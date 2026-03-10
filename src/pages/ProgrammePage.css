@@ -1,0 +1,185 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600&display=swap');
+
+/* Reset and Wrapper */
+.prog-wrapper {
+  min-height: 100vh;
+  font-family: 'Inter', sans-serif;
+  color: #1a1a1a;
+  background: transparent;
+}
+
+/* 1. BACKGROUND & BUNTING */
+.bg-fixed-layer {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-color: #f0f9ff;
+}
+
+.festival-bg-image {
+  width: 100%;
+  height: 100%;
+  background-image: url('/day-bg.png');
+  background-size: cover;
+  background-position: center -40px; /* Moves bunting higher */
+  background-repeat: no-repeat;
+  opacity: 0.85; /* Reduces contrast of background */
+}
+
+/* 2. HEADER HIERARCHY */
+.prog-header {
+  padding: 85px 24px 15px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.back-nav {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  margin-top: 14px;
+}
+
+.fest-subtitle {
+  font-size: 0.7rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #666;
+  margin: 0;
+}
+
+.prog-main-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 2.6rem;
+  margin: 2px 0 0;
+  line-height: 1;
+}
+
+/* 3. STICKY DAY NAV */
+.day-nav-sticky {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding: 12px 20px;
+  background: rgba(240, 249, 255, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.day-nav-inner {
+  display: flex;
+  justify-content: space-between;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.day-pill {
+  background: transparent;
+  border: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 8px 14px;
+  border-radius: 20px;
+  color: #888;
+  transition: all 0.2s ease;
+}
+
+.day-pill.active {
+  background: #f2c94c;
+  color: #000;
+  box-shadow: 0 2px 8px rgba(242, 201, 76, 0.3);
+}
+
+/* 4. MAIN CONTENT */
+.main-feed {
+  padding: 20px 20px 60px;
+}
+
+/* Weather Card Refinement */
+.weather-card {
+  background: white;
+  border-radius: 20px;
+  padding: 18px 22px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+.weather-icon { font-size: 1.8rem; }
+
+.weather-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.temp-line {
+  font-weight: 600;
+  color: #2d9cdb;
+  font-size: 0.95rem;
+}
+
+.desc-line {
+  font-size: 0.85rem;
+  color: #666;
+}
+
+/* Schedule List */
+.glass-schedule {
+  background: rgba(255, 255, 255, 0.95); /* Lighter card background */
+  border-radius: 32px;
+  border: 1px solid white;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+  overflow: hidden;
+}
+
+.event-item {
+  display: flex;
+  padding: 24px 22px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+.event-item:last-child { border-bottom: none; }
+
+.time-column {
+  width: 75px;
+  font-weight: 500; /* Inter Medium */
+  color: #f2994a;
+  font-size: 1rem;
+}
+
+.event-details h3 {
+  margin: 0;
+  font-weight: 600; /* Inter SemiBold */
+  font-size: 1.1rem;
+  letter-spacing: -0.01em;
+}
+
+.event-details p {
+  margin: 6px 0 0;
+  font-size: 0.9rem;
+  color: #888; /* Lighter secondary text */
+  display: flex;
+  align-items: center;
+}
+
+.v-icon { margin-right: 10px; font-size: 1.1rem; }
+
+/* 5. FOOTER */
+.prog-footer {
+  padding: 80px 0 100px;
+  display: flex;
+  justify-content: center;
+  opacity: 0.6;
+}
+
+.lighthouse-sig {
+  width: 130px;
+  height: auto;
+}

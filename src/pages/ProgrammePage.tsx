@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import "./ProgrammePage.css";
 
@@ -26,20 +26,49 @@ const PROGRAMME_DATA = {
 
 type FestivalDay = keyof typeof PROGRAMME_DATA;
 
+const isEventLive = (eventTime: string) => {
+  const now = new Date();
+  const [hours, minutes] = eventTime.split(':').map(Number);
+  const eventDate = new Date();
+  eventDate.setHours(hours, minutes, 0);
+  const diff = (now.getTime() - eventDate.getTime()) / 1000 / 60;
+  return diff >= 0 && diff < 90; 
+};
+
 function ProgrammePage() {
   const navigate = useNavigate();
   const [activeDay, setActiveDay] = useState<FestivalDay>('SAT');
+  const [isNight, setIsNight] = useState(false);
+
+  useEffect(() => {
+    const checkTime = () => {
+      const hour = new Date().getHours();
+      setIsNight(hour >= 18 || hour < 6);
+    };
+    checkTime();
+    const timer = setInterval(checkTime, 60000);
+    return () => clearInterval(timer);
+  }, []);
 
   return (
-    <div className="prog-wrapper">
+    <div className={`prog-wrapper ${isNight ? 'theme-night' : 'theme-day'}`}>
       <div className="bg-fixed-layer" aria-hidden="true">
-        <div className="festival-bg-image"></div>
+        {isNight ? (
+          <>
+            <video autoPlay loop muted playsInline className="festival-bg-video">
+              <source src="/bokeh-bg.mp4" type="video/mp4" />
+            </video>
+            <div className="night-overlay"></div>
+          </>
+        ) : (
+          <div className="festival-bg-image"></div>
+        )}
       </div>
 
       <div className="content-scroller">
         <header className="prog-header">
           <button className="back-nav" onClick={() => navigate('/')}>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" strokeWidth="3">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
               <path d="M15 18l-6-6 6-6" />
             </svg>
           </button>
@@ -52,9 +81,9 @@ function ProgrammePage() {
         <nav className="day-nav-sticky">
           <div className="day-nav-inner">
             {(Object.keys(PROGRAMME_DATA) as FestivalDay[]).map((day) => (
-              <button
-                key={day}
-                className={`day-pill ${activeDay === day ? 'active' : ''}`}
+              <button 
+                key={day} 
+                className={`day-pill ${activeDay === day ? 'active' : ''}`} 
                 onClick={() => setActiveDay(day)}
               >
                 {day}
@@ -65,20 +94,28 @@ function ProgrammePage() {
 
         <main className="main-feed">
           <div className="weather-card">
-            <span className="weather-icon">☀️</span>
+            <span className="weather-icon">{isNight ? '🌙' : '☀️'}</span>
             <div className="weather-info">
-              <span className="temp-line">18°C in Moville</span>
-              <span className="desc-line">Great weather for {PROGRAMME_DATA[activeDay][0].title}!</span>
+              <span className="temp-line">{isNight ? '14°C' : '18°C'} in Moville</span>
+              <span className="desc-line">{isNight ? 'Perfect night for music!' : 'Great day for the festival!'}</span>
             </div>
           </div>
 
           <div className="glass-schedule">
             {PROGRAMME_DATA[activeDay].map((event, idx) => (
               <div className="event-item" key={idx}>
-                <div className="time-column">{event.time}</div>
+                <div className="time-column">
+                  <span className="time-text">{event.time}</span>
+                  {activeDay === 'SAT' && isEventLive(event.time) && (
+                    <span className="live-indicator">LIVE</span>
+                  )}
+                </div>
                 <div className="event-details">
                   <h3>{event.title}</h3>
-                  <p><span className="v-icon">{event.icon}</span>{event.venue}</p>
+                  <div className="venue-line">
+                    <span className="v-icon">{event.icon}</span>
+                    <span className="venue-text">{event.venue}</span>
+                  </div>
                 </div>
               </div>
             ))}

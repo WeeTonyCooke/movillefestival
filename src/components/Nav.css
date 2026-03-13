@@ -1,0 +1,104 @@
+.site-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    transition: background 0.3s ease;
+  }
+  
+  /* ── Transparent variant — over the hero ── */
+  .site-nav--transparent {
+    background: linear-gradient(to bottom, rgba(0,0,0,0.35) 0%, transparent 100%);
+  }
+  
+  .site-nav--transparent .nav-wordmark,
+  .site-nav--transparent .nav-links a {
+    color: rgba(255, 255, 255, 0.9);
+  }
+  
+  .site-nav--transparent .nav-links a:hover {
+    color: #ffffff;
+  }
+  
+  /* ── Solid variant — inner pages ── */
+  .site-nav--solid {
+    background: #1F4E5F;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  
+  .site-nav--solid .nav-wordmark,
+  .site-nav--solid .nav-links a {
+    color: rgba(255, 255, 255, 0.88);
+  }
+  
+  .site-nav--solid .nav-links a:hover {
+    color: #ffffff;
+  }
+  
+  /* ── Layout ── */
+  .nav-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px;
+    height: 54px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .nav-wordmark {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-decoration: none;
+    flex-shrink: 0;
+  }
+  
+  .nav-links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 32px;
+  }
+  
+  .nav-links a {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+  
+  /* ── Mobile ── */
+  @media (max-width: 600px) {
+    .nav-inner {
+      padding: 0 16px;
+      height: 48px;
+    }
+  
+    .nav-links {
+      gap: 18px;
+    }
+  
+    .nav-links a {
+      font-size: 0.68rem;
+      letter-spacing: 0.06em;
+    }
+  
+    .nav-wordmark {
+      font-size: 0.95rem;
+    }
+  }
+  
+  @media (max-width: 420px) {
+    /* Hide less important links on very small screens */
+    .nav-links li:nth-child(2),
+    .nav-links li:nth-child(4) {
+      display: none;
+    }
+  }

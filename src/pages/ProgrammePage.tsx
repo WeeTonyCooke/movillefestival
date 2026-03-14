@@ -1,5 +1,4 @@
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import './ProgrammePage.css';
 
 type FestivalDay = 'WED' | 'THU' | 'FRI' | 'SAT' | 'SUN';
@@ -10,7 +9,7 @@ const PROGRAMME_DATA = {
       time: '21:00',
       title: 'Festival Bingo',
       venue: "St Eugene's Hall",
-      kind: 'Community event',
+      type: 'Community Event',
     },
   ],
   THU: [
@@ -18,7 +17,7 @@ const PROGRAMME_DATA = {
       time: '20:00',
       title: 'Festival Queen',
       venue: "Annie's Bar",
-      kind: 'Festival event',
+      type: 'Festival Event',
     },
   ],
   FRI: [
@@ -26,13 +25,13 @@ const PROGRAMME_DATA = {
       time: '19:00',
       title: 'Street Frolics',
       venue: 'Market Square',
-      kind: 'Street event',
+      type: 'Street Event',
     },
     {
       time: '20:00',
       title: "All Folk'd Up",
       venue: 'Market Square',
-      kind: 'Live music',
+      type: 'Live Music',
     },
   ],
   SAT: [
@@ -40,31 +39,31 @@ const PROGRAMME_DATA = {
       time: '11:00',
       title: 'Pet Show',
       venue: 'The Green',
-      kind: 'Family event',
+      type: 'Family Event',
     },
     {
       time: '14:00',
       title: 'Bonny Baby',
       venue: "St Eugene's Hall",
-      kind: 'Community event',
+      type: 'Community Event',
     },
     {
       time: '16:00',
       title: 'Treasure Hunt',
-      venue: "McGettigan's Bar",
-      kind: 'Festival event',
+      venue: "McGettigan's",
+      type: 'Festival Event',
     },
     {
       time: '18:00',
       title: 'Marty Healy Band',
       venue: 'Market Square',
-      kind: 'Live music',
+      type: 'Live Music',
     },
     {
       time: '21:00',
       title: 'Bagatelle',
       venue: 'Market Square',
-      kind: 'Live music',
+      type: 'Live Music',
     },
   ],
   SUN: [
@@ -72,25 +71,25 @@ const PROGRAMME_DATA = {
       time: '12:00',
       title: 'Moville Celtic Sports',
       venue: 'Glencrow',
-      kind: 'Sports event',
+      type: 'Sports',
     },
     {
       time: '17:30',
       title: 'Ball Drop',
       venue: 'The Green',
-      kind: 'Festival event',
+      type: 'Festival Event',
     },
     {
       time: '17:30',
       title: 'The Two Bucks',
       venue: 'Market Square',
-      kind: 'Live music',
+      type: 'Live Music',
     },
     {
       time: '20:30',
       title: 'ABBA Tribute',
       venue: 'Market Square',
-      kind: 'Live music',
+      type: 'Live Music',
     },
   ],
 } as const;
@@ -117,124 +116,48 @@ function getInitialFestivalDay(): FestivalDay {
   return matchedDay ? matchedDay[0] : 'WED';
 }
 
-const isEventLive = (eventTime: string) => {
-  const now = new Date();
-  const [hours, minutes] = eventTime.split(':').map(Number);
-  const eventDate = new Date();
-  eventDate.setHours(hours, minutes, 0, 0);
-  const diff = (now.getTime() - eventDate.getTime()) / 1000 / 60;
-  return diff >= 0 && diff < 90;
-};
-
-function ProgrammePage() {
-  const navigate = useNavigate();
+export default function ProgrammePage() {
   const [activeDay, setActiveDay] = useState<FestivalDay>(getInitialFestivalDay());
-  const [isNight, setIsNight] = useState(false);
-  const [isRaining] = useState(false);
-
-  useEffect(() => {
-    const checkTime = () => {
-      const hour = new Date().getHours();
-      setIsNight(hour >= 18 || hour < 6);
-    };
-
-    checkTime();
-    const timer = setInterval(checkTime, 60000);
-    return () => clearInterval(timer);
-  }, []);
-
-  const weatherLine = isRaining
-    ? 'A day for the high stool.'
-    : isNight
-      ? 'Perfect night for music.'
-      : 'Great day for a shore walk.';
 
   return (
-    <div className={`programme-page ${isNight ? 'theme-night' : 'theme-day'}`}>
-      <div className="programme-page__bg" aria-hidden="true" />
+    <div className="programme-page">
+      <header className="programme-header">
+        <p className="programme-eyebrow">Moville Festival 2026 · 8–12 July</p>
+        <h1 className="programme-title">Programme</h1>
 
-      <div className="programme-page__content">
-        <header className="programme-header">
+        <p className="programme-intro">
+          This is the early programme for Moville Festival 2026.
+          More events and artists will be added in the coming weeks.
+        </p>
+      </header>
+
+      <nav className="programme-nav">
+        {(Object.keys(PROGRAMME_DATA) as FestivalDay[]).map((day) => (
           <button
-            className="programme-back"
-            onClick={() => navigate('/')}
+            key={day}
             type="button"
-            aria-label="Back to homepage"
+            className={`programme-tab ${activeDay === day ? 'active' : ''}`}
+            onClick={() => setActiveDay(day)}
           >
-            <svg
-              width="22"
-              height="22"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.5"
-            >
-              <path d="M15 18l-6-6 6-6" />
-            </svg>
+            {day}
           </button>
+        ))}
+      </nav>
 
-          <div className="programme-header__text">
-            <p className="programme-kicker">Moville Festival 2026 · 8–12 July</p>
-            <h1 className="programme-title">Programme</h1>
-            <p className="programme-intro">
-              This is the early programme for Moville Festival 2026. More events and
-              artists will be added in the coming weeks.
-            </p>
-          </div>
-        </header>
+      <section className="programme-events">
+        {PROGRAMME_DATA[activeDay].map((event, i) => (
+          <div className="programme-event" key={`${activeDay}-${i}`}>
+            <div className="event-time">{event.time}</div>
 
-        <nav className="programme-day-nav" aria-label="Festival days">
-          <div className="programme-day-nav__inner">
-            {(Object.keys(PROGRAMME_DATA) as FestivalDay[]).map((day) => (
-              <button
-                key={day}
-                className={`programme-day-pill ${activeDay === day ? 'is-active' : ''}`}
-                onClick={() => setActiveDay(day)}
-                type="button"
-              >
-                {day}
-              </button>
-            ))}
-          </div>
-        </nav>
-
-        <main className="programme-main">
-          <div className="programme-weather-card">
-            <div className="programme-weather-card__text">
-              <span className="programme-weather-card__temp">
-                {isNight ? '14°C' : '18°C'} in Moville
-              </span>
-              <span className="programme-weather-card__desc">{weatherLine}</span>
+            <div className="event-body">
+              <div className="event-title">{event.title}</div>
+              <div className="event-meta">
+                {event.venue} · {event.type}
+              </div>
             </div>
           </div>
-
-          <section className="programme-schedule" aria-label={`${activeDay} schedule`}>
-            {PROGRAMME_DATA[activeDay].map((event, idx) => (
-              <article className="programme-event" key={`${activeDay}-${idx}`}>
-                <div className="programme-event__time-col">
-                  <span className="programme-event__time">{event.time}</span>
-                  {activeDay === 'SAT' && isEventLive(event.time) && (
-                    <span className="programme-event__live">Live</span>
-                  )}
-                </div>
-
-                <div className="programme-event__details">
-                  <h2 className="programme-event__title">{event.title}</h2>
-                  <div className="programme-event__meta">
-                    <span className="programme-event__venue">{event.venue}</span>
-                    <span className="programme-event__dot" aria-hidden="true">
-                      ·
-                    </span>
-                    <span className="programme-event__kind">{event.kind}</span>
-                  </div>
-                </div>
-              </article>
-            ))}
-          </section>
-        </main>
-      </div>
+        ))}
+      </section>
     </div>
   );
 }
-
-export default ProgrammePage;

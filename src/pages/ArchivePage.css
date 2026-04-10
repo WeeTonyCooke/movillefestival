@@ -1,0 +1,304 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600&display=swap');
+
+.archive-page {
+  min-height: 100vh;
+  background: #dfe6e3;
+  color: #1f2321;
+  font-family: 'Inter', sans-serif;
+}
+
+.archive-shell {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 18px 80px;
+}
+
+.archive-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 28px;
+}
+
+.archive-back {
+  background: transparent;
+  border: none;
+  color: #222;
+  cursor: pointer;
+  padding: 6px;
+  margin-top: 8px;
+}
+
+.archive-header-copy {
+  min-width: 0;
+}
+
+.archive-kicker {
+  margin: 0 0 6px;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: rgba(31, 35, 33, 0.55);
+}
+
+.archive-title {
+  margin: 0;
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(2.4rem, 5vw, 4.25rem);
+  line-height: 0.95;
+  color: #1f2321;
+}
+
+.archive-intro {
+  margin: 12px 0 0;
+  max-width: 640px;
+  font-size: 1rem;
+  line-height: 1.55;
+  color: rgba(31, 35, 33, 0.72);
+}
+
+.archive-controls {
+  margin-bottom: 24px;
+}
+
+.archive-search-wrap {
+  margin-bottom: 18px;
+}
+
+.archive-search {
+  width: 100%;
+  max-width: 420px;
+  height: 46px;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: rgba(255, 255, 255, 0.7);
+  padding: 0 18px;
+  font-size: 0.98rem;
+  color: #232624;
+  outline: none;
+}
+
+.archive-search::placeholder {
+  color: rgba(35, 38, 36, 0.45);
+}
+
+.archive-search:focus {
+  border-color: rgba(0, 0, 0, 0.22);
+  background: rgba(255, 255, 255, 0.88);
+}
+
+.archive-decade-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.archive-decade-pill {
+  border: 1px solid rgba(0, 0, 0, 0.14);
+  background: rgba(255, 255, 255, 0.58);
+  color: #2b2f2c;
+  border-radius: 999px;
+  padding: 10px 18px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.archive-decade-pill.active {
+  background: #212121;
+  color: #fff;
+  border-color: #212121;
+}
+
+.archive-count {
+  margin: 0;
+  font-size: 0.95rem;
+  color: rgba(31, 35, 33, 0.6);
+}
+
+.archive-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+}
+
+.archive-card {
+  background: #e7ece8;
+  border-radius: 24px;
+  padding: 18px 18px 20px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+.archive-paper {
+  background: #f6f3ee;
+  border-radius: 14px;
+  padding: 18px 18px 20px;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  min-height: 230px;
+}
+
+.archive-paper-inner {
+  height: 100%;
+}
+
+.archive-masthead-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 18px;
+}
+
+.archive-masthead {
+  width: 100%;
+  text-align: center;
+  padding-bottom: 11px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-size: 0.88rem;
+  font-weight: 600;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: rgba(47, 44, 40, 0.72);
+}
+
+.archive-card-title {
+  margin: 0 0 18px;
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-size: clamp(1.9rem, 2.2vw, 2.35rem);
+  line-height: 1.04;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: #322d27;
+  text-wrap: balance;
+}
+
+.archive-card-summary {
+  margin: 0;
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-size: 1.02rem;
+  line-height: 1.58;
+  color: #4b4741;
+}
+
+.archive-card-footer {
+  margin-top: 18px;
+  padding: 0 14px 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.archive-date-stamp {
+  padding-left: 8px;
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-size: 1.14rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(64, 57, 49, 0.8);
+  text-shadow:
+    0.3px 0 rgba(64, 57, 49, 0.34),
+    -0.3px 0 rgba(64, 57, 49, 0.2);
+  transform: rotate(-0.8deg);
+  white-space: nowrap;
+}
+
+.archive-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.archive-pdf-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 34px;
+  padding: 0 15px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.34);
+  color: #3f3b37;
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.archive-share-button {
+  border: none;
+  background: transparent;
+  color: #67625c;
+  font-size: 0.95rem;
+  cursor: pointer;
+  padding: 0;
+}
+
+.archive-pdf-button:hover,
+.archive-share-button:hover {
+  opacity: 0.78;
+}
+
+@media (max-width: 900px) {
+  .archive-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .archive-shell {
+    padding: 24px 14px 64px;
+  }
+
+  .archive-header {
+    margin-bottom: 22px;
+  }
+
+  .archive-title {
+    font-size: 2.7rem;
+  }
+
+  .archive-intro {
+    font-size: 0.95rem;
+  }
+
+  .archive-card {
+    padding: 14px 14px 16px;
+    border-radius: 22px;
+  }
+
+  .archive-paper {
+    min-height: 210px;
+    padding: 16px 16px 18px;
+  }
+
+  .archive-masthead {
+    font-size: 0.8rem;
+    letter-spacing: 0.2em;
+  }
+
+  .archive-card-title {
+    font-size: 1.8rem;
+  }
+
+  .archive-card-summary {
+    font-size: 0.98rem;
+  }
+
+  .archive-card-footer {
+    padding: 0 10px 0 12px;
+    gap: 12px;
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .archive-card-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .archive-date-stamp {
+    padding-left: 4px;
+    font-size: 1.06rem;
+  }
+}

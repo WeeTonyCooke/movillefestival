@@ -1,67 +1,50 @@
-import React, { useEffect, useState } from 'react';
-import './MovilleHero.css';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import "./MovilleHero.css"; 
 
 const DAY_IMG = '/movillelightcleanday.png';
 const NIGHT_IMG = '/movillelightcleannight.png';
 
-const getIsNight = () => {
-  const hour = new Date().getHours();
-  return hour >= 19 || hour < 7;
-};
-
-const MovilleHero: React.FC = () => {
-  const [isNight, setIsNight] = useState(getIsNight());
+const MovilleHero = () => {
+  const navigate = useNavigate();
+  const [isNight, setIsNight] = useState(false);
 
   useEffect(() => {
-    const updateTimeTheme = () => {
-      setIsNight(getIsNight());
+    const checkTime = () => {
+      const hour = new Date().getHours();
+      setIsNight(hour >= 18 || hour < 6);
     };
-
-    updateTimeTheme();
-    const interval = window.setInterval(updateTimeTheme, 60 * 1000);
-
-    return () => window.clearInterval(interval);
+    checkTime();
+    const timer = setInterval(checkTime, 60000);
+    return () => clearInterval(timer);
   }, []);
 
-  const heroImage = isNight ? NIGHT_IMG : DAY_IMG;
-
-  const scrollToUpdates = () => {
-    const updatesSection = document.getElementById('updates');
-    if (updatesSection) {
-      updatesSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  };
-
   return (
-    <section
-      className="moville-hero"
-      style={{
-        backgroundImage: `url('${heroImage}')`,
-      }}
-    >
-      <div className="moville-hero__overlay" />
-
-      <div className="moville-hero__content">
-        <h1 className="moville-hero__title">Moville Festival 2026</h1>
-
-        <p className="moville-hero__copy">8–12 July 2026</p>
-
-        <div className="moville-hero__actions">
-          <button
-            type="button"
-            className="moville-hero__button moville-hero__button--reset"
-            onClick={scrollToUpdates}
-          >
-            Latest Updates
+    <section className="moville-hero">
+      <div 
+        className={`bg-layer day-bg ${!isNight ? 'active' : ''}`} 
+        style={{ backgroundImage: `url(${DAY_IMG})` }} 
+      />
+      <div 
+        className={`bg-layer night-bg ${isNight ? 'active' : ''}`} 
+        style={{ backgroundImage: `url(${NIGHT_IMG})` }}
+      >
+        <div className="beam-sweep"></div>
+      </div>
+      <div className="water-shimmer"></div>
+      <div className="hero-content">
+        <header className="hero-header">
+          <h1 className="title">
+            MOVILLE<br />
+            <span className="serif-italic">SUMMER FESTIVAL</span>
+          </h1>
+          <p className="date">8–12 JULY</p>
+        </header>
+        <footer className="hero-footer">
+          <button className="cta-button" onClick={() => navigate('/programme')}>
+            VIEW PROGRAMME
           </button>
-
-          <a
-            className="moville-hero__button moville-hero__button--ghost"
-            href="/programme"
-          >
-            Programme
-          </a>
-        </div>
+        </footer>
       </div>
     </section>
   );

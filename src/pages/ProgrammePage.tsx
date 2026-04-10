@@ -1,206 +1,124 @@
-
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './ProgrammePage.css';
 
-type FestivalDay = 'WED' | 'THU' | 'FRI' | 'SAT' | 'SUN';
-
 const PROGRAMME_DATA = {
-  WED: [
-    {
-      time: '21:00',
-      title: 'Festival Bingo',
-      venue: "St Eugene's Hall",
-      type: 'Community event',
-    },
-  ],
-  THU: [
-    {
-      time: '20:00',
-      title: 'Festival Queen',
-      venue: "Annie's Bar",
-      type: 'Festival event',
-    },
-  ],
+  WED: [{ time: '21:00', title: 'Festival Bingo', venue: "St Eugene's Hall", icon: '🎱' }],
+  THU: [{ time: '20:00', title: 'Festival Queen', venue: "Annie's Bar", icon: '👑' }],
   FRI: [
-    {
-      time: '19:00',
-      title: 'Street Frolics',
-      venue: 'Market Square',
-      type: 'Street event',
-    },
-    {
-      time: '20:00',
-      title: "All Folk'd Up",
-      venue: 'Market Square',
-      type: 'Live music',
-    },
+    { time: '19:00', title: 'Street Frolics', venue: 'Market Square', icon: '🎉' },
+    { time: '20:00', title: "All Folk'd Up", venue: 'Market Square', icon: '🎵' },
   ],
   SAT: [
-    {
-      time: '11:00',
-      title: 'Pet Show',
-      venue: 'The Green',
-      type: 'Family event',
-    },
-    {
-      time: '14:00',
-      title: 'Bonny Baby',
-      venue: "St Eugene's Hall",
-      type: 'Community event',
-    },
-    {
-      time: '16:00',
-      title: 'Treasure Hunt',
-      venue: "McGettigan's",
-      type: 'Festival event',
-    },
-    {
-      time: '18:00',
-      title: 'Marty Healy Band',
-      venue: 'Market Square',
-      type: 'Live music',
-    },
-    {
-      time: '21:00',
-      title: 'Bagatelle',
-      venue: 'Market Square',
-      type: 'Live music',
-    },
+    { time: '11:00', title: 'Pet Show', venue: 'The Green', icon: '🐕' },
+    { time: '14:00', title: 'Bonny Baby', venue: "St Eugene's Hall", icon: '👶' },
+    { time: '16:00', title: 'Treasure Hunt', venue: "McGettigan's Bar", icon: '🗺️' },
+    { time: '18:00', title: 'Marty Healy Band', venue: 'Market Square', icon: '🎸' },
+    { time: '21:00', title: 'Bagatelle', venue: 'Market Square', icon: '🎤' },
   ],
   SUN: [
-    {
-      time: '12:00',
-      title: 'Moville Celtic Sports',
-      venue: 'Glencrow',
-      type: 'Sports',
-    },
-    {
-      time: '17:30',
-      title: 'Ball Drop',
-      venue: 'The Green',
-      type: 'Festival event',
-    },
-    {
-      time: '17:30',
-      title: 'The Two Bucks',
-      venue: 'Market Square',
-      type: 'Live music',
-    },
-    {
-      time: '20:30',
-      title: 'ABBA Tribute',
-      venue: 'Market Square',
-      type: 'Live music',
-    },
+    { time: '12:00', title: 'Moville Celtic Sports', venue: 'Glencrow', icon: '🏅' },
+    { time: '17:30', title: 'Ball Drop', venue: 'The Green', icon: '🎈' },
+    { time: '17:30', title: 'The Two Bucks', venue: 'Market Square', icon: '🎵' },
+    { time: '20:30', title: 'ABBA Tribute', venue: 'Market Square', icon: '🎤' },
   ],
 } as const;
 
-const FESTIVAL_DATES: Record<FestivalDay, string> = {
-  WED: '2026-07-08',
-  THU: '2026-07-09',
-  FRI: '2026-07-10',
-  SAT: '2026-07-11',
-  SUN: '2026-07-12',
-};
+type FestivalDay = keyof typeof PROGRAMME_DATA;
 
-function getInitialFestivalDay(): FestivalDay {
-  const today = new Date();
-  const localDateString = [
-    today.getFullYear(),
-    String(today.getMonth() + 1).padStart(2, '0'),
-    String(today.getDate()).padStart(2, '0'),
-  ].join('-');
-
-  const matchedDay = (Object.entries(FESTIVAL_DATES) as [FestivalDay, string][])
-    .find(([, date]) => date === localDateString);
-
-  return matchedDay ? matchedDay[0] : 'WED';
-}
-
-export default function ProgrammePage() {
+function ProgrammePage() {
   const navigate = useNavigate();
-  const [activeDay, setActiveDay] = useState<FestivalDay>(getInitialFestivalDay());
+  const [activeDay, setActiveDay] = useState<FestivalDay>('SAT');
+  const [isNight, setIsNight] = useState(false);
+
+  useEffect(() => {
+    const checkTime = () => {
+      const hour = new Date().getHours();
+      setIsNight(hour >= 18 || hour < 6);
+    };
+
+    checkTime();
+    const timer = setInterval(checkTime, 60000);
+    return () => clearInterval(timer);
+  }, []);
 
   return (
-    <div className="programme-page">
-      <header className="programme-header">
-        <button
-          type="button"
-          className="programme-back"
-          onClick={() => navigate('/')}
-          aria-label="Back to homepage"
-        >
-          ←
-        </button>
+    <div className={`prog-wrapper ${isNight ? 'theme-night' : 'theme-day'}`}>
+      <div className={`bg-fixed-layer ${isNight ? 'bg-night-gradient' : ''}`} aria-hidden="true">
+        {!isNight && <div className="festival-bg-image"></div>}
+      </div>
 
-        <p className="programme-eyebrow">Moville Festival 2026 · 8–12 July</p>
-
-        <h1 className="programme-title">Programme</h1>
-
-        <p className="programme-intro">
-          This is the early programme for Moville Festival 2026. More events and
-          artists will be added in the coming weeks.
-        </p>
-      </header>
-
-      <nav className="programme-nav" aria-label="Festival days">
-        {(Object.keys(PROGRAMME_DATA) as FestivalDay[]).map((day) => (
-          <button
-            key={day}
-            type="button"
-            className={`programme-tab ${activeDay === day ? 'active' : ''}`}
-            onClick={() => setActiveDay(day)}
-          >
-            {day}
+      <div className="content-scroller">
+        <header className="prog-header">
+          <button className="back-nav" onClick={() => navigate('/')}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+              <path d="M15 18l-6-6 6-6" />
+            </svg>
           </button>
-        ))}
-      </nav>
+          <div className="header-titles">
+            <p className="fest-subtitle">Moville Festival · July 8–12</p>
+            <h1 className="prog-main-title">Programme</h1>
+          </div>
+        </header>
 
-      <section className="programme-events">
-        {PROGRAMME_DATA[activeDay].map((event, i) => (
-          <article className="programme-event" key={`${activeDay}-${i}`}>
-            <div className="event-time">{event.time}</div>
+        <nav className="day-nav-sticky">
+          <div className="day-nav-inner">
+            {(Object.keys(PROGRAMME_DATA) as FestivalDay[]).map((day) => (
+              <button
+                key={day}
+                className={`day-pill ${activeDay === day ? 'active' : ''}`}
+                onClick={() => setActiveDay(day)}
+              >
+                {day}
+              </button>
+            ))}
+          </div>
+        </nav>
 
-            <div className="event-body">
-              <h2 className="event-title">{event.title}</h2>
-              <div className="event-meta">
-                {event.venue} <span className="event-separator">·</span> {event.type}
-              </div>
+        <main className="main-feed">
+          <div className="weather-card">
+            <span className="weather-icon">{isNight ? '🌙' : '☀️'}</span>
+            <div className="weather-info">
+              <span className="temp-line">{isNight ? '14°C' : '18°C'} in Moville</span>
+              <span className="desc-line">
+                {isNight
+                  ? 'Clear skies for the evening!'
+                  : `Great weather for ${PROGRAMME_DATA[activeDay][0].title}!`}
+              </span>
             </div>
-          </article>
-        ))}
-      </section>
+          </div>
 
-      <div className="programme-social">
-        <div className="programme-social__label">Follow the festival</div>
+          <div className="glass-schedule">
+            {PROGRAMME_DATA[activeDay].map((event, idx) => (
+              <div className="event-item" key={idx}>
+                <div className="time-column">{event.time}</div>
+                <div className="event-details">
+                  <h3>{event.title}</h3>
+                  <p>
+                    <span className="v-icon">{event.icon}</span>
+                    {event.venue}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
 
-        <div className="programme-social__links">
-          <a
-            href="https://instagram.com/movillefestival"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Instagram
-          </a>
-          <span>·</span>
-          <a
-            href="https://facebook.com/MovilleFestival"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Facebook
-          </a>
-          <span>·</span>
-          <a
-            href="https://tiktok.com/@moville.festival"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            TikTok
-          </a>
-        </div>
+          <div className="archive-link-section">
+            <a href="/archive" className="archive-link" aria-label="Open archive">
+              <div className="archive-logo-wrap">
+                <img
+                  src="/moville_lighthouse_clean_best.webp"
+                  alt="Moville lighthouse"
+                  className="archive-logo"
+                />
+                <span className="archive-years">1958 — 2026</span>
+              </div>
+            </a>
+          </div>
+        </main>
       </div>
     </div>
   );
 }
+
+export default ProgrammePage;

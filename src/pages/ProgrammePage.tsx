@@ -18,9 +18,9 @@ const PROGRAMME_DATA = {
   ],
   SUN: [
     { time: '12:00', title: 'Moville Celtic Sports', venue: 'Glencrow', icon: '🏅' },
-    { time: '17:30', title: 'Ball Drop', venue: 'The Green', icon: '🎈' },
-    { time: '17:30', title: 'The Two Bucks', venue: 'Market Square', icon: '🎵' },
-    { time: '20:30', title: 'ABBA Tribute', venue: 'Market Square', icon: '🎤' },
+    { time: '17:30', title: 'Balldrop', venue: 'The Green', icon: '🎈' },
+    { time: '17:30', title: 'The 2 Bucks', venue: 'Market Square', icon: '🎵' },
+    { time: '20:30', title: 'ABBA', venue: 'Market Square', icon: '🎤' },
   ],
 } as const;
 
@@ -29,6 +29,47 @@ type FestivalDay = keyof typeof PROGRAMME_DATA;
 type ProgrammePageProps = {
   isNight: boolean;
 };
+
+function InstagramIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className="prog-social-icon-svg">
+      <rect x="3" y="3" width="18" height="18" rx="5" ry="5" fill="none" stroke="currentColor" strokeWidth="1.8" />
+      <circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" strokeWidth="1.8" />
+      <circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" />
+    </svg>
+  );
+}
+
+function TikTokIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className="prog-social-icon-svg">
+      <path
+        d="M14.5 3.5c.4 1.9 1.8 3.3 3.7 3.7v2.7c-1.4 0-2.7-.4-3.8-1.1v6a4.9 4.9 0 1 1-4.9-4.9c.3 0 .7 0 1 .1v2.8a2.3 2.3 0 1 0 1.4 2.1V3.5h2.6Z"
+        fill="currentColor"
+      />
+    </svg>
+  );
+}
+
+function FacebookIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className="prog-social-icon-svg">
+      <path
+        d="M13.5 21v-7h2.5l.4-3h-2.9V9.1c0-.9.2-1.6 1.5-1.6H16V4.8c-.4-.1-1.2-.2-2.1-.2-2.1 0-3.5 1.3-3.5 3.7V11H8v3h2.4v7h3.1Z"
+        fill="currentColor"
+      />
+    </svg>
+  );
+}
+
+function MailIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className="prog-social-icon-svg">
+      <rect x="3" y="5" width="18" height="14" rx="2" ry="2" fill="none" stroke="currentColor" strokeWidth="1.8" />
+      <path d="M4.5 7l7.5 6 7.5-6" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
 
 function ProgrammePage({ isNight }: ProgrammePageProps) {
   const [activeDay, setActiveDay] = useState<FestivalDay>('SAT');
@@ -120,6 +161,46 @@ function ProgrammePage({ isNight }: ProgrammePageProps) {
                 />
                 <span className="prog-archive-years">Festival Heritage</span>
               </div>
+            </a>
+          </section>
+
+          <section className="prog-socials" aria-label="Moville Festival social links">
+            <a
+              href="https://www.instagram.com/movillefestival/"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Moville Festival on Instagram"
+              className="prog-social-link"
+            >
+              <InstagramIcon />
+            </a>
+
+            <a
+              href="https://www.tiktok.com/@moville.festival"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Moville Festival on TikTok"
+              className="prog-social-link"
+            >
+              <TikTokIcon />
+            </a>
+
+            <a
+              href="https://www.facebook.com/profile.php?id=100092674825683"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Moville Festival on Facebook"
+              className="prog-social-link"
+            >
+              <FacebookIcon />
+            </a>
+
+            <a
+              href="mailto:movillefestival@gmail.com"
+              aria-label="Email Moville Festival"
+              className="prog-social-link"
+            >
+              <MailIcon />
             </a>
           </section>
         </main>

@@ -1,0 +1,337 @@
+.prog-page {
+  position: relative;
+  min-height: 100vh;
+  background: var(--bg-base);
+  color: var(--text-primary);
+  transition: background-color 0.35s ease, color 0.35s ease;
+}
+
+.prog-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background:
+    radial-gradient(circle at top, rgba(255, 255, 255, 0.28), transparent 30%),
+    linear-gradient(to bottom, #eef5fa 0%, #e7f0f6 52%, #dde8ef 100%);
+}
+
+.theme-night .prog-bg {
+  background:
+    radial-gradient(circle at top, rgba(214, 171, 67, 0.09), transparent 26%),
+    linear-gradient(to bottom, #10161d 0%, #0d1218 100%);
+}
+
+.prog-content {
+  position: relative;
+  z-index: 1;
+  padding-top: 44px;
+  padding-bottom: 88px;
+}
+
+.prog-header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 28px;
+}
+
+.prog-title-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+.prog-inline-back {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  flex: 0 0 auto;
+  color: var(--text-primary);
+  text-decoration: none;
+  opacity: 0.88;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.prog-inline-back:hover {
+  opacity: 1;
+  transform: translateX(-1px);
+}
+
+.prog-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(2.8rem, 6vw, 4.8rem);
+  font-weight: 700;
+  line-height: 0.94;
+  color: var(--text-primary);
+}
+
+.prog-header-meta {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.prog-day-nav {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  margin-bottom: 26px;
+  padding: 12px 0 16px;
+  background: linear-gradient(to bottom, var(--bg-base) 74%, transparent 100%);
+}
+
+.prog-day-nav-inner {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.prog-day-pill {
+  min-height: 42px;
+  padding: 0 18px;
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-pill);
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    background 0.2s ease;
+}
+
+.prog-day-pill:hover {
+  transform: translateY(-1px);
+}
+
+.prog-day-pill.is-active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #101010;
+}
+
+.prog-main {
+  display: grid;
+  gap: 22px;
+}
+
+.prog-weather {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 22px;
+  border-radius: var(--radius-md);
+  background: var(--bg-surface-strong);
+}
+
+.prog-weather-icon {
+  font-size: 1.55rem;
+}
+
+.prog-weather-copy {
+  display: flex;
+  flex-direction: column;
+}
+
+.prog-weather-line {
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.prog-weather-subline {
+  margin-top: 4px;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.prog-schedule {
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  background: var(--bg-surface-strong);
+  box-shadow: var(--shadow-card);
+}
+
+.prog-event {
+  display: grid;
+  grid-template-columns: 92px minmax(0, 1fr);
+  gap: 18px;
+  padding: 24px 24px;
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.prog-event:last-child {
+  border-bottom: none;
+}
+
+.prog-event-time {
+  padding-top: 1px;
+  font-size: 0.96rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--accent-strong);
+}
+
+.prog-event-body h3 {
+  margin: 0;
+  font-size: 1.12rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.prog-event-body p {
+  display: flex;
+  align-items: center;
+  margin: 8px 0 0;
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+}
+
+.prog-event-icon {
+  margin-right: 10px;
+}
+
+.prog-archive-link {
+  display: flex;
+  justify-content: center;
+  margin-top: 8px;
+  padding-top: 8px;
+}
+
+.prog-archive-anchor {
+  text-decoration: none;
+}
+
+.prog-archive-mark {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.prog-archive-mark::before {
+  content: '';
+  position: absolute;
+  inset: 50% auto auto 50%;
+  width: 120px;
+  height: 120px;
+  transform: translate(-50%, -52%);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(214, 171, 67, 0.16) 0%, transparent 70%);
+  filter: blur(12px);
+  opacity: 0.45;
+}
+
+.prog-archive-logo {
+  position: relative;
+  z-index: 1;
+  width: 122px;
+  height: auto;
+  filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.18));
+  transition: transform 0.25s ease, filter 0.25s ease;
+}
+
+.prog-archive-anchor:hover .prog-archive-logo {
+  transform: translateY(-2px) scale(1.02);
+}
+
+.prog-archive-years {
+  position: relative;
+  z-index: 1;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary);
+}
+
+.theme-night .prog-archive-years {
+  color: rgba(244, 239, 229, 0.78);
+}
+
+@media (min-width: 900px) {
+  .prog-content {
+    padding-top: 48px;
+    padding-bottom: 96px;
+  }
+
+  .prog-main {
+    gap: 24px;
+  }
+
+  .prog-weather,
+  .prog-schedule {
+    width: 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  .prog-content {
+    padding-top: 32px;
+    padding-bottom: 64px;
+  }
+
+  .prog-header {
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .prog-title-row {
+    gap: 12px;
+  }
+
+  .prog-title {
+    font-size: 3.1rem;
+  }
+
+  .prog-header-meta {
+    font-size: 0.78rem;
+  }
+
+  .prog-day-nav {
+    margin-bottom: 22px;
+    padding: 10px 0 14px;
+  }
+
+  .prog-day-nav-inner {
+    justify-content: space-between;
+  }
+
+  .prog-day-pill {
+    flex: 1 1 calc(20% - 8px);
+    min-width: 0;
+    padding: 0 12px;
+  }
+
+  .prog-event {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    padding: 20px 18px;
+  }
+
+  .prog-event-time {
+    font-size: 0.88rem;
+  }
+
+  .prog-archive-logo {
+    width: 112px;
+  }
+
+  .prog-archive-years {
+    font-size: 0.94rem;
+  }
+}

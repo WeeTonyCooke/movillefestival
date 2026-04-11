@@ -34,15 +34,8 @@ const MovilleHero: React.FC<MovilleHeroProps> = ({ isNight }) => {
         <div className="page-shell hero-shell">
           <div className="hero-text-wrap">
             <header className="hero-header">
-              <h1 className="hero-title">
-                MOVILLE
-                <br />
-                <span className="hero-title-italic">SUMMER</span>
-                <br />
-                <span className="hero-title-italic">FESTIVAL</span>
-              </h1>
-
-              <p className="hero-date">8–12 JULY</p>
+              <h1 className="hero-title">Moville Festival</h1>
+              <p className="hero-date">8–12 July</p>
             </header>
 
             <footer className="hero-footer">

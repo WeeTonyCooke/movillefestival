@@ -38,22 +38,28 @@ function ProgrammePage({ isNight }: ProgrammePageProps) {
       <div className="prog-bg" aria-hidden="true" />
 
       <div className="prog-content page-shell--narrow">
-        <header className="prog-topbar">
-          <Link to="/" className="prog-brand" aria-label="Back to home">
-            <span className="prog-brand-main">Moville</span>
-            <span className="prog-brand-sub">Summer Festival</span>
-          </Link>
-
-          <div className="prog-topbar-date">8–12 July 2026</div>
-        </header>
-
-        <div className="prog-topbar-rule" aria-hidden="true" />
-
         <header className="prog-header">
-          <div className="prog-header-copy">
-            <p className="prog-kicker">Moville Festival</p>
+          <div className="prog-title-row">
+            <Link to="/" className="prog-inline-back" aria-label="Back to home">
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M15 18l-6-6 6-6" />
+              </svg>
+            </Link>
+
             <h1 className="prog-title">Programme</h1>
           </div>
+
+          <div className="prog-header-meta">8–12 July 2026</div>
         </header>
 
         <nav className="prog-day-nav" aria-label="Festival days">

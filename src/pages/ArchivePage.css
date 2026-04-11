@@ -21,43 +21,51 @@
 .archive-header {
   max-width: var(--container-narrow);
   display: flex;
+  flex-direction: column;
   align-items: flex-start;
   gap: 14px;
   margin-bottom: 30px;
 }
 
-.archive-back {
-  background: transparent;
-  border: none;
-  color: var(--text-primary);
-  padding: 6px;
-  margin-top: 8px;
-}
-
-.archive-header-copy {
+.archive-title-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
   min-width: 0;
 }
 
-.archive-kicker {
-  margin: 0 0 10px;
-  font-size: 0.78rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.18em;
-  color: var(--text-muted);
+.archive-inline-back {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  flex: 0 0 auto;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--text-primary);
+  text-decoration: none;
+  opacity: 0.88;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.archive-inline-back:hover {
+  opacity: 1;
+  transform: translateX(-1px);
 }
 
 .archive-title {
   margin: 0;
   font-family: var(--font-display);
-  font-size: clamp(2.5rem, 5.6vw, 4.8rem);
+  font-size: clamp(2.8rem, 6vw, 4.8rem);
   font-weight: 700;
   line-height: 0.94;
   color: var(--text-primary);
 }
 
 .archive-intro {
-  margin: 12px 0 0;
+  margin: 0;
   max-width: 640px;
   font-size: 1rem;
   line-height: 1.58;
@@ -296,7 +304,12 @@
   }
 
   .archive-header {
+    gap: 12px;
     margin-bottom: 24px;
+  }
+
+  .archive-title-row {
+    gap: 12px;
   }
 
   .archive-controls {

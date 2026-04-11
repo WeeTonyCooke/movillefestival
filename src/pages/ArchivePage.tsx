@@ -65,23 +65,34 @@ function ArchivePage() {
     <div className="archive-page">
       <div className="archive-shell page-shell">
         <header className="archive-header">
-          <button
-            className="archive-back"
-            onClick={() => navigate('/programme')}
-            aria-label="Back to programme"
-          >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
-              <path d="M15 18l-6-6 6-6" />
-            </svg>
-          </button>
+          <div className="archive-title-row">
+            <button
+              className="archive-inline-back"
+              onClick={() => navigate('/programme')}
+              aria-label="Back to programme"
+              type="button"
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M15 18l-6-6 6-6" />
+              </svg>
+            </button>
 
-          <div className="archive-header-copy">
-            <p className="archive-kicker">Moville Festival</p>
             <h1 className="archive-title">Heritage</h1>
-            <p className="archive-intro">
-              Newspaper clippings, local memories and festival history from years gone by.
-            </p>
           </div>
+
+          <p className="archive-intro">
+            Newspaper clippings, local memories and festival history from years gone by.
+          </p>
         </header>
 
         <div className="archive-controls">

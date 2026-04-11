@@ -32,12 +32,14 @@ const MovilleHero: React.FC<MovilleHeroProps> = ({ isNight }) => {
 
       <div className="hero-content">
         <div className="page-shell hero-shell">
-          <div className="hero-text-wrap">
+          <div className="hero-title-wrap">
             <header className="hero-header">
               <h1 className="hero-title">Moville Festival</h1>
               <p className="hero-date">8–12 July</p>
             </header>
+          </div>
 
+          <div className="hero-footer-wrap">
             <footer className="hero-footer">
               <button className="hero-cta" onClick={() => navigate('/programme')}>
                 View Programme

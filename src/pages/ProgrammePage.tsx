@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import './ProgrammePage.css';
 
 const PROGRAMME_DATA = {
@@ -26,48 +26,45 @@ const PROGRAMME_DATA = {
 
 type FestivalDay = keyof typeof PROGRAMME_DATA;
 
-function ProgrammePage() {
-  const navigate = useNavigate();
+type ProgrammePageProps = {
+  isNight: boolean;
+};
+
+function ProgrammePage({ isNight }: ProgrammePageProps) {
   const [activeDay, setActiveDay] = useState<FestivalDay>('SAT');
-  const [isNight, setIsNight] = useState(false);
-
-  useEffect(() => {
-    const checkTime = () => {
-      const hour = new Date().getHours();
-      setIsNight(hour >= 18 || hour < 6);
-    };
-
-    checkTime();
-    const timer = setInterval(checkTime, 60000);
-    return () => clearInterval(timer);
-  }, []);
 
   return (
-    <div className={`prog-wrapper ${isNight ? 'theme-night' : 'theme-day'}`}>
-      <div className={`bg-fixed-layer ${isNight ? 'bg-night-gradient' : ''}`} aria-hidden="true">
-        {!isNight && <div className="festival-bg-image"></div>}
-      </div>
+    <div className="prog-page">
+      <div className="prog-bg" aria-hidden="true" />
 
-      <div className="content-scroller">
+      <div className="prog-content page-shell--narrow">
+        <header className="prog-topbar">
+          <Link to="/" className="prog-brand" aria-label="Back to home">
+            <span className="prog-brand-main">Moville</span>
+            <span className="prog-brand-sub">Summer Festival</span>
+          </Link>
+
+          <div className="prog-topbar-date">8–12 July 2026</div>
+        </header>
+
+        <div className="prog-topbar-rule" aria-hidden="true" />
+
         <header className="prog-header">
-          <button className="back-nav" onClick={() => navigate('/')}>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
-              <path d="M15 18l-6-6 6-6" />
-            </svg>
-          </button>
-          <div className="header-titles">
-            <p className="fest-subtitle">Moville Festival · July 8–12</p>
-            <h1 className="prog-main-title">Programme</h1>
+          <div className="prog-header-copy">
+            <p className="prog-kicker">Moville Festival</p>
+            <h1 className="prog-title">Programme</h1>
           </div>
         </header>
 
-        <nav className="day-nav-sticky">
-          <div className="day-nav-inner">
+        <nav className="prog-day-nav" aria-label="Festival days">
+          <div className="prog-day-nav-inner">
             {(Object.keys(PROGRAMME_DATA) as FestivalDay[]).map((day) => (
               <button
                 key={day}
-                className={`day-pill ${activeDay === day ? 'active' : ''}`}
+                className={`prog-day-pill ${activeDay === day ? 'is-active' : ''}`}
                 onClick={() => setActiveDay(day)}
+                type="button"
+                aria-pressed={activeDay === day}
               >
                 {day}
               </button>
@@ -75,46 +72,50 @@ function ProgrammePage() {
           </div>
         </nav>
 
-        <main className="main-feed">
-          <div className="weather-card">
-            <span className="weather-icon">{isNight ? '🌙' : '☀️'}</span>
-            <div className="weather-info">
-              <span className="temp-line">{isNight ? '14°C' : '18°C'} in Moville</span>
-              <span className="desc-line">
+        <main className="prog-main">
+          <section className="prog-weather surface-card">
+            <span className="prog-weather-icon">{isNight ? '🌜' : '☀️'}</span>
+
+            <div className="prog-weather-copy">
+              <span className="prog-weather-line">
+                {isNight ? '14°C in Moville this evening' : '18°C in Moville today'}
+              </span>
+              <span className="prog-weather-subline">
                 {isNight
-                  ? 'Clear skies for the evening!'
-                  : `Great weather for ${PROGRAMME_DATA[activeDay][0].title}!`}
+                  ? 'Clear skies and a good night for heading into town.'
+                  : `A decent day for ${PROGRAMME_DATA[activeDay][0].title}.`}
               </span>
             </div>
-          </div>
+          </section>
 
-          <div className="glass-schedule">
+          <section className="prog-schedule surface-card">
             {PROGRAMME_DATA[activeDay].map((event, idx) => (
-              <div className="event-item" key={idx}>
-                <div className="time-column">{event.time}</div>
-                <div className="event-details">
+              <article className="prog-event" key={`${activeDay}-${idx}`}>
+                <div className="prog-event-time">{event.time}</div>
+
+                <div className="prog-event-body">
                   <h3>{event.title}</h3>
                   <p>
-                    <span className="v-icon">{event.icon}</span>
+                    <span className="prog-event-icon">{event.icon}</span>
                     {event.venue}
                   </p>
                 </div>
-              </div>
+              </article>
             ))}
-          </div>
+          </section>
 
-          <div className="archive-link-section">
-            <a href="/archive" className="archive-link" aria-label="Open archive">
-              <div className="archive-logo-wrap">
+          <section className="prog-archive-link">
+            <a href="/archive" className="prog-archive-anchor" aria-label="Open heritage">
+              <div className="prog-archive-mark">
                 <img
                   src="/moville_lighthouse_clean_best.webp"
                   alt="Moville lighthouse"
-                  className="archive-logo"
+                  className="prog-archive-logo"
                 />
-                <span className="archive-years">1958 — 2026</span>
+                <span className="prog-archive-years">Festival Heritage</span>
               </div>
             </a>
-          </div>
+          </section>
         </main>
       </div>
     </div>

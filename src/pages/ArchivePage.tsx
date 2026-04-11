@@ -1,108 +1,69 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { archiveItems, type ArchiveItem } from '../data/archive';
 import './ArchivePage.css';
-
-type ArchiveItem = {
-  id: number;
-  title: string;
-  summary: string;
-  date: string;
-  decade: string;
-  pdf: string;
-};
-
-const ARCHIVE_ITEMS: ArchiveItem[] = [
-  {
-    id: 1,
-    title: 'Opening Ceremony of International Angling Festival',
-    summary:
-      'A prominent festival report linking the event to fishing tourism, Greencastle and the wider development of the area’s visitor economy.',
-    date: '26 Aug 1958',
-    decade: '1950s',
-    pdf: '/archive/opening-ceremony-of-international-angling-festival.pdf',
-  },
-  {
-    id: 2,
-    title: 'Sea Angling Benefits Tourist Industry',
-    summary:
-      'A closing festival report focused on visitor numbers, hospitality, fish and the wider tourism value brought to Moville and the district.',
-    date: '2 Sep 1958',
-    decade: '1950s',
-    pdf: '/archive/competitors-say-moville-has-everything-festival-report.pdf',
-  },
-  {
-    id: 3,
-    title: 'Moville Plans for Big Sea Angling Event',
-    summary:
-      'An early preview piece announcing plans for the annual festival and pointing to competitors from across Ireland and overseas.',
-    date: '21 Mar 1958',
-    decade: '1950s',
-    pdf: '/archive/moville-plans-big-sea-angling-event.pdf',
-  },
-  {
-    id: 4,
-    title: 'Moville and Its Deep-Sea Angling Festival',
-    summary:
-      'A feature-style article setting the scene for the festival and presenting Moville as both a fishing centre and a holiday destination.',
-    date: '8 May 1958',
-    decade: '1950s',
-    pdf: '/archive/moville-sea-angling-festival-upcoming-events-preview.pdf',
-  },
-  {
-    id: 5,
-    title: 'European Sea-Angling Festival at Moville',
-    summary:
-      'A substantial article around the opening ceremony, facilities, entries and the sense that Moville was staging an event of growing importance.',
-    date: '22 Aug 1958',
-    decade: '1950s',
-    pdf: '/archive/moville-sea-angling-festival-08.pdf',
-  },
-  {
-    id: 6,
-    title: 'Foyle Sea Angling Club’s First Annual Dinner',
-    summary:
-      'A follow-on report tied to the festival orbit, showing the wider social life, networks and club culture surrounding angling in the area.',
-    date: '2 Dec 1958',
-    decade: '1950s',
-    pdf: '/archive/foyle-sea-angling-festival.pdf',
-  },
-  {
-    id: 7,
-    title: 'A Trip Through Romantic Inishowen',
-    summary:
-      'A broader travel-style feature that helps place Moville and the festival landscape within the romance, scenery and appeal of Inishowen.',
-    date: '17 Oct 1958',
-    decade: '1950s',
-    pdf: '/archive/a-trip-through-romantic-inishowen.pdf',
-  },
-];
-
-const DECADES = ['All', '1950s', '1960s', '1970s', '1980s', '1990s', '2000s'];
 
 function ArchivePage() {
   const navigate = useNavigate();
   const [activeDecade, setActiveDecade] = useState('All');
   const [searchTerm, setSearchTerm] = useState('');
+  const [copiedId, setCopiedId] = useState<string | null>(null);
+
+  const decades = useMemo(() => {
+    const values = Array.from(new Set(archiveItems.map((item) => item.decade)));
+    return ['All', ...values.sort()];
+  }, []);
 
   const filteredItems = useMemo(() => {
-    return ARCHIVE_ITEMS.filter((item) => {
+    return archiveItems.filter((item) => {
       const matchesDecade = activeDecade === 'All' || item.decade === activeDecade;
       const q = searchTerm.trim().toLowerCase();
 
       const matchesSearch =
         q === '' ||
         item.title.toLowerCase().includes(q) ||
-        item.summary.toLowerCase().includes(q) ||
+        item.excerpt.toLowerCase().includes(q) ||
         item.date.toLowerCase().includes(q) ||
-        item.decade.toLowerCase().includes(q);
+        item.decade.toLowerCase().includes(q) ||
+        item.source.toLowerCase().includes(q);
 
       return matchesDecade && matchesSearch;
     });
   }, [activeDecade, searchTerm]);
 
+  useEffect(() => {
+    if (!copiedId) return;
+
+    const timer = window.setTimeout(() => {
+      setCopiedId(null);
+    }, 1800);
+
+    return () => window.clearTimeout(timer);
+  }, [copiedId]);
+
+  const handleShare = async (item: ArchiveItem) => {
+    const shareUrl = `${window.location.origin}${item.pdf}`;
+
+    try {
+      if (navigator.share) {
+        await navigator.share({
+          title: item.title,
+          text: item.excerpt,
+          url: shareUrl,
+        });
+        return;
+      }
+
+      await navigator.clipboard.writeText(shareUrl);
+      setCopiedId(item.id);
+    } catch {
+      // intentionally quiet
+    }
+  };
+
   return (
     <div className="archive-page">
-      <div className="archive-shell">
+      <div className="archive-shell page-shell">
         <header className="archive-header">
           <button
             className="archive-back"
@@ -116,9 +77,9 @@ function ArchivePage() {
 
           <div className="archive-header-copy">
             <p className="archive-kicker">Moville Festival</p>
-            <h1 className="archive-title">Archive</h1>
+            <h1 className="archive-title">Heritage</h1>
             <p className="archive-intro">
-              Newspaper clippings, reports and fragments from festival history.
+              Newspaper clippings, local memories and festival history from years gone by.
             </p>
           </div>
         </header>
@@ -128,25 +89,27 @@ function ArchivePage() {
             <input
               type="text"
               className="archive-search"
-              placeholder="Search archive"
+              placeholder="Search heritage"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
 
-          <div className="archive-decade-row">
-            {DECADES.map((decade) => (
+          <div className="archive-decade-row" aria-label="Archive decades">
+            {decades.map((decade) => (
               <button
                 key={decade}
                 className={`archive-decade-pill ${activeDecade === decade ? 'active' : ''}`}
                 onClick={() => setActiveDecade(decade)}
+                type="button"
+                aria-pressed={activeDecade === decade}
               >
                 {decade}
               </button>
             ))}
           </div>
 
-          <p className="archive-count">{filteredItems.length} clippings in the archive</p>
+          <p className="archive-count">{filteredItems.length} items in the heritage collection</p>
         </div>
 
         <section className="archive-grid">
@@ -154,25 +117,33 @@ function ArchivePage() {
             <article className="archive-card" key={item.id}>
               <div className="archive-paper">
                 <div className="archive-paper-inner">
-                  <div className="archive-masthead-wrap">
-                    <div className="archive-masthead">Derry Journey</div>
+                  <div className="archive-meta">
+                    <div className="archive-card-date" aria-label={`Published ${item.date}`}>
+                      {item.date}
+                    </div>
+                    <div className="archive-masthead">{item.source}</div>
                   </div>
 
-                  <h2 className="archive-card-title">{item.title}</h2>
+                  <div className="archive-meta-rule" aria-hidden="true" />
 
-                  <p className="archive-card-summary">{item.summary}</p>
+                  <h2 className="archive-card-title">{item.title}</h2>
+                  <p className="archive-card-summary">{item.excerpt}</p>
                 </div>
               </div>
 
               <div className="archive-card-footer">
-                <div className="archive-date-stamp">{item.date}</div>
-
                 <div className="archive-card-actions">
                   <a href={item.pdf} className="archive-pdf-button" target="_blank" rel="noreferrer">
                     View PDF
                   </a>
-                  <button className="archive-share-button" type="button">
-                    Share
+
+                  <button
+                    className={`archive-share-button ${copiedId === item.id ? 'is-copied' : ''}`}
+                    type="button"
+                    onClick={() => handleShare(item)}
+                    aria-live="polite"
+                  >
+                    {copiedId === item.id ? 'Copied' : 'Share'}
                   </button>
                 </div>
               </div>

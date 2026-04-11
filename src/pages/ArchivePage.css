@@ -1,30 +1,35 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600&display=swap');
-
 .archive-page {
   min-height: 100vh;
-  background: #dfe6e3;
-  color: #1f2321;
-  font-family: 'Inter', sans-serif;
+  background: var(--bg-base);
+  color: var(--text-primary);
+
+  --archive-card-shell-bg: color-mix(in srgb, var(--bg-surface-strong) 72%, #e6ddd0 28%);
+  --archive-paper-surface: var(--bg-paper);
+  --archive-paper-border: color-mix(in srgb, var(--border-soft) 65%, rgba(40, 36, 30, 0.08) 35%);
+  --archive-meta-strong: color-mix(in srgb, var(--text-primary) 88%, #2d2924 12%);
+  --archive-meta-soft: var(--text-muted);
+  --archive-rule: color-mix(in srgb, var(--text-primary) 16%, transparent 84%);
+  --archive-body: color-mix(in srgb, var(--text-primary) 74%, #4d473f 26%);
+  --archive-button-bg: color-mix(in srgb, var(--bg-surface-strong) 72%, white 28%);
 }
 
 .archive-shell {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 32px 18px 80px;
+  padding-top: 44px;
+  padding-bottom: 88px;
 }
 
 .archive-header {
+  max-width: var(--container-narrow);
   display: flex;
   align-items: flex-start;
   gap: 14px;
-  margin-bottom: 28px;
+  margin-bottom: 30px;
 }
 
 .archive-back {
   background: transparent;
   border: none;
-  color: #222;
-  cursor: pointer;
+  color: var(--text-primary);
   padding: 6px;
   margin-top: 8px;
 }
@@ -34,31 +39,34 @@
 }
 
 .archive-kicker {
-  margin: 0 0 6px;
+  margin: 0 0 10px;
   font-size: 0.78rem;
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.18em;
-  color: rgba(31, 35, 33, 0.55);
+  color: var(--text-muted);
 }
 
 .archive-title {
   margin: 0;
-  font-family: 'DM Serif Display', serif;
-  font-size: clamp(2.4rem, 5vw, 4.25rem);
-  line-height: 0.95;
-  color: #1f2321;
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 5.6vw, 4.8rem);
+  font-weight: 700;
+  line-height: 0.94;
+  color: var(--text-primary);
 }
 
 .archive-intro {
   margin: 12px 0 0;
   max-width: 640px;
   font-size: 1rem;
-  line-height: 1.55;
-  color: rgba(31, 35, 33, 0.72);
+  line-height: 1.58;
+  color: var(--text-secondary);
 }
 
 .archive-controls {
-  margin-bottom: 24px;
+  max-width: var(--container-narrow);
+  margin-bottom: 34px;
 }
 
 .archive-search-wrap {
@@ -68,23 +76,22 @@
 .archive-search {
   width: 100%;
   max-width: 420px;
-  height: 46px;
-  border-radius: 999px;
-  border: 1px solid rgba(0, 0, 0, 0.12);
-  background: rgba(255, 255, 255, 0.7);
+  min-height: 48px;
   padding: 0 18px;
-  font-size: 0.98rem;
-  color: #232624;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border-strong);
+  background: var(--bg-surface-strong);
+  color: var(--text-primary);
   outline: none;
 }
 
 .archive-search::placeholder {
-  color: rgba(35, 38, 36, 0.45);
+  color: var(--text-muted);
 }
 
 .archive-search:focus {
-  border-color: rgba(0, 0, 0, 0.22);
-  background: rgba(255, 255, 255, 0.88);
+  border-color: color-mix(in srgb, var(--text-primary) 18%, transparent 82%);
+  background: color-mix(in srgb, var(--bg-surface-strong) 88%, white 12%);
 }
 
 .archive-decade-row {
@@ -95,113 +102,123 @@
 }
 
 .archive-decade-pill {
-  border: 1px solid rgba(0, 0, 0, 0.14);
-  background: rgba(255, 255, 255, 0.58);
-  color: #2b2f2c;
-  border-radius: 999px;
-  padding: 10px 18px;
-  font-size: 0.95rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
+  min-height: 42px;
+  padding: 0 18px;
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-pill);
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.archive-decade-pill:hover {
+  transform: translateY(-1px);
 }
 
 .archive-decade-pill.active {
-  background: #212121;
-  color: #fff;
-  border-color: #212121;
+  background: var(--text-primary);
+  color: var(--bg-base);
+  border-color: var(--text-primary);
 }
 
 .archive-count {
   margin: 0;
   font-size: 0.95rem;
-  color: rgba(31, 35, 33, 0.6);
+  color: var(--text-muted);
 }
 
 .archive-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 22px;
+  align-items: stretch;
 }
 
 .archive-card {
-  background: #e7ece8;
-  border-radius: 24px;
-  padding: 18px 18px 20px;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  display: flex;
+  flex-direction: column;
+  border-radius: 26px;
+  padding: 18px;
+  background: var(--archive-card-shell-bg);
+  border: 1px solid var(--border-soft);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18);
 }
 
 .archive-paper {
-  background: #f6f3ee;
-  border-radius: 14px;
-  padding: 18px 18px 20px;
-  border: 1px solid rgba(0, 0, 0, 0.04);
-  min-height: 230px;
+  flex: 1 1 auto;
+  min-height: 236px;
+  border-radius: 16px;
+  padding: 22px 20px 22px;
+  background: var(--archive-paper-surface);
+  border: 1px solid var(--archive-paper-border);
 }
 
 .archive-paper-inner {
   height: 100%;
 }
 
-.archive-masthead-wrap {
+.archive-meta {
   display: flex;
-  justify-content: center;
-  margin-bottom: 18px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  margin-bottom: 14px;
+}
+
+.archive-card-date {
+  font-size: 1.02rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--archive-meta-strong);
 }
 
 .archive-masthead {
-  width: 100%;
-  text-align: center;
-  padding-bottom: 11px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-  font-family: 'Georgia', 'Times New Roman', serif;
-  font-size: 0.88rem;
-  font-weight: 600;
-  letter-spacing: 0.26em;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.24em;
   text-transform: uppercase;
-  color: rgba(47, 44, 40, 0.72);
+  color: var(--archive-meta-soft);
+}
+
+.archive-meta-rule {
+  width: 100%;
+  height: 1px;
+  background: var(--archive-rule);
+  margin-bottom: 18px;
 }
 
 .archive-card-title {
   margin: 0 0 18px;
-  font-family: 'Georgia', 'Times New Roman', serif;
-  font-size: clamp(1.9rem, 2.2vw, 2.35rem);
-  line-height: 1.04;
+  font-family: var(--font-display);
+  font-size: clamp(1.7rem, 2.1vw, 2.18rem);
+  line-height: 1.02;
   font-weight: 700;
-  letter-spacing: -0.025em;
-  color: #322d27;
+  letter-spacing: -0.02em;
+  color: var(--archive-meta-strong);
   text-wrap: balance;
 }
 
 .archive-card-summary {
   margin: 0;
-  font-family: 'Georgia', 'Times New Roman', serif;
-  font-size: 1.02rem;
-  line-height: 1.58;
-  color: #4b4741;
+  font-size: 0.98rem;
+  line-height: 1.62;
+  color: var(--archive-body);
 }
 
 .archive-card-footer {
-  margin-top: 18px;
-  padding: 0 14px 0 16px;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-}
-
-.archive-date-stamp {
-  padding-left: 8px;
-  font-family: 'Georgia', 'Times New Roman', serif;
-  font-size: 1.14rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: rgba(64, 57, 49, 0.8);
-  text-shadow:
-    0.3px 0 rgba(64, 57, 49, 0.34),
-    -0.3px 0 rgba(64, 57, 49, 0.2);
-  transform: rotate(-0.8deg);
-  white-space: nowrap;
+  justify-content: flex-start;
+  margin-top: 18px;
+  padding: 0 12px 0 14px;
 }
 
 .archive-card-actions {
@@ -214,32 +231,59 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 34px;
+  min-height: 36px;
   padding: 0 15px;
-  border: 1px solid rgba(0, 0, 0, 0.15);
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.34);
-  color: #3f3b37;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-pill);
+  background: var(--archive-button-bg);
+  color: var(--text-primary);
   text-decoration: none;
-  font-size: 0.95rem;
-  font-weight: 500;
+  font-size: 0.94rem;
+  font-weight: 600;
+  transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
 .archive-share-button {
   border: none;
   background: transparent;
-  color: #67625c;
-  font-size: 0.95rem;
-  cursor: pointer;
+  color: var(--text-secondary);
+  font-size: 0.94rem;
+  font-weight: 600;
   padding: 0;
+  transition: opacity 0.2s ease, transform 0.2s ease, color 0.2s ease;
+}
+
+.archive-share-button.is-copied {
+  color: var(--accent-strong);
 }
 
 .archive-pdf-button:hover,
 .archive-share-button:hover {
-  opacity: 0.78;
+  opacity: 0.82;
+  transform: translateY(-1px);
 }
 
-@media (max-width: 900px) {
+.theme-night .archive-page {
+  --archive-card-shell-bg: rgba(255, 255, 255, 0.03);
+  --archive-paper-surface: linear-gradient(
+    to bottom,
+    rgba(24, 32, 40, 0.96) 0%,
+    rgba(20, 28, 36, 0.98) 100%
+  );
+  --archive-paper-border: rgba(255, 255, 255, 0.06);
+  --archive-meta-strong: color-mix(in srgb, var(--text-primary) 92%, #f2eadc 8%);
+  --archive-meta-soft: rgba(244, 239, 229, 0.58);
+  --archive-rule: rgba(255, 255, 255, 0.12);
+  --archive-body: rgba(242, 234, 220, 0.72);
+  --archive-button-bg: rgba(255, 255, 255, 0.06);
+}
+
+@media (max-width: 720px) {
+  .archive-shell {
+    padding-top: 36px;
+    padding-bottom: 72px;
+  }
+
   .archive-grid {
     grid-template-columns: 1fr;
   }
@@ -247,58 +291,33 @@
 
 @media (max-width: 640px) {
   .archive-shell {
-    padding: 24px 14px 64px;
+    padding-top: 32px;
+    padding-bottom: 64px;
   }
 
   .archive-header {
-    margin-bottom: 22px;
+    margin-bottom: 24px;
   }
 
-  .archive-title {
-    font-size: 2.7rem;
-  }
-
-  .archive-intro {
-    font-size: 0.95rem;
+  .archive-controls {
+    margin-bottom: 28px;
   }
 
   .archive-card {
-    padding: 14px 14px 16px;
     border-radius: 22px;
+    padding: 14px;
   }
 
   .archive-paper {
-    min-height: 210px;
-    padding: 16px 16px 18px;
-  }
-
-  .archive-masthead {
-    font-size: 0.8rem;
-    letter-spacing: 0.2em;
+    min-height: auto;
+    padding: 20px 18px;
   }
 
   .archive-card-title {
-    font-size: 1.8rem;
+    font-size: 1.56rem;
   }
 
   .archive-card-summary {
-    font-size: 0.98rem;
-  }
-
-  .archive-card-footer {
-    padding: 0 10px 0 12px;
-    gap: 12px;
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
-  .archive-card-actions {
-    width: 100%;
-    justify-content: flex-start;
-  }
-
-  .archive-date-stamp {
-    padding-left: 4px;
-    font-size: 1.06rem;
+    font-size: 0.95rem;
   }
 }

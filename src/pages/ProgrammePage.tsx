@@ -3,24 +3,93 @@ import { Link } from 'react-router-dom';
 import './ProgrammePage.css';
 
 const PROGRAMME_DATA = {
-  WED: [{ time: '21:00', title: 'Festival Bingo', venue: "St Eugene's Hall", icon: '🎱' }],
-  THU: [{ time: '20:00', title: 'Festival Queen', venue: "Annie's Bar", icon: '👑' }],
+  WED: [
+    {
+      time: '21:00',
+      title: 'Festival Bingo',
+      strapline: 'Eyes down for a good night. Prizes, laughs and some serious daubing.',
+      venue: "St Eugene's Hall",
+    },
+  ],
+  THU: [
+    {
+      time: '20:00',
+      title: 'Festival Queen',
+      strapline: 'Who will wear the crown? An evening of glam, talent and Moville pride.',
+      venue: "Annie's Bar",
+    },
+  ],
   FRI: [
-    { time: '19:00', title: 'Street Frolics', venue: 'Market Square', icon: '🎉' },
-    { time: '20:00', title: "All Folk'd Up", venue: 'Market Square', icon: '🎵' },
+    {
+      time: '19:00',
+      title: 'Street Frolics',
+      strapline: 'Market Square opens up for the festival\'s first big outdoor evening.',
+      venue: 'Market Square',
+    },
+    {
+      time: '20:00',
+      title: "All Folk'd Up",
+      strapline: 'Trad, folk and everything in between — live music under the summer sky.',
+      venue: 'Market Square',
+    },
   ],
   SAT: [
-    { time: '11:00', title: 'Pet Show', venue: 'The Green', icon: '🐕' },
-    { time: '14:00', title: 'Bonny Baby', venue: "St Eugene's Hall", icon: '👶' },
-    { time: '16:00', title: 'Treasure Hunt', venue: "McGettigan's Bar", icon: '🗺️' },
-    { time: '18:00', title: 'Marty Healy Band', venue: 'Market Square', icon: '🎸' },
-    { time: '21:00', title: 'Bagatelle', venue: 'Market Square', icon: '🎤' },
+    {
+      time: '11:00',
+      title: 'Pet Show',
+      strapline: "Moville's finest four-legged friends. Judges will be tough.",
+      venue: 'The Green',
+    },
+    {
+      time: '14:00',
+      title: 'Bonny Baby',
+      strapline: "The one the whole town turns out for — cheer on Moville's bonniest babies.",
+      venue: "St Eugene's Hall",
+    },
+    {
+      time: '16:00',
+      title: 'Treasure Hunt',
+      strapline: 'Follow the clues across town — prizes for all who dare to seek.',
+      venue: "McGettigan's Bar",
+    },
+    {
+      time: '18:00',
+      title: 'Marty Healy Band',
+      strapline: 'Live music on the square as the evening kicks off — expect something to move your feet.',
+      venue: 'Market Square',
+    },
+    {
+      time: '21:00',
+      title: 'Bagatelle',
+      strapline: "Ireland's beloved folk-rock legends bring the big Saturday night to Market Square.",
+      venue: 'Market Square',
+    },
   ],
   SUN: [
-    { time: '12:00', title: 'Moville Celtic Sports', venue: 'Glencrow', icon: '🏅' },
-    { time: '17:30', title: 'Balldrop', venue: 'The Green', icon: '🎈' },
-    { time: '17:30', title: 'The 2 Bucks', venue: 'Market Square', icon: '🎵' },
-    { time: '20:30', title: 'ABBA', venue: 'Market Square', icon: '🎤' },
+    {
+      time: '12:00',
+      title: 'Moville Celtic Sports',
+      strapline: 'Track and field on the banks of the Foyle — a proud day for the peninsula.',
+      venue: 'Glencrow',
+    },
+    {
+      time: '17:30',
+      title: 'Ball Drop',
+      strapline: 'The suspense builds as hundreds of balls are released over The Green.',
+      venue: 'The Green',
+    },
+    {
+      time: '17:30',
+      title: 'The Two Bucks',
+      strapline: 'An afternoon session to ease you into the final night.',
+      venue: 'Market Square',
+    },
+    {
+      time: '20:30',
+      title: 'ABBA Tribute',
+      strapline: 'The perfect send-off. Dancing Queens, Moville style.',
+      venue: 'Market Square',
+    },
   ],
 } as const;
 
@@ -30,46 +99,13 @@ type ProgrammePageProps = {
   isNight: boolean;
 };
 
-function InstagramIcon() {
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden="true" className="prog-social-icon-svg">
-      <rect x="3" y="3" width="18" height="18" rx="5" ry="5" fill="none" stroke="currentColor" strokeWidth="1.8" />
-      <circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" strokeWidth="1.8" />
-      <circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" />
-    </svg>
-  );
-}
-
-function TikTokIcon() {
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden="true" className="prog-social-icon-svg">
-      <path
-        d="M14.5 3.5c.4 1.9 1.8 3.3 3.7 3.7v2.7c-1.4 0-2.7-.4-3.8-1.1v6a4.9 4.9 0 1 1-4.9-4.9c.3 0 .7 0 1 .1v2.8a2.3 2.3 0 1 0 1.4 2.1V3.5h2.6Z"
-        fill="currentColor"
-      />
-    </svg>
-  );
-}
-
-function FacebookIcon() {
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden="true" className="prog-social-icon-svg">
-      <path
-        d="M13.5 21v-7h2.5l.4-3h-2.9V9.1c0-.9.2-1.6 1.5-1.6H16V4.8c-.4-.1-1.2-.2-2.1-.2-2.1 0-3.5 1.3-3.5 3.7V11H8v3h2.4v7h3.1Z"
-        fill="currentColor"
-      />
-    </svg>
-  );
-}
-
-function MailIcon() {
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden="true" className="prog-social-icon-svg">
-      <rect x="3" y="5" width="18" height="14" rx="2" ry="2" fill="none" stroke="currentColor" strokeWidth="1.8" />
-      <path d="M4.5 7l7.5 6 7.5-6" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
+const DAY_LABELS: Record<FestivalDay, string> = {
+  WED: 'Wed, 8 Jul',
+  THU: 'Thu, 9 Jul',
+  FRI: 'Fri, 10 Jul',
+  SAT: 'Sat, 11 Jul',
+  SUN: 'Sun, 12 Jul',
+};
 
 function ProgrammePage({ isNight }: ProgrammePageProps) {
   const [activeDay, setActiveDay] = useState<FestivalDay>('SAT');
@@ -80,27 +116,18 @@ function ProgrammePage({ isNight }: ProgrammePageProps) {
 
       <div className="prog-content page-shell--narrow">
         <header className="prog-header">
-          <div className="prog-title-row">
-            <Link to="/" className="prog-inline-back" aria-label="Back to home">
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden="true"
-              >
+          <div className="prog-header-top">
+            <Link to="/" className="prog-back" aria-label="Back to home">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
                 <path d="M15 18l-6-6 6-6" />
               </svg>
             </Link>
-
-            <h1 className="prog-title">Programme</h1>
+            <div className="prog-header-meta">
+              <p className="prog-kicker">Moville Festival</p>
+              <span className="prog-header-date">8–12 July 2026</span>
+            </div>
           </div>
-
-          <div className="prog-header-meta">8–12 July 2026</div>
+          <h1 className="prog-title">Programme</h1>
         </header>
 
         <nav className="prog-day-nav" aria-label="Festival days">
@@ -122,7 +149,6 @@ function ProgrammePage({ isNight }: ProgrammePageProps) {
         <main className="prog-main">
           <section className="prog-weather surface-card">
             <span className="prog-weather-icon">{isNight ? '🌜' : '☀️'}</span>
-
             <div className="prog-weather-copy">
               <span className="prog-weather-line">
                 {isNight ? '14°C in Moville this evening' : '18°C in Moville today'}
@@ -136,16 +162,21 @@ function ProgrammePage({ isNight }: ProgrammePageProps) {
           </section>
 
           <section className="prog-schedule surface-card">
+            <div className="prog-day-header">
+              <span className="prog-day-header-text">{DAY_LABELS[activeDay].toUpperCase()}</span>
+            </div>
+            <div className="prog-day-rule" aria-hidden="true" />
+
             {PROGRAMME_DATA[activeDay].map((event, idx) => (
               <article className="prog-event" key={`${activeDay}-${idx}`}>
                 <div className="prog-event-time">{event.time}</div>
-
-                <div className="prog-event-body">
-                  <h3>{event.title}</h3>
-                  <p>
-                    <span className="prog-event-icon">{event.icon}</span>
-                    {event.venue}
-                  </p>
+                <h3 className="prog-event-title">{event.title}</h3>
+                <p className="prog-event-strapline">{event.strapline}</p>
+                <div className="prog-event-venue">
+                  <svg width="13" height="13" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z" />
+                  </svg>
+                  {event.venue}
                 </div>
               </article>
             ))}
@@ -159,48 +190,56 @@ function ProgrammePage({ isNight }: ProgrammePageProps) {
                   alt="Moville lighthouse"
                   className="prog-archive-logo"
                 />
-                <span className="prog-archive-years">Festival Heritage</span>
+                <span className="prog-archive-years"> 1958 - 2026 </span>
               </div>
             </a>
           </section>
 
-          <section className="prog-socials" aria-label="Moville Festival social links">
+          <section className="prog-social">
             <a
               href="https://www.instagram.com/movillefestival/"
-              target="_blank"
-              rel="noreferrer"
-              aria-label="Moville Festival on Instagram"
               className="prog-social-link"
+              aria-label="Instagram"
+              target="_blank"
+              rel="noopener noreferrer"
             >
-              <InstagramIcon />
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                <circle cx="12" cy="12" r="4"/>
+                <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/>
+              </svg>
             </a>
-
             <a
               href="https://www.tiktok.com/@moville.festival"
-              target="_blank"
-              rel="noreferrer"
-              aria-label="Moville Festival on TikTok"
               className="prog-social-link"
+              aria-label="TikTok"
+              target="_blank"
+              rel="noopener noreferrer"
             >
-              <TikTokIcon />
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/>
+              </svg>
             </a>
-
             <a
               href="https://www.facebook.com/profile.php?id=100092674825683"
-              target="_blank"
-              rel="noreferrer"
-              aria-label="Moville Festival on Facebook"
               className="prog-social-link"
+              aria-label="Facebook"
+              target="_blank"
+              rel="noopener noreferrer"
             >
-              <FacebookIcon />
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+              </svg>
             </a>
-
             <a
               href="mailto:movillefestival@gmail.com"
-              aria-label="Email Moville Festival"
               className="prog-social-link"
+              aria-label="Email"
             >
-              <MailIcon />
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <rect x="2" y="4" width="20" height="16" rx="3"/>
+                <polyline points="2,4 12,13 22,4"/>
+              </svg>
             </a>
           </section>
         </main>

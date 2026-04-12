@@ -32,7 +32,7 @@
   --bg-soft: #f4f8fb;
   --bg-surface: rgba(255, 255, 255, 0.62);
   --bg-surface-strong: rgba(255, 255, 255, 0.82);
-  --bg-paper: #f5f0e7;
+  --bg-paper: #edf4f5;
 
   --text-primary: #1d2730;
   --text-secondary: rgba(29, 39, 48, 0.72);
@@ -41,8 +41,8 @@
   --border-soft: rgba(30, 50, 68, 0.08);
   --border-strong: rgba(30, 50, 68, 0.14);
 
-  --accent: #d6ab43;
-  --accent-strong: #c99628;
+  --accent: #3d9db0;
+  --accent-strong: #2d8a9e;
 }
 
 html {
@@ -115,11 +115,11 @@ button {
 }
 
 .theme-night {
-  --bg-base: #0d1218;
-  --bg-soft: #121921;
-  --bg-surface: rgba(26, 33, 42, 0.76);
-  --bg-surface-strong: rgba(24, 31, 40, 0.92);
-  --bg-paper: #191f27;
+  --bg-base: #0c1a22;
+  --bg-soft: #101e28;
+  --bg-surface: rgba(18, 36, 48, 0.76);
+  --bg-surface-strong: rgba(16, 32, 44, 0.92);
+  --bg-paper: #122030;
 
   --text-primary: #f4efe5;
   --text-secondary: rgba(244, 239, 229, 0.74);

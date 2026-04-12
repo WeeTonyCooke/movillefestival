@@ -3,14 +3,14 @@
   background: var(--bg-base);
   color: var(--text-primary);
 
-  --archive-card-shell-bg: color-mix(in srgb, var(--bg-surface-strong) 72%, #e6ddd0 28%);
+  --archive-card-shell-bg: color-mix(in srgb, var(--bg-surface-strong) 92%, rgba(61, 157, 176, 0.12) 8%);
   --archive-paper-surface: var(--bg-paper);
-  --archive-paper-border: color-mix(in srgb, var(--border-soft) 65%, rgba(40, 36, 30, 0.08) 35%);
-  --archive-meta-strong: color-mix(in srgb, var(--text-primary) 88%, #2d2924 12%);
+  --archive-paper-border: var(--border-soft);
+  --archive-meta-strong: var(--text-primary);
   --archive-meta-soft: var(--text-muted);
-  --archive-rule: color-mix(in srgb, var(--text-primary) 16%, transparent 84%);
-  --archive-body: color-mix(in srgb, var(--text-primary) 74%, #4d473f 26%);
-  --archive-button-bg: color-mix(in srgb, var(--bg-surface-strong) 72%, white 28%);
+  --archive-rule: var(--border-soft);
+  --archive-body: var(--text-secondary);
+  --archive-button-bg: var(--bg-surface);
 }
 
 .archive-shell {
@@ -21,51 +21,43 @@
 .archive-header {
   max-width: var(--container-narrow);
   display: flex;
-  flex-direction: column;
   align-items: flex-start;
   gap: 14px;
   margin-bottom: 30px;
 }
 
-.archive-title-row {
-  display: flex;
-  align-items: center;
-  gap: 14px;
+.archive-back {
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  padding: 6px;
+  margin-top: 8px;
+}
+
+.archive-header-copy {
   min-width: 0;
 }
 
-.archive-inline-back {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
-  flex: 0 0 auto;
-  padding: 0;
-  border: none;
-  background: transparent;
-  color: var(--text-primary);
-  text-decoration: none;
-  opacity: 0.88;
-  transition: opacity 0.2s ease, transform 0.2s ease;
-}
-
-.archive-inline-back:hover {
-  opacity: 1;
-  transform: translateX(-1px);
+.archive-kicker {
+  margin: 0 0 10px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--text-muted);
 }
 
 .archive-title {
   margin: 0;
   font-family: var(--font-display);
-  font-size: clamp(2.8rem, 6vw, 4.8rem);
+  font-size: clamp(2.5rem, 5.6vw, 4.8rem);
   font-weight: 700;
   line-height: 0.94;
   color: var(--text-primary);
 }
 
 .archive-intro {
-  margin: 0;
+  margin: 12px 0 0;
   max-width: 640px;
   font-size: 1rem;
   line-height: 1.58;
@@ -132,9 +124,9 @@
 }
 
 .archive-decade-pill.active {
-  background: var(--text-primary);
-  color: var(--bg-base);
-  border-color: var(--text-primary);
+  background: var(--accent);
+  color: #ffffff;
+  border-color: var(--accent);
 }
 
 .archive-count {
@@ -182,19 +174,27 @@
 }
 
 .archive-card-date {
-  font-size: 1.02rem;
+  font-size: 0.75rem;
   font-weight: 700;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--archive-meta-strong);
+  color: var(--accent);
 }
 
 .archive-masthead {
+  display: flex;
+  align-items: center;
+  gap: 5px;
   font-size: 0.74rem;
   font-weight: 700;
-  letter-spacing: 0.24em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--archive-meta-soft);
+  color: var(--text-secondary);
+}
+
+.archive-masthead svg {
+  fill: var(--accent);
+  flex-shrink: 0;
 }
 
 .archive-meta-rule {
@@ -241,14 +241,20 @@
   justify-content: center;
   min-height: 36px;
   padding: 0 15px;
-  border: 1px solid var(--border-strong);
+  border: 1px solid var(--accent);
   border-radius: var(--radius-pill);
-  background: var(--archive-button-bg);
-  color: var(--text-primary);
+  background: transparent;
+  color: var(--accent);
   text-decoration: none;
   font-size: 0.94rem;
   font-weight: 600;
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.archive-pdf-button:hover {
+  background: var(--accent);
+  color: #ffffff;
+  transform: translateY(-1px);
 }
 
 .archive-share-button {
@@ -265,25 +271,20 @@
   color: var(--accent-strong);
 }
 
-.archive-pdf-button:hover,
 .archive-share-button:hover {
   opacity: 0.82;
   transform: translateY(-1px);
 }
 
 .theme-night .archive-page {
-  --archive-card-shell-bg: rgba(255, 255, 255, 0.03);
-  --archive-paper-surface: linear-gradient(
-    to bottom,
-    rgba(24, 32, 40, 0.96) 0%,
-    rgba(20, 28, 36, 0.98) 100%
-  );
-  --archive-paper-border: rgba(255, 255, 255, 0.06);
-  --archive-meta-strong: color-mix(in srgb, var(--text-primary) 92%, #f2eadc 8%);
-  --archive-meta-soft: rgba(244, 239, 229, 0.58);
-  --archive-rule: rgba(255, 255, 255, 0.12);
-  --archive-body: rgba(242, 234, 220, 0.72);
-  --archive-button-bg: rgba(255, 255, 255, 0.06);
+  --archive-card-shell-bg: rgba(61, 157, 176, 0.04);
+  --archive-paper-surface: rgba(18, 36, 48, 0.82);
+  --archive-paper-border: rgba(255, 255, 255, 0.07);
+  --archive-meta-strong: var(--text-primary);
+  --archive-meta-soft: var(--text-muted);
+  --archive-rule: rgba(255, 255, 255, 0.1);
+  --archive-body: var(--text-secondary);
+  --archive-button-bg: rgba(255, 255, 255, 0.05);
 }
 
 @media (max-width: 720px) {
@@ -304,12 +305,7 @@
   }
 
   .archive-header {
-    gap: 12px;
     margin-bottom: 24px;
-  }
-
-  .archive-title-row {
-    gap: 12px;
   }
 
   .archive-controls {

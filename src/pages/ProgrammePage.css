@@ -17,8 +17,8 @@
 
 .theme-night .prog-bg {
   background:
-    radial-gradient(circle at top, rgba(214, 171, 67, 0.09), transparent 26%),
-    linear-gradient(to bottom, #10161d 0%, #0d1218 100%);
+    radial-gradient(circle at top, rgba(61, 157, 176, 0.08), transparent 26%),
+    linear-gradient(to bottom, #101e28 0%, #0c1a22 100%);
 }
 
 .prog-content {
@@ -29,36 +29,53 @@
 }
 
 .prog-header {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 14px;
   margin-bottom: 28px;
 }
 
-.prog-title-row {
+.prog-header-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 10px;
+}
+
+.prog-back {
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  padding: 6px;
+  margin-top: 6px;
+  flex-shrink: 0;
+  text-decoration: none;
   display: flex;
   align-items: center;
-  gap: 14px;
-  min-width: 0;
 }
 
-.prog-inline-back {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
-  flex: 0 0 auto;
-  color: var(--text-primary);
-  text-decoration: none;
-  opacity: 0.88;
-  transition: opacity 0.2s ease, transform 0.2s ease;
+.prog-back:hover {
+  color: var(--accent);
 }
 
-.prog-inline-back:hover {
-  opacity: 1;
-  transform: translateX(-1px);
+.prog-header-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.prog-kicker {
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--text-muted);
+}
+
+.prog-header-date {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
 }
 
 .prog-title {
@@ -68,14 +85,6 @@
   font-weight: 700;
   line-height: 0.94;
   color: var(--text-primary);
-}
-
-.prog-header-meta {
-  font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--text-muted);
 }
 
 .prog-day-nav {
@@ -120,7 +129,7 @@
 .prog-day-pill.is-active {
   background: var(--accent);
   border-color: var(--accent);
-  color: #101010;
+  color: #ffffff;
 }
 
 .prog-main {
@@ -128,6 +137,7 @@
   gap: 22px;
 }
 
+/* ── Weather widget ── */
 .prog-weather {
   display: flex;
   align-items: center;
@@ -158,52 +168,88 @@
   color: var(--text-secondary);
 }
 
+/* ── Schedule card ── */
 .prog-schedule {
   overflow: hidden;
   border-radius: var(--radius-lg);
   background: var(--bg-surface-strong);
   box-shadow: var(--shadow-card);
+  padding: 0 24px;
 }
 
+/* ── Day header — RA style ── */
+.prog-day-header {
+  padding: 22px 0 10px;
+}
+
+.prog-day-header-text {
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--accent);
+  line-height: 1;
+}
+
+.prog-day-rule {
+  width: 100%;
+  height: 1px;
+  background: var(--border-soft);
+  margin-bottom: 4px;
+}
+
+/* ── Event items — RA style ── */
 .prog-event {
-  display: grid;
-  grid-template-columns: 92px minmax(0, 1fr);
-  gap: 18px;
-  padding: 24px 24px;
+  padding: 20px 0;
   border-bottom: 1px solid var(--border-soft);
 }
 
 .prog-event:last-child {
   border-bottom: none;
+  padding-bottom: 24px;
 }
 
 .prog-event-time {
-  padding-top: 1px;
-  font-size: 0.96rem;
+  font-size: 0.75rem;
   font-weight: 700;
-  letter-spacing: 0.04em;
-  color: var(--accent-strong);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 6px;
 }
 
-.prog-event-body h3 {
-  margin: 0;
-  font-size: 1.12rem;
+.prog-event-title {
+  margin: 0 0 5px;
+  font-family: var(--font-display);
+  font-size: 1.35rem;
   font-weight: 700;
+  line-height: 1.1;
   color: var(--text-primary);
 }
 
-.prog-event-body p {
-  display: flex;
-  align-items: center;
-  margin: 8px 0 0;
-  font-size: 0.95rem;
+.prog-event-strapline {
+  margin: 0 0 10px;
+  font-size: 0.85rem;
+  font-weight: 400;
+  line-height: 1.45;
   color: var(--text-secondary);
 }
 
-.prog-event-icon {
-  margin-right: 10px;
+.prog-event-venue {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--text-primary);
 }
 
+.prog-event-venue svg {
+  fill: var(--accent);
+  flex-shrink: 0;
+}
+
+/* ── Archive link ── */
 .prog-archive-link {
   display: flex;
   justify-content: center;
@@ -231,7 +277,7 @@
   height: 120px;
   transform: translate(-50%, -52%);
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(214, 171, 67, 0.16) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(61, 157, 176, 0.16) 0%, transparent 70%);
   filter: blur(12px);
   opacity: 0.45;
 }
@@ -259,129 +305,101 @@
   color: var(--text-secondary);
 }
 
-.prog-socials {
+.theme-night .prog-archive-years {
+  color: rgba(244, 239, 229, 0.78);
+}
+
+/* ── Social links ── */
+.prog-social {
   display: flex;
   justify-content: center;
-  align-items: center;
   gap: 18px;
-  margin-top: 4px;
-  padding-top: 4px;
+  padding: 12px 0 8px;
 }
 
 .prog-social-link {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
-  width: 42px;
-  height: 42px;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: 1px solid var(--border-strong);
   color: var(--text-secondary);
-  text-decoration: none;
-  border-radius: 999px;
-  border: 1px solid var(--border-soft);
-  background: var(--bg-surface);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
   transition:
-    transform 0.2s ease,
     color 0.2s ease,
     border-color 0.2s ease,
-    background 0.2s ease;
+    transform 0.2s ease;
+}
+
+.prog-social-link svg {
+  width: 20px;
+  height: 20px;
 }
 
 .prog-social-link:hover {
-  transform: translateY(-2px);
-  color: var(--text-primary);
+  color: var(--accent);
   border-color: var(--accent);
+  transform: translateY(-2px);
 }
 
-.prog-social-icon-svg {
-  width: 18px;
-  height: 18px;
-  display: block;
+/* ── Responsive ── */
+@media (min-width: 900px) {
+  .prog-content {
+    padding-top: 48px;
+    padding-bottom: 96px;
+  }
+
+  .prog-main {
+    gap: 24px;
+  }
 }
 
 @media (max-width: 640px) {
   .prog-content {
-    padding-top: 34px;
-    padding-bottom: 72px;
+    padding-top: 32px;
+    padding-bottom: 64px;
   }
 
-  .prog-header {
-    gap: 12px;
-    margin-bottom: 22px;
+  .prog-topbar {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 12px;
   }
 
   .prog-title {
-    font-size: clamp(2.3rem, 11vw, 3.2rem);
+    font-size: 3.1rem;
   }
 
   .prog-day-nav {
-    margin-bottom: 20px;
+    margin-bottom: 22px;
     padding: 10px 0 14px;
   }
 
   .prog-day-nav-inner {
-    gap: 8px;
+    justify-content: space-between;
   }
 
   .prog-day-pill {
-    min-height: 38px;
-    padding: 0 14px;
-    font-size: 0.74rem;
-    letter-spacing: 0.1em;
+    flex: 1 1 calc(20% - 8px);
+    min-width: 0;
+    padding: 0 12px;
   }
 
-  .prog-main {
-    gap: 18px;
+  .prog-schedule {
+    padding: 0 18px;
   }
 
-  .prog-weather {
-    padding: 16px 18px;
-    gap: 12px;
-  }
-
-  .prog-weather-line {
-    font-size: 0.93rem;
-  }
-
-  .prog-weather-subline {
-    font-size: 0.86rem;
-  }
-
-  .prog-event {
-    grid-template-columns: 72px minmax(0, 1fr);
-    gap: 14px;
-    padding: 18px 18px;
-  }
-
-  .prog-event-time {
-    font-size: 0.88rem;
-  }
-
-  .prog-event-body h3 {
-    font-size: 1rem;
-  }
-
-  .prog-event-body p {
-    margin-top: 6px;
-    font-size: 0.9rem;
+  .prog-event-title {
+    font-size: 1.2rem;
   }
 
   .prog-archive-logo {
-    width: 108px;
+    width: 112px;
   }
 
-  .prog-socials {
-    gap: 14px;
-  }
-
-  .prog-social-link {
-    width: 40px;
-    height: 40px;
-  }
-
-  .prog-social-icon-svg {
-    width: 17px;
-    height: 17px;
+  .prog-archive-years {
+    font-size: 0.94rem;
   }
 }

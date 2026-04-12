@@ -155,7 +155,7 @@
 
 .hero-footer-wrap {
   position: absolute;
-  top: 82vh;
+  top: 84vh;
   left: 50%;
   transform: translateX(-50%);
   width: 100%;
@@ -218,7 +218,7 @@
   }
 
   .hero-footer-wrap {
-    top: 74vh;
+    top: 76vh;
   }
 
   .hero-cta {
@@ -242,7 +242,7 @@
   }
 
   .hero-footer-wrap {
-    top: 75vh;
+    top: 77vh;
   }
 }
 
@@ -279,7 +279,7 @@
   }
 
   .hero-footer-wrap {
-    top: 73svh;
+    top: 75svh;
     padding: 0 14px;
   }
 
@@ -299,8 +299,8 @@
   .hero-title {
     font-size: clamp(1.9rem, 9.2vw, 3rem);
   }
-hero-footer-wrap 
+
   .hero-footer-wrap {
-    top: 74svh;
+    top: 76svh;
   }
 }

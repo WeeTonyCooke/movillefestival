@@ -276,6 +276,25 @@
   transform: translateY(-1px);
 }
 
+.archive-disclaimer {
+  max-width: 620px;
+  margin: 56px auto 0;
+  padding: 18px 22px 0;
+  text-align: center;
+  font-size: 0.76rem;
+  line-height: 1.55;
+  color: var(--text-muted);
+  border-top: 1px solid var(--border-soft);
+}
+
+.archive-disclaimer p {
+  margin: 0 0 10px;
+}
+
+.archive-disclaimer p:last-child {
+  margin-bottom: 0;
+}
+
 .theme-night .archive-page {
   --archive-card-shell-bg: rgba(61, 157, 176, 0.04);
   --archive-paper-surface: rgba(18, 36, 48, 0.82);
@@ -328,5 +347,13 @@
 
   .archive-card-summary {
     font-size: 0.95rem;
+  }
+
+  .archive-disclaimer {
+    max-width: 100%;
+    margin-top: 44px;
+    padding: 16px 8px 0;
+    font-size: 0.72rem;
+    line-height: 1.5;
   }
 }

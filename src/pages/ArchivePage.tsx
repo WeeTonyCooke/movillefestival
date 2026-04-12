@@ -42,7 +42,7 @@ function ArchivePage() {
   }, [copiedId]);
 
   const handleShare = async (item: ArchiveItem) => {
-    const shareUrl = `${window.location.origin}${item.pdf}`;
+    const shareUrl = item.pdf;
 
     try {
       if (navigator.share) {
@@ -123,7 +123,7 @@ function ArchivePage() {
                     </div>
                     <div className="archive-masthead">
                       <svg width="12" height="12" viewBox="0 0 24 24" aria-hidden="true">
-                        <path d="M4 4h16v2H4V4zm0 4h16v2H4V8zm0 4h10v2H4v-2zm0 4h10v2H4v-2zm12 0h4v4h-4v-4z"/>
+                        <path d="M4 4h16v2H4V4zm0 4h16v2H4V8zm0 4h10v2H4v-2zm0 4h10v2H4v-2zm12 0h4v4h-4v-4z" />
                       </svg>
                       {item.source}
                     </div>
@@ -155,6 +155,18 @@ function ArchivePage() {
             </article>
           ))}
         </section>
+
+        <div className="archive-disclaimer">
+          <p>
+            These historical newspaper extracts are shared for archival and educational purposes.
+            Copyright remains with the original publishers, including The Derry Journal and relevant rights holders.
+          </p>
+          <p>
+            These materials are reproduced from digitised newspaper archives.
+            If you are a rights holder and would like any content removed or amended,
+            please contact us and we will address it promptly.
+          </p>
+        </div>
       </div>
     </div>
   );

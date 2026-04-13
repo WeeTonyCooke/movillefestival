@@ -11,6 +11,7 @@ export interface ArchiveItem {
 const BASE_URL = 'https://res.cloudinary.com/dwpx6hrud/image/upload/v1775981670/';
 
 export const archiveItems: ArchiveItem[] = [
+  // ===== EXISTING =====
   {
     id: '1958-a-trip-through-romantic-inishowen',
     title: 'A Trip Through Romantic Inishowen',
@@ -53,7 +54,7 @@ export const archiveItems: ArchiveItem[] = [
     date: '1958',
     source: 'The Derry Journal',
     decade: '1950s',
-    excerpt: 'Newspaper coverage of the 1958 sea angling festival in Moville, Co. Donegal — from the local press archives.',
+    excerpt: 'Newspaper coverage of the 1958 sea angling festival in Moville.',
     pdf: `${BASE_URL}1958_-_Moville_Plans_Big_Sea_Angling_Event_rcbxzd.pdf`,
   },
   {
@@ -62,7 +63,7 @@ export const archiveItems: ArchiveItem[] = [
     date: '1959',
     source: 'The Derry Journal',
     decade: '1950s',
-    excerpt: 'Ministerial attendance at the 1959 festival highlights its standing as one of Ireland\'s premier sea angling events.',
+    excerpt: 'Ministerial attendance at the 1959 festival.',
     pdf: `${BASE_URL}1959_-_During_Lough_Foyle_Sea_Angling_Festival_-_Minister_on_Economic_Importanc_ehzvb2.pdf`,
   },
   {
@@ -71,7 +72,7 @@ export const archiveItems: ArchiveItem[] = [
     date: '19 August 1960',
     source: 'The Derry Journal',
     decade: '1960s',
-    excerpt: 'Newspaper coverage of the 1960 sea angling festival in Moville, Co. Donegal — from the local press archives.',
+    excerpt: 'Coverage of the 1960 sea angling festival.',
     pdf: `${BASE_URL}1960_-_3rd_International_Festival_of_Sea_Angling_at_Moville_s5xgeb.pdf`,
   },
   {
@@ -80,7 +81,7 @@ export const archiveItems: ArchiveItem[] = [
     date: '22 August 1961',
     source: 'The Derry Journal',
     decade: '1960s',
-    excerpt: 'The fourth Sea Angling Festival gets under way in 1961, with competitors and visitors arriving in Moville.',
+    excerpt: 'Festival gets underway in 1961.',
     pdf: `${BASE_URL}1961_-_Fourth_Sea_Angling_Festival_Gets_Under_Way_xuljxa.pdf`,
   },
   {
@@ -89,7 +90,7 @@ export const archiveItems: ArchiveItem[] = [
     date: '26 August 1994',
     source: 'The Derry Journal',
     decade: '1990s',
-    excerpt: 'The Moville Song Contest finale — one of the festival\'s most popular and hotly contested events, 1994.',
+    excerpt: 'Song contest finale in 1994.',
     pdf: `${BASE_URL}1994_-_Fabulous_Finale_to_Moville_Song_Contest_tgbnl9.pdf`,
   },
   {
@@ -98,7 +99,63 @@ export const archiveItems: ArchiveItem[] = [
     date: '3 August 2001',
     source: 'The Derry Journal',
     decade: '2000s',
-    excerpt: 'Regatta day on the Foyle — a favourite of the Moville festival week, drawing spectators from across Inishowen.',
+    excerpt: 'Regatta day on the Foyle.',
     pdf: `${BASE_URL}2001_-_Regatta_and_Festival_Fun_in_Moville_jyryrp.pdf`,
+  },
+
+  // ===== NEW ADDITIONS =====
+  {
+    id: '1973-letters-to-editor-old-peoples-home-appeal',
+    title: 'Letters to Editor — Old People’s Home Appeal',
+    date: '1973',
+    source: 'The Derry Journal',
+    decade: '1970s',
+    excerpt: 'A local appeal highlighting community concerns and support for elderly care.',
+    pdf: `${BASE_URL}1973_-_Letters_to_Editor_-_Old_Peoples_Home_Appeal_pvnt0d.pdf`,
+  },
+  {
+    id: '1972-sea-anglers-festival',
+    title: 'Sea Anglers Festival — 15th Annual',
+    date: '1972',
+    source: 'The Derry Journal',
+    decade: '1970s',
+    excerpt: 'Coverage of the 15th annual sea angling festival.',
+    pdf: `${BASE_URL}1972_-_Sea_Anglers_Festival_-_15th_Annual_Festival_at_Moville_tvscm.pdf`,
+  },
+  {
+    id: '1985-festival-fun-run',
+    title: 'Festival Fun Run',
+    date: '1985',
+    source: 'The Derry Journal',
+    decade: '1980s',
+    excerpt: 'Three-mile and ten-mile races during festival week.',
+    pdf: `${BASE_URL}1985_-_Festival_Fun_Run_-_Three_Mile_and_Ten_Mile_Races_bswc7j.pdf`,
+  },
+  {
+    id: '1970-red-cross-walkers',
+    title: 'Red Cross Walkers Reach Moville',
+    date: '1970',
+    source: 'The Derry Journal',
+    decade: '1970s',
+    excerpt: 'Participants arrive during a charity walk.',
+    pdf: `${BASE_URL}1970_-_Red_Cross_Walkers_Reach_Moville_Sea_Angling_Festival_ssxfob.pdf`,
+  },
+  {
+    id: '1970-dance-entertainment-listings',
+    title: 'Dance & Entertainment Listings',
+    date: '1970',
+    source: 'The Derry Journal',
+    decade: '1970s',
+    excerpt: 'Festival entertainment listings across the region.',
+    pdf: `${BASE_URL}1970_-_Dance_Entertainment_Listings_Magilligan_and_Greencastle_ke92tl.pdf`,
+  },
+  {
+    id: '1989-corner-bar-entertainment',
+    title: 'Entertainment Nightly During Festival — Corner Bar',
+    date: '1989',
+    source: 'The Derry Journal',
+    decade: '1980s',
+    excerpt: 'Live music and nightly entertainment at the Corner Bar.',
+    pdf: `${BASE_URL}1989_-_Entertainment_Nightly_During_Festival_-_Corner_Bar_Moville_ihchff.pdf`,
   },
 ];

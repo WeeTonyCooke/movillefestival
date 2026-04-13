@@ -7,7 +7,7 @@ const PROGRAMME_DATA = {
     {
       time: '21:00',
       title: 'Festival Bingo',
-      strapline: 'Eyes down for a good night. Prizes, laughs and some serious daubing.',
+      strapline: 'Eyes down for a good night. Big prizes, plenty of craic and some serious daubing.',
       venue: "St Eugene's Hall",
     },
   ],
@@ -15,7 +15,7 @@ const PROGRAMME_DATA = {
     {
       time: '20:00',
       title: 'Festival Queen',
-      strapline: 'Who will wear the crown? An evening of glam, talent and Moville pride.',
+      strapline: 'Who will wear the crown? An evening of glitz, glam and all eyes on the runway.',
       venue: "Annie's Bar",
     },
   ],
@@ -23,13 +23,13 @@ const PROGRAMME_DATA = {
     {
       time: '19:00',
       title: 'Street Frolics',
-      strapline: 'Market Square opens up for the festival\'s first big outdoor evening.',
+      strapline: ' La Tomatina Moville style! Something’s about to get out of hand… in a good way!',
       venue: 'Market Square',
     },
     {
       time: '20:00',
       title: "All Folk'd Up",
-      strapline: 'Trad, folk and everything in between — live music under the summer sky.',
+      strapline: 'Trad, folk and everything in between - live music under the summer sky.',
       venue: 'Market Square',
     },
   ],
@@ -37,19 +37,19 @@ const PROGRAMME_DATA = {
     {
       time: '11:00',
       title: 'Pet Show',
-      strapline: "Moville's finest four-legged friends. Judges will be tough.",
+      strapline: "Moville's finest four-legged friends - big, small and full of personality.",
       venue: 'The Green',
     },
     {
       time: '14:00',
       title: 'Bonny Baby',
-      strapline: "The one the whole town turns out for — cheer on Moville's bonniest babies.",
+      strapline: "Moville’s bonniest babies - or so they’ll be told.",
       venue: "St Eugene's Hall",
     },
     {
       time: '16:00',
       title: 'Treasure Hunt',
-      strapline: 'Follow the clues across town — prizes for all who dare to seek.',
+      strapline: 'Follow the clues across town — prizes at the finish.',
       venue: "McGettigan's Bar",
     },
     {
@@ -61,7 +61,7 @@ const PROGRAMME_DATA = {
     {
       time: '21:00',
       title: 'Bagatelle',
-      strapline: "Ireland's beloved folk-rock legends bring the big Saturday night to Market Square.",
+      strapline: "One of Ireland’s best-loved bands bring the big Saturday night to Market Square.",
       venue: 'Market Square',
     },
   ],
@@ -69,13 +69,13 @@ const PROGRAMME_DATA = {
     {
       time: '12:00',
       title: 'Moville Celtic Sports',
-      strapline: 'Track and field on the banks of the Foyle — a proud day for the peninsula.',
+      strapline: 'Track and field on the banks of the Foyle — a proud day for the parish.',
       venue: 'Glencrow',
     },
     {
       time: '17:30',
       title: 'Ball Drop',
-      strapline: 'The suspense builds as hundreds of balls are released over The Green.',
+      strapline: 'Hundreds of balls. One hill. Absolute chaos. Make sure you have your ticket!',
       venue: 'The Green',
     },
     {
@@ -87,7 +87,7 @@ const PROGRAMME_DATA = {
     {
       time: '20:30',
       title: 'ABBA Tribute',
-      strapline: 'The perfect send-off. Dancing Queens, Moville style.',
+      strapline: 'Get your glitter ready — sequins, sparkle and guilty pleasures.',
       venue: 'Market Square',
     },
   ],
@@ -190,7 +190,7 @@ function ProgrammePage({ isNight }: ProgrammePageProps) {
                   alt="Moville lighthouse"
                   className="prog-archive-logo"
                 />
-                <span className="prog-archive-years"> 1958 - 2026 </span>
+                <span className="prog-archive-years"> Archive - 1958 - 2026 </span>
               </div>
             </a>
           </section>

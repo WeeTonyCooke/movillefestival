@@ -49,13 +49,13 @@ const PROGRAMME_DATA = {
     {
       time: '16:00',
       title: 'Treasure Hunt',
-      strapline: 'Follow the clues across town — prizes at the finish.',
+      strapline: 'Follow the clues across town - prizes at the finish.',
       venue: "McGettigan's Bar",
     },
     {
       time: '18:00',
       title: 'Marty Healy Band',
-      strapline: 'Live music on the square as the evening kicks off — expect something to move your feet.',
+      strapline: 'Live music on the square as the evening kicks off - expect something to move your feet.',
       venue: 'Market Square',
     },
     {
@@ -69,7 +69,7 @@ const PROGRAMME_DATA = {
     {
       time: '12:00',
       title: 'Moville Celtic Sports',
-      strapline: 'Track and field on the banks of the Foyle — a proud day for the parish.',
+      strapline: 'Track and field on the banks of the Foyle - a proud day for the parish.',
       venue: 'Glencrow',
     },
     {
@@ -87,7 +87,7 @@ const PROGRAMME_DATA = {
     {
       time: '20:30',
       title: 'ABBA Tribute',
-      strapline: 'Get your glitter ready — sequins, sparkle and guilty pleasures.',
+      strapline: 'Get your glitter ready - sequins, sparkle and guilty pleasures.',
       venue: 'Market Square',
     },
   ],

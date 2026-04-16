@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 function getNightState() {
   const hour = new Date().getHours();
-  return hour >= 18 || hour < 6;
+  return hour >= 21 || hour < 6;
 }
 
 export function useNightMode() {

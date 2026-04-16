@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import './ProgrammePage.css';
 
@@ -23,13 +23,13 @@ const PROGRAMME_DATA = {
     {
       time: '19:00',
       title: 'Street Frolics',
-      strapline: ' La Tomatina Moville style! Something’s about to get out of hand… in a good way!',
+      strapline: 'La Tomatina, Moville style. Something’s about to get out of hand… in a good way.',
       venue: 'Market Square',
     },
     {
       time: '20:00',
       title: "All Folk'd Up",
-      strapline: 'Trad, folk and everything in between - live music under the summer sky.',
+      strapline: 'Trad, folk and everything in between — live music under the summer sky.',
       venue: 'Market Square',
     },
   ],
@@ -37,25 +37,25 @@ const PROGRAMME_DATA = {
     {
       time: '11:00',
       title: 'Pet Show',
-      strapline: "Moville's finest four-legged friends - big, small and full of personality.",
+      strapline: "Moville's finest four-legged friends — big, small and full of personality.",
       venue: 'The Green',
     },
     {
       time: '14:00',
       title: 'Bonny Baby',
-      strapline: "Moville’s bonniest babies - or so they’ll be told.",
+      strapline: 'Moville’s bonniest babies — or so they’ll be told.',
       venue: "St Eugene's Hall",
     },
     {
       time: '16:00',
       title: 'Treasure Hunt',
-      strapline: 'Follow the clues across town - prizes at the finish.',
+      strapline: 'Follow the clues across town — prizes at the finish.',
       venue: "McGettigan's Bar",
     },
     {
-      time: '18:00',
+      time: '19:00',
       title: 'Marty Healy Band',
-      strapline: 'Live music on the square as the evening kicks off - expect something to move your feet.',
+      strapline: 'Live music on the square as the evening kicks off.',
       venue: 'Market Square',
     },
     {
@@ -69,25 +69,25 @@ const PROGRAMME_DATA = {
     {
       time: '12:00',
       title: 'Moville Celtic Sports',
-      strapline: 'Track and field on the banks of the Foyle - a proud day for the parish.',
+      strapline: 'Track and field on the banks of the Foyle — a proud day for the parish.',
       venue: 'Glencrow',
     },
     {
       time: '17:30',
       title: 'Ball Drop',
-      strapline: 'Hundreds of balls. One hill. Absolute chaos. Make sure you have your ticket!',
+      strapline: 'Hundreds of balls. One hill. Absolute chaos. Make sure you have your ticket.',
       venue: 'The Green',
     },
     {
-      time: '17:30',
+      time: '18:00',
       title: 'The Two Bucks',
-      strapline: 'An afternoon session to ease you into the final night.',
+      strapline: 'An evening session to ease you into the final night.',
       venue: 'Market Square',
     },
     {
-      time: '20:30',
-      title: 'ABBA Tribute',
-      strapline: 'Get your glitter ready - sequins, sparkle and guilty pleasures.',
+      time: '20:00',
+      title: 'Björn Again',
+      strapline: 'The most recognised ABBA tribute act on the planet hits The Square. Get your hotpants on and the glitter ready!',
       venue: 'Market Square',
     },
   ],
@@ -107,8 +107,38 @@ const DAY_LABELS: Record<FestivalDay, string> = {
   SUN: 'Sun, 12 Jul',
 };
 
+const DAY_ORDER: FestivalDay[] = ['WED', 'THU', 'FRI', 'SAT', 'SUN'];
+
+function getDefaultFestivalDay(): FestivalDay {
+  const now = new Date();
+
+  const festivalStart = new Date(2026, 6, 8, 0, 0, 0, 0); // 8 July 2026
+  const festivalEnd = new Date(2026, 6, 12, 23, 59, 59, 999); // 12 July 2026
+
+  if (now < festivalStart) return 'WED';
+  if (now > festivalEnd) return 'SUN';
+
+  const dayIndex = now.getDay(); // Sun=0, Mon=1, Tue=2, Wed=3, Thu=4, Fri=5, Sat=6
+
+  switch (dayIndex) {
+    case 3:
+      return 'WED';
+    case 4:
+      return 'THU';
+    case 5:
+      return 'FRI';
+    case 6:
+      return 'SAT';
+    case 0:
+      return 'SUN';
+    default:
+      return 'WED';
+  }
+}
+
 function ProgrammePage({ isNight }: ProgrammePageProps) {
-  const [activeDay, setActiveDay] = useState<FestivalDay>('SAT');
+  const defaultDay = useMemo(() => getDefaultFestivalDay(), []);
+  const [activeDay, setActiveDay] = useState<FestivalDay>(defaultDay);
 
   return (
     <div className="prog-page">
@@ -132,7 +162,7 @@ function ProgrammePage({ isNight }: ProgrammePageProps) {
 
         <nav className="prog-day-nav" aria-label="Festival days">
           <div className="prog-day-nav-inner">
-            {(Object.keys(PROGRAMME_DATA) as FestivalDay[]).map((day) => (
+            {DAY_ORDER.map((day) => (
               <button
                 key={day}
                 className={`prog-day-pill ${activeDay === day ? 'is-active' : ''}`}
@@ -183,14 +213,14 @@ function ProgrammePage({ isNight }: ProgrammePageProps) {
           </section>
 
           <section className="prog-archive-link">
-            <a href="/archive" className="prog-archive-anchor" aria-label="Open heritage">
+            <a href="/archive" className="prog-archive-anchor" aria-label="Open archive">
               <div className="prog-archive-mark">
                 <img
                   src="/moville_lighthouse_clean_best.webp"
                   alt="Moville lighthouse"
                   className="prog-archive-logo"
                 />
-                <span className="prog-archive-years"> Archive - 1958 - 2026 </span>
+                <span className="prog-archive-years">Archive — 1958–2026</span>
               </div>
             </a>
           </section>
@@ -204,9 +234,9 @@ function ProgrammePage({ isNight }: ProgrammePageProps) {
               rel="noopener noreferrer"
             >
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
-                <circle cx="12" cy="12" r="4"/>
-                <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/>
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                <circle cx="12" cy="12" r="4" />
+                <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none" />
               </svg>
             </a>
             <a
@@ -217,7 +247,7 @@ function ProgrammePage({ isNight }: ProgrammePageProps) {
               rel="noopener noreferrer"
             >
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/>
+                <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" />
               </svg>
             </a>
             <a
@@ -228,7 +258,7 @@ function ProgrammePage({ isNight }: ProgrammePageProps) {
               rel="noopener noreferrer"
             >
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
               </svg>
             </a>
             <a
@@ -237,11 +267,30 @@ function ProgrammePage({ isNight }: ProgrammePageProps) {
               aria-label="Email"
             >
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <rect x="2" y="4" width="20" height="16" rx="3"/>
-                <polyline points="2,4 12,13 22,4"/>
+                <rect x="2" y="4" width="20" height="16" rx="3" />
+                <polyline points="2,4 12,13 22,4" />
               </svg>
             </a>
           </section>
+
+          <section className="prog-photo-credit-wrap">
+            <a
+              href="https://www.instagram.com/christybutterz/"
+              className="prog-photo-credit"
+              aria-label="Images by Christy Buttermilk on Instagram"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span className="prog-photo-credit-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M4 7h3l1.4-2h7.2L17 7h3a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2z" />
+                  <circle cx="12" cy="13" r="4" />
+                </svg>
+              </span>
+              <span className="prog-photo-credit-text">Images by Christy Buttermilk</span>
+            </a>
+          </section>
+          
         </main>
       </div>
     </div>

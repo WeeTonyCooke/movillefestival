@@ -137,7 +137,6 @@
   gap: 22px;
 }
 
-/* ── Weather widget ── */
 .prog-weather {
   display: flex;
   align-items: center;
@@ -168,7 +167,6 @@
   color: var(--text-secondary);
 }
 
-/* ── Schedule card ── */
 .prog-schedule {
   overflow: hidden;
   border-radius: var(--radius-lg);
@@ -177,7 +175,6 @@
   padding: 0 24px;
 }
 
-/* ── Day header — RA style ── */
 .prog-day-header {
   padding: 22px 0 10px;
 }
@@ -198,7 +195,6 @@
   margin-bottom: 4px;
 }
 
-/* ── Event items — RA style ── */
 .prog-event {
   padding: 20px 0;
   border-bottom: 1px solid var(--border-soft);
@@ -249,7 +245,6 @@
   flex-shrink: 0;
 }
 
-/* ── Archive link ── */
 .prog-archive-link {
   display: flex;
   justify-content: center;
@@ -309,7 +304,6 @@
   color: rgba(244, 239, 229, 0.78);
 }
 
-/* ── Social links ── */
 .prog-social {
   display: flex;
   justify-content: center;
@@ -343,7 +337,53 @@
   transform: translateY(-2px);
 }
 
-/* ── Responsive ── */
+.prog-photo-credit-wrap {
+  display: flex;
+  justify-content: center;
+  padding-top: 2px;
+}
+
+.prog-photo-credit {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 42px;
+  padding: 0 16px;
+  border-radius: 999px;
+  border: 1px solid var(--border-soft);
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    background 0.2s ease;
+}
+
+.prog-photo-credit:hover {
+  transform: translateY(-1px);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.prog-photo-credit-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.prog-photo-credit-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.prog-photo-credit-text {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
 @media (min-width: 900px) {
   .prog-content {
     padding-top: 48px;
@@ -359,13 +399,6 @@
   .prog-content {
     padding-top: 32px;
     padding-bottom: 64px;
-  }
-
-  .prog-topbar {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 10px;
-    margin-bottom: 12px;
   }
 
   .prog-title {
@@ -401,5 +434,14 @@
 
   .prog-archive-years {
     font-size: 0.94rem;
+  }
+
+  .prog-photo-credit {
+    padding: 0 14px;
+  }
+
+  .prog-photo-credit-text {
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
   }
 }

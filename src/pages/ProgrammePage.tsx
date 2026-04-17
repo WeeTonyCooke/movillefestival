@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import './ProgrammePage.css';
 
@@ -31,7 +31,7 @@ const PROGRAMME_DATA = {
       title: "All Folk'd Up",
       strapline: 'Trad, folk and everything in between — live music under the summer sky.',
       venue: 'Market Square',
-      admission: '€15',
+      admission: '€10',
     },
   ],
   SAT: [
@@ -140,6 +140,22 @@ function getDefaultFestivalDay(): FestivalDay {
 
 function ProgrammePage({ isNight }: ProgrammePageProps) {
   const [activeDay, setActiveDay] = useState<FestivalDay>(() => getDefaultFestivalDay());
+  const [temp, setTemp] = useState<number | null>(null);
+
+  useEffect(() => {
+    fetch('/.netlify/functions/weather')
+      .then((res) => res.json())
+      .then((data) => {
+        if (typeof data.temp === 'number') {
+          setTemp(data.temp);
+        } else {
+          setTemp(null);
+        }
+      })
+      .catch(() => {
+        setTemp(null);
+      });
+  }, []);
 
   return (
     <div className="prog-page">
@@ -185,7 +201,11 @@ function ProgrammePage({ isNight }: ProgrammePageProps) {
 
             <div className="prog-weather-copy">
               <span className="prog-weather-line">
-                {isNight ? 'A lovely evening in Moville' : 'A fine day in Moville'}
+                {temp !== null
+                  ? `${temp}°C in Moville`
+                  : isNight
+                  ? 'A lovely evening in Moville'
+                  : 'A fine day in Moville'}
               </span>
 
               <span className="prog-weather-subline">
@@ -237,7 +257,7 @@ function ProgrammePage({ isNight }: ProgrammePageProps) {
                   alt="Moville lighthouse"
                   className="prog-archive-logo"
                 />
-                <span className="prog-archive-years">Archive | 1958 – 2026</span>
+                <span className="prog-archive-years">Archive — 1958–2026</span>
               </div>
             </Link>
           </section>

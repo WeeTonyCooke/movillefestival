@@ -49,66 +49,67 @@
   position: absolute;
   inset: 0;
   z-index: 1;
-  background:
-    linear-gradient(
-      to bottom,
-      rgba(8, 13, 18, 0.04) 0%,
-      rgba(8, 13, 18, 0.08) 22%,
-      rgba(8, 13, 18, 0.16) 58%,
-      rgba(8, 13, 18, 0.30) 100%
-    );
+  background: linear-gradient(
+    to bottom,
+    rgba(8, 13, 18, 0.34) 0%,
+    rgba(8, 13, 18, 0.16) 18%,
+    rgba(8, 13, 18, 0.08) 38%,
+    rgba(8, 13, 18, 0.10) 100%
+  );
 }
 
 .hero-day .hero-overlay {
-  background:
-    linear-gradient(
-      to bottom,
-      rgba(16, 26, 34, 0.05) 0%,
-      rgba(16, 26, 34, 0.09) 24%,
-      rgba(16, 26, 34, 0.15) 58%,
-      rgba(16, 26, 34, 0.24) 100%
-    );
+  background: linear-gradient(
+    to bottom,
+    rgba(10, 18, 26, 0.30) 0%,
+    rgba(10, 18, 26, 0.14) 18%,
+    rgba(10, 18, 26, 0.06) 38%,
+    rgba(10, 18, 26, 0.08) 100%
+  );
 }
 
 .hero-evening .hero-overlay {
-  background:
-    linear-gradient(
-      to bottom,
-      rgba(26, 16, 18, 0.08) 0%,
-      rgba(26, 16, 18, 0.12) 24%,
-      rgba(26, 16, 18, 0.20) 58%,
-      rgba(26, 16, 18, 0.34) 100%
-    );
+  background: linear-gradient(
+    to bottom,
+    rgba(14, 18, 26, 0.36) 0%,
+    rgba(14, 18, 26, 0.16) 18%,
+    rgba(14, 18, 26, 0.08) 38%,
+    rgba(14, 18, 26, 0.10) 100%
+  );
 }
 
 .hero-night .hero-overlay {
-  background:
-    linear-gradient(
-      to bottom,
-      rgba(7, 10, 14, 0.08) 0%,
-      rgba(7, 10, 14, 0.12) 24%,
-      rgba(7, 10, 14, 0.20) 58%,
-      rgba(7, 10, 14, 0.34) 100%
-    );
+  background: linear-gradient(
+    to bottom,
+    rgba(4, 8, 14, 0.42) 0%,
+    rgba(4, 8, 14, 0.22) 18%,
+    rgba(4, 8, 14, 0.10) 38%,
+    rgba(4, 8, 14, 0.16) 100%
+  );
 }
 
 .water-shimmer {
   position: absolute;
   inset: auto 0 0 0;
-  height: 28%;
+  height: 24%;
   z-index: 2;
-  background: linear-gradient(0deg, rgba(255, 255, 255, 0.06) 0%, transparent 100%);
+  background: linear-gradient(
+    0deg,
+    rgba(255, 255, 255, 0.05) 0%,
+    rgba(255, 255, 255, 0.02) 45%,
+    transparent 100%
+  );
   animation: shimmer 4s ease-in-out infinite alternate;
   pointer-events: none;
 }
 
 @keyframes shimmer {
   from {
-    opacity: 0.16;
+    opacity: 0.14;
   }
 
   to {
-    opacity: 0.34;
+    opacity: 0.24;
   }
 }
 
@@ -163,7 +164,7 @@
 
 .hero-footer-wrap {
   position: absolute;
-  top: 84vh;
+  top: 80vh;
   left: 50%;
   transform: translateX(-50%);
   width: 100%;
@@ -250,7 +251,7 @@
   }
 
   .hero-footer-wrap {
-    top: 76vh;
+    top: 78vh;
   }
 
   .hero-cta {
@@ -260,16 +261,15 @@
   }
 
   .hero-bg-evening {
-    background-position: center 22%;
+    background-position: center 30%;
   }
 
   .hero-bg-night {
-    background-position: center 32%;
+    background-position: center 34%;
   }
 }
 
 @media (min-width: 1280px) {
-  /* Hide mobile images, show desktop images */
   .hero-bg-day,
   .hero-bg-evening,
   .hero-bg-night {
@@ -306,7 +306,7 @@
   }
 
   .hero-footer-wrap {
-    top: 77vh;
+    top: 79vh;
   }
 
   .hero-credit {
@@ -332,17 +332,17 @@
   }
 
   .hero-bg-evening {
-    background-position: center 50%;
-    transform: translateY(14%);
-    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 20%);
-    mask-image: linear-gradient(to bottom, transparent 0%, black 20%);
+    background-position: center 54%;
+    transform: none;
+    -webkit-mask-image: none;
+    mask-image: none;
   }
 
   .hero-bg-night {
-    background-position: center 50%;
-    transform: translateY(14%);
-    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 20%);
-    mask-image: linear-gradient(to bottom, transparent 0%, black 20%);
+    background-position: center 54%;
+    transform: none;
+    -webkit-mask-image: none;
+    mask-image: none;
   }
 
   .hero-title-wrap {
@@ -367,7 +367,7 @@
   }
 
   .hero-footer-wrap {
-    top: 82svh;
+    top: 84svh;
     padding: 0 14px;
   }
 
@@ -389,6 +389,6 @@
   }
 
   .hero-footer-wrap {
-    top: 83svh;
+    top: 85svh;
   }
 }

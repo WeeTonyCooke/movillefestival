@@ -2,28 +2,37 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './MovilleHero.css';
 
-const DAY_IMG               = '/movillelight-day.jpeg';
-const DAY_DESKTOP_IMG       = '/movillelight-day-desktop.jpeg';
-const AFTERNOON_IMG         = '/movillelight-afternoon.jpeg';
-const AFTERNOON_DESKTOP_IMG = '/the-fid-evening-desktop.jpeg';
-const NIGHT_IMG             = '/movillelightcleannight.png';
-const NIGHT_DESKTOP_IMG     = '/the-fid-night-desktop.jpeg';
+const DAY_IMG = '/mobile_lighthouse_day.webp';
+const DAY_DESKTOP_IMG = '/movillelight-day-desktop.jpeg';
+
+const EVENING_IMG = '/mobile_lighthouse_evening.webp';
+const EVENING_DESKTOP_IMG = '/the-fid-evening-desktop.jpeg';
+
+const NIGHT_IMG = '/mobile_lighthouse_night.webp';
+const NIGHT_DESKTOP_IMG = '/the-fid-night-desktop.jpeg';
 
 type MovilleHeroProps = {
   isNight: boolean;
 };
 
-type HeroPhase = 'day' | 'afternoon' | 'night';
+type HeroPhase = 'day' | 'evening' | 'night';
 
 function getHeroPhase(): HeroPhase {
   const params = new URLSearchParams(window.location.search);
   const override = params.get('hero');
-  if (override === 'day' || override === 'afternoon' || override === 'night') {
+
+  if (override === 'day' || override === 'evening' || override === 'night') {
     return override;
   }
+
+  if (override === 'afternoon') {
+    return 'evening';
+  }
+
   const hour = new Date().getHours();
+
   if (hour >= 21 || hour < 6) return 'night';
-  if (hour >= 14) return 'afternoon';
+  if (hour >= 14) return 'evening';
   return 'day';
 }
 
@@ -42,7 +51,6 @@ const MovilleHero: React.FC<MovilleHeroProps> = ({ isNight }) => {
 
   return (
     <section className={`moville-hero hero-${heroPhase}`}>
-
       {/* Day — mobile */}
       <div
         className={`hero-bg hero-bg-day ${heroPhase === 'day' ? 'active' : ''}`}
@@ -57,17 +65,17 @@ const MovilleHero: React.FC<MovilleHeroProps> = ({ isNight }) => {
         aria-hidden="true"
       />
 
-      {/* Afternoon — mobile */}
+      {/* Evening — mobile */}
       <div
-        className={`hero-bg hero-bg-afternoon ${heroPhase === 'afternoon' ? 'active' : ''}`}
-        style={{ backgroundImage: `url(${AFTERNOON_IMG})` }}
+        className={`hero-bg hero-bg-evening ${heroPhase === 'evening' ? 'active' : ''}`}
+        style={{ backgroundImage: `url(${EVENING_IMG})` }}
         aria-hidden="true"
       />
 
-      {/* Afternoon — desktop */}
+      {/* Evening — desktop */}
       <div
-        className={`hero-bg hero-bg-afternoon-desktop ${heroPhase === 'afternoon' ? 'active' : ''}`}
-        style={{ backgroundImage: `url(${AFTERNOON_DESKTOP_IMG})` }}
+        className={`hero-bg hero-bg-evening-desktop ${heroPhase === 'evening' ? 'active' : ''}`}
+        style={{ backgroundImage: `url(${EVENING_DESKTOP_IMG})` }}
         aria-hidden="true"
       />
 
@@ -77,7 +85,6 @@ const MovilleHero: React.FC<MovilleHeroProps> = ({ isNight }) => {
         style={{ backgroundImage: `url(${NIGHT_IMG})` }}
         aria-hidden="true"
       >
-        <div className="beam-sweep" />
       </div>
 
       {/* Night — desktop */}
@@ -98,6 +105,7 @@ const MovilleHero: React.FC<MovilleHeroProps> = ({ isNight }) => {
               <p className="hero-date">8–12 July</p>
             </header>
           </div>
+
           <div className="hero-footer-wrap">
             <footer className="hero-footer">
               <button className="hero-cta" onClick={() => navigate('/programme')}>
@@ -107,7 +115,6 @@ const MovilleHero: React.FC<MovilleHeroProps> = ({ isNight }) => {
           </div>
         </div>
       </div>
-
     </section>
   );
 };

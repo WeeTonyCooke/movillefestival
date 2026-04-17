@@ -1,7 +1,7 @@
-export async function handler() {
+export const handler = async () => {
     try {
       const res = await fetch(
-        `https://api.open-meteo.com/v1/forecast?latitude=55.19&longitude=-7.04&current_weather=true`
+        "https://api.open-meteo.com/v1/forecast?latitude=55.19&longitude=-7.04&current_weather=true"
       );
   
       const data = await res.json();
@@ -14,7 +14,7 @@ export async function handler() {
           temp,
         }),
       };
-    } catch (err) {
+    } catch (error) {
       return {
         statusCode: 200,
         body: JSON.stringify({
@@ -22,4 +22,4 @@ export async function handler() {
         }),
       };
     }
-  }
+  };

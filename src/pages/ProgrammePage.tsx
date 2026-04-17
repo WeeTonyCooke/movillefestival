@@ -257,7 +257,7 @@ function ProgrammePage({ isNight }: ProgrammePageProps) {
                   alt="Moville lighthouse"
                   className="prog-archive-logo"
                 />
-                <span className="prog-archive-years">Archive — 1958–2026</span>
+                <span className="prog-archive-years">Archive | 1958 – 2026</span>
               </div>
             </Link>
           </section>

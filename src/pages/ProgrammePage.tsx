@@ -64,6 +64,7 @@ const PROGRAMME_DATA = {
       title: 'Bagatelle',
       strapline: "One of Ireland’s best-loved bands bring the big Saturday night to Market Square.",
       venue: 'Market Square',
+      admission: '€10',
     },
   ],
   SUN: [

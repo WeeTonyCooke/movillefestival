@@ -2,12 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import './ProgrammePage.css';
 
-const FEEDBACK_URL =
-  'https://script.google.com/macros/s/AKfycbwADI9Ld2vGjlkjST4VTHHR-y5QbuoBPmFjhE8IX2sZVS8mXxfPWQL5nWoCNSJdHQ9oxg/exec';
-
 type FestivalDay = 'TUE' | 'WED' | 'THU' | 'FRI' | 'SAT' | 'SUN';
-type Rating = 1 | 2 | 3 | 4;
-type Phase = 'before' | 'during' | 'after';
 
 type ProgrammeEvent = {
   time: string;
@@ -207,181 +202,6 @@ const DAY_LABELS: Record<FestivalDay, string> = {
 
 const DAY_ORDER: FestivalDay[] = ['TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
 
-const FESTIVAL_DATES: Record<
-  FestivalDay,
-  { year: number; month: number; day: number }
-> = {
-  TUE: { year: 2026, month: 6, day: 7 },
-  WED: { year: 2026, month: 6, day: 8 },
-  THU: { year: 2026, month: 6, day: 9 },
-  FRI: { year: 2026, month: 6, day: 10 },
-  SAT: { year: 2026, month: 6, day: 11 },
-  SUN: { year: 2026, month: 6, day: 12 },
-};
-
-const DEFAULT_EVENT_DURATION_MIN = 120;
-
-function getStartTime(event: ProgrammeEvent): string {
-  return event.startTime ?? event.time.split('–')[0].trim();
-}
-
-function buildEventStart(day: FestivalDay, event: ProgrammeEvent): Date {
-  const { year, month, day: dayNum } = FESTIVAL_DATES[day];
-  const [hours, minutes] = getStartTime(event)
-    .split(':')
-    .map((n) => Number(n));
-  return new Date(year, month, dayNum, hours, minutes, 0, 0);
-}
-
-function getEventPhase(day: FestivalDay, event: ProgrammeEvent): Phase {
-  const start = buildEventStart(day, event);
-  const end = new Date(
-    start.getTime() + DEFAULT_EVENT_DURATION_MIN * 60 * 1000,
-  );
-  const now = new Date();
-  if (now < start) return 'before';
-  if (now > end) return 'after';
-  return 'during';
-}
-
-function getClientId(): string {
-  const KEY = 'moville-client-id';
-  try {
-    let id = window.localStorage.getItem(KEY);
-    if (!id) {
-      id =
-        'c_' +
-        Math.random().toString(36).slice(2, 10) +
-        Date.now().toString(36);
-      window.localStorage.setItem(KEY, id);
-    }
-    return id;
-  } catch {
-    return 'c_nostorage';
-  }
-}
-
-function SmileyVeryUnhappy() {
-  return (
-    <svg viewBox="0 0 100 100" aria-hidden="true">
-      <circle cx="35" cy="42" r="6" />
-      <circle cx="65" cy="42" r="6" />
-      <path
-        d="M 25 78 Q 50 52 75 78"
-        strokeWidth="7"
-        fill="none"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-}
-
-function SmileyUnhappy() {
-  return (
-    <svg viewBox="0 0 100 100" aria-hidden="true">
-      <circle cx="35" cy="42" r="6" />
-      <circle cx="65" cy="42" r="6" />
-      <path
-        d="M 30 70 Q 50 60 70 70"
-        strokeWidth="7"
-        fill="none"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-}
-
-function SmileyHappy() {
-  return (
-    <svg viewBox="0 0 100 100" aria-hidden="true">
-      <circle cx="35" cy="42" r="6" />
-      <circle cx="65" cy="42" r="6" />
-      <path
-        d="M 30 60 Q 50 72 70 60"
-        strokeWidth="7"
-        fill="none"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-}
-
-function SmileyVeryHappy() {
-  return (
-    <svg viewBox="0 0 100 100" aria-hidden="true">
-      <path
-        d="M 28 44 Q 35 36 42 44"
-        strokeWidth="7"
-        fill="none"
-        strokeLinecap="round"
-      />
-      <path
-        d="M 58 44 Q 65 36 72 44"
-        strokeWidth="7"
-        fill="none"
-        strokeLinecap="round"
-      />
-      <path
-        d="M 25 55 Q 50 85 75 55"
-        strokeWidth="7"
-        fill="none"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-}
-
-function VoteTick() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      aria-hidden="true"
-      className="prog-event-vote-tick-icon"
-    >
-      <path
-        d="M6 12.5l4 4L18 8.5"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2.6"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-const RATING_CONFIG: {
-  rating: Rating;
-  className: string;
-  label: string;
-  Smiley: () => JSX.Element;
-}[] = [
-  {
-    rating: 1,
-    className: 'prog-event-vote-face--r1',
-    label: 'Very unhappy',
-    Smiley: SmileyVeryUnhappy,
-  },
-  {
-    rating: 2,
-    className: 'prog-event-vote-face--r2',
-    label: 'Unhappy',
-    Smiley: SmileyUnhappy,
-  },
-  {
-    rating: 3,
-    className: 'prog-event-vote-face--r3',
-    label: 'Happy',
-    Smiley: SmileyHappy,
-  },
-  {
-    rating: 4,
-    className: 'prog-event-vote-face--r4',
-    label: 'Very happy',
-    Smiley: SmileyVeryHappy,
-  },
-];
-
 function getDefaultFestivalDay(): FestivalDay {
   const now = new Date();
 
@@ -416,9 +236,6 @@ function ProgrammePage({ isNight }: { isNight: boolean }) {
     getDefaultFestivalDay(),
   );
   const [temp, setTemp] = useState<number | null>(null);
-  const [selectedVotes, setSelectedVotes] = useState<Record<string, Rating>>(
-    {},
-  );
 
   useEffect(() => {
     fetch('/.netlify/functions/weather')
@@ -434,50 +251,6 @@ function ProgrammePage({ isNight }: { isNight: boolean }) {
         setTemp(null);
       });
   }, []);
-
-  const handleVote = (
-    eventKey: string,
-    eventTitle: string,
-    day: FestivalDay,
-    event: ProgrammeEvent,
-    rating: Rating,
-  ) => {
-    const phase = getEventPhase(day, event);
-
-    setSelectedVotes((prev) => ({ ...prev, [eventKey]: rating }));
-
-    if (
-      !FEEDBACK_URL ||
-      FEEDBACK_URL === 'PASTE_YOUR_APPS_SCRIPT_URL_HERE'
-    ) {
-      console.warn('FEEDBACK_URL not set — vote not sent.', {
-        event: eventTitle,
-        day,
-        time: event.time,
-        rating,
-        phase,
-      });
-      return;
-    }
-
-    const payload = {
-      event: eventTitle,
-      day,
-      scheduledTime: event.time,
-      rating,
-      phase,
-      recordedAt: new Date().toISOString(),
-      clientId: getClientId(),
-    };
-
-    fetch(FEEDBACK_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify(payload),
-    }).catch(() => {
-      // keep tap experience clean
-    });
-  };
 
   return (
     <div className="prog-page">
@@ -557,7 +330,6 @@ function ProgrammePage({ isNight }: { isNight: boolean }) {
 
             {PROGRAMME_DATA[activeDay].map((event) => {
               const eventKey = `${activeDay}-${event.time}-${event.title}`;
-              const selectedRating = selectedVotes[eventKey];
 
               return (
                 <article
@@ -598,39 +370,6 @@ function ProgrammePage({ isNight }: { isNight: boolean }) {
                       )}
                     </div>
                   )}
-
-                  <div
-                    className="prog-event-vote"
-                    role="group"
-                    aria-label={`Your reaction to ${event.title}`}
-                  >
-                    {RATING_CONFIG.map(({ rating, className, label, Smiley }) => {
-                      const isSelected = selectedRating === rating;
-
-                      return (
-                        <button
-                          key={rating}
-                          type="button"
-                          className={`prog-event-vote-face ${className}${isSelected ? ' is-voted' : ''}`}
-                          onClick={() =>
-                            handleVote(eventKey, event.title, activeDay, event, rating)
-                          }
-                          aria-label={label}
-                          aria-pressed={isSelected}
-                        >
-                          <Smiley />
-                          {isSelected && (
-                            <span
-                              className="prog-event-vote-tick"
-                              aria-hidden="true"
-                            >
-                              <VoteTick />
-                            </span>
-                          )}
-                        </button>
-                      );
-                    })}
-                  </div>
                 </article>
               );
             })}

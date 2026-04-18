@@ -372,112 +372,6 @@
   );
 }
 
-.prog-event-vote {
-  margin-top: 18px;
-  padding-top: 16px;
-  border-top: 1px dashed var(--border-soft);
-  display: flex;
-  justify-content: center;
-  gap: 16px;
-}
-
-.prog-event-vote-face {
-  position: relative;
-  width: 48px;
-  height: 48px;
-  padding: 0;
-  border: 2px solid transparent;
-  border-radius: 50%;
-  background: transparent;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: none;
-  opacity: 0.92;
-  transition:
-    transform 0.18s ease,
-    border-color 0.18s ease,
-    color 0.18s ease,
-    background-color 0.18s ease,
-    opacity 0.18s ease;
-}
-
-.prog-event-vote-face:hover {
-  transform: translateY(-1px);
-  opacity: 1;
-}
-
-.prog-event-vote-face:active {
-  transform: scale(0.92);
-}
-
-.prog-event-vote-face svg {
-  width: 72%;
-  height: 72%;
-  display: block;
-}
-
-.prog-event-vote-face svg circle,
-.prog-event-vote-face svg path {
-  stroke: currentColor;
-  fill: currentColor;
-}
-
-.prog-event-vote-face svg path[fill='none'] {
-  fill: none;
-}
-
-.prog-event-vote-face--r1 {
-  border-color: #b53640;
-  color: #b53640;
-}
-
-.prog-event-vote-face--r2 {
-  border-color: #de7b5f;
-  color: #de7b5f;
-}
-
-.prog-event-vote-face--r3 {
-  border-color: #6fae67;
-  color: #6fae67;
-}
-
-.prog-event-vote-face--r4 {
-  border-color: #248b45;
-  color: #248b45;
-}
-
-.prog-event-vote-face.is-voted {
-  transform: scale(1.04);
-  opacity: 1;
-  background: rgba(255, 255, 255, 0.58);
-  box-shadow: 0 0 0 3px rgba(43, 149, 166, 0.14);
-}
-
-.prog-event-vote-tick {
-  position: absolute;
-  right: -4px;
-  bottom: -4px;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: #2d9e4c;
-  color: #ffffff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow:
-    0 2px 6px rgba(0, 0, 0, 0.16),
-    0 0 0 2px var(--bg-surface-strong);
-}
-
-.prog-event-vote-tick-icon {
-  width: 11px;
-  height: 11px;
-  display: block;
-}
-
 .prog-event-vote-face:focus-visible,
 .prog-day-pill:focus-visible,
 .prog-back:focus-visible,
@@ -485,15 +379,6 @@
 .prog-archive-anchor:focus-visible {
   outline: 3px solid rgba(43, 149, 166, 0.28);
   outline-offset: 3px;
-}
-
-.theme-night .prog-event-vote-face {
-  opacity: 0.96;
-}
-
-.theme-night .prog-event-vote-face.is-voted {
-  background: rgba(255, 255, 255, 0.04);
-  box-shadow: 0 0 0 3px rgba(43, 149, 166, 0.18);
 }
 
 .prog-archive-link {
@@ -685,17 +570,6 @@
     margin-bottom: 13px;
   }
 
-  .prog-event-vote {
-    margin-top: 16px;
-    padding-top: 14px;
-    gap: 14px;
-  }
-
-  .prog-event-vote-face {
-    width: 46px;
-    height: 46px;
-  }
-
   .prog-archive-logo {
     width: 112px;
   }
@@ -710,26 +584,5 @@
     flex-basis: calc(33.333% - 8px);
     letter-spacing: 0.12em;
     font-size: 0.72rem;
-  }
-
-  .prog-event-vote {
-    gap: 12px;
-  }
-
-  .prog-event-vote-face {
-    width: 42px;
-    height: 42px;
-  }
-
-  .prog-event-vote-tick {
-    width: 17px;
-    height: 17px;
-    right: -3px;
-    bottom: -3px;
-  }
-
-  .prog-event-vote-tick-icon {
-    width: 10px;
-    height: 10px;
   }
 }

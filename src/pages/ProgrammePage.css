@@ -196,7 +196,6 @@
 }
 
 .prog-event {
-  position: relative;
   padding: 24px 0;
   border-bottom: 1px solid var(--border-soft);
 }
@@ -217,7 +216,6 @@
 
 .prog-event-title {
   margin: 0 0 8px;
-  padding-right: 178px; /* leave space for the four smileys in the corner */
   font-family: var(--font-display);
   font-size: 1.35rem;
   font-weight: 700;
@@ -266,46 +264,45 @@
   font-weight: 700;
 }
 
-/* Inline feedback: four small smileys in the top-right of each event.
-   HappyOrNot-style colour ramp: dark red → coral → light green → dark green. */
+/* Feedback row */
 .prog-event-vote {
-  position: absolute;
-  top: 20px;
-  right: 0;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px dashed var(--border-soft);
   display: flex;
-  gap: 6px;
-  z-index: 2;
+  justify-content: center;
+  gap: 16px;
 }
 
 .prog-event-vote-face {
-  width: 36px;
-  height: 36px;
+  position: relative;
+  width: 48px;
+  height: 48px;
   padding: 0;
-  border: none;
+  border: 2px solid transparent;
   border-radius: 50%;
+  background: transparent;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow:
-    0 2px 6px rgba(0, 0, 0, 0.14),
-    inset 0 -2px 0 rgba(0, 0, 0, 0.1);
-  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  box-shadow: none;
+  opacity: 0.92;
+  transition:
+    transform 0.18s ease,
+    border-color 0.18s ease,
+    color 0.18s ease,
+    background-color 0.18s ease,
+    opacity 0.18s ease;
 }
 
 .prog-event-vote-face:hover {
   transform: translateY(-1px);
+  opacity: 1;
 }
 
 .prog-event-vote-face:active {
-  transform: scale(0.88);
-}
-
-.prog-event-vote-face.is-voted {
-  transform: scale(1.18);
-  box-shadow:
-    0 4px 10px rgba(0, 0, 0, 0.22),
-    0 0 0 3px rgba(43, 149, 166, 0.35);
+  transform: scale(0.92);
 }
 
 .prog-event-vote-face svg {
@@ -314,26 +311,82 @@
   display: block;
 }
 
+.prog-event-vote-face svg circle,
+.prog-event-vote-face svg path {
+  stroke: currentColor;
+  fill: currentColor;
+}
+
+.prog-event-vote-face svg path[fill='none'] {
+  fill: none;
+}
+
 .prog-event-vote-face--r1 {
-  background: #d63a42;
+  border-color: #b53640;
+  color: #b53640;
 }
 
 .prog-event-vote-face--r2 {
-  background: #ff8a6a;
+  border-color: #de7b5f;
+  color: #de7b5f;
 }
 
 .prog-event-vote-face--r3 {
-  background: #7bc96a;
+  border-color: #6fae67;
+  color: #6fae67;
 }
 
 .prog-event-vote-face--r4 {
+  border-color: #248b45;
+  color: #248b45;
+}
+
+.prog-event-vote-face.is-voted {
+  transform: scale(1.04);
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.58);
+  box-shadow: 0 0 0 3px rgba(43, 149, 166, 0.14);
+}
+
+.prog-event-vote-tick {
+  position: absolute;
+  right: -4px;
+  bottom: -4px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
   background: #2d9e4c;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.16),
+    0 0 0 2px var(--bg-surface-strong);
+}
+
+.prog-event-vote-tick-icon {
+  width: 11px;
+  height: 11px;
+  display: block;
+}
+
+.prog-event-vote-face:focus-visible,
+.prog-day-pill:focus-visible,
+.prog-back:focus-visible,
+.prog-social-link:focus-visible,
+.prog-archive-anchor:focus-visible {
+  outline: 3px solid rgba(43, 149, 166, 0.28);
+  outline-offset: 3px;
 }
 
 .theme-night .prog-event-vote-face {
-  box-shadow:
-    0 2px 6px rgba(0, 0, 0, 0.5),
-    inset 0 -2px 0 rgba(0, 0, 0, 0.18);
+  opacity: 0.96;
+}
+
+.theme-night .prog-event-vote-face.is-voted {
+  background: rgba(255, 255, 255, 0.04);
+  box-shadow: 0 0 0 3px rgba(43, 149, 166, 0.18);
 }
 
 .prog-archive-link {
@@ -474,7 +527,6 @@
 
   .prog-event-title {
     font-size: 1.2rem;
-    padding-right: 154px;
   }
 
   .prog-event-strapline {
@@ -484,13 +536,14 @@
   }
 
   .prog-event-vote {
-    top: 18px;
-    gap: 5px;
+    margin-top: 14px;
+    padding-top: 14px;
+    gap: 14px;
   }
 
   .prog-event-vote-face {
-    width: 32px;
-    height: 32px;
+    width: 46px;
+    height: 46px;
   }
 
   .prog-archive-logo {
@@ -503,16 +556,24 @@
 }
 
 @media (max-width: 380px) {
-  .prog-event-title {
-    padding-right: 134px;
-  }
-
   .prog-event-vote {
-    gap: 4px;
+    gap: 12px;
   }
 
   .prog-event-vote-face {
-    width: 28px;
-    height: 28px;
+    width: 42px;
+    height: 42px;
+  }
+
+  .prog-event-vote-tick {
+    width: 17px;
+    height: 17px;
+    right: -3px;
+    bottom: -3px;
+  }
+
+  .prog-event-vote-tick-icon {
+    width: 10px;
+    height: 10px;
   }
 }

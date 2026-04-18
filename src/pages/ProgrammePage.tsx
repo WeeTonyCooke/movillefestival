@@ -5,14 +5,16 @@ import './ProgrammePage.css';
 // ─── Feedback backend ──────────────────────────────────────────────────────
 // Paste the URL of your deployed Google Apps Script web app here.
 // See SETUP-guide.md for how to get it.
-const FEEDBACK_URL = 'https://script.google.com/macros/s/AKfycbwADI9Ld2vGjlkjST4VTHHR-y5QbuoBPmFjhE8IX2sZVS8mXxfPWQL5nWoCNSJdHQ9oxg/exec';
+const FEEDBACK_URL =
+  'https://script.google.com/macros/s/AKfycbwADI9Ld2vGjlkjST4VTHHR-y5QbuoBPmFjhE8IX2sZVS8mXxfPWQL5nWoCNSJdHQ9oxg/exec';
 
 const PROGRAMME_DATA = {
   WED: [
     {
       time: '21:00',
       title: 'Festival Bingo',
-      strapline: 'Eyes down for a good night. Big prizes, plenty of craic and some serious daubing.',
+      strapline:
+        'Eyes down for a good night. Big prizes, plenty of craic and some serious daubing.',
       venue: "St Eugene's Hall",
     },
   ],
@@ -20,7 +22,8 @@ const PROGRAMME_DATA = {
     {
       time: '20:00',
       title: 'Festival Queen',
-      strapline: 'Who will wear the crown? An evening of glitz, glam and all eyes on the runway.',
+      strapline:
+        'Who will wear the crown? An evening of glitz, glam and all eyes on the runway.',
       venue: "Annie's Bar",
     },
   ],
@@ -28,13 +31,15 @@ const PROGRAMME_DATA = {
     {
       time: '19:00',
       title: 'Street Frolics',
-      strapline: 'La Tomatina, Moville style. Something’s about to get out of hand… in a good way.',
+      strapline:
+        'La Tomatina, Moville style. Something’s about to get out of hand… in a good way.',
       venue: 'Market Square',
     },
     {
       time: '20:00',
       title: "All Folk'd Up",
-      strapline: 'Trad, folk and everything in between — live music under the summer sky.',
+      strapline:
+        'Trad, folk and everything in between — live music under the summer sky.',
       venue: 'Market Square',
       admission: '€10',
     },
@@ -43,7 +48,8 @@ const PROGRAMME_DATA = {
     {
       time: '11:00',
       title: 'Pet Show',
-      strapline: "Moville's finest four-legged friends — big, small and full of personality.",
+      strapline:
+        "Moville's finest four-legged friends — big, small and full of personality.",
       venue: 'The Green',
     },
     {
@@ -67,7 +73,8 @@ const PROGRAMME_DATA = {
     {
       time: '21:00',
       title: 'Bagatelle',
-      strapline: "One of Ireland’s best-loved bands bring the big Saturday night to Market Square.",
+      strapline:
+        "One of Ireland’s best-loved bands bring the big Saturday night to Market Square.",
       venue: 'Market Square',
       admission: '€10',
     },
@@ -76,13 +83,15 @@ const PROGRAMME_DATA = {
     {
       time: '12:00',
       title: 'Moville Celtic Sports',
-      strapline: 'Track and field on the banks of the Foyle — a proud day for the parish.',
+      strapline:
+        'Track and field on the banks of the Foyle — a proud day for the parish.',
       venue: 'Glencrow',
     },
     {
       time: '17:30',
       title: 'Ball Drop',
-      strapline: 'Hundreds of balls. One hill. Absolute chaos. Make sure you have your ticket.',
+      strapline:
+        'Hundreds of balls. One hill. Absolute chaos. Make sure you have your ticket.',
       venue: 'The Green',
     },
     {
@@ -118,8 +127,10 @@ const DAY_LABELS: Record<FestivalDay, string> = {
 
 const DAY_ORDER: FestivalDay[] = ['WED', 'THU', 'FRI', 'SAT', 'SUN'];
 
-// Calendar dates for each festival day (month is 0-indexed: 6 === July)
-const FESTIVAL_DATES: Record<FestivalDay, { year: number; month: number; day: number }> = {
+const FESTIVAL_DATES: Record<
+  FestivalDay,
+  { year: number; month: number; day: number }
+> = {
   WED: { year: 2026, month: 6, day: 8 },
   THU: { year: 2026, month: 6, day: 9 },
   FRI: { year: 2026, month: 6, day: 10 },
@@ -127,7 +138,6 @@ const FESTIVAL_DATES: Record<FestivalDay, { year: number; month: number; day: nu
   SUN: { year: 2026, month: 6, day: 12 },
 };
 
-// Assumed duration of any event when working out before/during/after.
 const DEFAULT_EVENT_DURATION_MIN = 120;
 
 type Phase = 'before' | 'during' | 'after';
@@ -140,21 +150,24 @@ function buildEventStart(day: FestivalDay, time: string): Date {
 
 function getEventPhase(day: FestivalDay, time: string): Phase {
   const start = buildEventStart(day, time);
-  const end = new Date(start.getTime() + DEFAULT_EVENT_DURATION_MIN * 60 * 1000);
+  const end = new Date(
+    start.getTime() + DEFAULT_EVENT_DURATION_MIN * 60 * 1000,
+  );
   const now = new Date();
   if (now < start) return 'before';
   if (now > end) return 'after';
   return 'during';
 }
 
-// Anonymous per-browser marker so the backend can tell votes apart and
-// dedupe a single person's repeated taps within the same phase. Not a login.
 function getClientId(): string {
   const KEY = 'moville-client-id';
   try {
     let id = window.localStorage.getItem(KEY);
     if (!id) {
-      id = 'c_' + Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
+      id =
+        'c_' +
+        Math.random().toString(36).slice(2, 10) +
+        Date.now().toString(36);
       window.localStorage.setItem(KEY, id);
     }
     return id;
@@ -163,15 +176,17 @@ function getClientId(): string {
   }
 }
 
-// Four smiley SVGs — rating 1 (worst) to rating 4 (best).
-// Drawn as paths so they look the same on every device.
-
 function SmileyVeryUnhappy() {
   return (
     <svg viewBox="0 0 100 100" aria-hidden="true">
-      <circle cx="35" cy="42" r="6" fill="#2a0a0c" />
-      <circle cx="65" cy="42" r="6" fill="#2a0a0c" />
-      <path d="M 25 78 Q 50 52 75 78" stroke="#2a0a0c" strokeWidth="7" fill="none" strokeLinecap="round" />
+      <circle cx="35" cy="42" r="6" />
+      <circle cx="65" cy="42" r="6" />
+      <path
+        d="M 25 78 Q 50 52 75 78"
+        strokeWidth="7"
+        fill="none"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }
@@ -179,9 +194,14 @@ function SmileyVeryUnhappy() {
 function SmileyUnhappy() {
   return (
     <svg viewBox="0 0 100 100" aria-hidden="true">
-      <circle cx="35" cy="42" r="6" fill="#2a0a0c" />
-      <circle cx="65" cy="42" r="6" fill="#2a0a0c" />
-      <path d="M 30 70 Q 50 60 70 70" stroke="#2a0a0c" strokeWidth="7" fill="none" strokeLinecap="round" />
+      <circle cx="35" cy="42" r="6" />
+      <circle cx="65" cy="42" r="6" />
+      <path
+        d="M 30 70 Q 50 60 70 70"
+        strokeWidth="7"
+        fill="none"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }
@@ -189,9 +209,14 @@ function SmileyUnhappy() {
 function SmileyHappy() {
   return (
     <svg viewBox="0 0 100 100" aria-hidden="true">
-      <circle cx="35" cy="42" r="6" fill="#0c2a14" />
-      <circle cx="65" cy="42" r="6" fill="#0c2a14" />
-      <path d="M 30 60 Q 50 72 70 60" stroke="#0c2a14" strokeWidth="7" fill="none" strokeLinecap="round" />
+      <circle cx="35" cy="42" r="6" />
+      <circle cx="65" cy="42" r="6" />
+      <path
+        d="M 30 60 Q 50 72 70 60"
+        strokeWidth="7"
+        fill="none"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }
@@ -199,18 +224,77 @@ function SmileyHappy() {
 function SmileyVeryHappy() {
   return (
     <svg viewBox="0 0 100 100" aria-hidden="true">
-      <path d="M 28 44 Q 35 36 42 44" stroke="#0c2a14" strokeWidth="7" fill="none" strokeLinecap="round" />
-      <path d="M 58 44 Q 65 36 72 44" stroke="#0c2a14" strokeWidth="7" fill="none" strokeLinecap="round" />
-      <path d="M 25 55 Q 50 85 75 55" stroke="#0c2a14" strokeWidth="7" fill="none" strokeLinecap="round" />
+      <path
+        d="M 28 44 Q 35 36 42 44"
+        strokeWidth="7"
+        fill="none"
+        strokeLinecap="round"
+      />
+      <path
+        d="M 58 44 Q 65 36 72 44"
+        strokeWidth="7"
+        fill="none"
+        strokeLinecap="round"
+      />
+      <path
+        d="M 25 55 Q 50 85 75 55"
+        strokeWidth="7"
+        fill="none"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }
 
-const RATING_CONFIG: { rating: Rating; className: string; label: string; Smiley: () => JSX.Element }[] = [
-  { rating: 1, className: 'prog-event-vote-face--r1', label: 'Very unhappy',   Smiley: SmileyVeryUnhappy },
-  { rating: 2, className: 'prog-event-vote-face--r2', label: 'Unhappy',        Smiley: SmileyUnhappy },
-  { rating: 3, className: 'prog-event-vote-face--r3', label: 'Happy',          Smiley: SmileyHappy },
-  { rating: 4, className: 'prog-event-vote-face--r4', label: 'Very happy',     Smiley: SmileyVeryHappy },
+function VoteTick() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      className="prog-event-vote-tick-icon"
+    >
+      <path
+        d="M6 12.5l4 4L18 8.5"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+const RATING_CONFIG: {
+  rating: Rating;
+  className: string;
+  label: string;
+  Smiley: () => JSX.Element;
+}[] = [
+  {
+    rating: 1,
+    className: 'prog-event-vote-face--r1',
+    label: 'Very unhappy',
+    Smiley: SmileyVeryUnhappy,
+  },
+  {
+    rating: 2,
+    className: 'prog-event-vote-face--r2',
+    label: 'Unhappy',
+    Smiley: SmileyUnhappy,
+  },
+  {
+    rating: 3,
+    className: 'prog-event-vote-face--r3',
+    label: 'Happy',
+    Smiley: SmileyHappy,
+  },
+  {
+    rating: 4,
+    className: 'prog-event-vote-face--r4',
+    label: 'Very happy',
+    Smiley: SmileyVeryHappy,
+  },
 ];
 
 function getDefaultFestivalDay(): FestivalDay {
@@ -241,10 +325,11 @@ function getDefaultFestivalDay(): FestivalDay {
 }
 
 function ProgrammePage({ isNight }: ProgrammePageProps) {
-  const [activeDay, setActiveDay] = useState<FestivalDay>(() => getDefaultFestivalDay());
+  const [activeDay, setActiveDay] = useState<FestivalDay>(() =>
+    getDefaultFestivalDay(),
+  );
   const [temp, setTemp] = useState<number | null>(null);
-  // Visual confirmation — which face was tapped most recently per event card.
-  const [recentVotes, setRecentVotes] = useState<Record<string, number>>({});
+  const [selectedVotes, setSelectedVotes] = useState<Record<string, Rating>>({});
 
   useEffect(() => {
     fetch('/.netlify/functions/weather')
@@ -270,21 +355,18 @@ function ProgrammePage({ isNight }: ProgrammePageProps) {
   ) => {
     const phase = getEventPhase(day, time);
 
-    // Always flash a visual confirmation so the tap feels responsive.
-    setRecentVotes((prev) => ({ ...prev, [eventKey]: rating }));
-    window.setTimeout(() => {
-      setRecentVotes((prev) => {
-        if (prev[eventKey] !== rating) return prev;
-        const { [eventKey]: _discard, ...rest } = prev;
-        return rest;
-      });
-    }, 1400);
+    setSelectedVotes((prev) => ({ ...prev, [eventKey]: rating }));
 
-    // If the backend URL hasn't been set, log and bail — handy in development.
-    if (!FEEDBACK_URL || FEEDBACK_URL === 'PASTE_YOUR_APPS_SCRIPT_URL_HERE') {
-      // eslint-disable-next-line no-console
+    if (
+      !FEEDBACK_URL ||
+      FEEDBACK_URL === 'PASTE_YOUR_APPS_SCRIPT_URL_HERE'
+    ) {
       console.warn('FEEDBACK_URL not set — vote not sent.', {
-        event: eventTitle, day, time, rating, phase,
+        event: eventTitle,
+        day,
+        time,
+        rating,
+        phase,
       });
       return;
     }
@@ -299,16 +381,12 @@ function ProgrammePage({ isNight }: ProgrammePageProps) {
       clientId: getClientId(),
     };
 
-    // Every tap is sent. The Apps Script keeps a full audit trail, and the
-    // results page dedupes by (clientId + event + phase) keeping the latest —
-    // so a person can change their mind within a phase and not skew totals.
-    // Using text/plain avoids a CORS preflight; Apps Script parses the body.
     fetch(FEEDBACK_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify(payload),
     }).catch(() => {
-      /* silently ignore — don't ruin the tap experience */
+      // keep tap experience clean
     });
   };
 
@@ -320,7 +398,14 @@ function ProgrammePage({ isNight }: ProgrammePageProps) {
         <header className="prog-header">
           <div className="prog-header-top">
             <Link to="/" className="prog-back" aria-label="Back to home">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="3"
+              >
                 <path d="M15 18l-6-6 6-6" />
               </svg>
             </Link>
@@ -359,8 +444,8 @@ function ProgrammePage({ isNight }: ProgrammePageProps) {
                 {temp !== null
                   ? `${temp}°C in Moville`
                   : isNight
-                  ? 'A lovely evening in Moville'
-                  : 'A fine day in Moville'}
+                    ? 'A lovely evening in Moville'
+                    : 'A fine day in Moville'}
               </span>
 
               <span className="prog-weather-subline">
@@ -373,41 +458,30 @@ function ProgrammePage({ isNight }: ProgrammePageProps) {
 
           <section className="prog-schedule surface-card">
             <div className="prog-day-header">
-              <span className="prog-day-header-text">{DAY_LABELS[activeDay].toUpperCase()}</span>
+              <span className="prog-day-header-text">
+                {DAY_LABELS[activeDay].toUpperCase()}
+              </span>
             </div>
 
             <div className="prog-day-rule" aria-hidden="true" />
 
             {PROGRAMME_DATA[activeDay].map((event) => {
               const eventKey = `${activeDay}-${event.time}-${event.title}`;
-              const voted = recentVotes[eventKey];
+              const selectedRating = selectedVotes[eventKey];
 
               return (
                 <article className="prog-event" key={eventKey}>
-                  <div
-                    className="prog-event-vote"
-                    role="group"
-                    aria-label={`Your reaction to ${event.title}`}
-                  >
-                    {RATING_CONFIG.map(({ rating, className, label, Smiley }) => (
-                      <button
-                        key={rating}
-                        type="button"
-                        className={`prog-event-vote-face ${className}${voted === rating ? ' is-voted' : ''}`}
-                        onClick={() => handleVote(eventKey, event.title, activeDay, event.time, rating)}
-                        aria-label={`${label} about ${event.title}`}
-                      >
-                        <Smiley />
-                      </button>
-                    ))}
-                  </div>
-
                   <div className="prog-event-time">{event.time}</div>
                   <h3 className="prog-event-title">{event.title}</h3>
                   <p className="prog-event-strapline">{event.strapline}</p>
 
                   <div className="prog-event-venue">
-                    <svg width="13" height="13" viewBox="0 0 24 24" aria-hidden="true">
+                    <svg
+                      width="13"
+                      height="13"
+                      viewBox="0 0 24 24"
+                      aria-hidden="true"
+                    >
                       <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z" />
                     </svg>
 
@@ -416,11 +490,51 @@ function ProgrammePage({ isNight }: ProgrammePageProps) {
                       {'admission' in event && event.admission && (
                         <>
                           <span className="prog-event-separator"> · </span>
-                          <span className="prog-event-admission-label">Admission </span>
-                          <span className="prog-event-admission-value">{event.admission}</span>
+                          <span className="prog-event-admission-label">
+                            Admission{' '}
+                          </span>
+                          <span className="prog-event-admission-value">
+                            {event.admission}
+                          </span>
                         </>
                       )}
                     </span>
+                  </div>
+
+                  <div
+                    className="prog-event-vote"
+                    role="group"
+                    aria-label={`Your reaction to ${event.title}`}
+                  >
+                    {RATING_CONFIG.map(({ rating, className, label, Smiley }) => {
+                      const isSelected = selectedRating === rating;
+
+                      return (
+                        <button
+                          key={rating}
+                          type="button"
+                          className={`prog-event-vote-face ${className}${isSelected ? ' is-voted' : ''}`}
+                          onClick={() =>
+                            handleVote(
+                              eventKey,
+                              event.title,
+                              activeDay,
+                              event.time,
+                              rating,
+                            )
+                          }
+                          aria-label={`${label} about ${event.title}`}
+                          aria-pressed={isSelected}
+                        >
+                          <Smiley />
+                          {isSelected && (
+                            <span className="prog-event-vote-tick" aria-hidden="true">
+                              <VoteTick />
+                            </span>
+                          )}
+                        </button>
+                      );
+                    })}
                   </div>
                 </article>
               );
@@ -428,14 +542,20 @@ function ProgrammePage({ isNight }: ProgrammePageProps) {
           </section>
 
           <section className="prog-archive-link">
-            <Link to="/archive" className="prog-archive-anchor" aria-label="Open archive">
+            <Link
+              to="/archive"
+              className="prog-archive-anchor"
+              aria-label="Open archive"
+            >
               <div className="prog-archive-mark">
                 <img
                   src="/moville_lighthouse_icon.png"
                   alt="Moville lighthouse"
                   className="prog-archive-logo"
                 />
-                <span className="prog-archive-years">Archive | 1958 – 2026</span>
+                <span className="prog-archive-years">
+                  Archive | 1958 – 2026
+                </span>
               </div>
             </Link>
           </section>
@@ -459,7 +579,13 @@ function ProgrammePage({ isNight }: ProgrammePageProps) {
               >
                 <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
                 <circle cx="12" cy="12" r="4" />
-                <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none" />
+                <circle
+                  cx="17.5"
+                  cy="6.5"
+                  r="0.5"
+                  fill="currentColor"
+                  stroke="none"
+                />
               </svg>
             </a>
 

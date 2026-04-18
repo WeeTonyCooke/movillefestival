@@ -196,6 +196,7 @@
 }
 
 .prog-event {
+  position: relative;
   padding: 24px 0;
   border-bottom: 1px solid var(--border-soft);
 }
@@ -216,6 +217,7 @@
 
 .prog-event-title {
   margin: 0 0 8px;
+  padding-right: 178px; /* leave space for the four smileys in the corner */
   font-family: var(--font-display);
   font-size: 1.35rem;
   font-weight: 700;
@@ -262,6 +264,76 @@
 .prog-event-admission-value {
   color: var(--accent);
   font-weight: 700;
+}
+
+/* Inline feedback: four small smileys in the top-right of each event.
+   HappyOrNot-style colour ramp: dark red → coral → light green → dark green. */
+.prog-event-vote {
+  position: absolute;
+  top: 20px;
+  right: 0;
+  display: flex;
+  gap: 6px;
+  z-index: 2;
+}
+
+.prog-event-vote-face {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.14),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.1);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.prog-event-vote-face:hover {
+  transform: translateY(-1px);
+}
+
+.prog-event-vote-face:active {
+  transform: scale(0.88);
+}
+
+.prog-event-vote-face.is-voted {
+  transform: scale(1.18);
+  box-shadow:
+    0 4px 10px rgba(0, 0, 0, 0.22),
+    0 0 0 3px rgba(43, 149, 166, 0.35);
+}
+
+.prog-event-vote-face svg {
+  width: 72%;
+  height: 72%;
+  display: block;
+}
+
+.prog-event-vote-face--r1 {
+  background: #d63a42;
+}
+
+.prog-event-vote-face--r2 {
+  background: #ff8a6a;
+}
+
+.prog-event-vote-face--r3 {
+  background: #7bc96a;
+}
+
+.prog-event-vote-face--r4 {
+  background: #2d9e4c;
+}
+
+.theme-night .prog-event-vote-face {
+  box-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.5),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.18);
 }
 
 .prog-archive-link {
@@ -402,6 +474,7 @@
 
   .prog-event-title {
     font-size: 1.2rem;
+    padding-right: 154px;
   }
 
   .prog-event-strapline {
@@ -410,11 +483,36 @@
     margin-bottom: 13px;
   }
 
+  .prog-event-vote {
+    top: 18px;
+    gap: 5px;
+  }
+
+  .prog-event-vote-face {
+    width: 32px;
+    height: 32px;
+  }
+
   .prog-archive-logo {
     width: 112px;
   }
 
   .prog-archive-years {
     font-size: 0.94rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .prog-event-title {
+    padding-right: 134px;
+  }
+
+  .prog-event-vote {
+    gap: 4px;
+  }
+
+  .prog-event-vote-face {
+    width: 28px;
+    height: 28px;
   }
 }

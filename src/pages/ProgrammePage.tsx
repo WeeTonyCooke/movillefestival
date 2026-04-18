@@ -2,6 +2,11 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import './ProgrammePage.css';
 
+// ─── Feedback backend ──────────────────────────────────────────────────────
+// Paste the URL of your deployed Google Apps Script web app here.
+// See SETUP-guide.md for how to get it.
+const FEEDBACK_URL = 'https://script.google.com/macros/s/AKfycbwADI9Ld2vGjlkjST4VTHHR-y5QbuoBPmFjhE8IX2sZVS8mXxfPWQL5nWoCNSJdHQ9oxg/exec';
+
 const PROGRAMME_DATA = {
   WED: [
     {
@@ -97,6 +102,7 @@ const PROGRAMME_DATA = {
 } as const;
 
 type FestivalDay = keyof typeof PROGRAMME_DATA;
+type Rating = 1 | 2 | 3 | 4;
 
 type ProgrammePageProps = {
   isNight: boolean;
@@ -111,6 +117,101 @@ const DAY_LABELS: Record<FestivalDay, string> = {
 };
 
 const DAY_ORDER: FestivalDay[] = ['WED', 'THU', 'FRI', 'SAT', 'SUN'];
+
+// Calendar dates for each festival day (month is 0-indexed: 6 === July)
+const FESTIVAL_DATES: Record<FestivalDay, { year: number; month: number; day: number }> = {
+  WED: { year: 2026, month: 6, day: 8 },
+  THU: { year: 2026, month: 6, day: 9 },
+  FRI: { year: 2026, month: 6, day: 10 },
+  SAT: { year: 2026, month: 6, day: 11 },
+  SUN: { year: 2026, month: 6, day: 12 },
+};
+
+// Assumed duration of any event when working out before/during/after.
+const DEFAULT_EVENT_DURATION_MIN = 120;
+
+type Phase = 'before' | 'during' | 'after';
+
+function buildEventStart(day: FestivalDay, time: string): Date {
+  const { year, month, day: dayNum } = FESTIVAL_DATES[day];
+  const [hours, minutes] = time.split(':').map((n) => Number(n));
+  return new Date(year, month, dayNum, hours, minutes, 0, 0);
+}
+
+function getEventPhase(day: FestivalDay, time: string): Phase {
+  const start = buildEventStart(day, time);
+  const end = new Date(start.getTime() + DEFAULT_EVENT_DURATION_MIN * 60 * 1000);
+  const now = new Date();
+  if (now < start) return 'before';
+  if (now > end) return 'after';
+  return 'during';
+}
+
+// Anonymous per-browser marker so the backend can tell votes apart and
+// dedupe a single person's repeated taps within the same phase. Not a login.
+function getClientId(): string {
+  const KEY = 'moville-client-id';
+  try {
+    let id = window.localStorage.getItem(KEY);
+    if (!id) {
+      id = 'c_' + Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
+      window.localStorage.setItem(KEY, id);
+    }
+    return id;
+  } catch {
+    return 'c_nostorage';
+  }
+}
+
+// Four smiley SVGs — rating 1 (worst) to rating 4 (best).
+// Drawn as paths so they look the same on every device.
+
+function SmileyVeryUnhappy() {
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <circle cx="35" cy="42" r="6" fill="#2a0a0c" />
+      <circle cx="65" cy="42" r="6" fill="#2a0a0c" />
+      <path d="M 25 78 Q 50 52 75 78" stroke="#2a0a0c" strokeWidth="7" fill="none" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function SmileyUnhappy() {
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <circle cx="35" cy="42" r="6" fill="#2a0a0c" />
+      <circle cx="65" cy="42" r="6" fill="#2a0a0c" />
+      <path d="M 30 70 Q 50 60 70 70" stroke="#2a0a0c" strokeWidth="7" fill="none" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function SmileyHappy() {
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <circle cx="35" cy="42" r="6" fill="#0c2a14" />
+      <circle cx="65" cy="42" r="6" fill="#0c2a14" />
+      <path d="M 30 60 Q 50 72 70 60" stroke="#0c2a14" strokeWidth="7" fill="none" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function SmileyVeryHappy() {
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <path d="M 28 44 Q 35 36 42 44" stroke="#0c2a14" strokeWidth="7" fill="none" strokeLinecap="round" />
+      <path d="M 58 44 Q 65 36 72 44" stroke="#0c2a14" strokeWidth="7" fill="none" strokeLinecap="round" />
+      <path d="M 25 55 Q 50 85 75 55" stroke="#0c2a14" strokeWidth="7" fill="none" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+const RATING_CONFIG: { rating: Rating; className: string; label: string; Smiley: () => JSX.Element }[] = [
+  { rating: 1, className: 'prog-event-vote-face--r1', label: 'Very unhappy',   Smiley: SmileyVeryUnhappy },
+  { rating: 2, className: 'prog-event-vote-face--r2', label: 'Unhappy',        Smiley: SmileyUnhappy },
+  { rating: 3, className: 'prog-event-vote-face--r3', label: 'Happy',          Smiley: SmileyHappy },
+  { rating: 4, className: 'prog-event-vote-face--r4', label: 'Very happy',     Smiley: SmileyVeryHappy },
+];
 
 function getDefaultFestivalDay(): FestivalDay {
   const now = new Date();
@@ -142,6 +243,8 @@ function getDefaultFestivalDay(): FestivalDay {
 function ProgrammePage({ isNight }: ProgrammePageProps) {
   const [activeDay, setActiveDay] = useState<FestivalDay>(() => getDefaultFestivalDay());
   const [temp, setTemp] = useState<number | null>(null);
+  // Visual confirmation — which face was tapped most recently per event card.
+  const [recentVotes, setRecentVotes] = useState<Record<string, number>>({});
 
   useEffect(() => {
     fetch('/.netlify/functions/weather')
@@ -157,6 +260,57 @@ function ProgrammePage({ isNight }: ProgrammePageProps) {
         setTemp(null);
       });
   }, []);
+
+  const handleVote = (
+    eventKey: string,
+    eventTitle: string,
+    day: FestivalDay,
+    time: string,
+    rating: Rating,
+  ) => {
+    const phase = getEventPhase(day, time);
+
+    // Always flash a visual confirmation so the tap feels responsive.
+    setRecentVotes((prev) => ({ ...prev, [eventKey]: rating }));
+    window.setTimeout(() => {
+      setRecentVotes((prev) => {
+        if (prev[eventKey] !== rating) return prev;
+        const { [eventKey]: _discard, ...rest } = prev;
+        return rest;
+      });
+    }, 1400);
+
+    // If the backend URL hasn't been set, log and bail — handy in development.
+    if (!FEEDBACK_URL || FEEDBACK_URL === 'PASTE_YOUR_APPS_SCRIPT_URL_HERE') {
+      // eslint-disable-next-line no-console
+      console.warn('FEEDBACK_URL not set — vote not sent.', {
+        event: eventTitle, day, time, rating, phase,
+      });
+      return;
+    }
+
+    const payload = {
+      event: eventTitle,
+      day,
+      scheduledTime: time,
+      rating,
+      phase,
+      recordedAt: new Date().toISOString(),
+      clientId: getClientId(),
+    };
+
+    // Every tap is sent. The Apps Script keeps a full audit trail, and the
+    // results page dedupes by (clientId + event + phase) keeping the latest —
+    // so a person can change their mind within a phase and not skew totals.
+    // Using text/plain avoids a CORS preflight; Apps Script parses the body.
+    fetch(FEEDBACK_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload),
+    }).catch(() => {
+      /* silently ignore — don't ruin the tap experience */
+    });
+  };
 
   return (
     <div className="prog-page">
@@ -224,30 +378,53 @@ function ProgrammePage({ isNight }: ProgrammePageProps) {
 
             <div className="prog-day-rule" aria-hidden="true" />
 
-            {PROGRAMME_DATA[activeDay].map((event) => (
-              <article className="prog-event" key={`${activeDay}-${event.time}-${event.title}`}>
-                <div className="prog-event-time">{event.time}</div>
-                <h3 className="prog-event-title">{event.title}</h3>
-                <p className="prog-event-strapline">{event.strapline}</p>
+            {PROGRAMME_DATA[activeDay].map((event) => {
+              const eventKey = `${activeDay}-${event.time}-${event.title}`;
+              const voted = recentVotes[eventKey];
 
-                <div className="prog-event-venue">
-                  <svg width="13" height="13" viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z" />
-                  </svg>
+              return (
+                <article className="prog-event" key={eventKey}>
+                  <div
+                    className="prog-event-vote"
+                    role="group"
+                    aria-label={`Your reaction to ${event.title}`}
+                  >
+                    {RATING_CONFIG.map(({ rating, className, label, Smiley }) => (
+                      <button
+                        key={rating}
+                        type="button"
+                        className={`prog-event-vote-face ${className}${voted === rating ? ' is-voted' : ''}`}
+                        onClick={() => handleVote(eventKey, event.title, activeDay, event.time, rating)}
+                        aria-label={`${label} about ${event.title}`}
+                      >
+                        <Smiley />
+                      </button>
+                    ))}
+                  </div>
 
-                  <span className="prog-event-venue-text">
-                    {event.venue}
-                    {'admission' in event && event.admission && (
-                      <>
-                        <span className="prog-event-separator"> · </span>
-                        <span className="prog-event-admission-label">Admission </span>
-                        <span className="prog-event-admission-value">{event.admission}</span>
-                      </>
-                    )}
-                  </span>
-                </div>
-              </article>
-            ))}
+                  <div className="prog-event-time">{event.time}</div>
+                  <h3 className="prog-event-title">{event.title}</h3>
+                  <p className="prog-event-strapline">{event.strapline}</p>
+
+                  <div className="prog-event-venue">
+                    <svg width="13" height="13" viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z" />
+                    </svg>
+
+                    <span className="prog-event-venue-text">
+                      {event.venue}
+                      {'admission' in event && event.admission && (
+                        <>
+                          <span className="prog-event-separator"> · </span>
+                          <span className="prog-event-admission-label">Admission </span>
+                          <span className="prog-event-admission-value">{event.admission}</span>
+                        </>
+                      )}
+                    </span>
+                  </div>
+                </article>
+              );
+            })}
           </section>
 
           <section className="prog-archive-link">

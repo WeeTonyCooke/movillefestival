@@ -57,7 +57,7 @@ function ArchivePage() {
       await navigator.clipboard.writeText(shareUrl);
       setCopiedId(item.id);
     } catch {
-      // intentionally quiet
+      // keep quiet
     }
   };
 
@@ -69,14 +69,22 @@ function ArchivePage() {
             className="archive-back"
             onClick={() => navigate('/programme')}
             aria-label="Back to programme"
+            type="button"
           >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="3"
+            >
               <path d="M15 18l-6-6 6-6" />
             </svg>
           </button>
 
           <div className="archive-header-copy">
-            <p className="archive-kicker">Moville Festival</p>
+            <p className="archive-kicker">From the Archive</p>
             <h1 className="archive-title">Heritage</h1>
             <p className="archive-intro">
               Newspaper clippings, local memories and festival history from years gone by.
@@ -109,7 +117,9 @@ function ArchivePage() {
             ))}
           </div>
 
-          <p className="archive-count">{filteredItems.length} items in the heritage collection</p>
+          <p className="archive-count">
+            {filteredItems.length} items in the heritage collection
+          </p>
         </div>
 
         <section className="archive-grid">
@@ -121,6 +131,7 @@ function ArchivePage() {
                     <div className="archive-card-date" aria-label={`Published ${item.date}`}>
                       {item.date}
                     </div>
+
                     <div className="archive-masthead">
                       <svg width="12" height="12" viewBox="0 0 24 24" aria-hidden="true">
                         <path d="M4 4h16v2H4V4zm0 4h16v2H4V8zm0 4h10v2H4v-2zm0 4h10v2H4v-2zm12 0h4v4h-4v-4z" />
@@ -138,7 +149,12 @@ function ArchivePage() {
 
               <div className="archive-card-footer">
                 <div className="archive-card-actions">
-                  <a href={item.pdf} className="archive-pdf-button" target="_blank" rel="noreferrer">
+                  <a
+                    href={item.pdf}
+                    className="archive-pdf-button"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
                     View PDF
                   </a>
 

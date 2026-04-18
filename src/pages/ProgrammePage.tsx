@@ -2,32 +2,92 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import './ProgrammePage.css';
 
-// ─── Feedback backend ──────────────────────────────────────────────────────
-// Paste the URL of your deployed Google Apps Script web app here.
-// See SETUP-guide.md for how to get it.
 const FEEDBACK_URL =
   'https://script.google.com/macros/s/AKfycbwADI9Ld2vGjlkjST4VTHHR-y5QbuoBPmFjhE8IX2sZVS8mXxfPWQL5nWoCNSJdHQ9oxg/exec';
 
-const PROGRAMME_DATA = {
+type FestivalDay = 'TUE' | 'WED' | 'THU' | 'FRI' | 'SAT' | 'SUN';
+type Rating = 1 | 2 | 3 | 4;
+type Phase = 'before' | 'during' | 'after';
+
+type ProgrammeEvent = {
+  time: string;
+  title: string;
+  venue?: string;
+  strapline?: string;
+  admission?: string;
+  startTime?: string;
+  headline?: boolean;
+};
+
+const PROGRAMME_DATA: Record<FestivalDay, ProgrammeEvent[]> = {
+  TUE: [
+    {
+      time: '17:30',
+      title: 'Golf Scramble',
+      venue: 'Greencastle Golf Club',
+    },
+  ],
   WED: [
+    {
+      time: '18:30',
+      title: 'Fancy Dress Opening Parade',
+      venue: 'Market Square',
+    },
+    {
+      time: '19:00',
+      title: 'Bed Push',
+      venue: 'Quay Street',
+    },
+    {
+      time: '19:30',
+      title: 'Fire Brigade Car Rescue Demo',
+      venue: 'Moville Pier',
+    },
     {
       time: '21:00',
       title: 'Festival Bingo',
+      venue: "St Eugene's Hall",
       strapline:
         'Eyes down for a good night. Big prizes, plenty of craic and some serious daubing.',
-      venue: "St Eugene's Hall",
     },
   ],
   THU: [
     {
-      time: '20:00',
+      time: '18:00',
+      title: 'Car Treasure Hunt',
+      venue: "McGettigan's Bar",
+    },
+    {
+      time: '20:00–22:00',
+      startTime: '20:00',
+      title: 'Social Dance',
+      venue: "St Eugene's Hall",
+    },
+    {
+      time: '20:30',
       title: 'Festival Queen',
+      venue: "Annie's Bar",
       strapline:
         'Who will wear the crown? An evening of glitz, glam and all eyes on the runway.',
-      venue: "Annie's Bar",
+    },
+    {
+      time: '21:00',
+      title: 'Darts Competition',
+      venue: "Maguire's & The Corner Bar",
     },
   ],
   FRI: [
+    {
+      time: '16:00',
+      title: 'Kids Entertainment',
+      venue: 'Market Square',
+    },
+    {
+      time: '17:00',
+      title: 'Junior Bake Off',
+      strapline: 'Judged by Bakerona.',
+      venue: 'Market Square',
+    },
     {
       time: '19:00',
       title: 'Street Frolics',
@@ -42,9 +102,20 @@ const PROGRAMME_DATA = {
         'Trad, folk and everything in between — live music under the summer sky.',
       venue: 'Market Square',
       admission: '€10',
+      headline: true,
     },
   ],
   SAT: [
+    {
+      time: '09:00',
+      title: 'Fun Team Workout',
+      venue: 'Paul McGowan Fitness',
+    },
+    {
+      time: '10:00',
+      title: 'Community Games',
+      venue: 'Paul McGowan Fitness',
+    },
     {
       time: '11:00',
       title: 'Pet Show',
@@ -54,38 +125,48 @@ const PROGRAMME_DATA = {
     },
     {
       time: '14:00',
+      title: 'Crab Fishing',
+    },
+    {
+      time: '14:00',
       title: 'Bonny Baby',
-      strapline: 'Moville’s bonniest babies — or so they’ll be told.',
+      strapline: "Moville's bonniest babies — or so they'll be told.",
       venue: "St Eugene's Hall",
     },
     {
       time: '16:00',
       title: 'Treasure Hunt',
-      strapline: 'Follow the clues across town — prizes at the finish.',
       venue: "McGettigan's Bar",
     },
     {
-      time: '19:00',
+      time: '18:00',
       title: 'Marty Healy Band',
-      strapline: 'Live music on the square as the evening kicks off.',
       venue: 'Market Square',
+    },
+    {
+      time: '19:00',
+      title: 'Pool Competition',
+      venue: "Maguire's, Diver's & The Corner Bar",
     },
     {
       time: '21:00',
       title: 'Bagatelle',
       strapline:
-        "One of Ireland’s best-loved bands bring the big Saturday night to Market Square.",
+        'One of Ireland’s best-loved bands bring the big Saturday night to Market Square.',
       venue: 'Market Square',
       admission: '€10',
+      headline: true,
     },
   ],
   SUN: [
     {
+      time: '09:00',
+      title: '5K Fun Run or Walk',
+    },
+    {
       time: '12:00',
       title: 'Moville Celtic Sports',
-      strapline:
-        'Track and field on the banks of the Foyle — a proud day for the parish.',
-      venue: 'Glencrow',
+      venue: 'Bayfield',
     },
     {
       time: '17:30',
@@ -95,29 +176,28 @@ const PROGRAMME_DATA = {
       venue: 'The Green',
     },
     {
-      time: '18:00',
+      time: '17:30',
       title: 'The Two Bucks',
-      strapline: 'An evening session to ease you into the final night.',
       venue: 'Market Square',
     },
     {
-      time: '20:00',
-      title: 'Björn Again',
+      time: '19:00',
+      title: 'Pool Competition',
+      venue: "Maguire's, Diver's & The Corner Bar",
+    },
+    {
+      time: '20:30',
+      title: 'The Björn Identity',
       strapline:
-        'The most recognised ABBA tribute act on the planet hits The Square. Get your hotpants on and the glitter ready!',
+        'The premier ABBA tribute band in Ireland hits the Square. Get your hotpants on and the glitter ready!',
       venue: 'Market Square',
+      headline: true,
     },
   ],
-} as const;
-
-type FestivalDay = keyof typeof PROGRAMME_DATA;
-type Rating = 1 | 2 | 3 | 4;
-
-type ProgrammePageProps = {
-  isNight: boolean;
 };
 
 const DAY_LABELS: Record<FestivalDay, string> = {
+  TUE: 'Tue, 7 Jul',
   WED: 'Wed, 8 Jul',
   THU: 'Thu, 9 Jul',
   FRI: 'Fri, 10 Jul',
@@ -125,12 +205,13 @@ const DAY_LABELS: Record<FestivalDay, string> = {
   SUN: 'Sun, 12 Jul',
 };
 
-const DAY_ORDER: FestivalDay[] = ['WED', 'THU', 'FRI', 'SAT', 'SUN'];
+const DAY_ORDER: FestivalDay[] = ['TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
 
 const FESTIVAL_DATES: Record<
   FestivalDay,
   { year: number; month: number; day: number }
 > = {
+  TUE: { year: 2026, month: 6, day: 7 },
   WED: { year: 2026, month: 6, day: 8 },
   THU: { year: 2026, month: 6, day: 9 },
   FRI: { year: 2026, month: 6, day: 10 },
@@ -140,16 +221,20 @@ const FESTIVAL_DATES: Record<
 
 const DEFAULT_EVENT_DURATION_MIN = 120;
 
-type Phase = 'before' | 'during' | 'after';
+function getStartTime(event: ProgrammeEvent): string {
+  return event.startTime ?? event.time.split('–')[0].trim();
+}
 
-function buildEventStart(day: FestivalDay, time: string): Date {
+function buildEventStart(day: FestivalDay, event: ProgrammeEvent): Date {
   const { year, month, day: dayNum } = FESTIVAL_DATES[day];
-  const [hours, minutes] = time.split(':').map((n) => Number(n));
+  const [hours, minutes] = getStartTime(event)
+    .split(':')
+    .map((n) => Number(n));
   return new Date(year, month, dayNum, hours, minutes, 0, 0);
 }
 
-function getEventPhase(day: FestivalDay, time: string): Phase {
-  const start = buildEventStart(day, time);
+function getEventPhase(day: FestivalDay, event: ProgrammeEvent): Phase {
+  const start = buildEventStart(day, event);
   const end = new Date(
     start.getTime() + DEFAULT_EVENT_DURATION_MIN * 60 * 1000,
   );
@@ -300,15 +385,17 @@ const RATING_CONFIG: {
 function getDefaultFestivalDay(): FestivalDay {
   const now = new Date();
 
-  const festivalStart = new Date(2026, 6, 8, 0, 0, 0, 0);
+  const festivalStart = new Date(2026, 6, 7, 0, 0, 0, 0);
   const festivalEnd = new Date(2026, 6, 12, 23, 59, 59, 999);
 
-  if (now < festivalStart) return 'WED';
+  if (now < festivalStart) return 'TUE';
   if (now > festivalEnd) return 'SUN';
 
   const dayIndex = now.getDay();
 
   switch (dayIndex) {
+    case 2:
+      return 'TUE';
     case 3:
       return 'WED';
     case 4:
@@ -320,16 +407,18 @@ function getDefaultFestivalDay(): FestivalDay {
     case 0:
       return 'SUN';
     default:
-      return 'WED';
+      return 'TUE';
   }
 }
 
-function ProgrammePage({ isNight }: ProgrammePageProps) {
+function ProgrammePage({ isNight }: { isNight: boolean }) {
   const [activeDay, setActiveDay] = useState<FestivalDay>(() =>
     getDefaultFestivalDay(),
   );
   const [temp, setTemp] = useState<number | null>(null);
-  const [selectedVotes, setSelectedVotes] = useState<Record<string, Rating>>({});
+  const [selectedVotes, setSelectedVotes] = useState<Record<string, Rating>>(
+    {},
+  );
 
   useEffect(() => {
     fetch('/.netlify/functions/weather')
@@ -350,10 +439,10 @@ function ProgrammePage({ isNight }: ProgrammePageProps) {
     eventKey: string,
     eventTitle: string,
     day: FestivalDay,
-    time: string,
+    event: ProgrammeEvent,
     rating: Rating,
   ) => {
-    const phase = getEventPhase(day, time);
+    const phase = getEventPhase(day, event);
 
     setSelectedVotes((prev) => ({ ...prev, [eventKey]: rating }));
 
@@ -364,7 +453,7 @@ function ProgrammePage({ isNight }: ProgrammePageProps) {
       console.warn('FEEDBACK_URL not set — vote not sent.', {
         event: eventTitle,
         day,
-        time,
+        time: event.time,
         rating,
         phase,
       });
@@ -374,7 +463,7 @@ function ProgrammePage({ isNight }: ProgrammePageProps) {
     const payload = {
       event: eventTitle,
       day,
-      scheduledTime: time,
+      scheduledTime: event.time,
       rating,
       phase,
       recordedAt: new Date().toISOString(),
@@ -411,12 +500,13 @@ function ProgrammePage({ isNight }: ProgrammePageProps) {
             </Link>
 
             <div className="prog-header-meta">
-              <p className="prog-kicker">Moville Festival</p>
-              <span className="prog-header-date">8–12 July 2026</span>
+              <p className="prog-kicker">What’s On</p>
+              <h1 className="prog-title">Programme</h1>
+              <span className="prog-header-date">
+                Tuesday 7 – Sunday 12 July
+              </span>
             </div>
           </div>
-
-          <h1 className="prog-title">Programme</h1>
         </header>
 
         <nav className="prog-day-nav" aria-label="Festival days">
@@ -470,36 +560,44 @@ function ProgrammePage({ isNight }: ProgrammePageProps) {
               const selectedRating = selectedVotes[eventKey];
 
               return (
-                <article className="prog-event" key={eventKey}>
+                <article
+                  className={`prog-event${event.headline ? ' is-headline' : ''}`}
+                  key={eventKey}
+                >
                   <div className="prog-event-time">{event.time}</div>
+
                   <h3 className="prog-event-title">{event.title}</h3>
-                  <p className="prog-event-strapline">{event.strapline}</p>
 
-                  <div className="prog-event-venue">
-                    <svg
-                      width="13"
-                      height="13"
-                      viewBox="0 0 24 24"
-                      aria-hidden="true"
-                    >
-                      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z" />
-                    </svg>
+                  {event.strapline && (
+                    <p className="prog-event-strapline">{event.strapline}</p>
+                  )}
 
-                    <span className="prog-event-venue-text">
-                      {event.venue}
-                      {'admission' in event && event.admission && (
+                  {event.venue && (
+                    <div className="prog-event-venue">
+                      <svg
+                        width="13"
+                        height="13"
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                      >
+                        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z" />
+                      </svg>
+
+                      <span className="prog-event-venue-text">{event.venue}</span>
+
+                      {event.admission && (
                         <>
-                          <span className="prog-event-separator"> · </span>
+                          <span className="prog-event-separator">·</span>
                           <span className="prog-event-admission-label">
-                            Admission{' '}
+                            Admission
                           </span>
                           <span className="prog-event-admission-value">
                             {event.admission}
                           </span>
                         </>
                       )}
-                    </span>
-                  </div>
+                    </div>
+                  )}
 
                   <div
                     className="prog-event-vote"
@@ -515,20 +613,17 @@ function ProgrammePage({ isNight }: ProgrammePageProps) {
                           type="button"
                           className={`prog-event-vote-face ${className}${isSelected ? ' is-voted' : ''}`}
                           onClick={() =>
-                            handleVote(
-                              eventKey,
-                              event.title,
-                              activeDay,
-                              event.time,
-                              rating,
-                            )
+                            handleVote(eventKey, event.title, activeDay, event, rating)
                           }
-                          aria-label={`${label} about ${event.title}`}
+                          aria-label={label}
                           aria-pressed={isSelected}
                         >
                           <Smiley />
                           {isSelected && (
-                            <span className="prog-event-vote-tick" aria-hidden="true">
+                            <span
+                              className="prog-event-vote-tick"
+                              aria-hidden="true"
+                            >
                               <VoteTick />
                             </span>
                           )}
@@ -541,110 +636,104 @@ function ProgrammePage({ isNight }: ProgrammePageProps) {
             })}
           </section>
 
-          <section className="prog-archive-link">
+          <div className="prog-archive-link">
             <Link
               to="/archive"
               className="prog-archive-anchor"
-              aria-label="Open archive"
+              aria-label="Go to archive"
             >
               <div className="prog-archive-mark">
                 <img
                   src="/moville_lighthouse_icon.png"
-                  alt="Moville lighthouse"
+                  alt=""
                   className="prog-archive-logo"
                 />
-                <span className="prog-archive-years">
-                  Archive | 1958 – 2026
-                </span>
+                <span className="prog-archive-years">Archive — 1958–2026</span>
               </div>
             </Link>
-          </section>
+          </div>
 
-          <section className="prog-social">
+          <section className="prog-social" aria-label="Moville Festival social links">
             <a
-              href="https://www.instagram.com/movillefestival/"
               className="prog-social-link"
-              aria-label="Instagram"
+              href="https://www.instagram.com/movillefestival"
               target="_blank"
-              rel="noopener noreferrer"
+              rel="noreferrer"
+              aria-label="Moville Festival on Instagram"
             >
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.8"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden="true"
-              >
-                <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
-                <circle cx="12" cy="12" r="4" />
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <rect
+                  x="3.5"
+                  y="3.5"
+                  width="17"
+                  height="17"
+                  rx="5"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                />
                 <circle
-                  cx="17.5"
-                  cy="6.5"
-                  r="0.5"
+                  cx="12"
+                  cy="12"
+                  r="4"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                />
+                <circle cx="17.3" cy="6.7" r="1.1" fill="currentColor" />
+              </svg>
+            </a>
+
+            <a
+              className="prog-social-link"
+              href="https://www.facebook.com/movillefestival"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Moville Festival on Facebook"
+            >
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path
+                  d="M13.2 20v-7h2.4l.4-3h-2.8V8.1c0-.87.24-1.46 1.49-1.46H16V4.02c-.23-.03-1.03-.1-1.96-.1-1.94 0-3.27 1.18-3.27 3.36V10H8v3h2.77v7h2.43Z"
                   fill="currentColor"
-                  stroke="none"
                 />
               </svg>
             </a>
 
             <a
-              href="https://www.tiktok.com/@moville.festival"
               className="prog-social-link"
-              aria-label="TikTok"
+              href="https://www.tiktok.com/@movillefestival"
               target="_blank"
-              rel="noopener noreferrer"
+              rel="noreferrer"
+              aria-label="Moville Festival on TikTok"
             >
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.8"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden="true"
-              >
-                <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" />
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path
+                  d="M14.6 3.8c.42 1.2 1.31 2.25 2.46 2.87.78.42 1.63.63 2.5.63v2.63a7.6 7.6 0 0 1-3.36-.77v5.37c0 2.9-2.35 5.25-5.25 5.25S5.7 17.43 5.7 14.53c0-2.9 2.35-5.25 5.25-5.25.27 0 .54.02.8.06v2.72a2.64 2.64 0 0 0-.8-.12 2.59 2.59 0 1 0 2.59 2.59V3.8h1.06Z"
+                  fill="currentColor"
+                />
               </svg>
             </a>
 
             <a
-              href="https://www.facebook.com/profile.php?id=100092674825683"
               className="prog-social-link"
-              aria-label="Facebook"
+              href="https://www.instagram.com/christybutterz/"
               target="_blank"
-              rel="noopener noreferrer"
+              rel="noreferrer"
+              aria-label="Photography by Christy Butterz"
             >
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.8"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden="true"
-              >
-                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
-              </svg>
-            </a>
-
-            <a
-              href="mailto:movillefestival@gmail.com"
-              className="prog-social-link"
-              aria-label="Email"
-            >
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.8"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden="true"
-              >
-                <rect x="2" y="4" width="20" height="16" rx="3" />
-                <polyline points="2,4 12,13 22,4" />
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path
+                  d="M7 7.5h2.1l1-1.7h3.8l1 1.7H17a2 2 0 0 1 2 2V16a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V9.5a2 2 0 0 1 2-2Z"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinejoin="round"
+                />
+                <circle
+                  cx="12"
+                  cy="12.5"
+                  r="3.1"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                />
+                <circle cx="16.6" cy="9.7" r="0.9" fill="currentColor" />
               </svg>
             </a>
           </section>

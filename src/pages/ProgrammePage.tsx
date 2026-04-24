@@ -20,6 +20,7 @@ const PROGRAMME_DATA: Record<FestivalDay, ProgrammeEvent[]> = {
       time: '17:30',
       title: 'Golf Scramble',
       venue: 'Greencastle Golf Club',
+      strapline: 'Drive for show, putt for dough.',
     },
   ],
   WED: [
@@ -27,16 +28,21 @@ const PROGRAMME_DATA: Record<FestivalDay, ProgrammeEvent[]> = {
       time: '18:30',
       title: 'Fancy Dress Opening Parade',
       venue: 'Market Square',
+      strapline:
+        'A colourful start to the festival - loud, lively and full of fun.',
     },
     {
       time: '19:00',
       title: 'Bed Push',
       venue: 'Quay Street',
+      strapline: 'Fast, slightly chaotic, and much harder than it looks.',
     },
     {
       time: '19:30',
       title: 'Fire Brigade Car Rescue Demo',
       venue: 'Moville Pier',
+      strapline:
+        'Up close and real - a live rescue demonstration from the fire brigade.',
     },
     {
       time: '21:00',
@@ -51,12 +57,15 @@ const PROGRAMME_DATA: Record<FestivalDay, ProgrammeEvent[]> = {
       time: '18:00',
       title: 'Car Treasure Hunt',
       venue: "McGettigan's Bar",
+      strapline:
+        'Follow the clues, trust your instincts and blame the navigator if you don’t win.',
     },
     {
       time: '20:00–22:00',
       startTime: '20:00',
       title: 'Social Dance',
       venue: "St Eugene's Hall",
+      strapline: 'Good music, a bit of dancing and plenty of craic.',
     },
     {
       time: '20:30',
@@ -69,6 +78,7 @@ const PROGRAMME_DATA: Record<FestivalDay, ProgrammeEvent[]> = {
       time: '21:00',
       title: 'Darts Competition',
       venue: "Maguire's & The Corner Bar",
+      strapline: 'Love the Darts!',
     },
   ],
   FRI: [
@@ -76,11 +86,13 @@ const PROGRAMME_DATA: Record<FestivalDay, ProgrammeEvent[]> = {
       time: '16:00',
       title: 'Kids Entertainment',
       venue: 'Market Square',
+      strapline: 'A lively afternoon of fun for the younger crowd.',
     },
     {
       time: '17:00',
       title: 'Junior Bake Off',
-      strapline: 'Judged by Bakerona.',
+      strapline:
+        'Young bakers, big effort and a few crumbs along the way. Judged by Bakerona.',
       venue: 'Market Square',
     },
     {
@@ -105,11 +117,19 @@ const PROGRAMME_DATA: Record<FestivalDay, ProgrammeEvent[]> = {
       time: '09:00',
       title: 'Fun Team Workout',
       venue: 'Paul McGowan Fitness',
+      strapline: 'Shake off the cobwebs and get the day started properly.',
     },
     {
       time: '10:00',
       title: 'Community Games',
       venue: 'Paul McGowan Fitness',
+      strapline: 'A bit of friendly competition - and a few bragging rights.',
+    },
+    {
+      time: '10:00',
+      title: 'Sea Swim',
+      strapline: 'With The Mighty Mermaids at Big White Bay. All welcome.',
+      venue: 'Big White Bay',
     },
     {
       time: '11:00',
@@ -121,6 +141,8 @@ const PROGRAMME_DATA: Record<FestivalDay, ProgrammeEvent[]> = {
     {
       time: '14:00',
       title: 'Crab Fishing',
+      venue: 'Moville Pier',
+      strapline: 'Buckets, lines and a bit of patience down at the pier.',
     },
     {
       time: '14:00',
@@ -132,22 +154,25 @@ const PROGRAMME_DATA: Record<FestivalDay, ProgrammeEvent[]> = {
       time: '16:00',
       title: 'Treasure Hunt',
       venue: "McGettigan's Bar",
+      strapline: 'Follow the clues and see where they take you.',
     },
     {
       time: '18:00',
       title: 'Marty Healy Band',
       venue: 'Market Square',
+      strapline: 'Live music in the Square to ease you into Saturday evening.',
     },
     {
       time: '19:00',
       title: 'Pool Competition',
       venue: "Maguire's, Diver's & The Corner Bar",
+      strapline: 'Better to be lucky than good.',
     },
     {
       time: '21:00',
       title: 'Bagatelle',
       strapline:
-        'One of Ireland’s best-loved bands bring the big Saturday night to Market Square.',
+        'One of Ireland’s best-loved bands brings the big Saturday night to Market Square.',
       venue: 'Market Square',
       admission: '€10',
       headline: true,
@@ -157,11 +182,13 @@ const PROGRAMME_DATA: Record<FestivalDay, ProgrammeEvent[]> = {
     {
       time: '09:00',
       title: '5K Fun Run or Walk',
+      strapline: 'Run it, walk it or just enjoy the fresh start to Sunday.',
     },
     {
       time: '12:00',
       title: 'Moville Celtic Sports',
       venue: 'Bayfield',
+      strapline: 'A great afternoon of sport, competition and community spirit.',
     },
     {
       time: '17:30',
@@ -172,19 +199,22 @@ const PROGRAMME_DATA: Record<FestivalDay, ProgrammeEvent[]> = {
     },
     {
       time: '17:30',
-      title: 'The Two Bucks',
+      title: 'The 2 Bucks',
       venue: 'Market Square',
+      strapline:
+        'A lively start to Sunday evening - expect a good crowd and high-energy takes on familiar favourites.',
     },
     {
       time: '19:00',
       title: 'Pool Competition',
       venue: "Maguire's, Diver's & The Corner Bar",
+      strapline: 'Better to be lucky than good.',
     },
     {
       time: '20:30',
       title: 'The Björn Identity',
       strapline:
-        'The premier ABBA tribute band in Ireland hits the Square. Get your hotpants on and the glitter ready!',
+        'Ireland’s premier ABBA tribute band hits the Square for the festival finale. Glitter optional, but encouraged.',
       venue: 'Market Square',
       headline: true,
     },
@@ -387,7 +417,7 @@ function ProgrammePage({ isNight }: { isNight: boolean }) {
                   alt=""
                   className="prog-archive-logo"
                 />
-                <span className="prog-archive-years">Archive — 1958–2026</span>
+                <span className="prog-archive-years">Archive | 1958 – 2026</span>
               </div>
             </Link>
           </div>

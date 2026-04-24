@@ -20,7 +20,7 @@ const PROGRAMME_DATA: Record<FestivalDay, ProgrammeEvent[]> = {
       time: '17:30',
       title: 'Golf Scramble',
       venue: 'Greencastle Golf Club',
-      strapline: 'Drive for show, putt for dough.',
+      strapline: 'One of the most beautiful links courses you will play anywhere.',
     },
   ],
   WED: [
@@ -29,7 +29,7 @@ const PROGRAMME_DATA: Record<FestivalDay, ProgrammeEvent[]> = {
       title: 'Fancy Dress Opening Parade',
       venue: 'Market Square',
       strapline:
-        'A colourful start to the festival - loud, lively and full of fun.',
+        'A colourful start to the festival - loud, lively and full of fun for everyone.',
     },
     {
       time: '19:00',
@@ -42,14 +42,14 @@ const PROGRAMME_DATA: Record<FestivalDay, ProgrammeEvent[]> = {
       title: 'Fire Brigade Car Rescue Demo',
       venue: 'Moville Pier',
       strapline:
-        'Up close and real - a live rescue demonstration from the fire brigade.',
+        'Up close and real - a live rescue demonstration from the fire brigade. Not to be missed.',
     },
     {
       time: '21:00',
       title: 'Festival Bingo',
       venue: "St Eugene's Hall",
       strapline:
-        'Eyes down for a good night. Big prizes, plenty of craic and some serious daubing.',
+        'Eyes down, dabbers ready. Expect a full house.',
     },
   ],
   THU: [
@@ -78,7 +78,7 @@ const PROGRAMME_DATA: Record<FestivalDay, ProgrammeEvent[]> = {
       time: '21:00',
       title: 'Darts Competition',
       venue: "Maguire's & The Corner Bar",
-      strapline: 'Love the Darts!',
+      strapline: "Some of Inishowen's sharpest shooters step up to the oche.",
     },
   ],
   FRI: [
@@ -86,7 +86,7 @@ const PROGRAMME_DATA: Record<FestivalDay, ProgrammeEvent[]> = {
       time: '16:00',
       title: 'Kids Entertainment',
       venue: 'Market Square',
-      strapline: 'Fun and games for the younger festival-goers.',
+      strapline: 'Fun and games for our younger festival-goers.',
     },
     {
       time: '17:00',
@@ -167,7 +167,7 @@ const PROGRAMME_DATA: Record<FestivalDay, ProgrammeEvent[]> = {
       title: 'Pool Competition',
       venue: "Maguire's, Diver's & The Corner Bar",
       strapline:
-        'Chalk up and take your shot. The game is 90% mental - the other half is physical.',
+        'Chalk up and take your shot.',
     },
     {
       time: '21:00',
@@ -210,7 +210,7 @@ const PROGRAMME_DATA: Record<FestivalDay, ProgrammeEvent[]> = {
       title: 'Pool Competition',
       venue: "Maguire's, Diver's & The Corner Bar",
       strapline:
-        'Chalk up and take your shot. The game is 90% mental - the other half is physical.',
+        'Chalk up and take your shot.',
     },
     {
       time: '20:30',

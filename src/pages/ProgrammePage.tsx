@@ -2,7 +2,14 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import './ProgrammePage.css';
 
+const FEEDBACK_URL =
+  'https://script.google.com/macros/s/AKfycbwADI9Ld2vGjlkjST4VTHHR-y5QbuoBPmFjhE8IX2sZVS8mXxfPWQL5nWoCNSJdHQ9oxg/exec';
+
+const FORCE_SHOW_FEEDBACK = false;
+const DEFAULT_EVENT_DURATION_MIN = 90;
+
 type FestivalDay = 'TUE' | 'WED' | 'THU' | 'FRI' | 'SAT' | 'SUN';
+type Rating = 1 | 2 | 3 | 4;
 
 type ProgrammeEvent = {
   time: string;
@@ -14,13 +21,25 @@ type ProgrammeEvent = {
   headline?: boolean;
 };
 
+const FESTIVAL_DATES: Record<
+  FestivalDay,
+  { year: number; month: number; day: number }
+> = {
+  TUE: { year: 2026, month: 6, day: 7 },
+  WED: { year: 2026, month: 6, day: 8 },
+  THU: { year: 2026, month: 6, day: 9 },
+  FRI: { year: 2026, month: 6, day: 10 },
+  SAT: { year: 2026, month: 6, day: 11 },
+  SUN: { year: 2026, month: 6, day: 12 },
+};
+
 const PROGRAMME_DATA: Record<FestivalDay, ProgrammeEvent[]> = {
   TUE: [
     {
       time: '17:30',
       title: 'Golf Scramble',
       venue: 'Greencastle Golf Club',
-      strapline: 'One of the most beautiful links courses you will play anywhere.',
+      strapline: 'Drive for show, putt for dough.',
     },
   ],
   WED: [
@@ -29,7 +48,7 @@ const PROGRAMME_DATA: Record<FestivalDay, ProgrammeEvent[]> = {
       title: 'Fancy Dress Opening Parade',
       venue: 'Market Square',
       strapline:
-        'A colourful start to the festival - loud, lively and full of fun for everyone.',
+        'A colourful start to the festival - loud, lively and full of fun.',
     },
     {
       time: '19:00',
@@ -42,14 +61,14 @@ const PROGRAMME_DATA: Record<FestivalDay, ProgrammeEvent[]> = {
       title: 'Fire Brigade Car Rescue Demo',
       venue: 'Moville Pier',
       strapline:
-        'Up close and real - a live rescue demonstration from the fire brigade. Not to be missed.',
+        'Up close and real - a live rescue demonstration from the fire brigade.',
     },
     {
       time: '21:00',
       title: 'Festival Bingo',
       venue: "St Eugene's Hall",
       strapline:
-        'Eyes down, dabbers ready. Expect a full house.',
+        'Eyes down for a good night. Big prizes, plenty of craic and some serious daubing.',
     },
   ],
   THU: [
@@ -78,7 +97,7 @@ const PROGRAMME_DATA: Record<FestivalDay, ProgrammeEvent[]> = {
       time: '21:00',
       title: 'Darts Competition',
       venue: "Maguire's & The Corner Bar",
-      strapline: "Some of Inishowen's sharpest shooters step up to the oche.",
+      strapline: 'Love the Darts!',
     },
   ],
   FRI: [
@@ -86,7 +105,7 @@ const PROGRAMME_DATA: Record<FestivalDay, ProgrammeEvent[]> = {
       time: '16:00',
       title: 'Kids Entertainment',
       venue: 'Market Square',
-      strapline: 'Fun and games for our younger festival-goers.',
+      strapline: 'Fun and games for the younger festival-goers.',
     },
     {
       time: '17:00',
@@ -128,8 +147,8 @@ const PROGRAMME_DATA: Record<FestivalDay, ProgrammeEvent[]> = {
     {
       time: '10:00',
       title: 'Sea Swim',
-      strapline: 'With The Mighty Mermaids at Big White Bay. All welcome.',
       venue: 'Big White Bay',
+      strapline: 'With The Mighty Mermaids at Big White Bay. All welcome.',
     },
     {
       time: '11:00',
@@ -167,7 +186,7 @@ const PROGRAMME_DATA: Record<FestivalDay, ProgrammeEvent[]> = {
       title: 'Pool Competition',
       venue: "Maguire's, Diver's & The Corner Bar",
       strapline:
-        'Chalk up and take your shot.',
+        'Chalk up and take your shot. The game is 90% mental - the other half is physical.',
     },
     {
       time: '21:00',
@@ -210,7 +229,7 @@ const PROGRAMME_DATA: Record<FestivalDay, ProgrammeEvent[]> = {
       title: 'Pool Competition',
       venue: "Maguire's, Diver's & The Corner Bar",
       strapline:
-        'Chalk up and take your shot.',
+        'Chalk up and take your shot. The game is 90% mental - the other half is physical.',
     },
     {
       time: '20:30',
@@ -233,6 +252,162 @@ const DAY_LABELS: Record<FestivalDay, string> = {
 };
 
 const DAY_ORDER: FestivalDay[] = ['TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
+
+function getStartTime(event: ProgrammeEvent): string {
+  return event.startTime ?? event.time.split(/[–-]/)[0].trim();
+}
+
+function buildEventStart(day: FestivalDay, event: ProgrammeEvent): Date {
+  const { year, month, day: dayNum } = FESTIVAL_DATES[day];
+  const [hours, minutes] = getStartTime(event)
+    .split(':')
+    .map((n) => Number(n));
+
+  return new Date(year, month, dayNum, hours, minutes, 0, 0);
+}
+
+function hasEventFinished(day: FestivalDay, event: ProgrammeEvent): boolean {
+  if (FORCE_SHOW_FEEDBACK) return true;
+
+  const start = buildEventStart(day, event);
+  const end = new Date(
+    start.getTime() + DEFAULT_EVENT_DURATION_MIN * 60 * 1000,
+  );
+
+  return new Date() > end;
+}
+
+function getClientId(): string {
+  const KEY = 'moville-client-id';
+
+  try {
+    let id = window.localStorage.getItem(KEY);
+
+    if (!id) {
+      id =
+        'c_' +
+        Math.random().toString(36).slice(2, 10) +
+        Date.now().toString(36);
+
+      window.localStorage.setItem(KEY, id);
+    }
+
+    return id;
+  } catch {
+    return 'c_nostorage';
+  }
+}
+
+function SmileyVeryUnhappy() {
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <circle cx="35" cy="40" r="7" />
+      <circle cx="65" cy="40" r="7" />
+      <path
+        d="M 28 77 Q 50 55 72 77"
+        strokeWidth="8"
+        fill="none"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+function SmileyUnhappy() {
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <circle cx="35" cy="40" r="7" />
+      <circle cx="65" cy="40" r="7" />
+      <path
+        d="M 30 70 Q 50 62 70 70"
+        strokeWidth="8"
+        fill="none"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+function SmileyHappy() {
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <circle cx="35" cy="40" r="7" />
+      <circle cx="65" cy="40" r="7" />
+      <path
+        d="M 30 64 Q 50 80 70 64"
+        strokeWidth="8"
+        fill="none"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+function SmileyVeryHappy() {
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <circle cx="35" cy="40" r="7" />
+      <circle cx="65" cy="40" r="7" />
+      <path
+        d="M 27 62 Q 50 88 73 62"
+        strokeWidth="8"
+        fill="none"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+function VoteTick() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      className="prog-event-vote-tick-icon"
+    >
+      <path
+        d="M6 12.5l4 4L18 8.5"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+const RATING_CONFIG: {
+  rating: Rating;
+  className: string;
+  label: string;
+  Smiley: () => JSX.Element;
+}[] = [
+  {
+    rating: 1,
+    className: 'prog-event-vote-face--r1',
+    label: 'Very unhappy',
+    Smiley: SmileyVeryUnhappy,
+  },
+  {
+    rating: 2,
+    className: 'prog-event-vote-face--r2',
+    label: 'Unhappy',
+    Smiley: SmileyUnhappy,
+  },
+  {
+    rating: 3,
+    className: 'prog-event-vote-face--r3',
+    label: 'Happy',
+    Smiley: SmileyHappy,
+  },
+  {
+    rating: 4,
+    className: 'prog-event-vote-face--r4',
+    label: 'Very happy',
+    Smiley: SmileyVeryHappy,
+  },
+];
 
 function getDefaultFestivalDay(): FestivalDay {
   const now = new Date();
@@ -268,6 +443,9 @@ function ProgrammePage({ isNight }: { isNight: boolean }) {
     getDefaultFestivalDay(),
   );
   const [temp, setTemp] = useState<number | null>(null);
+  const [selectedVotes, setSelectedVotes] = useState<Record<string, Rating>>(
+    {},
+  );
 
   useEffect(() => {
     fetch('/.netlify/functions/weather')
@@ -284,22 +462,58 @@ function ProgrammePage({ isNight }: { isNight: boolean }) {
       });
   }, []);
 
+  const handleVote = (
+    eventKey: string,
+    eventTitle: string,
+    day: FestivalDay,
+    event: ProgrammeEvent,
+    rating: Rating,
+  ) => {
+    setSelectedVotes((prev) => ({ ...prev, [eventKey]: rating }));
+
+    const payload = {
+      event: eventTitle,
+      day,
+      scheduledTime: event.time,
+      rating,
+      recordedAt: new Date().toISOString(),
+      clientId: getClientId(),
+    };
+
+    fetch(FEEDBACK_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload),
+    }).catch(() => {
+      // keep tap experience clean
+    });
+  };
+
   return (
     <div className="prog-page">
       <div className="prog-bg" aria-hidden="true" />
+
       <div className="prog-content page-shell--narrow">
         <header className="prog-header">
           <div className="prog-header-top">
             <Link to="/" className="prog-back" aria-label="Back to home">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="3"
+              >
                 <path d="M15 18l-6-6 6-6" />
               </svg>
             </Link>
+
             <div className="prog-header-meta">
               <p className="prog-kicker">What’s On</p>
               <h1 className="prog-title">Programme</h1>
               <span className="prog-header-date">
-                Tuesday 7 – Sunday 12 July
+                Tuesday 7 - Sunday 12 July
               </span>
             </div>
           </div>
@@ -324,14 +538,16 @@ function ProgrammePage({ isNight }: { isNight: boolean }) {
         <main className="prog-main">
           <section className="prog-weather surface-card">
             <span className="prog-weather-icon">{isNight ? '🌜' : '☀️'}</span>
+
             <div className="prog-weather-copy">
               <span className="prog-weather-line">
                 {temp !== null
                   ? `${temp}°C in Moville`
                   : isNight
-                  ? 'A lovely evening in Moville'
-                  : 'A fine day in Moville'}
+                    ? 'A lovely evening in Moville'
+                    : 'A fine day in Moville'}
               </span>
+
               <span className="prog-weather-subline">
                 {isNight
                   ? 'Clear skies and a good night for heading into town.'
@@ -351,12 +567,16 @@ function ProgrammePage({ isNight }: { isNight: boolean }) {
 
             {PROGRAMME_DATA[activeDay].map((event) => {
               const eventKey = `${activeDay}-${event.time}-${event.title}`;
+              const selectedRating = selectedVotes[eventKey];
+              const eventFinished = hasEventFinished(activeDay, event);
+
               return (
                 <article
                   className={`prog-event${event.headline ? ' is-headline' : ''}`}
                   key={eventKey}
                 >
                   <div className="prog-event-time">{event.time}</div>
+
                   <h3 className="prog-event-title">{event.title}</h3>
 
                   {event.strapline && (
@@ -365,9 +585,15 @@ function ProgrammePage({ isNight }: { isNight: boolean }) {
 
                   {event.venue && (
                     <div className="prog-event-venue">
-                      <svg width="13" height="13" viewBox="0 0 24 24">
+                      <svg
+                        width="13"
+                        height="13"
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                      >
                         <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z" />
                       </svg>
+
                       <span className="prog-event-venue-text">{event.venue}</span>
 
                       {event.admission && (
@@ -383,9 +609,163 @@ function ProgrammePage({ isNight }: { isNight: boolean }) {
                       )}
                     </div>
                   )}
+
+                  {eventFinished && (
+                    <>
+                      <p className="prog-event-vote-heading">
+                        Tell us what you thought
+                      </p>
+
+                      <div
+                        className="prog-event-vote"
+                        role="group"
+                        aria-label={`Your reaction to ${event.title}`}
+                      >
+                        {RATING_CONFIG.map(
+                          ({ rating, className, label, Smiley }) => {
+                            const isSelected = selectedRating === rating;
+
+                            return (
+                              <button
+                                key={rating}
+                                type="button"
+                                className={`prog-event-vote-face ${className}${
+                                  isSelected ? ' is-voted' : ''
+                                }`}
+                                onClick={() =>
+                                  handleVote(
+                                    eventKey,
+                                    event.title,
+                                    activeDay,
+                                    event,
+                                    rating,
+                                  )
+                                }
+                                aria-label={`${label} about ${event.title}`}
+                                aria-pressed={isSelected}
+                              >
+                                <Smiley />
+
+                                {isSelected && (
+                                  <span
+                                    className="prog-event-vote-tick"
+                                    aria-hidden="true"
+                                  >
+                                    <VoteTick />
+                                  </span>
+                                )}
+                              </button>
+                            );
+                          },
+                        )}
+                      </div>
+                    </>
+                  )}
                 </article>
               );
             })}
+          </section>
+
+          <div className="prog-archive-link">
+            <Link
+              to="/archive"
+              className="prog-archive-anchor"
+              aria-label="Go to archive"
+            >
+              <div className="prog-archive-mark">
+                <img
+                  src="/moville_lighthouse_icon.png"
+                  alt=""
+                  className="prog-archive-logo"
+                />
+                <span className="prog-archive-years">Archive | 1958 - 2026</span>
+              </div>
+            </Link>
+          </div>
+
+          <section className="prog-social" aria-label="Moville Festival social links">
+            <a
+              className="prog-social-link"
+              href="https://www.instagram.com/movillefestival"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Moville Festival on Instagram"
+            >
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <rect
+                  x="3.5"
+                  y="3.5"
+                  width="17"
+                  height="17"
+                  rx="5"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                />
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="4"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                />
+                <circle cx="17.3" cy="6.7" r="1.1" fill="currentColor" />
+              </svg>
+            </a>
+
+            <a
+              className="prog-social-link"
+              href="https://www.facebook.com/movillefestival"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Moville Festival on Facebook"
+            >
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path
+                  d="M13.2 20v-7h2.4l.4-3h-2.8V8.1c0-.87.24-1.46 1.49-1.46H16V4.02c-.23-.03-1.03-.1-1.96-.1-1.94 0-3.27 1.18-3.27 3.36V10H8v3h2.77v7h2.43Z"
+                  fill="currentColor"
+                />
+              </svg>
+            </a>
+
+            <a
+              className="prog-social-link"
+              href="https://www.tiktok.com/@movillefestival"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Moville Festival on TikTok"
+            >
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path
+                  d="M14.6 3.8c.42 1.2 1.31 2.25 2.46 2.87.78.42 1.63.63 2.5.63v2.63a7.6 7.6 0 0 1-3.36-.77v5.37c0 2.9-2.35 5.25-5.25 5.25S5.7 17.43 5.7 14.53c0-2.9 2.35-5.25 5.25-5.25.27 0 .54.02.8.06v2.72a2.64 2.64 0 0 0-.8-.12 2.59 2.59 0 1 0 2.59 2.59V3.8h1.06Z"
+                  fill="currentColor"
+                />
+              </svg>
+            </a>
+
+            <a
+              className="prog-social-link"
+              href="https://www.instagram.com/christybutterz/"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Photography by Christy Butterz"
+            >
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path
+                  d="M7 7.5h2.1l1-1.7h3.8l1 1.7H17a2 2 0 0 1 2 2V16a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V9.5a2 2 0 0 1 2-2Z"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinejoin="round"
+                />
+                <circle
+                  cx="12"
+                  cy="12.5"
+                  r="3.1"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                />
+                <circle cx="16.6" cy="9.7" r="0.9" fill="currentColor" />
+              </svg>
+            </a>
           </section>
         </main>
       </div>

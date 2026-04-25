@@ -1,0 +1,128 @@
+.getting-page {
+    position: relative;
+    min-height: 100vh;
+    background: var(--bg-base);
+    color: var(--text-primary);
+  }
+  
+  .getting-bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background:
+      radial-gradient(circle at top, rgba(255, 255, 255, 0.3), transparent 30%),
+      linear-gradient(to bottom, #eef5fa 0%, #e7f0f6 52%, #dde8ef 100%);
+  }
+  
+  .theme-night .getting-bg {
+    background:
+      radial-gradient(circle at top, rgba(61, 157, 176, 0.08), transparent 26%),
+      linear-gradient(to bottom, #101e28 0%, #0c1a22 100%);
+  }
+  
+  .getting-content {
+    position: relative;
+    z-index: 1;
+    padding-top: 44px;
+    padding-bottom: 88px;
+  }
+  
+  /* Header — same pattern as Programme */
+  
+  .getting-header {
+    margin-bottom: 28px;
+  }
+  
+  .getting-header-top {
+    display: grid;
+    grid-template-columns: 44px 1fr;
+    gap: 14px;
+    align-items: start;
+  }
+  
+  .getting-back {
+    width: 44px;
+    height: 44px;
+    margin-top: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 1px solid var(--border-strong);
+    color: var(--text-primary);
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.5),
+      rgba(255, 255, 255, 0.22)
+    );
+    backdrop-filter: blur(16px);
+  }
+  
+  .getting-title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(2.6rem, 6vw, 4.4rem);
+    line-height: 0.95;
+  }
+  
+  /* Main card */
+  
+  .getting-card {
+    border-radius: var(--radius-lg);
+    background:
+      linear-gradient(180deg, rgba(255,255,255,0.5), rgba(255,255,255,0.24)),
+      var(--bg-surface-strong);
+    box-shadow:
+      0 24px 50px rgba(12,20,28,0.08),
+      inset 0 1px 0 rgba(255,255,255,0.5);
+    padding: 26px 24px;
+  }
+  
+  /* Intro line */
+  
+  .getting-intro {
+    margin: 0 0 24px;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    max-width: 36ch;
+  }
+  
+  /* Sections */
+  
+  .getting-section {
+    padding-top: 18px;
+    border-top: 1px solid var(--border-soft);
+    margin-top: 18px;
+  }
+  
+  .getting-section h2 {
+    margin: 0 0 6px;
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+  }
+  
+  .getting-section p {
+    margin: 0;
+    font-size: 0.92rem;
+    line-height: 1.55;
+    color: var(--text-secondary);
+    max-width: 36ch;
+  }
+  
+  /* Mobile */
+  
+  @media (max-width: 640px) {
+    .getting-content {
+      padding-top: 32px;
+      padding-bottom: 64px;
+    }
+  
+    .getting-title {
+      font-size: 3rem;
+    }
+  
+    .getting-card {
+      padding: 22px 18px;
+    }
+  }

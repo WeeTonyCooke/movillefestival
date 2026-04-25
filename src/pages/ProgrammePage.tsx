@@ -5,7 +5,7 @@ import './ProgrammePage.css';
 const FEEDBACK_URL =
   'https://script.google.com/macros/s/AKfycbwADI9Ld2vGjlkjST4VTHHR-y5QbuoBPmFjhE8IX2sZVS8mXxfPWQL5nWoCNSJdHQ9oxg/exec';
 
-const FORCE_SHOW_FEEDBACK = false;
+const FORCE_SHOW_FEEDBACK = true;
 const DEFAULT_EVENT_DURATION_MIN = 90;
 
 type FestivalDay = 'TUE' | 'WED' | 'THU' | 'FRI' | 'SAT' | 'SUN';
@@ -266,7 +266,7 @@ function buildEventStart(day: FestivalDay, event: ProgrammeEvent): Date {
 }
 
 function hasEventFinished(day: FestivalDay, event: ProgrammeEvent): boolean {
-  if (FORCE_SHOW_FEEDBACK) return true;
+  if (FORCE_SHOW_FEEDBACK) return false;
 
   const start = buildEventStart(day, event);
   const end = new Date(
@@ -303,7 +303,7 @@ function SmileyVeryUnhappy() {
       <circle cx="35" cy="40" r="7" />
       <circle cx="65" cy="40" r="7" />
       <path
-        d="M 28 77 Q 50 55 72 77"
+        d="M 27 78 Q 50 52 73 78"
         strokeWidth="8"
         fill="none"
         strokeLinecap="round"
@@ -680,8 +680,109 @@ function ProgrammePage({ isNight }: { isNight: boolean }) {
                 <span className="prog-archive-years">Archive | 1958 - 2026</span>
               </div>
             </Link>
-          </div>
-        </main>
+            </div>
+
+<div className="directions-footer">
+  <Link
+    to="/getting-to-moville"
+    className="directions-footer-anchor"
+    aria-label="Getting to Moville"
+  >
+    <svg
+      viewBox="0 0 24 24"
+      className="directions-footer-icon"
+      aria-hidden="true"
+    >
+      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z" />
+    </svg>
+    <span className="directions-footer-text">Getting to Moville</span>
+  </Link>
+</div>
+
+<section className="prog-social" aria-label="Moville Festival social links">
+  <a
+    className="prog-social-link"
+    href="https://www.instagram.com/movillefestival"
+    target="_blank"
+    rel="noreferrer"
+    aria-label="Moville Festival on Instagram"
+  >
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <rect
+        x="3.5"
+        y="3.5"
+        width="17"
+        height="17"
+        rx="5"
+        stroke="currentColor"
+        strokeWidth="1.8"
+      />
+      <circle
+        cx="12"
+        cy="12"
+        r="4"
+        stroke="currentColor"
+        strokeWidth="1.8"
+      />
+      <circle cx="17.3" cy="6.7" r="1.1" fill="currentColor" />
+    </svg>
+  </a>
+
+  <a
+    className="prog-social-link"
+    href="https://www.facebook.com/movillefestival"
+    target="_blank"
+    rel="noreferrer"
+    aria-label="Moville Festival on Facebook"
+  >
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path
+        d="M13.2 20v-7h2.4l.4-3h-2.8V8.1c0-.87.24-1.46 1.49-1.46H16V4.02c-.23-.03-1.03-.1-1.96-.1-1.94 0-3.27 1.18-3.27 3.36V10H8v3h2.77v7h2.43Z"
+        fill="currentColor"
+      />
+    </svg>
+  </a>
+
+  <a
+    className="prog-social-link"
+    href="https://www.tiktok.com/@movillefestival"
+    target="_blank"
+    rel="noreferrer"
+    aria-label="Moville Festival on TikTok"
+  >
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path
+        d="M14.6 3.8c.42 1.2 1.31 2.25 2.46 2.87.78.42 1.63.63 2.5.63v2.63a7.6 7.6 0 0 1-3.36-.77v5.37c0 2.9-2.35 5.25-5.25 5.25S5.7 17.43 5.7 14.53c0-2.9 2.35-5.25 5.25-5.25.27 0 .54.02.8.06v2.72a2.64 2.64 0 0 0-.8-.12 2.59 2.59 0 1 0 2.59 2.59V3.8h1.06Z"
+        fill="currentColor"
+      />
+    </svg>
+  </a>
+
+  <a
+    className="prog-social-link"
+    href="https://www.instagram.com/christybutterz/"
+    target="_blank"
+    rel="noreferrer"
+    aria-label="Photography by Christy Butterz"
+  >
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path
+        d="M7 7.5h2.1l1-1.7h3.8l1 1.7H17a2 2 0 0 1 2 2V16a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V9.5a2 2 0 0 1 2-2Z"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinejoin="round"
+      />
+      <circle
+        cx="12"
+        cy="12.5"
+        r="3.1"
+        stroke="currentColor"
+        strokeWidth="1.8"
+      />
+      <circle cx="16.6" cy="9.7" r="0.9" fill="currentColor" />
+    </svg>
+  </a>
+</section></main>
       </div>
     </div>
   );

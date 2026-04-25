@@ -39,7 +39,8 @@ const PROGRAMME_DATA: Record<FestivalDay, ProgrammeEvent[]> = {
       time: '17:30',
       title: 'Golf Scramble',
       venue: 'Greencastle Golf Club',
-      strapline: 'Drive for show, putt for dough.',
+      strapline:
+        'One of the most beautiful links courses you will play anywhere.',
     },
   ],
   WED: [
@@ -48,7 +49,7 @@ const PROGRAMME_DATA: Record<FestivalDay, ProgrammeEvent[]> = {
       title: 'Fancy Dress Opening Parade',
       venue: 'Market Square',
       strapline:
-        'A colourful start to the festival - loud, lively and full of fun.',
+        'A colourful start to the festival - loud, lively and full of fun for everyone.',
     },
     {
       time: '19:00',
@@ -61,14 +62,13 @@ const PROGRAMME_DATA: Record<FestivalDay, ProgrammeEvent[]> = {
       title: 'Fire Brigade Car Rescue Demo',
       venue: 'Moville Pier',
       strapline:
-        'Up close and real - a live rescue demonstration from the fire brigade.',
+        'Up close and real - a live rescue demonstration from the fire brigade. Not to be missed.',
     },
     {
       time: '21:00',
       title: 'Festival Bingo',
       venue: "St Eugene's Hall",
-      strapline:
-        'Eyes down for a good night. Big prizes, plenty of craic and some serious daubing.',
+      strapline: 'Eyes down, dabbers ready. Expect a full house.',
     },
   ],
   THU: [
@@ -97,7 +97,8 @@ const PROGRAMME_DATA: Record<FestivalDay, ProgrammeEvent[]> = {
       time: '21:00',
       title: 'Darts Competition',
       venue: "Maguire's & The Corner Bar",
-      strapline: 'Love the Darts!',
+      strapline:
+        "Some of Inishowen's sharpest shooters step up to the oche.",
     },
   ],
   FRI: [
@@ -105,7 +106,7 @@ const PROGRAMME_DATA: Record<FestivalDay, ProgrammeEvent[]> = {
       time: '16:00',
       title: 'Kids Entertainment',
       venue: 'Market Square',
-      strapline: 'Fun and games for the younger festival-goers.',
+      strapline: 'Fun and games for our younger festival-goers.',
     },
     {
       time: '17:00',
@@ -116,18 +117,18 @@ const PROGRAMME_DATA: Record<FestivalDay, ProgrammeEvent[]> = {
     {
       time: '19:00',
       title: 'Street Frolics',
+      venue: 'Market Square',
       strapline:
         'La Tomatina, Moville style. Something’s about to get out of hand… in a good way.',
-      venue: 'Market Square',
     },
     {
       time: '20:00',
       title: "All Folk'd Up",
-      strapline:
-        'Trad, folk and everything in between - live music under the summer sky.',
       venue: 'Market Square',
       admission: '€10',
       headline: true,
+      strapline:
+        'Trad, folk and everything in between - live music under the summer sky.',
     },
   ],
   SAT: [
@@ -153,21 +154,21 @@ const PROGRAMME_DATA: Record<FestivalDay, ProgrammeEvent[]> = {
     {
       time: '11:00',
       title: 'Pet Show',
+      venue: 'The Green',
       strapline:
         "Moville's finest four-legged friends - big, small and full of personality.",
-      venue: 'The Green',
     },
     {
       time: '14:00',
       title: 'Crab Fishing',
       venue: 'Moville Pier',
-      strapline: 'Buckets, lines and a bit of patience down at the pier.',
+      strapline: 'Pull your line in very slowly, inch by inch.',
     },
     {
       time: '14:00',
       title: 'Bonny Baby',
-      strapline: "Moville's bonniest babies - or so they'll be told.",
       venue: "St Eugene's Hall",
+      strapline: "Moville's bonniest babies - or so they'll be told.",
     },
     {
       time: '16:00',
@@ -185,17 +186,16 @@ const PROGRAMME_DATA: Record<FestivalDay, ProgrammeEvent[]> = {
       time: '19:00',
       title: 'Pool Competition',
       venue: "Maguire's, Diver's & The Corner Bar",
-      strapline:
-        'Chalk up and take your shot. The game is 90% mental - the other half is physical.',
+      strapline: 'Chalk up and take your shot.',
     },
     {
       time: '21:00',
       title: 'Bagatelle',
-      strapline:
-        'One of Ireland’s best-loved bands brings the big Saturday night to Market Square.',
       venue: 'Market Square',
       admission: '€10',
       headline: true,
+      strapline:
+        'One of Ireland’s best-loved bands brings the big Saturday night to Market Square.',
     },
   ],
   SUN: [
@@ -213,9 +213,9 @@ const PROGRAMME_DATA: Record<FestivalDay, ProgrammeEvent[]> = {
     {
       time: '17:30',
       title: 'Ball Drop',
+      venue: 'The Green',
       strapline:
         'Hundreds of balls. One hill. Absolute chaos. Make sure you have your ticket.',
-      venue: 'The Green',
     },
     {
       time: '17:30',
@@ -228,16 +228,15 @@ const PROGRAMME_DATA: Record<FestivalDay, ProgrammeEvent[]> = {
       time: '19:00',
       title: 'Pool Competition',
       venue: "Maguire's, Diver's & The Corner Bar",
-      strapline:
-        'Chalk up and take your shot. The game is 90% mental - the other half is physical.',
+      strapline: 'Chalk up and take your shot.',
     },
     {
       time: '20:30',
       title: 'The Björn Identity',
-      strapline:
-        'Ireland’s premier ABBA tribute band hits the Square for the festival finale. Glitter optional, but encouraged.',
       venue: 'Market Square',
       headline: true,
+      strapline:
+        'Ireland’s premier ABBA tribute band hits the Square for the festival finale. Glitter optional, but encouraged.',
     },
   ],
 };
@@ -682,91 +681,6 @@ function ProgrammePage({ isNight }: { isNight: boolean }) {
               </div>
             </Link>
           </div>
-
-          <section className="prog-social" aria-label="Moville Festival social links">
-            <a
-              className="prog-social-link"
-              href="https://www.instagram.com/movillefestival"
-              target="_blank"
-              rel="noreferrer"
-              aria-label="Moville Festival on Instagram"
-            >
-              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <rect
-                  x="3.5"
-                  y="3.5"
-                  width="17"
-                  height="17"
-                  rx="5"
-                  stroke="currentColor"
-                  strokeWidth="1.8"
-                />
-                <circle
-                  cx="12"
-                  cy="12"
-                  r="4"
-                  stroke="currentColor"
-                  strokeWidth="1.8"
-                />
-                <circle cx="17.3" cy="6.7" r="1.1" fill="currentColor" />
-              </svg>
-            </a>
-
-            <a
-              className="prog-social-link"
-              href="https://www.facebook.com/movillefestival"
-              target="_blank"
-              rel="noreferrer"
-              aria-label="Moville Festival on Facebook"
-            >
-              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path
-                  d="M13.2 20v-7h2.4l.4-3h-2.8V8.1c0-.87.24-1.46 1.49-1.46H16V4.02c-.23-.03-1.03-.1-1.96-.1-1.94 0-3.27 1.18-3.27 3.36V10H8v3h2.77v7h2.43Z"
-                  fill="currentColor"
-                />
-              </svg>
-            </a>
-
-            <a
-              className="prog-social-link"
-              href="https://www.tiktok.com/@movillefestival"
-              target="_blank"
-              rel="noreferrer"
-              aria-label="Moville Festival on TikTok"
-            >
-              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path
-                  d="M14.6 3.8c.42 1.2 1.31 2.25 2.46 2.87.78.42 1.63.63 2.5.63v2.63a7.6 7.6 0 0 1-3.36-.77v5.37c0 2.9-2.35 5.25-5.25 5.25S5.7 17.43 5.7 14.53c0-2.9 2.35-5.25 5.25-5.25.27 0 .54.02.8.06v2.72a2.64 2.64 0 0 0-.8-.12 2.59 2.59 0 1 0 2.59 2.59V3.8h1.06Z"
-                  fill="currentColor"
-                />
-              </svg>
-            </a>
-
-            <a
-              className="prog-social-link"
-              href="https://www.instagram.com/christybutterz/"
-              target="_blank"
-              rel="noreferrer"
-              aria-label="Photography by Christy Butterz"
-            >
-              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path
-                  d="M7 7.5h2.1l1-1.7h3.8l1 1.7H17a2 2 0 0 1 2 2V16a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V9.5a2 2 0 0 1 2-2Z"
-                  stroke="currentColor"
-                  strokeWidth="1.8"
-                  strokeLinejoin="round"
-                />
-                <circle
-                  cx="12"
-                  cy="12.5"
-                  r="3.1"
-                  stroke="currentColor"
-                  strokeWidth="1.8"
-                />
-                <circle cx="16.6" cy="9.7" r="0.9" fill="currentColor" />
-              </svg>
-            </a>
-          </section>
         </main>
       </div>
     </div>

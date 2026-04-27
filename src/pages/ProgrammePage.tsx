@@ -98,7 +98,7 @@ const PROGRAMME_DATA: Record<FestivalDay, ProgrammeEvent[]> = {
       title: 'Darts Competition',
       venue: "Maguire's & The Corner Bar",
       strapline:
-        "Some of Inishowen's sharpest shooters step up to the oche.",
+        "Hoping we'll see some of Inishowen's sharpest shooters step up to the oche. Everyone welcome. ",
     },
   ],
   FRI: [
@@ -186,7 +186,7 @@ const PROGRAMME_DATA: Record<FestivalDay, ProgrammeEvent[]> = {
       time: '19:00',
       title: 'Pool Competition',
       venue: "Maguire's, Diver's & The Corner Bar",
-      strapline: 'Chalk up and take your shot.',
+      strapline: 'Chalk up your cue and show us what you’ve got.',
     },
     {
       time: '21:00',
@@ -228,7 +228,7 @@ const PROGRAMME_DATA: Record<FestivalDay, ProgrammeEvent[]> = {
       time: '19:00',
       title: 'Pool Competition',
       venue: "Maguire's, Diver's & The Corner Bar",
-      strapline: 'Chalk up and take your shot.',
+      strapline: 'Chalk up your cue and show us what you’ve got.',
     },
     {
       time: '20:30',

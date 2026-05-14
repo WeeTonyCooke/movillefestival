@@ -1,7 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;1,700&display=swap');
 
 :root {
-  --font-sans: 'Inter', sans-serif;
+  --font-sans: 'Outfit', system-ui, -apple-system, sans-serif;
   --font-display: 'Playfair Display', serif;
   --font-hero: 'Playfair Display', serif;
 
@@ -43,6 +43,11 @@
 
   --accent: #2b95a6;
   --accent-strong: #247f8f;
+
+  /* Festival palette accents */
+  --coral: #F26A4B;
+  --coral-strong: #DB4F2F;
+  --coral-soft: rgba(242, 106, 75, 0.12);
 }
 
 html {

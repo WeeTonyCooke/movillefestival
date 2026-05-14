@@ -343,6 +343,25 @@
   color: rgba(43, 149, 166, 0.5);
 }
 
+.prog-event-admission-chip {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 4px;
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+  background: var(--coral-soft);
+  color: var(--coral-strong);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.theme-night .prog-event-admission-chip {
+  background: rgba(242, 106, 75, 0.18);
+  color: #ffb7a3;
+}
+
 .prog-event-admission-label {
   color: var(--text-secondary);
 }
@@ -350,6 +369,19 @@
 .prog-event-admission-value {
   color: var(--accent);
   font-weight: 700;
+}
+
+.prog-event-badge {
+  display: inline-block;
+  margin-left: 10px;
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  background: var(--coral);
+  color: #fff;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  vertical-align: 2px;
 }
 
 .prog-event.is-headline .prog-event-title {
@@ -367,9 +399,86 @@
   border-radius: 999px;
   background: linear-gradient(
     to bottom,
-    rgba(43, 149, 166, 0.85),
-    rgba(43, 149, 166, 0.08)
+    var(--coral) 0%,
+    rgba(242, 106, 75, 0.08) 100%
   );
+}
+
+.prog-event-cal {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 14px;
+  padding: 7px 14px;
+  border: 1px solid rgba(242, 106, 75, 0.42);
+  background: var(--coral-soft);
+  color: var(--coral-strong);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  border-radius: var(--radius-pill);
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease,
+    color 0.2s ease;
+}
+
+.prog-event-cal:hover {
+  background: var(--coral);
+  border-color: var(--coral);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.prog-event-cal:focus-visible {
+  outline: 2px solid var(--coral);
+  outline-offset: 2px;
+}
+
+.theme-night .prog-event-cal {
+  color: #ffd2c1;
+  background: rgba(242, 106, 75, 0.16);
+  border-color: rgba(242, 106, 75, 0.4);
+}
+
+.theme-night .prog-event-cal:hover {
+  background: var(--coral);
+  color: #fff;
+  border-color: var(--coral);
+}
+
+/* Time-of-day dividers (Morning / Afternoon / Evening) */
+.prog-time-divider {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 18px 0 6px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.prog-time-divider span {
+  flex-shrink: 0;
+}
+
+.prog-time-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border-soft);
+}
+
+.prog-event + .prog-time-divider {
+  margin-top: 26px;
+}
+
+/* All-days rendering: only show the active day on screen */
+.prog-day-block:not(.is-active) {
+  display: none;
 }
 
 .prog-event-vote-heading {
@@ -806,4 +915,145 @@
 
 .theme-night .directions-footer-text {
   color: rgba(244, 239, 229, 0.78);
+}
+
+/* ───────────────────────────────────────────────
+   Print: a fridge schedule of the whole festival
+   ─────────────────────────────────────────────── */
+@media print {
+  @page {
+    size: A4;
+    margin: 14mm;
+  }
+
+  /* Force a light, ink-friendly look regardless of theme */
+  body,
+  .prog-page {
+    background: #fff !important;
+    color: #111 !important;
+  }
+
+  .prog-bg,
+  .prog-day-nav,
+  .prog-weather,
+  .prog-back,
+  .prog-event-cal,
+  .prog-event-vote,
+  .prog-event-vote-heading,
+  .prog-archive-link,
+  .directions-footer,
+  .prog-social,
+  .hero-credit {
+    display: none !important;
+  }
+
+  /* Show every day in print, not just the active one */
+  .prog-day-block,
+  .prog-day-block:not(.is-active) {
+    display: block !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+    background: #fff !important;
+    border: none !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    padding: 0 !important;
+    margin: 0 0 18mm 0 !important;
+  }
+
+  .prog-day-block + .prog-day-block {
+    border-top: 1px solid #ccc !important;
+    padding-top: 8mm !important;
+  }
+
+  .prog-header {
+    margin-bottom: 8mm;
+  }
+
+  .prog-kicker,
+  .prog-header-date {
+    color: #555 !important;
+  }
+
+  .prog-title {
+    font-size: 28pt !important;
+    line-height: 1;
+    color: #111 !important;
+  }
+
+  .prog-day-header-text {
+    color: #000 !important;
+    font-size: 14pt !important;
+  }
+
+  .prog-time-divider {
+    color: #555 !important;
+    font-size: 8pt !important;
+    margin: 6mm 0 2mm !important;
+  }
+
+  .prog-time-divider::after {
+    background: #ccc !important;
+  }
+
+  .prog-event {
+    padding: 4mm 0 !important;
+    border-bottom: 1px solid #ddd !important;
+    page-break-inside: avoid;
+  }
+
+  .prog-event-time,
+  .prog-event-title,
+  .prog-event-strapline,
+  .prog-event-venue,
+  .prog-event-venue-text {
+    color: #111 !important;
+  }
+
+  .prog-event-time {
+    font-size: 9pt !important;
+    color: #666 !important;
+  }
+
+  .prog-event-title {
+    font-size: 13pt !important;
+    margin-bottom: 1mm !important;
+  }
+
+  .prog-event-strapline {
+    font-size: 10pt !important;
+    max-width: none !important;
+  }
+
+  .prog-event-venue {
+    font-size: 9pt !important;
+  }
+
+  .prog-event-badge,
+  .prog-event-admission-chip {
+    background: #fff !important;
+    color: #000 !important;
+    border: 1px solid #999 !important;
+    padding: 1px 6px !important;
+    font-size: 8pt !important;
+  }
+
+  .prog-event.is-headline::before {
+    background: #000 !important;
+    left: -3mm !important;
+  }
+
+  /* Drop-in print masthead so a printed page reads as one document */
+  .prog-content::before {
+    content: 'MOVILLE FESTIVAL · 8–12 JULY 2026 · INISHOWEN, CO. DONEGAL';
+    display: block;
+    font-family: var(--font-display);
+    font-size: 11pt;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: #555;
+    margin-bottom: 4mm;
+    padding-bottom: 3mm;
+    border-bottom: 1px solid #999;
+  }
 }

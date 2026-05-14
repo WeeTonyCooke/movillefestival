@@ -141,6 +141,28 @@
   width: min(100%, 760px);
 }
 
+.hero-kicker {
+  margin: 0 0 14px;
+  font-family: var(--font-sans);
+  font-size: clamp(0.72rem, 1.2vw, 0.82rem);
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.86);
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.28);
+}
+
+.hero-kicker::before,
+.hero-kicker::after {
+  content: '';
+  display: inline-block;
+  width: 22px;
+  height: 1px;
+  vertical-align: middle;
+  background: rgba(255, 255, 255, 0.55);
+  margin: 0 12px 3px;
+}
+
 .hero-title {
   margin: 0;
   font-family: var(--font-hero);
@@ -358,6 +380,18 @@
   .hero-title {
     font-size: clamp(2rem, 9.5vw, 3.3rem);
     line-height: 0.94;
+  }
+
+  .hero-kicker {
+    font-size: 0.66rem;
+    letter-spacing: 0.22em;
+    margin-bottom: 10px;
+  }
+
+  .hero-kicker::before,
+  .hero-kicker::after {
+    width: 14px;
+    margin: 0 8px 3px;
   }
 
   .hero-date {

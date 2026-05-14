@@ -100,8 +100,9 @@ const MovilleHero: React.FC<MovilleHeroProps> = ({ isNight }) => {
         <div className="page-shell hero-shell">
           <div className="hero-title-wrap">
             <header className="hero-header">
+              <p className="hero-kicker">Inishowen · Since 1958</p>
               <h1 className="hero-title">Moville Festival</h1>
-              <p className="hero-date">8–12 July</p>
+              <p className="hero-date">8–12 July 2026</p>
             </header>
           </div>
 

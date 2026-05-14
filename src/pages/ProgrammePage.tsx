@@ -1,11 +1,10 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import './ProgrammePage.css';
 
 const FEEDBACK_URL =
   'https://script.google.com/macros/s/AKfycbwADI9Ld2vGjlkjST4VTHHR-y5QbuoBPmFjhE8IX2sZVS8mXxfPWQL5nWoCNSJdHQ9oxg/exec';
 
-const FORCE_SHOW_FEEDBACK = true;
 const DEFAULT_EVENT_DURATION_MIN = 90;
 
 type FestivalDay = 'TUE' | 'WED' | 'THU' | 'FRI' | 'SAT' | 'SUN';
@@ -266,8 +265,6 @@ function buildEventStart(day: FestivalDay, event: ProgrammeEvent): Date {
 }
 
 function hasEventFinished(day: FestivalDay, event: ProgrammeEvent): boolean {
-  if (FORCE_SHOW_FEEDBACK) return false;
-
   const start = buildEventStart(day, event);
   const end = new Date(
     start.getTime() + DEFAULT_EVENT_DURATION_MIN * 60 * 1000,
@@ -295,6 +292,89 @@ function getClientId(): string {
   } catch {
     return 'c_nostorage';
   }
+}
+
+type TimeBucket = 'morning' | 'afternoon' | 'evening';
+
+const BUCKET_LABELS: Record<TimeBucket, string> = {
+  morning: 'Morning',
+  afternoon: 'Afternoon',
+  evening: 'Evening',
+};
+
+function bucketForTime(timeStr: string): TimeBucket {
+  const hour = Number(timeStr.split(':')[0]);
+  if (hour < 12) return 'morning';
+  if (hour < 17) return 'afternoon';
+  return 'evening';
+}
+
+/**
+ * Build an .ics calendar file string for a festival event.
+ * Festival is in July (Ireland BST = UTC+1), so we hand-roll the UTC offset
+ * rather than rely on the browser's local timezone, which would corrupt times
+ * for diaspora users abroad.
+ */
+function buildICS(day: FestivalDay, event: ProgrammeEvent): string {
+  const { year, month, day: dayNum } = FESTIVAL_DATES[day];
+  const [startH, startM] = getStartTime(event).split(':').map(Number);
+
+  const totalEndMinutes = startH * 60 + startM + DEFAULT_EVENT_DURATION_MIN;
+  const endH = Math.floor(totalEndMinutes / 60);
+  const endM = totalEndMinutes % 60;
+
+  const pad = (n: number) => n.toString().padStart(2, '0');
+
+  // Convert Ireland-local hour to UTC (BST = +1 throughout July).
+  const toUTC = (h: number, m: number) =>
+    `${year}${pad(month + 1)}${pad(dayNum)}T${pad(h - 1)}${pad(m)}00Z`;
+
+  const dtStart = toUTC(startH, startM);
+  const dtEnd = toUTC(endH, endM);
+  const dtStamp =
+    new Date().toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+
+  const escape = (s: string) =>
+    s.replace(/\\/g, '\\\\').replace(/[,;]/g, '\\$&').replace(/\n/g, '\\n');
+
+  const uidSlug = event.title.replace(/[^a-z0-9]/gi, '').toLowerCase();
+  const venue = event.venue
+    ? `${event.venue}, Moville, Co. Donegal`
+    : 'Moville, Co. Donegal';
+  const description =
+    (event.strapline ?? '') +
+    (event.admission ? ` Admission: ${event.admission}.` : '');
+
+  return [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//Moville Festival//EN',
+    'CALSCALE:GREGORIAN',
+    'BEGIN:VEVENT',
+    `UID:${day}-${getStartTime(event).replace(':', '')}-${uidSlug}@movillefestival.com`,
+    `DTSTAMP:${dtStamp}`,
+    `DTSTART:${dtStart}`,
+    `DTEND:${dtEnd}`,
+    `SUMMARY:${escape(event.title)} — Moville Festival`,
+    `LOCATION:${escape(venue)}`,
+    `DESCRIPTION:${escape(description.trim())}`,
+    'END:VEVENT',
+    'END:VCALENDAR',
+  ].join('\r\n');
+}
+
+function downloadICS(day: FestivalDay, event: ProgrammeEvent) {
+  const ics = buildICS(day, event);
+  const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const filename = event.title.replace(/[^a-z0-9]/gi, '-').toLowerCase();
+  a.href = url;
+  a.download = `moville-${filename}.ics`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
 }
 
 function SmileyVeryUnhappy() {
@@ -555,115 +635,166 @@ function ProgrammePage({ isNight }: { isNight: boolean }) {
             </div>
           </section>
 
-          <section className="prog-schedule surface-card">
-            <div className="prog-day-header">
-              <span className="prog-day-header-text">
-                {DAY_LABELS[activeDay].toUpperCase()}
-              </span>
-            </div>
+          {DAY_ORDER.map((day) => {
+            const dayEvents = PROGRAMME_DATA[day];
+            let lastBucket: TimeBucket | null = null;
 
-            <div className="prog-day-rule" aria-hidden="true" />
+            return (
+              <section
+                className={`prog-schedule surface-card prog-day-block${
+                  day === activeDay ? ' is-active' : ''
+                }`}
+                key={day}
+                aria-hidden={day === activeDay ? undefined : true}
+              >
+                <div className="prog-day-header">
+                  <span className="prog-day-header-text">
+                    {DAY_LABELS[day].toUpperCase()}
+                  </span>
+                </div>
 
-            {PROGRAMME_DATA[activeDay].map((event) => {
-              const eventKey = `${activeDay}-${event.time}-${event.title}`;
-              const selectedRating = selectedVotes[eventKey];
-              const eventFinished = hasEventFinished(activeDay, event);
+                <div className="prog-day-rule" aria-hidden="true" />
 
-              return (
-                <article
-                  className={`prog-event${event.headline ? ' is-headline' : ''}`}
-                  key={eventKey}
-                >
-                  <div className="prog-event-time">{event.time}</div>
+                {dayEvents.map((event) => {
+                  const eventKey = `${day}-${event.time}-${event.title}`;
+                  const selectedRating = selectedVotes[eventKey];
+                  const eventFinished = hasEventFinished(day, event);
 
-                  <h3 className="prog-event-title">{event.title}</h3>
+                  const bucket = bucketForTime(getStartTime(event));
+                  const showBucket = bucket !== lastBucket && dayEvents.length > 3;
+                  lastBucket = bucket;
 
-                  {event.strapline && (
-                    <p className="prog-event-strapline">{event.strapline}</p>
-                  )}
-
-                  {event.venue && (
-                    <div className="prog-event-venue">
-                      <svg
-                        width="13"
-                        height="13"
-                        viewBox="0 0 24 24"
-                        aria-hidden="true"
-                      >
-                        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z" />
-                      </svg>
-
-                      <span className="prog-event-venue-text">{event.venue}</span>
-
-                      {event.admission && (
-                        <>
-                          <span className="prog-event-separator">·</span>
-                          <span className="prog-event-admission-label">
-                            Admission
-                          </span>
-                          <span className="prog-event-admission-value">
-                            {event.admission}
-                          </span>
-                        </>
+                  return (
+                    <React.Fragment key={eventKey}>
+                      {showBucket && (
+                        <div
+                          className={`prog-time-divider prog-time-divider--${bucket}`}
+                          aria-hidden="true"
+                        >
+                          <span>{BUCKET_LABELS[bucket]}</span>
+                        </div>
                       )}
-                    </div>
-                  )}
 
-                  {eventFinished && (
-                    <>
-                      <p className="prog-event-vote-heading">
-                        Tell us what you thought
-                      </p>
-
-                      <div
-                        className="prog-event-vote"
-                        role="group"
-                        aria-label={`Your reaction to ${event.title}`}
+                      <article
+                        className={`prog-event${event.headline ? ' is-headline' : ''}`}
                       >
-                        {RATING_CONFIG.map(
-                          ({ rating, className, label, Smiley }) => {
-                            const isSelected = selectedRating === rating;
+                        <div className="prog-event-time">
+                          {event.time}
+                          {event.headline && (
+                            <span className="prog-event-badge">Headline</span>
+                          )}
+                        </div>
 
-                            return (
-                              <button
-                                key={rating}
-                                type="button"
-                                className={`prog-event-vote-face ${className}${
-                                  isSelected ? ' is-voted' : ''
-                                }`}
-                                onClick={() =>
-                                  handleVote(
-                                    eventKey,
-                                    event.title,
-                                    activeDay,
-                                    event,
-                                    rating,
-                                  )
-                                }
-                                aria-label={`${label} about ${event.title}`}
-                                aria-pressed={isSelected}
-                              >
-                                <Smiley />
+                        <h3 className="prog-event-title">{event.title}</h3>
 
-                                {isSelected && (
-                                  <span
-                                    className="prog-event-vote-tick"
-                                    aria-hidden="true"
-                                  >
-                                    <VoteTick />
-                                  </span>
-                                )}
-                              </button>
-                            );
-                          },
+                        {event.strapline && (
+                          <p className="prog-event-strapline">{event.strapline}</p>
                         )}
-                      </div>
-                    </>
-                  )}
-                </article>
-              );
-            })}
-          </section>
+
+                        {event.venue && (
+                          <div className="prog-event-venue">
+                            <svg
+                              width="13"
+                              height="13"
+                              viewBox="0 0 24 24"
+                              aria-hidden="true"
+                            >
+                              <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z" />
+                            </svg>
+
+                            <span className="prog-event-venue-text">{event.venue}</span>
+
+                            {event.admission && (
+                              <span className="prog-event-admission-chip">
+                                Admission {event.admission}
+                              </span>
+                            )}
+                          </div>
+                        )}
+
+                        {event.headline && (
+                          <button
+                            type="button"
+                            className="prog-event-cal"
+                            onClick={() => downloadICS(day, event)}
+                            aria-label={`Add ${event.title} to your calendar`}
+                          >
+                            <svg
+                              width="14"
+                              height="14"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2.2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              aria-hidden="true"
+                            >
+                              <rect x="3" y="5" width="18" height="16" rx="2" />
+                              <path d="M8 3v4M16 3v4M3 10h18M12 14v4M10 16h4" />
+                            </svg>
+                            Add to calendar
+                          </button>
+                        )}
+
+                        {eventFinished && (
+                          <>
+                            <p className="prog-event-vote-heading">
+                              Tell us what you thought
+                            </p>
+
+                            <div
+                              className="prog-event-vote"
+                              role="group"
+                              aria-label={`Your reaction to ${event.title}`}
+                            >
+                              {RATING_CONFIG.map(
+                                ({ rating, className, label, Smiley }) => {
+                                  const isSelected = selectedRating === rating;
+
+                                  return (
+                                    <button
+                                      key={rating}
+                                      type="button"
+                                      className={`prog-event-vote-face ${className}${
+                                        isSelected ? ' is-voted' : ''
+                                      }`}
+                                      onClick={() =>
+                                        handleVote(
+                                          eventKey,
+                                          event.title,
+                                          day,
+                                          event,
+                                          rating,
+                                        )
+                                      }
+                                      aria-label={`${label} about ${event.title}`}
+                                      aria-pressed={isSelected}
+                                    >
+                                      <Smiley />
+
+                                      {isSelected && (
+                                        <span
+                                          className="prog-event-vote-tick"
+                                          aria-hidden="true"
+                                        >
+                                          <VoteTick />
+                                        </span>
+                                      )}
+                                    </button>
+                                  );
+                                },
+                              )}
+                            </div>
+                          </>
+                        )}
+                      </article>
+                    </React.Fragment>
+                  );
+                })}
+              </section>
+            );
+          })}
 
           <div className="prog-archive-link">
             <Link

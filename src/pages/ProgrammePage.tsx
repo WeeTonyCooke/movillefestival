@@ -179,6 +179,7 @@ const PROGRAMME_DATA: Record<FestivalDay, ProgrammeEvent[]> = {
       time: '18:00',
       title: 'Marty Healy Band',
       venue: 'Market Square',
+      admission: '€10',
       strapline: 'Live music in the Square to ease you into Saturday evening.',
     },
     {
@@ -218,8 +219,9 @@ const PROGRAMME_DATA: Record<FestivalDay, ProgrammeEvent[]> = {
     },
     {
       time: '17:30',
-      title: 'The 2 Bucks',
+      title: 'The Two Bucks',
       venue: 'Market Square',
+      admission: '€10',
       strapline:
         'A lively start to Sunday evening - expect a good crowd and high-energy takes on familiar favourites.',
     },
@@ -233,6 +235,7 @@ const PROGRAMME_DATA: Record<FestivalDay, ProgrammeEvent[]> = {
       time: '20:30',
       title: 'The Björn Identity',
       venue: 'Market Square',
+      admission: '€10',
       headline: true,
       strapline:
         'Ireland’s premier ABBA tribute band hits the Square for the festival finale. Glitter optional, but encouraged.',
@@ -660,6 +663,10 @@ function ProgrammePage({ isNight }: { isNight: boolean }) {
                   const selectedRating = selectedVotes[eventKey];
                   const eventFinished = hasEventFinished(day, event);
 
+                  // Any ticketed (admission) event is treated as a headliner:
+                  // coral accent, badge, add-to-calendar.
+                  const isHeadliner = Boolean(event.headline || event.admission);
+
                   const bucket = bucketForTime(getStartTime(event));
                   const showBucket = bucket !== lastBucket && dayEvents.length > 3;
                   lastBucket = bucket;
@@ -676,11 +683,11 @@ function ProgrammePage({ isNight }: { isNight: boolean }) {
                       )}
 
                       <article
-                        className={`prog-event${event.headline ? ' is-headline' : ''}`}
+                        className={`prog-event${isHeadliner ? ' is-headline' : ''}`}
                       >
                         <div className="prog-event-time">
                           {event.time}
-                          {event.headline && (
+                          {isHeadliner && (
                             <span className="prog-event-badge">Headline</span>
                           )}
                         </div>
@@ -712,7 +719,7 @@ function ProgrammePage({ isNight }: { isNight: boolean }) {
                           </div>
                         )}
 
-                        {event.headline && (
+                        {isHeadliner && (
                           <button
                             type="button"
                             className="prog-event-cal"

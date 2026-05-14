@@ -41,8 +41,11 @@
   --border-soft: rgba(30, 50, 68, 0.08);
   --border-strong: rgba(30, 50, 68, 0.14);
 
-  --accent: #2b95a6;
-  --accent-strong: #247f8f;
+  --accent: #1F4E5F;
+  --accent-strong: #163844;
+  --accent-pill-top: #357A8E;
+  --accent-pill-text: #ffffff;
+  --accent-rgb: 31, 78, 95;
 
   /* Festival palette accents */
   --coral: #F26A4B;
@@ -135,6 +138,13 @@ button {
 
   --shadow-soft: 0 18px 48px rgba(0, 0, 0, 0.34);
   --shadow-card: 0 24px 60px rgba(0, 0, 0, 0.42);
+
+  /* Seafoam family for night — pairs with the dark navy background */
+  --accent: #6BAFA7;
+  --accent-strong: #4f9990;
+  --accent-pill-top: #7FC0B8;
+  --accent-pill-text: #0c1a22;
+  --accent-rgb: 107, 175, 167;
 }
 
 @media (min-width: 1200px) {

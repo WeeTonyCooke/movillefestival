@@ -185,22 +185,22 @@ function ballDropEmail(registration) {
   const name = escapeHtml(registration.full_name);
   const numbers = registration.ball_numbers || [];
   const numbersList = numbers.map(n =>
-    `<span style="display:inline-block; background:#1F4E5F; color:#fff; font-weight:bold; font-size:18px; padding:8px 14px; border-radius:6px; margin:4px;">${n}</span>`
+    `<span style="display:inline-block; background:#1F4E5F; color:#fff; font-weight:bold; font-size:22px; padding:10px 16px; border-radius:6px; margin:4px;">${n}</span>`
   ).join('');
 
   return `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
       <div style="background: #1F4E5F; padding: 24px; text-align: center;">
-        <h1 style="color: #fff; margin: 0; font-size: 24px;">Moville Summer Festival 2026</h1>
+        <h1 style="color: #fff; margin: 0 0 6px; font-size: 24px;">Moville Summer Festival 2026</h1>
+        <p style="color: rgba(255,255,255,0.75); margin: 0; font-size: 13px;">Ball Drop &middot; Sunday 12 July &middot; Shore Green</p>
       </div>
       <div style="padding: 32px 24px;">
         <h2 style="color: #1F4E5F;">You're in the Ball Drop!</h2>
         <p>Hi ${name},</p>
-        <p>Payment confirmed. Good luck on 12 July — you don't need to be present to win.</p>
+        <p>Payment confirmed. Here are your ball number${numbers.length > 1 ? 's' : ''}:</p>
 
-        <div style="background: #F4E9D8; border-radius: 8px; padding: 20px; margin: 24px 0; text-align: center;">
-          <h3 style="margin: 0 0 16px; color: #1F4E5F;">Your ball number${numbers.length > 1 ? 's' : ''}</h3>
-          <div style="margin-bottom: 8px;">${numbersList}</div>
+        <div style="background: #F4E9D8; border-radius: 8px; padding: 24px 20px; margin: 24px 0; text-align: center;">
+          <div style="margin-bottom: 12px;">${numbersList}</div>
           <p style="margin: 12px 0 0; font-size: 13px; color: #666;">Keep these safe — the committee will contact winners directly after the draw.</p>
         </div>
 
@@ -210,20 +210,19 @@ function ballDropEmail(registration) {
             <tr><td style="padding: 6px 0; color: #666;">Amount paid</td><td style="padding: 6px 0; font-weight: bold; text-align: right;">€${(registration.amount_paid / 100).toFixed(2)}</td></tr>
             <tr><td style="padding: 6px 0; color: #666;">Event</td><td style="padding: 6px 0; font-weight: bold; text-align: right;">Shore Green · Sunday 12 July</td></tr>
             <tr><td style="padding: 6px 0; color: #666;">Time</td><td style="padding: 6px 0; font-weight: bold; text-align: right;">5.30pm</td></tr>
-            <tr><td style="padding: 6px 0; color: #666;">Prizes</td><td style="padding: 6px 0; font-weight: bold; text-align: right;">1st €500 · 2nd €300 · 3rd €150</td></tr>
+            <tr><td style="padding: 6px 0; color: #666;">Prizes</td><td style="padding: 6px 0; font-weight: bold; text-align: right;">1st €500 &middot; 2nd €300 &middot; 3rd €150</td></tr>
           </table>
         </div>
 
         <div style="border-left: 4px solid #F26A4B; padding: 12px 16px; margin: 16px 0; background: #fff8f6;">
-          <strong>Winner contacted directly</strong>
-          <p style="margin: 4px 0 0;">If your ball number is a winner, the festival committee will contact you directly. You don't need to be present at Shore Green to claim your prize.</p>
+          <strong>You don't need to be present to win</strong>
+          <p style="margin: 4px 0 0;">If your ball is a winner, the festival committee will contact you directly using the details you provided.</p>
         </div>
 
-        <p>Questions? Contact us at <a href="mailto:movillefestival@gmail.com">movillefestival@gmail.com</a>.</p>
-        <p>Good luck!</p>
+        <p>Good luck on 12 July. Questions? <a href="mailto:movillefestival@gmail.com">movillefestival@gmail.com</a></p>
       </div>
       <div style="background: #f5f5f5; padding: 16px 24px; text-align: center; font-size: 12px; color: #888;">
-        Moville Summer Festival 2026 · movillefestival.com · movillefestival@gmail.com
+        Moville Summer Festival 2026 &middot; movillefestival.com &middot; movillefestival@gmail.com
       </div>
     </div>
   `;
@@ -235,7 +234,8 @@ function craftFairEmail(registration) {
   return `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
       <div style="background: #1F4E5F; padding: 24px; text-align: center;">
-        <h1 style="color: #fff; margin: 0; font-size: 24px;">Moville Summer Festival 2026</h1>
+        <h1 style="color: #fff; margin: 0 0 6px; font-size: 24px;">Moville Summer Festival 2026</h1>
+        <p style="color: rgba(255,255,255,0.75); margin: 0; font-size: 13px;">Craft Fair &middot; Saturday 11 July &middot; Festival Square</p>
       </div>
       <div style="padding: 32px 24px;">
         <h2 style="color: #1F4E5F;">Your stall is booked!</h2>
@@ -258,14 +258,13 @@ function craftFairEmail(registration) {
           <p style="margin: 4px 0 0;">You'll be added to a WhatsApp group with all stallholders for event updates closer to the day.</p>
         </div>
         <div style="border-left: 4px solid #6BAFA7; padding: 12px 16px; margin: 16px 0; background: #f5fafa;">
-          <strong>A reminder on the day</strong>
+          <strong>What to know on the day</strong>
           <p style="margin: 4px 0 0;">A 6ft trestle table will be provided. Please note that electricity is not available at this event.</p>
         </div>
-        <p>Questions? Contact Rona at <a href="mailto:movillefestival@gmail.com">movillefestival@gmail.com</a>.</p>
-        <p>We look forward to seeing you on 11 July!</p>
+        <p>We look forward to seeing you on 11 July. Questions? <a href="mailto:movillefestival@gmail.com">movillefestival@gmail.com</a></p>
       </div>
       <div style="background: #f5f5f5; padding: 16px 24px; text-align: center; font-size: 12px; color: #888;">
-        Moville Summer Festival 2026 · movillefestival.com · movillefestival@gmail.com
+        Moville Summer Festival 2026 &middot; movillefestival.com &middot; movillefestival@gmail.com
       </div>
     </div>
   `;
@@ -278,12 +277,13 @@ function bedPushEmail(registration) {
   return `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
       <div style="background: #1F4E5F; padding: 24px; text-align: center;">
-        <h1 style="color: #fff; margin: 0; font-size: 24px;">Moville Summer Festival 2026</h1>
+        <h1 style="color: #fff; margin: 0 0 6px; font-size: 24px;">Moville Summer Festival 2026</h1>
+        <p style="color: rgba(255,255,255,0.75); margin: 0; font-size: 13px;">Bed Push Race &middot; Wednesday 8 July &middot; Quay Street</p>
       </div>
       <div style="padding: 32px 24px;">
         <h2 style="color: #1F4E5F;">You're registered!</h2>
         <p>Hi ${captain},</p>
-        <p>Payment confirmed. Your spot in the Great Bed Push Race is secured. See you on Quay Street!</p>
+        <p>Payment confirmed. Your spot in the Great Bed Push Race is secured.</p>
         <div style="background: #F4E9D8; border-radius: 8px; padding: 20px; margin: 24px 0;">
           <h3 style="margin: 0 0 16px; color: #1F4E5F;">Your entry</h3>
           <table style="width: 100%; border-collapse: collapse;">
@@ -297,14 +297,13 @@ function bedPushEmail(registration) {
           </table>
         </div>
         <div style="border-left: 4px solid #F26A4B; padding: 12px 16px; margin: 16px 0; background: #fff8f6;">
-          <strong>🔴 Scrutineering at 6pm sharp — Festival Square</strong>
+          <strong>Scrutineering at 6pm sharp — Festival Square</strong>
           <p style="margin: 4px 0 0;">All beds must pass inspection by Paddy and Paddy before the race. No helmet = no race. Don't be late.</p>
         </div>
-        <p>Questions? Contact us at <a href="mailto:movillefestival@gmail.com">movillefestival@gmail.com</a>.</p>
-        <p>We look forward to seeing you on 8 July!</p>
+        <p>See you on Quay Street on 8 July. Questions? <a href="mailto:movillefestival@gmail.com">movillefestival@gmail.com</a></p>
       </div>
       <div style="background: #f5f5f5; padding: 16px 24px; text-align: center; font-size: 12px; color: #888;">
-        Moville Summer Festival 2026 · movillefestival.com · movillefestival@gmail.com
+        Moville Summer Festival 2026 &middot; movillefestival.com &middot; movillefestival@gmail.com
       </div>
     </div>
   `;

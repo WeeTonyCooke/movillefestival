@@ -12,6 +12,8 @@ import TermsPage from './pages/TermsPage';
 import BallDropRulesPage from './pages/BallDropRulesPage';
 import { useNightMode } from './hooks/useNightMode';
 
+const REGISTRATIONS_OPEN = false;
+
 function App() {
   const isNight = useNightMode();
 
@@ -22,9 +24,9 @@ function App() {
         <Route path="/programme" element={<ProgrammePage isNight={isNight} />} />
         <Route path="/archive" element={<ArchivePage />} />
         <Route path="/getting-to-moville" element={<GettingToMoville />} />
-        <Route path="/craft-fair" element={<CraftFairPage />} />
-        <Route path="/bed-push" element={<BedPushPage />} />
-        <Route path="/ball-drop" element={<BallDropPage />} />
+        <Route path="/craft-fair" element={REGISTRATIONS_OPEN ? <CraftFairPage /> : <HomePage isNight={isNight} />} />
+        <Route path="/bed-push" element={REGISTRATIONS_OPEN ? <BedPushPage /> : <HomePage isNight={isNight} />} />
+        <Route path="/ball-drop" element={REGISTRATIONS_OPEN ? <BallDropPage /> : <HomePage isNight={isNight} />} />
         <Route path="/admin" element={<AdminPage />} />
         <Route path="/privacy" element={<PrivacyPolicyPage />} />
         <Route path="/terms" element={<TermsPage />} />

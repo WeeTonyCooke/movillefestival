@@ -551,3 +551,398 @@
   text-transform: uppercase;
   color: var(--text-muted);
 }
+
+/* ── Craft Fair / shared additions ─────────────────────────── */
+
+.form-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.form-chip {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 99px;
+  background: var(--bg-surface-strong);
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+}
+
+.form-availability {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-top: 14px;
+  flex-wrap: wrap;
+}
+
+.form-avail-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #22c55e;
+  flex-shrink: 0;
+}
+
+.form-progress {
+  flex: 1;
+  min-width: 80px;
+  height: 4px;
+  background: var(--border);
+  border-radius: 99px;
+  overflow: hidden;
+  position: relative;
+}
+
+.form-progress-bar {
+  height: 100%;
+  background: var(--coral);
+  border-radius: 99px;
+  transition: width 0.4s ease;
+}
+
+.form-progress-label {
+  position: absolute;
+  right: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.form-notice {
+  background: var(--bg-surface-strong);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.form-info-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-info-list li {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.form-counter-wrap {
+  text-align: center;
+  padding: 20px;
+  background: var(--bg-surface-strong);
+  border-radius: var(--radius-md);
+  margin: 16px 0;
+}
+
+.form-counter-number {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.form-counter-label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.form-confirm-card {
+  background: var(--bg-surface-strong);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  text-align: center;
+  margin: 16px 0;
+}
+
+.form-confirm-name {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 4px;
+}
+
+.form-confirm-sub {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.form-summary {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin: 16px 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.form-summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  font-size: 0.85rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.form-summary-row:last-child {
+  border-bottom: none;
+}
+
+.form-summary-row span {
+  color: var(--text-muted);
+}
+
+.form-summary-row strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.form-info-block {
+  background: var(--bg-surface-strong);
+  border-left: 3px solid var(--coral);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  margin: 10px 0;
+  font-size: 0.85rem;
+}
+
+.form-info-block .form-info-title {
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 4px;
+}
+
+.form-info-block .form-info-body {
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ── Bed Push additions ─────────────────────────────────────── */
+
+.form-section-hint {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin: -8px 0 12px;
+}
+
+.form-team-size-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: var(--bg-surface-strong);
+  border-radius: var(--radius-md);
+  padding: 14px;
+  margin-top: 8px;
+}
+
+.form-team-size-icon {
+  font-size: 1.4rem;
+  flex-shrink: 0;
+}
+
+.form-team-size-notice strong {
+  display: block;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+}
+
+.form-team-size-notice p {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.form-scrutineering {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: var(--bg-surface-strong);
+  border-left: 3px solid var(--coral);
+  border-radius: var(--radius-sm);
+  padding: 14px;
+  margin: 16px 0;
+}
+
+.form-scrutineering-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--coral);
+  flex-shrink: 0;
+  margin-top: 4px;
+}
+
+.form-scrutineering strong {
+  display: block;
+  font-size: 0.88rem;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.form-scrutineering p {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ── Consent text ───────────────────────────────────────────── */
+
+.form-consent {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  text-align: center;
+  margin: 0 0 12px;
+  line-height: 1.5;
+}
+
+/* ── Ball Drop additions ─────────────────────────────────────── */
+
+.ball-prize-banner {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--accent);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  margin-bottom: 16px;
+  color: #fff;
+}
+
+.ball-prize-icon {
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.ball-prize-headline {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.ball-prize-sub {
+  font-size: 0.8rem;
+  opacity: 0.85;
+  margin-top: 4px;
+}
+
+.ball-intro {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 20px;
+  padding: 0 2px;
+}
+
+.ball-how-it-works {
+  background: var(--bg-surface-strong);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  margin-bottom: 20px;
+}
+
+.ball-how-title {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin: 0 0 8px;
+}
+
+.ball-how-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ball-how-list li {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  padding-left: 16px;
+  position: relative;
+  line-height: 1.5;
+}
+
+.ball-how-list li::before {
+  content: '·';
+  position: absolute;
+  left: 4px;
+  color: var(--coral);
+  font-weight: 700;
+}
+
+/* ── Ball number display ─────────────────────────────────────── */
+
+.ball-numbers-display {
+  background: var(--bg-surface-strong);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  margin: 16px 0;
+  text-align: center;
+}
+
+.ball-numbers-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin: 0 0 12px;
+}
+
+.ball-numbers-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.ball-number-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent);
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+}
+
+.ball-numbers-note {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin: 0;
+}

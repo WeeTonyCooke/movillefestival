@@ -44,6 +44,8 @@ export async function handler(event) {
       await handleCraftFair(session);
     } else if (eventType === 'bed_push') {
       await handleBedPush(session);
+    } else if (eventType === 'ball_drop') {
+      await handleBallDrop(session);
     }
   }
 
@@ -98,6 +100,108 @@ async function handleBedPush(session) {
   } catch (err) {
     console.error('Bed Push email error:', err);
   }
+}
+
+async function handleBallDrop(session) {
+  const registrationId = session.metadata?.registration_id;
+  const quantity = parseInt(session.metadata?.quantity || '1', 10);
+  if (!registrationId) return;
+
+  // Allocate ball numbers atomically
+  const { data: balls, error: ballError } = await supabase
+    .from('ball_drop_balls')
+    .select('number')
+    .eq('status', 'available')
+    .limit(quantity);
+
+  if (ballError || !balls || balls.length < quantity) {
+    console.error('Ball allocation error — not enough balls available');
+    return;
+  }
+
+  const ballNumbers = balls.map(b => b.number);
+
+  // Mark balls as sold
+  const { error: updateBallsError } = await supabase
+    .from('ball_drop_balls')
+    .update({ status: 'sold', registration_id: registrationId, updated_at: new Date().toISOString() })
+    .in('number', ballNumbers);
+
+  if (updateBallsError) {
+    console.error('Ball update error:', updateBallsError);
+    return;
+  }
+
+  // Update registration with ball numbers and paid status
+  const { data: registration, error: updateRegError } = await supabase
+    .from('ball_drop_registrations')
+    .update({ status: 'paid', ball_numbers: ballNumbers })
+    .eq('id', registrationId)
+    .select()
+    .single();
+
+  if (updateRegError) {
+    console.error('Ball Drop registration update error:', updateRegError);
+    return;
+  }
+
+  try {
+    await resend.emails.send({
+      from: 'Moville Summer Festival <noreply@movillefestival.com>',
+      to: registration.email,
+      subject: 'Your Ball Drop numbers — Moville Summer Festival 2026',
+      html: ballDropEmail(registration),
+    });
+  } catch (err) {
+    console.error('Ball Drop email error:', err);
+  }
+}
+
+function ballDropEmail(registration) {
+  const numbers = registration.ball_numbers || [];
+  const numbersList = numbers.map(n =>
+    `<span style="display:inline-block; background:#1F4E5F; color:#fff; font-weight:bold; font-size:18px; padding:8px 14px; border-radius:6px; margin:4px;">${n}</span>`
+  ).join('');
+
+  return `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
+      <div style="background: #1F4E5F; padding: 24px; text-align: center;">
+        <h1 style="color: #fff; margin: 0; font-size: 24px;">Moville Summer Festival 2026</h1>
+      </div>
+      <div style="padding: 32px 24px;">
+        <h2 style="color: #1F4E5F;">You're in the Ball Drop!</h2>
+        <p>Hi ${registration.full_name},</p>
+        <p>Payment confirmed. Good luck on 12 July — you don't need to be present to win.</p>
+
+        <div style="background: #F4E9D8; border-radius: 8px; padding: 20px; margin: 24px 0; text-align: center;">
+          <h3 style="margin: 0 0 16px; color: #1F4E5F;">Your ball number${numbers.length > 1 ? 's' : ''}</h3>
+          <div style="margin-bottom: 8px;">${numbersList}</div>
+          <p style="margin: 12px 0 0; font-size: 13px; color: #666;">Keep these safe — the committee will contact winners directly after the draw.</p>
+        </div>
+
+        <div style="background: #F4E9D8; border-radius: 8px; padding: 20px; margin: 24px 0;">
+          <table style="width: 100%; border-collapse: collapse;">
+            <tr><td style="padding: 6px 0; color: #666;">Entry</td><td style="padding: 6px 0; font-weight: bold; text-align: right;">${numbers.length} ball${numbers.length > 1 ? 's' : ''}</td></tr>
+            <tr><td style="padding: 6px 0; color: #666;">Amount paid</td><td style="padding: 6px 0; font-weight: bold; text-align: right;">€${(registration.amount_paid / 100).toFixed(2)}</td></tr>
+            <tr><td style="padding: 6px 0; color: #666;">Event</td><td style="padding: 6px 0; font-weight: bold; text-align: right;">Shore Green · Sunday 12 July</td></tr>
+            <tr><td style="padding: 6px 0; color: #666;">Time</td><td style="padding: 6px 0; font-weight: bold; text-align: right;">5.30pm</td></tr>
+            <tr><td style="padding: 6px 0; color: #666;">Prizes</td><td style="padding: 6px 0; font-weight: bold; text-align: right;">1st €500 · 2nd €300 · 3rd €150</td></tr>
+          </table>
+        </div>
+
+        <div style="border-left: 4px solid #F26A4B; padding: 12px 16px; margin: 16px 0; background: #fff8f6;">
+          <strong>Winner contacted directly</strong>
+          <p style="margin: 4px 0 0;">If your ball number is a winner, the festival committee will contact you directly. You don't need to be present at Shore Green to claim your prize.</p>
+        </div>
+
+        <p>Questions? Contact us at <a href="mailto:movillefestival@gmail.com">movillefestival@gmail.com</a>.</p>
+        <p>Good luck!</p>
+      </div>
+      <div style="background: #f5f5f5; padding: 16px 24px; text-align: center; font-size: 12px; color: #888;">
+        Moville Summer Festival 2026 · movillefestival.com · movillefestival@gmail.com
+      </div>
+    </div>
+  `;
 }
 
 function craftFairEmail(registration) {

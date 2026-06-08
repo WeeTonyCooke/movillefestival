@@ -335,6 +335,7 @@ export default function BedPushPage() {
               />
               <p className="form-hint">Include country code if outside Ireland — e.g. +44, +1, +61</p>
             </div>
+          </div>
 
           {/* Scrutineering notice */}
           <div className="form-scrutineering">

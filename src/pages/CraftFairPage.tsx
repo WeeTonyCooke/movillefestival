@@ -312,7 +312,10 @@ export default function CraftFairPage() {
                 value={form.phone}
                 onChange={set('phone')}
               />
-              <p className="form-hint">Include country code if outside Ireland — e.g. +44, +1, +61</p>            <div className="form-field">
+              <p className="form-hint">Include country code if outside Ireland — e.g. +44, +1, +61</p>
+            </div>
+
+            <div className="form-field">
               <label className="form-label">Business or trading name (if applicable)</label>
               <input
                 className="form-input"

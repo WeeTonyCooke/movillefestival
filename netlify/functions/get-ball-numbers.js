@@ -18,7 +18,7 @@ export async function handler(event) {
   try {
     const { data, error } = await supabase
       .from('ball_drop_registrations')
-      .select('full_name, ball_numbers, quantity, amount_paid')
+      .select('full_name, email, ball_numbers, quantity, amount_paid')
       .eq('stripe_session_id', sessionId)
       .single();
 
@@ -30,6 +30,7 @@ export async function handler(event) {
       statusCode: 200,
       body: JSON.stringify({
         fullName: data.full_name,
+        email: data.email,
         ballNumbers: data.ball_numbers || [],
         quantity: data.quantity,
         amountPaid: data.amount_paid,

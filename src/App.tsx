@@ -9,6 +9,7 @@ import BallDropPage from './pages/BallDropPage';
 import AdminPage from './pages/AdminPage';
 import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
 import TermsPage from './pages/TermsPage';
+import BallDropRulesPage from './pages/BallDropRulesPage';
 import { useNightMode } from './hooks/useNightMode';
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
         <Route path="/admin" element={<AdminPage />} />
         <Route path="/privacy" element={<PrivacyPolicyPage />} />
         <Route path="/terms" element={<TermsPage />} />
+        <Route path="/ball-drop-rules" element={<BallDropRulesPage />} />
       </Routes>
     </div>
   );

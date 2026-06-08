@@ -3,6 +3,9 @@ import MovilleHero from './pages/MovilleHero';
 import ProgrammePage from './pages/ProgrammePage';
 import ArchivePage from './pages/ArchivePage';
 import GettingToMoville from './pages/gettingtomoville';
+import CraftFairPage from './pages/CraftFairPage';
+import BedPushPage from './pages/BedPushPage';
+import BallDropPage from './pages/BallDropPage';
 import { useNightMode } from './hooks/useNightMode';
 
 function App() {
@@ -15,6 +18,9 @@ function App() {
         <Route path="/programme" element={<ProgrammePage isNight={isNight} />} />
         <Route path="/archive" element={<ArchivePage />} />
         <Route path="/getting-to-moville" element={<GettingToMoville />} />
+        <Route path="/craft-fair" element={<CraftFairPage />} />
+        <Route path="/bed-push" element={<BedPushPage />} />
+        <Route path="/ball-drop" element={<BallDropPage />} />
       </Routes>
     </div>
   );

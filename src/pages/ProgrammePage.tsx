@@ -18,6 +18,8 @@ type ProgrammeEvent = {
   admission?: string;
   startTime?: string;
   headline?: boolean;
+  registerUrl?: string;
+  registerLabel?: string;
 };
 
 const FESTIVAL_DATES: Record<
@@ -55,6 +57,8 @@ const PROGRAMME_DATA: Record<FestivalDay, ProgrammeEvent[]> = {
       title: 'Bed Push',
       venue: 'Quay Street',
       strapline: 'Fast, slightly chaotic, and much harder than it looks.',
+      registerUrl: '/bed-push',
+      registerLabel: 'Register your team',
     },
     {
       time: '19:30',
@@ -139,10 +143,11 @@ const PROGRAMME_DATA: Record<FestivalDay, ProgrammeEvent[]> = {
     },
     {
       time: '10:00',
-      title: 'Community Games',
-      venue: 'Paul McGowan Fitness',
-      strapline:
-        'Friendly competition, team spirit and possibly a few bragging rights.',
+      title: 'Craft Fair',
+      venue: 'Marquee, Festival Square',
+      strapline: 'Local makers, artists, crafters and small businesses. A day of creativity, community and unique shopping.',
+      registerUrl: '/craft-fair',
+      registerLabel: 'Apply for a stall',
     },
     {
       time: '10:00',
@@ -216,6 +221,8 @@ const PROGRAMME_DATA: Record<FestivalDay, ProgrammeEvent[]> = {
       venue: 'The Green',
       strapline:
         'Hundreds of balls. One hill. Absolute chaos. Make sure you have your ticket.',
+      registerUrl: '/ball-drop',
+      registerLabel: 'Buy balls',
     },
     {
       time: '17:30',
@@ -717,6 +724,15 @@ function ProgrammePage({ isNight }: { isNight: boolean }) {
                               </span>
                             )}
                           </div>
+                        )}
+
+                        {event.registerUrl && (
+                          <Link
+                            to={event.registerUrl}
+                            className="prog-event-register"
+                          >
+                            {event.registerLabel || 'Register'} →
+                          </Link>
                         )}
 
                         {isHeadliner && (

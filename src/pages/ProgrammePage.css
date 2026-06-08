@@ -447,6 +447,32 @@
   border-color: var(--coral);
 }
 
+.prog-event-register {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 14px;
+  padding: 8px 16px;
+  border-radius: var(--radius-pill);
+  background: var(--accent);
+  color: #fff;
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-decoration: none;
+  transition: background 0.18s, transform 0.14s;
+}
+
+.prog-event-register:hover {
+  background: var(--accent-strong);
+  transform: translateY(-1px);
+}
+
+.theme-night .prog-event-register {
+  background: var(--accent);
+  color: var(--accent-pill-text);
+}
+
 /* Time-of-day dividers (Morning / Afternoon / Evening) */
 .prog-time-divider {
   display: flex;

@@ -426,3 +426,51 @@
     top: 85svh;
   }
 }
+/* ── Ball Drop floating badge ────────────────────────────────── */
+
+.hero-balldrop-badge {
+  position: absolute;
+  top: 20px;
+  right: 16px;
+  z-index: 20;
+  background: #F26A4B;
+  border: none;
+  border-radius: 12px;
+  padding: 8px 14px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
+  animation: badge-fade-in 0.5s ease 1.5s both;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.hero-balldrop-badge:hover {
+  transform: scale(1.04);
+  opacity: 0.95;
+}
+
+.hero-balldrop-badge-eyebrow {
+  font-family: var(--font-body, 'Outfit', sans-serif);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1;
+}
+
+.hero-balldrop-badge-prize {
+  font-family: var(--font-display, 'Playfair Display', serif);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.1;
+}
+
+@keyframes badge-fade-in {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

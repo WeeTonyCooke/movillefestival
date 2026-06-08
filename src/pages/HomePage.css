@@ -1,0 +1,113 @@
+.home-events {
+  background: var(--bg-base, #F4E9D8);
+  padding: 40px 16px 60px;
+}
+
+.home-events-inner {
+  max-width: 640px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.home-event-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border-left: 5px solid transparent;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.home-event-card--balldrop {
+  border-left-color: #F26A4B;
+}
+
+.home-event-card--bedpush {
+  border-left-color: #6BAFA7;
+}
+
+.home-event-card--craftfair {
+  border-left-color: #1F4E5F;
+}
+
+.home-event-card-icon {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.home-event-card-title {
+  font-family: var(--font-display, 'Playfair Display', serif);
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--text-primary, #1F4E5F);
+  margin: 0 0 6px;
+  line-height: 1.2;
+}
+
+.home-event-card-desc {
+  font-family: var(--font-body, 'Outfit', sans-serif);
+  font-size: 0.88rem;
+  color: var(--text-secondary, #444);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.home-event-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.home-event-card-meta span {
+  font-family: var(--font-body, 'Outfit', sans-serif);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #555;
+  background: #f5f5f5;
+  padding: 3px 10px;
+  border-radius: 99px;
+}
+
+.home-event-card-btn {
+  width: 100%;
+  padding: 13px;
+  border: none;
+  border-radius: 10px;
+  background: #1F4E5F;
+  color: #fff;
+  font-family: var(--font-body, 'Outfit', sans-serif);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+  margin-top: 4px;
+}
+
+.home-event-card-btn:hover {
+  opacity: 0.9;
+}
+
+.home-event-card--balldrop .home-event-card-btn {
+  background: #F26A4B;
+}
+
+.home-event-card--bedpush .home-event-card-btn {
+  background: #6BAFA7;
+}
+
+.home-event-card--craftfair .home-event-card-btn {
+  background: #1F4E5F;
+}
+
+@media (min-width: 640px) {
+  .home-events-inner {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+  }
+}

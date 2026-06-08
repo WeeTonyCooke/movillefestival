@@ -44,6 +44,7 @@ export default function BallDropPage() {
         .then((data) => {
           if (data.ballNumbers) setAllocatedNumbers(data.ballNumbers);
           if (data.fullName) setForm((prev) => ({ ...prev, fullName: data.fullName }));
+          if (data.email) setForm((prev) => ({ ...prev, email: data.email }));
         })
         .catch((err) => console.error('Fetch error:', err));
     } else if (status === 'success') {
@@ -195,6 +196,20 @@ export default function BallDropPage() {
                   Shore Green to claim your prize.</p>
               </div>
 
+              <button
+                className="form-share-btn"
+                onClick={() => {
+                  if (navigator.share) {
+                    navigator.share({
+                      title: 'Moville Summer Festival Ball Drop',
+                      text: 'I\'ve just bought balls in the Moville Summer Festival Ball Drop on 12 July. You could win €500!',
+                      url: 'https://movillefestival.com/ball-drop',
+                    });
+                  }
+                }}
+              >
+                Share the Ball Drop with friends
+              </button>
               <Link to="/" className="form-success-back">Back to festival site</Link>
               <p className="form-submit-note">Questions? Contact movillefestival@gmail.com</p>
             </div>
@@ -356,6 +371,11 @@ export default function BallDropPage() {
 
           {/* Submit */}
           <div className="form-submit-wrap">
+            {valid && (
+              <div className="form-payment-summary">
+                You're buying <strong>{form.bundle === '5' ? '5 balls' : '1 ball'}</strong> for <strong>€{price}</strong> — payment taken securely via Stripe.
+              </div>
+            )}
             <p className="form-consent">
               By submitting this form you agree that Moville Summer Festival may contact you
               regarding your registration.
@@ -365,11 +385,10 @@ export default function BallDropPage() {
               onClick={handleBuy}
               disabled={!valid || submitting}
             >
-              {submitting ? 'Processing…' : `Pay €${price} Securely`}
+              {submitting ? 'Redirecting you to secure payment…' : `Pay €${price} Securely`}
             </button>
             <p className="form-submit-note">
-              Your ball number{form.bundle === '5' ? 's' : ''} will be emailed and texted
-              immediately after payment.
+              Your ball number{form.bundle === '5' ? 's' : ''} will be emailed immediately after payment.
             </p>
           </div>
 

@@ -210,6 +210,20 @@ export default function CraftFairPage() {
                   No electricity is available at this event.</p>
               </div>
 
+              <button
+                className="form-share-btn"
+                onClick={() => {
+                  if (navigator.share) {
+                    navigator.share({
+                      title: 'Moville Summer Festival Craft Fair',
+                      text: 'I\'ve just booked a stall at the Moville Summer Festival Craft Fair on 11 July. Come along!',
+                      url: 'https://movillefestival.com/craft-fair',
+                    });
+                  }
+                }}
+              >
+                Share the Craft Fair
+              </button>
               <Link to="/" className="form-success-back">Back to festival site</Link>
               <p className="form-submit-note">Questions? Contact Rona at movillefestival@gmail.com</p>
             </div>
@@ -298,9 +312,7 @@ export default function CraftFairPage() {
                 value={form.phone}
                 onChange={set('phone')}
               />
-            </div>
-
-            <div className="form-field">
+              <p className="form-hint">Include country code if outside Ireland — e.g. +44, +1, +61</p>            <div className="form-field">
               <label className="form-label">Business or trading name (if applicable)</label>
               <input
                 className="form-input"
@@ -356,6 +368,11 @@ export default function CraftFairPage() {
 
           {/* Submit */}
           <div className="form-submit-wrap">
+            {valid && (
+              <div className="form-payment-summary">
+                You're booking <strong>1 stall</strong> for <strong>€{FEE}</strong> — payment taken securely via Stripe.
+              </div>
+            )}
             <p className="form-consent">
               By submitting this form you agree that Moville Summer Festival may contact you
               regarding your registration.
@@ -365,7 +382,7 @@ export default function CraftFairPage() {
               onClick={handleSubmit}
               disabled={!valid || submitting}
             >
-              {submitting ? 'Processing…' : `Pay €${FEE} and secure my stall`}
+              {submitting ? 'Redirecting you to secure payment…' : `Pay €${FEE} and secure my stall`}
             </button>
             <p className="form-submit-note">
               Confirmation and further details will be sent to your email immediately after payment.

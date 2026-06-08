@@ -202,6 +202,20 @@ export default function BedPushPage() {
                   before the race. No helmet = no race. Don't be late.</p>
               </div>
 
+              <button
+                className="form-share-btn"
+                onClick={() => {
+                  if (navigator.share) {
+                    navigator.share({
+                      title: 'Moville Summer Festival Bed Push Race',
+                      text: `${form.teamName || 'We'} are entered in the Moville Summer Festival Bed Push Race on 8 July. Come and cheer us on!`,
+                      url: 'https://movillefestival.com/bed-push',
+                    });
+                  }
+                }}
+              >
+                Share with your team
+              </button>
               <Link to="/" className="form-success-back">Back to festival site</Link>
               <p className="form-submit-note">Questions? Contact movillefestival@gmail.com</p>
             </div>
@@ -319,8 +333,8 @@ export default function BedPushPage() {
                 value={form.phone}
                 onChange={set('phone')}
               />
+              <p className="form-hint">Include country code if outside Ireland — e.g. +44, +1, +61</p>
             </div>
-          </div>
 
           {/* Scrutineering notice */}
           <div className="form-scrutineering">
@@ -359,6 +373,11 @@ export default function BedPushPage() {
 
           {/* Submit */}
           <div className="form-submit-wrap">
+            {valid && (
+              <div className="form-payment-summary">
+                You're entering <strong>{form.teamName || 'your team'}</strong> for <strong>€{FEE}</strong> — payment taken securely via Stripe.
+              </div>
+            )}
             <p className="form-consent">
               By submitting this form you agree that Moville Summer Festival may contact you
               regarding your registration.
@@ -368,7 +387,7 @@ export default function BedPushPage() {
               onClick={handleSubmit}
               disabled={!valid || submitting}
             >
-              {submitting ? 'Processing…' : `Pay €${FEE} and register`}
+              {submitting ? 'Redirecting you to secure payment…' : `Pay €${FEE} and register`}
             </button>
             <p className="form-submit-note">
               Confirmation will be sent to your email immediately after payment.

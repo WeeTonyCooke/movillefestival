@@ -1,6 +1,6 @@
 import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
-import nodemailer from 'nodemailer';
+import { Resend } from 'resend';
 
 export const config = {
   bodyParser: false,
@@ -11,14 +11,7 @@ const supabase = createClient(
   process.env.SUPABASE_URL,
   process.env.SUPABASE_SERVICE_ROLE_KEY
 );
-
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: 'movillefestival@gmail.com',
-    pass: process.env.GMAIL_APP_PASSWORD,
-  },
-});
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function handler(event) {
   if (event.httpMethod !== 'POST') {
@@ -72,8 +65,8 @@ export async function handler(event) {
 
     // Send confirmation email
     try {
-      await transporter.sendMail({
-        from: '"Moville Summer Festival" <movillefestival@gmail.com>',
+      await resend.emails.send({
+        from: 'Moville Summer Festival <noreply@movillefestival.com>',
         to: registration.email,
         subject: 'Your Craft Fair stall is booked — Moville Summer Festival 2026',
         html: `

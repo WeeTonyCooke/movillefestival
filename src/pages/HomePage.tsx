@@ -13,27 +13,59 @@ export default function HomePage({ isNight }: HomePageProps) {
     <>
       <MovilleHero isNight={isNight} />
 
+      {/* Ball Drop — featured section */}
+      <section className="home-balldrop">
+        <div className="home-balldrop-inner">
+          <div className="home-balldrop-header">
+            <p className="home-balldrop-eyebrow">Festival Fundraiser · 12 July</p>
+            <h2 className="home-balldrop-title">The Great Ball Drop</h2>
+            <p className="home-balldrop-desc">
+              700 numbered balls are released at Shore Green. The first three to cross the finish line win cash prizes. You don't need to be there to win.
+            </p>
+          </div>
+
+          <div className="home-balldrop-prizes">
+            <div className="home-balldrop-prize">
+              <span className="home-balldrop-prize-place">1st</span>
+              <span className="home-balldrop-prize-amount">€500</span>
+            </div>
+            <div className="home-balldrop-prize">
+              <span className="home-balldrop-prize-place">2nd</span>
+              <span className="home-balldrop-prize-amount">€300</span>
+            </div>
+            <div className="home-balldrop-prize">
+              <span className="home-balldrop-prize-place">3rd</span>
+              <span className="home-balldrop-prize-amount">€150</span>
+            </div>
+          </div>
+
+          <div className="home-balldrop-options">
+            <div className="home-balldrop-option home-balldrop-option--featured">
+              <div className="home-balldrop-option-badge">Best value</div>
+              <div className="home-balldrop-option-price">€20</div>
+              <div className="home-balldrop-option-desc">5 balls · 5 chances to win</div>
+              <div className="home-balldrop-option-per">€4 each — save €5</div>
+            </div>
+            <div className="home-balldrop-option">
+              <div className="home-balldrop-option-price">€5</div>
+              <div className="home-balldrop-option-desc">1 ball</div>
+              <div className="home-balldrop-option-per">Single entry</div>
+            </div>
+          </div>
+
+          <button
+            className="home-balldrop-btn"
+            onClick={() => navigate('/ball-drop')}
+          >
+            Buy Ball Drop tickets
+          </button>
+          <p className="home-balldrop-note">Secure payment via Stripe · Confirmation email sent instantly</p>
+        </div>
+      </section>
+
+      {/* Other events */}
       <section className="home-events">
         <div className="home-events-inner">
-
-          <div className="home-event-card home-event-card--balldrop">
-            <div className="home-event-card-icon">🏆</div>
-            <div className="home-event-card-body">
-              <h2 className="home-event-card-title">The Great Ball Drop</h2>
-              <p className="home-event-card-desc">Win up to €500 cash. Buy a ball and support the festival — you don't need to be there to win.</p>
-              <div className="home-event-card-meta">
-                <span>Sunday 12 July</span>
-                <span>Shore Green</span>
-                <span>€5 per ball</span>
-              </div>
-            </div>
-            <button
-              className="home-event-card-btn"
-              onClick={() => navigate('/ball-drop')}
-            >
-              Buy a ball
-            </button>
-          </div>
 
           <div className="home-event-card home-event-card--bedpush">
             <div className="home-event-card-icon">🛏️</div>

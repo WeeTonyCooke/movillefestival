@@ -189,6 +189,13 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
+.theme-night .prog-day-pill.is-active {
+  background: linear-gradient(180deg, var(--accent-pill-top) 0%, var(--accent) 100%);
+  border-color: rgba(var(--accent-rgb), 0.75);
+  color: var(--accent-pill-text);
+  box-shadow: 0 14px 30px rgba(var(--accent-rgb), 0.25);
+}
+
 .prog-main {
   display: grid;
   gap: 22px;

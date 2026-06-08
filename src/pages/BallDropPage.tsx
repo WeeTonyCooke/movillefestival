@@ -4,7 +4,7 @@ import './forms.css';
 
 const FEE_SINGLE = 5;
 const FEE_BUNDLE = 20;
-const ONLINE_BALLS = 700;
+const TOTAL_BALLS = 1200;
 
 type Bundle = '1' | '5';
 type Screen = 'form' | 'success' | 'soldout';
@@ -118,7 +118,7 @@ export default function BallDropPage() {
           <div className="form-card">
             <div className="form-success">
               <div className="form-success-icon" style={{ fontSize: '2rem' }}>🏆</div>
-              <h2 className="form-success-title">All {ONLINE_BALLS} online balls are sold!</h2>
+              <h2 className="form-success-title">All {TOTAL_BALLS} balls are sold!</h2>
               <p className="form-success-body">
                 Online sales are now closed. The draw takes place at Shore Green on
                 12 July at 5.30pm.
@@ -249,11 +249,23 @@ export default function BallDropPage() {
 
           {/* Prize banner */}
           <div className="ball-prize-banner">
-            <div className="ball-prize-icon">🏆</div>
-            <div className="ball-prize-text">
-              <div className="ball-prize-headline">Win up to €500 cash</div>
-              <div className="ball-prize-sub">Cash prize · drawn at Shore Green · 12 July</div>
+            <div className="ball-prize-row">
+              <div className="ball-prize-item">
+                <span className="ball-prize-place">1st</span>
+                <span className="ball-prize-amount">€500</span>
+              </div>
+              <div className="ball-prize-divider" />
+              <div className="ball-prize-item">
+                <span className="ball-prize-place">2nd</span>
+                <span className="ball-prize-amount">€300</span>
+              </div>
+              <div className="ball-prize-divider" />
+              <div className="ball-prize-item">
+                <span className="ball-prize-place">3rd</span>
+                <span className="ball-prize-amount">€150</span>
+              </div>
             </div>
+            <div className="ball-prize-sub">Cash prizes · Shore Green · 12 July</div>
           </div>
 
           {/* Intro */}
@@ -266,9 +278,9 @@ export default function BallDropPage() {
           <div className="ball-how-it-works">
             <p className="ball-how-title">How it works</p>
             <ul className="ball-how-list">
-              <li>Numbered balls are rolled down the hill at Shore Green</li>
-              <li>The first three balls to cross the finish line win prizes</li>
-              <li>1st across wins €500 · 2nd wins €300 · 3rd wins €150</li>
+              <li>1,200 numbered balls are released at Shore Green on 12 July</li>
+              <li>The first three balls down win the cash prizes</li>
+              <li>1st wins €500 · 2nd wins €300 · 3rd wins €150</li>
               <li>You don't need to be present to win</li>
               <li>Winners are contacted directly by the festival committee</li>
             </ul>

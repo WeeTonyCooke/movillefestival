@@ -884,7 +884,7 @@ function ProgrammePage({ isNight }: { isNight: boolean }) {
 
   <a
     className="prog-social-link"
-    href="https://www.facebook.com/movillefestival"
+    href="https://www.facebook.com/p/Moville-Festival-100092674825683/"
     target="_blank"
     rel="noreferrer"
     aria-label="Moville Festival on Facebook"

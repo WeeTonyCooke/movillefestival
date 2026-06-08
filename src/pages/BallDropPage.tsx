@@ -32,6 +32,7 @@ export default function BallDropPage() {
   const [screen, setScreen] = useState<Screen>('form');
   const [submitting, setSubmitting] = useState(false);
   const [allocatedNumbers, setAllocatedNumbers] = useState<number[]>([]);
+  const [purchasedQuantity, setPurchasedQuantity] = useState<number>(0);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -43,6 +44,7 @@ export default function BallDropPage() {
         .then((res) => res.json())
         .then((data) => {
           if (data.ballNumbers) setAllocatedNumbers(data.ballNumbers);
+          if (data.quantity) setPurchasedQuantity(data.quantity);
           if (data.fullName) setForm((prev) => ({ ...prev, fullName: data.fullName }));
           if (data.email) setForm((prev) => ({ ...prev, email: data.email }));
         })
@@ -162,10 +164,10 @@ export default function BallDropPage() {
 
               <div className="form-summary">
                 <div className="form-summary-row">
-                  <span>Entry</span><strong>{form.bundle === '5' ? '5 balls' : '1 ball'}</strong>
+                  <span>Entry</span><strong>{purchasedQuantity === 5 ? '5 balls' : '1 ball'}</strong>
                 </div>
                 <div className="form-summary-row">
-                  <span>Amount paid</span><strong>€{price}.00</strong>
+                  <span>Amount paid</span><strong>€{purchasedQuantity === 5 ? FEE_BUNDLE : FEE_SINGLE}.00</strong>
                 </div>
                 <div className="form-summary-row">
                   <span>Event</span><strong>Shore Green · 12 July</strong>
@@ -189,7 +191,7 @@ export default function BallDropPage() {
 
               <div className="form-info-block">
                 <p className="form-info-title">Your ball numbers</p>
-                <p className="form-info-body">Your ball number{form.bundle === '5' ? 's have' : ' has'} been
+                <p className="form-info-body">Your ball number{purchasedQuantity === 5 ? 's have' : ' has'} been
                   emailed to {form.email}. Keep it safe — the committee will
                   contact winners directly after the draw.</p>
               </div>

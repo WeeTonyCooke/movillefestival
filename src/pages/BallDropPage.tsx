@@ -284,6 +284,7 @@ export default function BallDropPage() {
               <li>You don't need to be present to win</li>
               <li>Winners are contacted directly by the festival committee</li>
             </ul>
+            <Link to="/ball-drop-rules" className="ball-rules-link">Full rules and eligibility →</Link>
           </div>
 
           {/* Bundle selection */}

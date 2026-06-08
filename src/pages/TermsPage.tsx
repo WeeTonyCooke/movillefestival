@@ -25,8 +25,8 @@ export default function TermsPage() {
         <h3>Winner selection</h3>
         <ul>
           <li>The Ball Drop takes place on Sunday 12 July 2026 at Shore Green, Moville, at 5.30pm.</li>
-          <li>The winning ball numbers are determined by the first three balls to cross the finish line.</li>
-          <li>First ball across wins 1st Prize (€500), second wins 2nd Prize (€300), third wins 3rd Prize (€150).</li>
+          <li>1,200 numbered balls are released at Shore Green. The first three balls down determine the winners.</li>
+          <li>First ball down wins 1st Prize (€500), second wins 2nd Prize (€300), third wins 3rd Prize (€150).</li>
           <li>Winners are identified by ball number. The festival committee will contact winners directly using the contact details provided at registration.</li>
           <li>The committee's decision on the result is final.</li>
         </ul>

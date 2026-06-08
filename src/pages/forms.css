@@ -925,6 +925,19 @@
   font-weight: 700;
 }
 
+.ball-rules-link {
+  display: inline-block;
+  margin-top: 10px;
+  font-size: 0.8rem;
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.ball-rules-link:hover {
+  text-decoration: underline;
+}
+
 /* ── Ball number display ─────────────────────────────────────── */
 
 .ball-numbers-display {

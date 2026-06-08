@@ -2,46 +2,62 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './forms.css';
 
-const FEE_SINGLE = 5;
-const FEE_BUNDLE = 20;
-const ONLINE_BALLS = 700;
+const TOTAL_BALLS = 700; // balls 500–1200 available online
+const SOLD_PLACEHOLDER = 147;
 
 type Bundle = '1' | '5';
-type Screen = 'form' | 'success' | 'soldout';
 
 interface FormData {
   bundle: Bundle;
-  fullName: string;
+  firstName: string;
+  lastName: string;
   email: string;
   phone: string;
+  isGift: boolean;
+  giftName: string;
+  giftEmail: string;
+  location: string;
   over18: boolean;
   noRefund: boolean;
+  marketingOptIn: boolean;
 }
 
 const INITIAL: FormData = {
   bundle: '5',
-  fullName: '',
+  firstName: '',
+  lastName: '',
   email: '',
   phone: '',
+  isGift: false,
+  giftName: '',
+  giftEmail: '',
+  location: '',
   over18: false,
   noRefund: false,
+  marketingOptIn: false,
 };
 
 export default function BallDropPage() {
   const [form, setForm] = useState<FormData>(INITIAL);
-  const [screen, setScreen] = useState<Screen>('form');
+  const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
+  const remaining = TOTAL_BALLS - SOLD_PLACEHOLDER;
+  const raised = SOLD_PLACEHOLDER * 5;
+
   const set = (field: keyof FormData) =>
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+    (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+      const value = e.target instanceof HTMLInputElement && e.target.type === 'checkbox'
+        ? e.target.checked
+        : e.target.value;
       setForm((prev) => ({ ...prev, [field]: value }));
     };
 
-  const price = form.bundle === '5' ? FEE_BUNDLE : FEE_SINGLE;
+  const price = form.bundle === '5' ? 20 : 5;
 
   const valid =
-    form.fullName.trim() &&
+    form.firstName.trim() &&
+    form.lastName.trim() &&
     form.email.trim() &&
     form.over18 &&
     form.noRefund;
@@ -49,101 +65,10 @@ export default function BallDropPage() {
   const handleBuy = async () => {
     if (!valid || submitting) return;
     setSubmitting(true);
-    // TODO: POST to Netlify function → Stripe checkout
     await new Promise((r) => setTimeout(r, 1000));
-    setScreen('success');
+    setSubmitted(true);
     setSubmitting(false);
   };
-
-  if (screen === 'soldout') {
-    return (
-      <div className="form-page">
-        <div className="form-page-bg" aria-hidden="true" />
-        <div className="form-page-content page-shell--narrow">
-          <div className="form-card">
-            <div className="form-success">
-              <div className="form-success-icon" style={{ fontSize: '2rem' }}>🏆</div>
-              <h2 className="form-success-title">All {ONLINE_BALLS} online balls are sold!</h2>
-              <p className="form-success-body">
-                Online sales are now closed. The draw takes place at Shore Green on
-                12 July at 5.30pm.
-              </p>
-              <div className="form-info-block">
-                <p className="form-info-title">Already have a ball?</p>
-                <p className="form-info-body">Check your email for your ball number
-                  {ONLINE_BALLS > 1 ? 's' : ''}. You don't need to be present to win.</p>
-              </div>
-              <div className="form-info-block">
-                <p className="form-info-title">Missed out?</p>
-                <p className="form-info-body">A small number of balls may still be available
-                  on the day from committee members at the festival.</p>
-              </div>
-              <Link to="/programme" className="form-submit" style={{ textAlign: 'center', textDecoration: 'none' }}>
-                View the full festival programme
-              </Link>
-              <p className="form-submit-note">Questions? Contact movillefestival@gmail.com</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (screen === 'success') {
-    return (
-      <div className="form-page">
-        <div className="form-page-bg" aria-hidden="true" />
-        <div className="form-page-content page-shell--narrow">
-          <div className="form-card">
-            <div className="form-success">
-              <div className="form-success-icon">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" strokeWidth="2.5">
-                  <path d="M20 6L9 17l-5-5" />
-                </svg>
-              </div>
-              <h2 className="form-success-title">You're in!</h2>
-              <p className="form-success-body">
-                Payment confirmed. Good luck on 12 July — you don't need to be there to win.
-              </p>
-
-              <div className="form-summary">
-                <div className="form-summary-row">
-                  <span>Entry</span><strong>{form.bundle === '5' ? '5 balls' : '1 ball'}</strong>
-                </div>
-                <div className="form-summary-row">
-                  <span>Amount paid</span><strong>€{price}.00</strong>
-                </div>
-                <div className="form-summary-row">
-                  <span>Event</span><strong>Shore Green · 12 July</strong>
-                </div>
-                <div className="form-summary-row">
-                  <span>Prizes</span><strong>€500 · €300 · €150</strong>
-                </div>
-              </div>
-
-              <div className="form-info-block">
-                <p className="form-info-title">Your ball numbers</p>
-                <p className="form-info-body">Your ball number{form.bundle === '5' ? 's have' : ' has'} been
-                  emailed to {form.email}. Keep it safe — the committee will
-                  contact winners directly after the draw.</p>
-              </div>
-
-              <div className="form-info-block">
-                <p className="form-info-title">Winner contacted directly</p>
-                <p className="form-info-body">If your ball number is a winner, the festival
-                  committee will contact you directly. You don't need to be present at
-                  Shore Green to claim your prize.</p>
-              </div>
-
-              <Link to="/" className="form-success-back">Back to festival site</Link>
-              <p className="form-submit-note">Questions? Contact movillefestival@gmail.com</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="form-page">
@@ -158,162 +83,224 @@ export default function BallDropPage() {
               </svg>
             </Link>
             <div className="form-header-meta">
-              <p className="form-eyebrow">Moville Summer Festival · 12 July 2026</p>
-              <h1 className="form-title">The Great Ball Drop</h1>
+              <p className="form-eyebrow">Moville Summer Festival · Sunday 12th July 2026</p>
+              <h1 className="form-title">Great Ball Drop</h1>
+              <p className="form-subtitle">Shore Green · 5.30pm · Wherever you are in the world</p>
             </div>
           </div>
         </header>
 
         <div className="form-card">
-
-          {/* Prize banner */}
-          <div className="ball-prize-banner">
-            <div className="ball-prize-icon">🏆</div>
-            <div className="ball-prize-text">
-              <div className="ball-prize-headline">Win up to €500 cash</div>
-              <div className="ball-prize-sub">Cash prize · drawn at Shore Green · 12 July</div>
-            </div>
-          </div>
-
-          {/* Intro */}
-          <p className="ball-intro">
-            Wherever you are in the world, support Moville Summer Festival.
-            Every ball helps fund the events that bring the town together each summer.
-          </p>
-
-          {/* How it works */}
-          <div className="ball-how-it-works">
-            <p className="ball-how-title">How it works</p>
-            <ul className="ball-how-list">
-              <li>Numbered balls are rolled down the hill at Shore Green</li>
-              <li>The first three balls to cross the finish line win prizes</li>
-              <li>1st across wins €500 · 2nd wins €300 · 3rd wins €150</li>
-              <li>You don't need to be present to win</li>
-              <li>Winners are contacted directly by the festival committee</li>
-            </ul>
-          </div>
-
-          {/* Bundle selection */}
-          <div className="form-section">
-            <p className="form-section-title">Choose your entry</p>
-            <div className="ball-options">
-
-              <button
-                type="button"
-                className={`ball-option featured${form.bundle === '5' ? ' selected' : ''}`}
-                onClick={() => setForm((p) => ({ ...p, bundle: '5' }))}
-                aria-pressed={form.bundle === '5'}
-              >
-                <div className="ball-selected-indicator" aria-hidden="true">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
-                    stroke="#fff" strokeWidth="3"><path d="M20 6L9 17l-5-5" /></svg>
-                </div>
-                <div className="ball-badge">⭐ Best Value</div>
-                <div className="ball-option-count">5 Balls — €20</div>
-                <div className="ball-option-desc">5 chances to win · save €5</div>
-                <div className="ball-option-per">€4 each</div>
-              </button>
-
-              <button
-                type="button"
-                className={`ball-option${form.bundle === '1' ? ' selected' : ''}`}
-                onClick={() => setForm((p) => ({ ...p, bundle: '1' }))}
-                aria-pressed={form.bundle === '1'}
-              >
-                <div className="ball-selected-indicator" aria-hidden="true">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
-                    stroke="#fff" strokeWidth="3"><path d="M20 6L9 17l-5-5" /></svg>
-                </div>
-                <div className="ball-option-count">1 Ball</div>
-                <div className="ball-option-desc">1 chance to win</div>
-                <div className="ball-option-price">€5</div>
-              </button>
-
-            </div>
-          </div>
-
-          {/* Details */}
-          <div className="form-section">
-            <p className="form-section-title">Your details</p>
-
-            <div className="form-field">
-              <label className="form-label">Name <span className="required">*</span></label>
-              <input
-                className="form-input"
-                type="text"
-                placeholder="Your full name"
-                value={form.fullName}
-                onChange={set('fullName')}
-              />
-            </div>
-
-            <div className="form-field">
-              <label className="form-label">Email <span className="required">*</span></label>
-              <input
-                className="form-input"
-                type="email"
-                placeholder="your@email.com"
-                value={form.email}
-                onChange={set('email')}
-              />
-              <p className="form-hint">
-                Your ball number{form.bundle === '5' ? 's' : ''} will be emailed to you
-                immediately after payment.
+          {submitted ? (
+            <div className="form-success">
+              <div className="form-success-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" strokeWidth="2.5">
+                  <path d="M20 6L9 17l-5-5" />
+                </svg>
+              </div>
+              <h2 className="form-success-title">You're in, {form.firstName}! 🎱</h2>
+              <p className="form-success-body">
+                Your lucky ball number{form.bundle === '5' ? 's have' : ' has'} been emailed to{' '}
+                {form.email}. You don't need to be present on the day to win. Good luck on 12th July!
               </p>
+              <Link to="/" className="form-success-back">Back to festival site</Link>
             </div>
+          ) : (
+            <>
+              {/* Prize info */}
+              <div className="form-section">
+                <p className="form-section-title">The prize</p>
+                <p style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--accent)', margin: '0 0 4px' }}>🏆 Cash prize — to be confirmed</p>
+                <p className="form-hint">Prize details will be announced shortly. Watch the festival social media pages for updates.</p>
+              </div>
 
-            <div className="form-field">
-              <label className="form-label">Mobile number (optional)</label>
-              <input
-                className="form-input"
-                type="tel"
-                placeholder="Include country code if outside Ireland — e.g. +44, +1, +61"
-                value={form.phone}
-                onChange={set('phone')}
-              />
-              <p className="form-hint">
-                Add your mobile and we'll text your number{form.bundle === '5' ? 's' : ''} to you too.
-              </p>
-            </div>
-          </div>
+              {/* How it works */}
+              <div className="form-section">
+                <p className="form-section-title">How it works</p>
+                <p className="form-hint" style={{ fontSize: '0.9rem', lineHeight: '1.7' }}>
+                  Numbered balls are dropped onto a target at Shore Green. The ball closest to the
+                  marker wins. You do not need to be present on the day to win — winners will be
+                  verified by the festival committee and notified by phone or email.
+                </p>
+              </div>
 
-          {/* Declarations */}
-          <div className="form-section">
-            <label className="form-check">
-              <input type="checkbox" checked={form.over18} onChange={set('over18')} />
-              <span className="form-check-label">
-                I confirm I am over 18 years old.
-              </span>
-            </label>
+              {/* Pricing */}
+              <div className="form-section">
+                <p className="form-section-title">Pricing</p>
+                <p style={{ margin: '0 0 4px' }}><strong>1 Ball — €5</strong></p>
+                <p style={{ margin: '0 0 4px' }}><strong>5 Balls — €20</strong> <span style={{ color: 'var(--coral)', fontWeight: 600 }}>Best value · save €5</span></p>
+              </div>
 
-            <label className="form-check">
-              <input type="checkbox" checked={form.noRefund} onChange={set('noRefund')} />
-              <span className="form-check-label">
-                I understand this purchase is non-refundable, unless the event is cancelled
-                by the organisers, and that the committee's decision is final.
-              </span>
-            </label>
-          </div>
+              {/* Live counter */}
+              <div className="ball-counter-banner" role="status" aria-live="polite">
+                <div className="ball-counter-item">
+                  <div className="ball-counter-value">{SOLD_PLACEHOLDER}</div>
+                  <div className="ball-counter-label">Sold</div>
+                </div>
+                <div className="ball-counter-item">
+                  <div className="ball-counter-value">{remaining}</div>
+                  <div className="ball-counter-label">Remaining</div>
+                </div>
+                <div className="ball-counter-item">
+                  <div className="ball-counter-value">€{raised.toLocaleString()}</div>
+                  <div className="ball-counter-label">Raised</div>
+                </div>
+              </div>
 
-          {/* Submit */}
-          <div className="form-submit-wrap">
-            <p className="form-consent">
-              By submitting this form you agree that Moville Summer Festival may contact you
-              regarding your registration.
-            </p>
-            <button
-              className="form-submit"
-              onClick={handleBuy}
-              disabled={!valid || submitting}
-            >
-              {submitting ? 'Processing…' : `Pay €${price} Securely`}
-            </button>
-            <p className="form-submit-note">
-              Your ball number{form.bundle === '5' ? 's' : ''} will be emailed and texted
-              immediately after payment.
-            </p>
-          </div>
+              {/* Bundle selection */}
+              <div className="form-section">
+                <p className="form-section-title">Choose your balls</p>
+                <div className="ball-options">
+                  <button
+                    type="button"
+                    className={`ball-option featured${form.bundle === '5' ? ' selected' : ''}`}
+                    onClick={() => setForm((p) => ({ ...p, bundle: '5' }))}
+                    aria-pressed={form.bundle === '5'}
+                  >
+                    <div className="ball-selected-indicator" aria-hidden="true">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
+                        stroke="#fff" strokeWidth="3"><path d="M20 6L9 17l-5-5" /></svg>
+                    </div>
+                    <div className="ball-badge">⭐ Best value</div>
+                    <div className="ball-option-count">5 Balls</div>
+                    <div className="ball-option-desc">Most popular</div>
+                    <div className="ball-option-price">€20</div>
+                    <div className="ball-option-per">€4 per ball</div>
+                    <div className="ball-option-saving">You save €5 vs buying individually</div>
+                  </button>
 
+                  <button
+                    type="button"
+                    className={`ball-option${form.bundle === '1' ? ' selected' : ''}`}
+                    onClick={() => setForm((p) => ({ ...p, bundle: '1' }))}
+                    aria-pressed={form.bundle === '1'}
+                  >
+                    <div className="ball-selected-indicator" aria-hidden="true">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
+                        stroke="#fff" strokeWidth="3"><path d="M20 6L9 17l-5-5" /></svg>
+                    </div>
+                    <div className="ball-option-count">1 Ball</div>
+                    <div className="ball-option-desc">Single entry</div>
+                    <div className="ball-option-price">€5</div>
+                    <div className="ball-option-per">€5 per ball</div>
+                  </button>
+                </div>
+              </div>
+
+              {/* Your details */}
+              <div className="form-section">
+                <p className="form-section-title">Your details</p>
+
+                <div className="form-row">
+                  <div className="form-field">
+                    <label className="form-label">First name <span className="required">*</span></label>
+                    <input className="form-input" type="text" placeholder="Máire"
+                      value={form.firstName} onChange={set('firstName')} />
+                  </div>
+                  <div className="form-field">
+                    <label className="form-label">Last name <span className="required">*</span></label>
+                    <input className="form-input" type="text" placeholder="Ní Bhriain"
+                      value={form.lastName} onChange={set('lastName')} />
+                  </div>
+                </div>
+
+                <div className="form-field">
+                  <label className="form-label">Email address <span className="required">*</span></label>
+                  <input className="form-input" type="email" placeholder="you@example.com"
+                    value={form.email} onChange={set('email')} />
+                  <p className="form-hint">Your ball number{form.bundle === '5' ? 's' : ''} will be emailed to you immediately after payment.</p>
+                </div>
+
+                <div className="form-field">
+                  <label className="form-label">Phone number</label>
+                  <input className="form-input" type="tel" placeholder="+353 83 …"
+                    value={form.phone} onChange={set('phone')} />
+                </div>
+
+                <div className="form-field">
+                  <label className="form-label">Where are you joining from? (optional)</label>
+                  <select className="form-select" value={form.location} onChange={set('location')}>
+                    <option value="">Select…</option>
+                    <option value="moville">Moville</option>
+                    <option value="donegal">Donegal</option>
+                    <option value="ireland">Elsewhere in Ireland</option>
+                    <option value="uk">UK</option>
+                    <option value="usa">USA / Canada</option>
+                    <option value="aus">Australia / New Zealand</option>
+                    <option value="other">Other overseas</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Gift option */}
+              <div className="form-section">
+                <p className="form-section-title">Gifting</p>
+                <label className="form-check">
+                  <input type="checkbox" checked={form.isGift} onChange={set('isGift')} />
+                  <span className="form-check-label">These balls are a gift for someone else.</span>
+                </label>
+
+                {form.isGift && (
+                  <>
+                    <div className="form-field" style={{ marginTop: '12px' }}>
+                      <label className="form-label">Recipient name</label>
+                      <input className="form-input" type="text" placeholder="Their name"
+                        value={form.giftName} onChange={set('giftName')} />
+                    </div>
+                    <div className="form-field">
+                      <label className="form-label">Recipient email</label>
+                      <input className="form-input" type="email" placeholder="Their email address"
+                        value={form.giftEmail} onChange={set('giftEmail')} />
+                    </div>
+                  </>
+                )}
+              </div>
+
+              {/* Confirmations */}
+              <div className="form-section">
+                <p className="form-section-title">Before you pay</p>
+
+                <label className="form-check">
+                  <input type="checkbox" checked={form.over18} onChange={set('over18')} />
+                  <span className="form-check-label">
+                    I confirm that I am 18 years of age or older. Under Irish law, ticket purchasers
+                    must be 18 or older.
+                  </span>
+                </label>
+
+                <label className="form-check">
+                  <input type="checkbox" checked={form.noRefund} onChange={set('noRefund')} />
+                  <span className="form-check-label">
+                    I understand that ball purchases are non-refundable, ball numbers are automatically
+                    assigned, and I do not need to be present at Shore Green on 12th July to win.
+                    Winners will be verified by the festival committee.
+                  </span>
+                </label>
+
+                <label className="form-check">
+                  <input type="checkbox" checked={form.marketingOptIn} onChange={set('marketingOptIn')} />
+                  <span className="form-check-label">
+                    I would like to receive updates about Moville Summer Festival events.
+                  </span>
+                </label>
+              </div>
+
+              {/* Submit */}
+              <div className="form-submit-wrap">
+                <button
+                  className="form-submit"
+                  onClick={handleBuy}
+                  disabled={!valid || submitting}
+                >
+                  {submitting ? 'Processing…' : `Pay €${price} securely →`}
+                </button>
+                <p className="form-submit-note">
+                  Secure card payment via Stripe · Ball drop: Sunday 12th July at Shore Green
+                </p>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>

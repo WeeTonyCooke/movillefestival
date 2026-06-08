@@ -39,7 +39,26 @@ export default function CraftFairPage() {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const status = params.get('status');
-    if (status === 'success') setScreen('success');
+    const sessionId = params.get('session_id');
+
+    if (status === 'success' && sessionId) {
+      setScreen('success');
+      fetch(`/.netlify/functions/get-session?session_id=${sessionId}`)
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.customerName) {
+            setForm((prev) => ({
+              ...prev,
+              fullName: data.customerName,
+              email: data.customerEmail,
+              businessName: data.businessName,
+            }));
+          }
+        })
+        .catch((err) => console.error('Session fetch error:', err));
+    } else if (status === 'success') {
+      setScreen('success');
+    }
   }, []);
 
   const set = (field: keyof FormData) =>

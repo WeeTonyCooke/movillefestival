@@ -2,6 +2,10 @@ import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
 import nodemailer from 'nodemailer';
 
+export const config = {
+  bodyParser: false,
+};
+
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const supabase = createClient(
   process.env.SUPABASE_URL,
@@ -25,8 +29,12 @@ export async function handler(event) {
   let stripeEvent;
 
   try {
+    const rawBody = event.isBase64Encoded
+      ? Buffer.from(event.body, 'base64').toString('utf8')
+      : event.body;
+
     stripeEvent = stripe.webhooks.constructEvent(
-      event.body,
+      rawBody,
       sig,
       process.env.STRIPE_WEBHOOK_SECRET
     );

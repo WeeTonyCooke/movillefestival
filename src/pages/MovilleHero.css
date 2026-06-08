@@ -433,28 +433,30 @@
   top: 20px;
   right: 16px;
   z-index: 20;
-  background: #F26A4B;
+  background: #2D8A4E;
   border: none;
-  border-radius: 12px;
-  padding: 8px 14px;
+  border-radius: 50%;
+  width: 72px;
+  height: 72px;
   cursor: pointer;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 1px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
   animation: badge-fade-in 0.5s ease 1.5s both;
   transition: transform 0.15s ease, opacity 0.15s ease;
 }
 
 .hero-balldrop-badge:hover {
-  transform: scale(1.04);
+  transform: scale(1.06);
   opacity: 0.95;
 }
 
 .hero-balldrop-badge-eyebrow {
   font-family: var(--font-body, 'Outfit', sans-serif);
-  font-size: 0.65rem;
+  font-size: 0.55rem;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -464,13 +466,13 @@
 
 .hero-balldrop-badge-prize {
   font-family: var(--font-display, 'Playfair Display', serif);
-  font-size: 1.1rem;
+  font-size: 0.95rem;
   font-weight: 700;
   color: #fff;
   line-height: 1.1;
 }
 
 @keyframes badge-fade-in {
-  from { opacity: 0; transform: translateY(-6px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; transform: scale(0.8); }
+  to   { opacity: 1; transform: scale(1); }
 }

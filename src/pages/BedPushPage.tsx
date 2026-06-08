@@ -51,6 +51,11 @@ export default function BedPushPage() {
         .catch((err) => console.error('Session fetch error:', err));
     } else if (status === 'success') {
       setScreen('success');
+    } else {
+      fetch('/.netlify/functions/get-availability')
+        .then(res => res.json())
+        .then(data => { if (data.teamsRegistered >= MAX_TEAMS) setScreen('full'); })
+        .catch(() => {});
     }
   }, []);
 

@@ -49,6 +49,11 @@ export default function BallDropPage() {
         .catch((err) => console.error('Fetch error:', err));
     } else if (status === 'success') {
       setScreen('success');
+    } else {
+      fetch('/.netlify/functions/get-availability')
+        .then(res => res.json())
+        .then(data => { if (data.ballsAvailable <= 0) setScreen('soldout'); })
+        .catch(() => {});
     }
   }, []);
 

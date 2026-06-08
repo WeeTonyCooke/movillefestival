@@ -58,6 +58,11 @@ export default function CraftFairPage() {
         .catch((err) => console.error('Session fetch error:', err));
     } else if (status === 'success') {
       setScreen('success');
+    } else {
+      fetch('/.netlify/functions/get-availability')
+        .then(res => res.json())
+        .then(data => { if (data.stallsBooked >= MAX_STALLS) setScreen('soldout'); })
+        .catch(() => {});
     }
   }, []);
 

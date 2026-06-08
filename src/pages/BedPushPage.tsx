@@ -335,7 +335,6 @@ export default function BedPushPage() {
               />
               <p className="form-hint">Include country code if outside Ireland — e.g. +44, +1, +61</p>
             </div>
-          </div>
 
           {/* Scrutineering notice */}
           <div className="form-scrutineering">
@@ -392,6 +391,7 @@ export default function BedPushPage() {
             </button>
             <p className="form-submit-note">
               Confirmation will be sent to your email immediately after payment.
+              By registering you agree to our <Link to="/terms">Terms & Conditions</Link> and <Link to="/privacy">Privacy Policy</Link>.
             </p>
           </div>
         </div>

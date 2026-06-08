@@ -7,6 +7,8 @@ import CraftFairPage from './pages/CraftFairPage';
 import BedPushPage from './pages/BedPushPage';
 import BallDropPage from './pages/BallDropPage';
 import AdminPage from './pages/AdminPage';
+import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
+import TermsPage from './pages/TermsPage';
 import { useNightMode } from './hooks/useNightMode';
 
 function App() {
@@ -23,6 +25,8 @@ function App() {
         <Route path="/bed-push" element={<BedPushPage />} />
         <Route path="/ball-drop" element={<BallDropPage />} />
         <Route path="/admin" element={<AdminPage />} />
+        <Route path="/privacy" element={<PrivacyPolicyPage />} />
+        <Route path="/terms" element={<TermsPage />} />
       </Routes>
     </div>
   );

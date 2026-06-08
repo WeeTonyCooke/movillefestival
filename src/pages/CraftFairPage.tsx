@@ -389,6 +389,7 @@ export default function CraftFairPage() {
             </button>
             <p className="form-submit-note">
               Confirmation and further details will be sent to your email immediately after payment.
+              By registering you agree to our <Link to="/terms">Terms & Conditions</Link> and <Link to="/privacy">Privacy Policy</Link>.
             </p>
           </div>
         </div>

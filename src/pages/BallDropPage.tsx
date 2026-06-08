@@ -389,6 +389,7 @@ export default function BallDropPage() {
             </button>
             <p className="form-submit-note">
               Your ball number{form.bundle === '5' ? 's' : ''} will be emailed immediately after payment.
+              By purchasing you agree to our <Link to="/terms">Terms & Conditions</Link> and <Link to="/privacy">Privacy Policy</Link>.
             </p>
           </div>
 

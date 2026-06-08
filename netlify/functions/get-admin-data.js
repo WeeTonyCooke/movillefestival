@@ -5,7 +5,7 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'moville2026';
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 
 export async function handler(event) {
   const supplied = event.headers['x-admin-password'];

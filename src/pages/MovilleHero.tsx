@@ -122,7 +122,8 @@ const MovilleHero: React.FC<MovilleHeroProps> = ({ isNight }) => {
         aria-label="Ball Drop — win up to €500, buy a ball"
       >
         <span className="hero-balldrop-badge-eyebrow">Ball Drop</span>
-        <span className="hero-balldrop-badge-prize">Win €500</span>
+        <span className="hero-balldrop-badge-prize">€500</span>
+        <span className="hero-balldrop-badge-cta">Buy tickets</span>
       </button>
 
       <div className="hero-credit">

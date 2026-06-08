@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" role="img" aria-labelledby="title">
+  <title id="title">Moville Festival</title>
+  <defs>
+    <style>
+      .navy  { fill: #1D3A5C; }
+      .light { fill: #8FAFD0; }
+      .white { fill: #F0F4F8; }
+      .wave  { fill: none; stroke: #1D3A5C; stroke-width: 3; stroke-linecap: round; }
+      .struct { fill: none; stroke: #1D3A5C; stroke-width: 3.5; stroke-linecap: round; stroke-linejoin: round; }
+      .struct-thin { fill: none; stroke: #1D3A5C; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    </style>
+  </defs>
+
+  <!-- white square background -->
+  <rect width="600" height="600" fill="#ffffff"/>
+
+  <!-- blue circle background -->
+  <circle cx="300" cy="255" r="172" class="light" opacity="0.85"/>
+
+  <!-- finial ball -->
+  <circle cx="300" cy="58" r="7" fill="#1D3A5C"/>
+  <rect x="297" y="62" width="6" height="16" rx="3" fill="#1D3A5C"/>
+
+  <!-- dome roof -->
+  <path d="M278 82 Q300 60 322 82" fill="#F0F4F8" stroke="#1D3A5C" stroke-width="1.5"/>
+  <ellipse cx="300" cy="82" rx="22" ry="8" fill="#F0F4F8" stroke="#1D3A5C" stroke-width="1.5"/>
+
+  <!-- lantern room -->
+  <rect x="279" y="82" width="42" height="22" rx="1" fill="#F0F4F8" stroke="#1D3A5C" stroke-width="1.5"/>
+  <line x1="293" y1="82" x2="293" y2="104" stroke="#1D3A5C" stroke-width="1"/>
+  <line x1="300" y1="82" x2="300" y2="104" stroke="#1D3A5C" stroke-width="1"/>
+  <line x1="307" y1="82" x2="307" y2="104" stroke="#1D3A5C" stroke-width="1"/>
+  <rect x="308" y="84" width="12" height="18" rx="1" fill="#1D3A5C" opacity="0.75"/>
+
+  <!-- gallery rail top -->
+  <rect x="268" y="104" width="64" height="8" rx="1" fill="#F0F4F8" stroke="#1D3A5C" stroke-width="1.5"/>
+  <line x1="272" y1="104" x2="272" y2="120" class="struct-thin"/>
+  <line x1="284" y1="104" x2="284" y2="120" class="struct-thin"/>
+  <line x1="300" y1="104" x2="300" y2="120" class="struct-thin"/>
+  <line x1="316" y1="104" x2="316" y2="120" class="struct-thin"/>
+  <line x1="328" y1="104" x2="328" y2="120" class="struct-thin"/>
+  <rect x="264" y="118" width="72" height="5" rx="1" fill="#1D3A5C" opacity="0.5"/>
+
+  <!-- upper body -->
+  <rect x="256" y="122" width="88" height="72" rx="3" fill="#F0F4F8" stroke="#1D3A5C" stroke-width="1.5"/>
+  <rect x="284" y="142" width="32" height="22" rx="2" fill="#1D3A5C" opacity="0.15" stroke="#1D3A5C" stroke-width="1.5"/>
+  <line x1="300" y1="142" x2="300" y2="164" stroke="#1D3A5C" stroke-width="1.5"/>
+  <line x1="284" y1="153" x2="316" y2="153" stroke="#1D3A5C" stroke-width="1.5"/>
+
+  <!-- lower gallery platform -->
+  <rect x="228" y="192" width="144" height="10" rx="1" fill="#1D3A5C"/>
+  <rect x="222" y="200" width="156" height="5" rx="1" fill="#1D3A5C" opacity="0.6"/>
+  <line x1="232" y1="172" x2="232" y2="202" class="struct-thin"/>
+  <line x1="258" y1="172" x2="258" y2="202" class="struct-thin"/>
+  <line x1="300" y1="172" x2="300" y2="202" class="struct-thin"/>
+  <line x1="342" y1="172" x2="342" y2="202" class="struct-thin"/>
+  <line x1="368" y1="172" x2="368" y2="202" class="struct-thin"/>
+
+  <!-- legs -->
+  <line x1="294" y1="202" x2="294" y2="420" class="struct"/>
+  <line x1="306" y1="202" x2="306" y2="420" class="struct"/>
+  <g class="struct-thin">
+    <line x1="294" y1="214" x2="306" y2="214"/>
+    <line x1="294" y1="226" x2="306" y2="226"/>
+    <line x1="294" y1="238" x2="306" y2="238"/>
+    <line x1="294" y1="250" x2="306" y2="250"/>
+    <line x1="294" y1="262" x2="306" y2="262"/>
+    <line x1="294" y1="274" x2="306" y2="274"/>
+    <line x1="294" y1="286" x2="306" y2="286"/>
+    <line x1="294" y1="298" x2="306" y2="298"/>
+    <line x1="294" y1="310" x2="306" y2="310"/>
+    <line x1="294" y1="322" x2="306" y2="322"/>
+    <line x1="294" y1="334" x2="306" y2="334"/>
+    <line x1="294" y1="346" x2="306" y2="346"/>
+    <line x1="294" y1="358" x2="306" y2="358"/>
+    <line x1="294" y1="370" x2="306" y2="370"/>
+    <line x1="294" y1="382" x2="306" y2="382"/>
+    <line x1="294" y1="394" x2="306" y2="394"/>
+    <line x1="294" y1="406" x2="306" y2="406"/>
+  </g>
+  <line x1="252" y1="202" x2="270" y2="420" class="struct"/>
+  <line x1="348" y1="202" x2="330" y2="420" class="struct"/>
+  <line x1="234" y1="202" x2="162" y2="420" class="struct"/>
+  <line x1="366" y1="202" x2="438" y2="420" class="struct"/>
+  <line x1="234" y1="202" x2="270" y2="420" class="struct-thin"/>
+  <line x1="252" y1="202" x2="162" y2="420" class="struct-thin"/>
+  <line x1="348" y1="202" x2="438" y2="420" class="struct-thin"/>
+  <line x1="366" y1="202" x2="330" y2="420" class="struct-thin"/>
+  <line x1="148" y1="420" x2="452" y2="420" class="struct"/>
+  <circle cx="162" cy="420" r="5" fill="#1D3A5C"/>
+  <circle cx="252" cy="420" r="5" fill="#1D3A5C"/>
+  <circle cx="300" cy="420" r="5" fill="#1D3A5C"/>
+  <circle cx="348" cy="420" r="5" fill="#1D3A5C"/>
+  <circle cx="438" cy="420" r="5" fill="#1D3A5C"/>
+
+  <!-- waves -->
+  <path d="M175 442 Q205 430 238 442 Q270 454 302 442 Q334 430 366 442 Q396 454 425 442" class="wave"/>
+  <path d="M192 457 Q220 447 252 457 Q284 467 316 457 Q348 447 376 457 Q400 465 420 457" class="wave" opacity="0.55"/>
+
+  <!-- wordmark -->
+  <text x="300" y="510" text-anchor="middle" font-size="62" font-weight="700" font-family="Georgia, 'Times New Roman', serif" fill="#1D3A5C">Moville</text>
+  <text x="300" y="558" text-anchor="middle" font-size="42" font-weight="600" font-family="Georgia, 'Times New Roman', serif" fill="#1D3A5C">Festival</text>
+
+</svg>

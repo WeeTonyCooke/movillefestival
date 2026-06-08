@@ -52,6 +52,16 @@ export async function handler(event) {
   return { statusCode: 200, body: 'OK' };
 }
 
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#x27;');
+}
+
 async function handleCraftFair(session) {
   const registrationId = session.metadata?.registration_id;
   if (!registrationId) return;
@@ -65,6 +75,11 @@ async function handleCraftFair(session) {
 
   if (error) { console.error('Craft Fair update error:', error); return; }
 
+  if (registration.confirmation_email_sent) {
+    console.log('Confirmation email already sent for', registrationId);
+    return;
+  }
+
   try {
     await resend.emails.send({
       from: 'Moville Summer Festival <noreply@movillefestival.com>',
@@ -72,6 +87,10 @@ async function handleCraftFair(session) {
       subject: 'Your Craft Fair stall is booked — Moville Summer Festival 2026',
       html: craftFairEmail(registration),
     });
+    await supabase
+      .from('craft_fair_registrations')
+      .update({ confirmation_email_sent: true })
+      .eq('id', registrationId);
   } catch (err) {
     console.error('Craft Fair email error:', err);
   }
@@ -90,6 +109,11 @@ async function handleBedPush(session) {
 
   if (error) { console.error('Bed Push update error:', error); return; }
 
+  if (registration.confirmation_email_sent) {
+    console.log('Confirmation email already sent for', registrationId);
+    return;
+  }
+
   try {
     await resend.emails.send({
       from: 'Moville Summer Festival <noreply@movillefestival.com>',
@@ -97,6 +121,10 @@ async function handleBedPush(session) {
       subject: 'Your Bed Push Race entry is confirmed — Moville Summer Festival 2026',
       html: bedPushEmail(registration),
     });
+    await supabase
+      .from('bed_push_registrations')
+      .update({ confirmation_email_sent: true })
+      .eq('id', registrationId);
   } catch (err) {
     console.error('Bed Push email error:', err);
   }
@@ -107,32 +135,15 @@ async function handleBallDrop(session) {
   const quantity = parseInt(session.metadata?.quantity || '1', 10);
   if (!registrationId) return;
 
-  // Fetch more than needed and randomly select
-  const fetchCount = Math.min(quantity * 10, 100);
-  const { data: balls, error: ballError } = await supabase
-    .from('ball_drop_balls')
-    .select('number')
-    .eq('status', 'available')
-    .limit(fetchCount);
+  // Allocate ball numbers atomically using Postgres function
+  const { data: ballNumbers, error: claimError } = await supabase
+    .rpc('claim_ball_numbers', {
+      p_quantity: quantity,
+      p_registration_id: registrationId,
+    });
 
-  if (ballError || !balls || balls.length < quantity) {
-    console.error('Ball allocation error — not enough balls available');
-    return;
-  }
-
-  // Shuffle and take required quantity
-  const shuffled = balls.sort(() => Math.random() - 0.5);
-  const selected = shuffled.slice(0, quantity);
-  const ballNumbers = selected.map(b => b.number);
-
-  // Mark balls as sold
-  const { error: updateBallsError } = await supabase
-    .from('ball_drop_balls')
-    .update({ status: 'sold', registration_id: registrationId, updated_at: new Date().toISOString() })
-    .in('number', ballNumbers);
-
-  if (updateBallsError) {
-    console.error('Ball update error:', updateBallsError);
+  if (claimError || !ballNumbers || ballNumbers.length < quantity) {
+    console.error('Ball allocation error:', claimError);
     return;
   }
 
@@ -149,6 +160,11 @@ async function handleBallDrop(session) {
     return;
   }
 
+  if (registration.confirmation_email_sent) {
+    console.log('Confirmation email already sent for', registrationId);
+    return;
+  }
+
   try {
     await resend.emails.send({
       from: 'Moville Summer Festival <noreply@movillefestival.com>',
@@ -156,12 +172,17 @@ async function handleBallDrop(session) {
       subject: 'Your Ball Drop numbers — Moville Summer Festival 2026',
       html: ballDropEmail(registration),
     });
+    await supabase
+      .from('ball_drop_registrations')
+      .update({ confirmation_email_sent: true })
+      .eq('id', registrationId);
   } catch (err) {
     console.error('Ball Drop email error:', err);
   }
 }
 
 function ballDropEmail(registration) {
+  const name = escapeHtml(registration.full_name);
   const numbers = registration.ball_numbers || [];
   const numbersList = numbers.map(n =>
     `<span style="display:inline-block; background:#1F4E5F; color:#fff; font-weight:bold; font-size:18px; padding:8px 14px; border-radius:6px; margin:4px;">${n}</span>`
@@ -174,7 +195,7 @@ function ballDropEmail(registration) {
       </div>
       <div style="padding: 32px 24px;">
         <h2 style="color: #1F4E5F;">You're in the Ball Drop!</h2>
-        <p>Hi ${registration.full_name},</p>
+        <p>Hi ${name},</p>
         <p>Payment confirmed. Good luck on 12 July — you don't need to be present to win.</p>
 
         <div style="background: #F4E9D8; border-radius: 8px; padding: 20px; margin: 24px 0; text-align: center;">
@@ -209,6 +230,8 @@ function ballDropEmail(registration) {
 }
 
 function craftFairEmail(registration) {
+  const name = escapeHtml(registration.full_name);
+  const business = escapeHtml(registration.business_name);
   return `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
       <div style="background: #1F4E5F; padding: 24px; text-align: center;">
@@ -216,13 +239,13 @@ function craftFairEmail(registration) {
       </div>
       <div style="padding: 32px 24px;">
         <h2 style="color: #1F4E5F;">Your stall is booked!</h2>
-        <p>Hi ${registration.full_name},</p>
+        <p>Hi ${name},</p>
         <p>Payment confirmed. Your stall at the Moville Summer Festival Craft Fair is secured.</p>
         <div style="background: #F4E9D8; border-radius: 8px; padding: 20px; margin: 24px 0;">
           <h3 style="margin: 0 0 16px; color: #1F4E5F;">Your booking</h3>
           <table style="width: 100%; border-collapse: collapse;">
-            <tr><td style="padding: 6px 0; color: #666;">Stallholder</td><td style="padding: 6px 0; font-weight: bold; text-align: right;">${registration.full_name}</td></tr>
-            ${registration.business_name ? `<tr><td style="padding: 6px 0; color: #666;">Business</td><td style="padding: 6px 0; font-weight: bold; text-align: right;">${registration.business_name}</td></tr>` : ''}
+            <tr><td style="padding: 6px 0; color: #666;">Stallholder</td><td style="padding: 6px 0; font-weight: bold; text-align: right;">${name}</td></tr>
+            ${business ? `<tr><td style="padding: 6px 0; color: #666;">Business</td><td style="padding: 6px 0; font-weight: bold; text-align: right;">${business}</td></tr>` : ''}
             <tr><td style="padding: 6px 0; color: #666;">Amount paid</td><td style="padding: 6px 0; font-weight: bold; text-align: right;">€20.00</td></tr>
             <tr><td style="padding: 6px 0; color: #666;">Date</td><td style="padding: 6px 0; font-weight: bold; text-align: right;">Saturday 11 July 2026</td></tr>
             <tr><td style="padding: 6px 0; color: #666;">Fair opens</td><td style="padding: 6px 0; font-weight: bold; text-align: right;">10am – 2pm</td></tr>
@@ -249,6 +272,9 @@ function craftFairEmail(registration) {
 }
 
 function bedPushEmail(registration) {
+  const captain = escapeHtml(registration.captain_name);
+  const team = escapeHtml(registration.team_name);
+  const org = escapeHtml(registration.organisation);
   return `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
       <div style="background: #1F4E5F; padding: 24px; text-align: center;">
@@ -256,14 +282,14 @@ function bedPushEmail(registration) {
       </div>
       <div style="padding: 32px 24px;">
         <h2 style="color: #1F4E5F;">You're registered!</h2>
-        <p>Hi ${registration.captain_name},</p>
+        <p>Hi ${captain},</p>
         <p>Payment confirmed. Your spot in the Great Bed Push Race is secured. See you on Quay Street!</p>
         <div style="background: #F4E9D8; border-radius: 8px; padding: 20px; margin: 24px 0;">
           <h3 style="margin: 0 0 16px; color: #1F4E5F;">Your entry</h3>
           <table style="width: 100%; border-collapse: collapse;">
-            <tr><td style="padding: 6px 0; color: #666;">Team</td><td style="padding: 6px 0; font-weight: bold; text-align: right;">${registration.team_name}</td></tr>
-            ${registration.organisation ? `<tr><td style="padding: 6px 0; color: #666;">Organisation</td><td style="padding: 6px 0; font-weight: bold; text-align: right;">${registration.organisation}</td></tr>` : ''}
-            <tr><td style="padding: 6px 0; color: #666;">Captain</td><td style="padding: 6px 0; font-weight: bold; text-align: right;">${registration.captain_name}</td></tr>
+            <tr><td style="padding: 6px 0; color: #666;">Team</td><td style="padding: 6px 0; font-weight: bold; text-align: right;">${team}</td></tr>
+            ${org ? `<tr><td style="padding: 6px 0; color: #666;">Organisation</td><td style="padding: 6px 0; font-weight: bold; text-align: right;">${org}</td></tr>` : ''}
+            <tr><td style="padding: 6px 0; color: #666;">Captain</td><td style="padding: 6px 0; font-weight: bold; text-align: right;">${captain}</td></tr>
             <tr><td style="padding: 6px 0; color: #666;">Amount paid</td><td style="padding: 6px 0; font-weight: bold; text-align: right;">€50.00</td></tr>
             <tr><td style="padding: 6px 0; color: #666;">Date</td><td style="padding: 6px 0; font-weight: bold; text-align: right;">Wednesday 8 July 2026</td></tr>
             <tr><td style="padding: 6px 0; color: #666;">Start time</td><td style="padding: 6px 0; font-weight: bold; text-align: right;">6pm for 6.30pm</td></tr>

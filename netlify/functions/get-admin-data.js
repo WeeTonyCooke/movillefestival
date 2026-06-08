@@ -5,7 +5,13 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
-export async function handler() {
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'moville2026';
+
+export async function handler(event) {
+  const supplied = event.headers['x-admin-password'];
+  if (!supplied || supplied !== ADMIN_PASSWORD) {
+    return { statusCode: 401, body: JSON.stringify({ error: 'Unauthorised' }) };
+  }
   try {
     const [ballDrop, bedPush, craftFair, ballsAvailable] = await Promise.all([
       supabase.from('ball_drop_registrations').select('*').order('created_at', { ascending: false }),

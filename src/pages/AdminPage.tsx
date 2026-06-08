@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
-const ADMIN_PASSWORD = 'moville2026';
-
 interface BallDropReg {
   id: string;
   full_name: string;
@@ -57,20 +55,30 @@ export default function AdminPage() {
   const [tab, setTab] = useState<Tab>('balldrop');
 
   const handleLogin = () => {
-    if (password === ADMIN_PASSWORD) {
-      setAuthed(true);
-      setError('');
-    } else {
-      setError('Incorrect password');
+    if (password.trim() === '') {
+      setError('Please enter a password');
+      return;
     }
+    setAuthed(true);
+    setError('');
   };
 
   useEffect(() => {
     if (!authed) return;
     setLoading(true);
-    fetch('/.netlify/functions/get-admin-data')
-      .then(res => res.json())
-      .then(d => { setData(d); setLoading(false); })
+    fetch('/.netlify/functions/get-admin-data', {
+      headers: { 'x-admin-password': password },
+    })
+      .then(res => {
+        if (res.status === 401) {
+          setAuthed(false);
+          setError('Incorrect password');
+          setLoading(false);
+          return null;
+        }
+        return res.json();
+      })
+      .then(d => { if (d) { setData(d); setLoading(false); } })
       .catch(() => setLoading(false));
   }, [authed]);
 

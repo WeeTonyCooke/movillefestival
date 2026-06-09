@@ -12,7 +12,7 @@ import TermsPage from './pages/TermsPage';
 import BallDropRulesPage from './pages/BallDropRulesPage';
 import { useNightMode } from './hooks/useNightMode';
 
-const REGISTRATIONS_OPEN = false;
+const REGISTRATIONS_OPEN = true;
 
 function App() {
   const isNight = useNightMode();

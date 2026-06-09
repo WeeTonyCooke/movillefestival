@@ -26,17 +26,17 @@ export async function handler() {
       statusCode: 200,
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        ballsAvailable: ballsAvailable.count ?? 700,
-        teamsRegistered: teamsRegistered.count ?? 0,
-        stallsBooked: stallsBooked.count ?? 0,
+        ballsAvailable: ballsAvailable.count ?? 0,
+        teamsRegistered: teamsRegistered.count ?? 20,
+        stallsBooked: stallsBooked.count ?? 15,
       }),
     };
   } catch (err) {
     console.error('Availability check error:', err);
-    // On error, return generous counts so we don't block sales
+    // Fail closed — block sales if DB is unreachable
     return {
       statusCode: 200,
-      body: JSON.stringify({ ballsAvailable: 700, teamsRegistered: 0, stallsBooked: 0 }),
+      body: JSON.stringify({ ballsAvailable: 0, teamsRegistered: 20, stallsBooked: 15 }),
     };
   }
 }

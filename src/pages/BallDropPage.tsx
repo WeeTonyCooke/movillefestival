@@ -4,7 +4,6 @@ import './forms.css';
 
 const FEE_SINGLE = 5;
 const FEE_BUNDLE = 20;
-const TOTAL_BALLS = 1200;
 
 type Bundle = '1' | '5';
 type Screen = 'form' | 'success' | 'soldout';
@@ -118,9 +117,9 @@ export default function BallDropPage() {
           <div className="form-card">
             <div className="form-success">
               <div className="form-success-icon" style={{ fontSize: '2rem' }}>🏆</div>
-              <h2 className="form-success-title">All {TOTAL_BALLS} balls are sold!</h2>
+              <h2 className="form-success-title">Online Ball Drop sales are now closed</h2>
               <p className="form-success-body">
-                Online sales are now closed. The draw takes place at Shore Green on
+                All online balls have been sold. The draw takes place at Shore Green on
                 12 July at 5.30pm.
               </p>
               <div className="form-info-block">

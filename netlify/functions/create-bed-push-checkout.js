@@ -32,11 +32,11 @@ export async function handler(event) {
   }
 
   try {
-    // Check capacity
+    // Check capacity — count both paid and pending to prevent oversell
     const { count, error: countError } = await supabase
       .from('bed_push_registrations')
       .select('*', { count: 'exact', head: true })
-      .eq('status', 'paid');
+      .in('status', ['paid', 'pending']);
 
     if (countError) throw countError;
 

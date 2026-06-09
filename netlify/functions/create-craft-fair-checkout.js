@@ -25,10 +25,18 @@ export async function handler(event) {
   const { fullName, email, phone, businessName, products, socialMediaConsent } = body;
 
   // Validate required fields
-  if (!fullName || !email || !phone || !products) {
+  const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!fullName || !email || !emailRe.test(email) || !phone || !products) {
     return {
       statusCode: 400,
       body: JSON.stringify({ error: 'Missing required fields' })
+    };
+  }
+
+  if (products.length > 500) {
+    return {
+      statusCode: 400,
+      body: JSON.stringify({ error: 'Products description must be 500 characters or fewer' })
     };
   }
 

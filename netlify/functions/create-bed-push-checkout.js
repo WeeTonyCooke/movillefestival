@@ -24,7 +24,8 @@ export async function handler(event) {
 
   const { teamName, organisation, captainName, email, phone } = body;
 
-  if (!teamName || !captainName || !email || !phone) {
+  const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!teamName || !captainName || !email || !emailRe.test(email) || !phone) {
     return {
       statusCode: 400,
       body: JSON.stringify({ error: 'Missing required fields' })

@@ -26,7 +26,8 @@ export async function handler(event) {
   const { fullName, email, phone, quantity } = body;
   const qty = parseInt(quantity, 10);
 
-  if (!fullName || !email || ![1, 5].includes(qty)) {
+  const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!fullName || !email || !emailRe.test(email) || ![1, 5].includes(qty)) {
     return {
       statusCode: 400,
       body: JSON.stringify({ error: 'Missing or invalid fields' })

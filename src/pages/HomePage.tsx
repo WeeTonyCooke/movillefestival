@@ -20,7 +20,7 @@ export default function HomePage({ isNight }: HomePageProps) {
             <p className="home-balldrop-eyebrow">Festival Fundraiser · 12 July</p>
             <h2 className="home-balldrop-title">The Great Ball Drop</h2>
             <p className="home-balldrop-desc">
-              700 numbered balls are released at Shore Green. The first three to cross the finish line win cash prizes. You don't need to be there to win.
+              1,200 numbered balls are released at Shore Green. The first three to cross the finish line win cash prizes. You don't need to be there to win.
             </p>
           </div>
 

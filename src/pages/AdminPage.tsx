@@ -142,7 +142,7 @@ export default function AdminPage() {
         {/* Summary cards */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px', marginBottom: '32px' }}>
           {[
-            { label: 'Ball Drop', value: `${ballPaid.length} balls sold`, sub: `${data.ballsRemaining} of 700 remaining`, color: '#1F4E5F' },
+            { label: 'Ball Drop', value: `${ballPaid.reduce((sum, r) => sum + (r.quantity || 0), 0)} balls sold`, sub: `${data.ballsRemaining} of 700 remaining`, color: '#1F4E5F' },
             { label: 'Bed Push', value: `${bedPaid.length} teams`, sub: `${20 - bedPaid.length} of 20 remaining`, color: '#1F4E5F' },
             { label: 'Craft Fair', value: `${craftPaid.length} stalls`, sub: `${15 - craftPaid.length} of 15 remaining`, color: '#1F4E5F' },
             { label: 'Total Revenue', value: formatEuro(totalRevenue), sub: 'all events combined', color: '#1A7A3C' },

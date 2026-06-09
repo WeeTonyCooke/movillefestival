@@ -135,6 +135,23 @@ async function handleBallDrop(session) {
   const quantity = parseInt(session.metadata?.quantity || '1', 10);
   if (!registrationId) return;
 
+  // Idempotency check — if already paid and balls allocated, skip allocation
+  const { data: existing, error: fetchError } = await supabase
+    .from('ball_drop_registrations')
+    .select('status, ball_numbers')
+    .eq('id', registrationId)
+    .single();
+
+  if (fetchError) {
+    console.error('Ball Drop fetch error:', fetchError);
+    return;
+  }
+
+  if (existing.status === 'paid' && existing.ball_numbers && existing.ball_numbers.length > 0) {
+    console.log('Ball Drop already processed for', registrationId, '— skipping allocation');
+    return;
+  }
+
   // Allocate ball numbers atomically using Postgres function
   const { data: ballNumbers, error: claimError } = await supabase
     .rpc('claim_ball_numbers', {

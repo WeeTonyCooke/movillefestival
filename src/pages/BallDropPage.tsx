@@ -125,8 +125,7 @@ export default function BallDropPage() {
               </p>
               <div className="form-info-block">
                 <p className="form-info-title">Already have a ball?</p>
-                <p className="form-info-body">Check your email for your ball number
-                  {ONLINE_BALLS > 1 ? 's' : ''}. You don't need to be present to win.</p>
+                <p className="form-info-body">Check your email for your ball numbers. You don't need to be present to win.</p>
               </div>
               <div className="form-info-block">
                 <p className="form-info-title">Missed out?</p>

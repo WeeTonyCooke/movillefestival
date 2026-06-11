@@ -5,6 +5,9 @@
 [functions]
   directory = "netlify/functions"
 
+[functions."daily-summary"]
+  schedule = "0 20 * * *"
+
 [[redirects]]
   from = "/*"
   to = "/index.html"

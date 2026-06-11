@@ -41,11 +41,12 @@ export async function handler(event) {
   }
 
   try {
-    // Check capacity before proceeding — count both paid and pending to prevent oversell
+    // Check capacity before proceeding — count paid only; pending rows from abandoned sessions
+    // should not block new registrations
     const { count, error: countError } = await supabase
       .from('craft_fair_registrations')
       .select('*', { count: 'exact', head: true })
-      .in('status', ['paid', 'pending']);
+      .eq('status', 'paid');
 
     if (countError) throw countError;
 

@@ -33,11 +33,12 @@ export async function handler(event) {
   }
 
   try {
-    // Check capacity — count both paid and pending to prevent oversell
+    // Check capacity — count paid only; pending rows from abandoned sessions
+    // should not block new registrations
     const { count, error: countError } = await supabase
       .from('bed_push_registrations')
       .select('*', { count: 'exact', head: true })
-      .in('status', ['paid', 'pending']);
+      .eq('status', 'paid');
 
     if (countError) throw countError;
 

@@ -139,7 +139,7 @@ export default function BedPushPage() {
               <div className="form-info-block">
                 <p className="form-info-title">Want to watch?</p>
                 <p className="form-info-body">Come along to Quay Street on Wednesday 8 July
-                  from 6.30pm. Spectators are very welcome.</p>
+                  from 7pm. Spectators are very welcome.</p>
               </div>
               <div className="form-info-block">
                 <p className="form-info-title">Next year?</p>
@@ -194,7 +194,7 @@ export default function BedPushPage() {
                   <span>Date</span><strong>Wednesday 8 July</strong>
                 </div>
                 <div className="form-summary-row">
-                  <span>Start time</span><strong>6pm for 6.30pm</strong>
+                  <span>Start time</span><strong>7pm</strong>
                 </div>
                 <div className="form-summary-row">
                   <span>Venue</span><strong>Festival Square &amp; Quay Street</strong>
@@ -202,7 +202,7 @@ export default function BedPushPage() {
               </div>
 
               <div className="form-info-block">
-                <p className="form-info-title">🔴 Scrutineering at 6pm sharp — Festival Square</p>
+                <p className="form-info-title">🔴 Scrutineering from 6.30pm sharp — Festival Square</p>
                 <p className="form-info-body">All beds must pass inspection by Paddy and Paddy
                   before the race. No helmet = no race. Don't be late.</p>
               </div>
@@ -247,7 +247,7 @@ export default function BedPushPage() {
               <h1 className="form-title">The Great Bed Push Race</h1>
               <p className="form-subtitle">
                 Speed, style, and absolute silliness. Register your team —
-                Wednesday 8 July, 6pm for 6.30pm.
+                Wednesday 8 July, race starts 7pm.
               </p>
               <div className="form-chips">
                 <span className="form-chip">Teams of {TEAM_SIZE}</span>
@@ -346,7 +346,7 @@ export default function BedPushPage() {
           <div className="form-scrutineering">
             <span className="form-scrutineering-dot" />
             <div>
-              <strong>Scrutineering at 6pm — Festival Square</strong>
+              <strong>Scrutineering from 6.30pm — Festival Square</strong>
               <p>All beds must pass a safety inspection by Paddy and Paddy before the race.
                 No helmet = no race.</p>
             </div>

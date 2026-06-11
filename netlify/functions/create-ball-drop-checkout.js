@@ -81,7 +81,7 @@ export async function handler(event) {
               name: qty === 5
                 ? 'Moville Festival Ball Drop — 5 Balls'
                 : 'Moville Festival Ball Drop — 1 Ball',
-              description: `Ball Drop · Shore Green · Sunday 12 July 2026`,
+              description: `Ball Drop · Festival Square · Sunday 12 July 2026`,
             },
             unit_amount: amountPaid,
           },

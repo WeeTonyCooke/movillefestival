@@ -19,13 +19,13 @@ export default function TermsPage() {
           <li>You must be 18 or over to purchase a Ball Drop entry.</li>
           <li>Ball Drop entries are available online at €5 per ball or 5 balls for €20.</li>
           <li>Ball numbers are allocated automatically at the time of purchase.</li>
-          <li>You do not need to be present at Shore Green on the day to win.</li>
+          <li>You do not need to be present at Festival Square on the day to win.</li>
         </ul>
 
         <h3>Winner selection</h3>
         <ul>
-          <li>The Ball Drop takes place on Sunday 12 July 2026 at Shore Green, Moville, at 5.30pm.</li>
-          <li>1,200 numbered balls are released at Shore Green. The first three balls down determine the winners.</li>
+          <li>The Ball Drop takes place on Sunday 12 July 2026 at Festival Square, Moville, at 5.30pm.</li>
+          <li>1,200 numbered balls are released at Festival Square. The first three balls down determine the winners.</li>
           <li>First ball down wins 1st Prize (€500), second wins 2nd Prize (€300), third wins 3rd Prize (€150).</li>
           <li>Winners are identified by ball number. The festival committee will contact winners directly using the contact details provided at registration.</li>
           <li>The committee's decision on the result is final.</li>

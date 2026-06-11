@@ -119,7 +119,7 @@ export default function BallDropPage() {
               <div className="form-success-icon" style={{ fontSize: '2rem' }}>🏆</div>
               <h2 className="form-success-title">Online Ball Drop sales are now closed</h2>
               <p className="form-success-body">
-                All online balls have been sold. The draw takes place at Shore Green on
+                All online balls have been sold. The draw takes place at Festival Square on
                 12 July at 5.30pm.
               </p>
               <div className="form-info-block">
@@ -168,7 +168,7 @@ export default function BallDropPage() {
                   <span>Amount paid</span><strong>€{purchasedQuantity === 5 ? FEE_BUNDLE : FEE_SINGLE}.00</strong>
                 </div>
                 <div className="form-summary-row">
-                  <span>Event</span><strong>Shore Green · 12 July</strong>
+                  <span>Event</span><strong>Festival Square · 12 July</strong>
                 </div>
                 <div className="form-summary-row">
                   <span>Prizes</span><strong>€500 · €300 · €150</strong>
@@ -198,7 +198,7 @@ export default function BallDropPage() {
                 <p className="form-info-title">Winner contacted directly</p>
                 <p className="form-info-body">If your ball number is a winner, the festival
                   committee will contact you directly. You don't need to be present at
-                  Shore Green to claim your prize.</p>
+                  Festival Square to claim your prize.</p>
               </div>
 
               <button
@@ -263,7 +263,7 @@ export default function BallDropPage() {
                 <span className="ball-prize-amount">€150</span>
               </div>
             </div>
-            <div className="ball-prize-sub">Cash prizes · Shore Green · 12 July</div>
+            <div className="ball-prize-sub">Cash prizes · Festival Square · 12 July</div>
           </div>
 
           {/* Intro */}
@@ -276,7 +276,7 @@ export default function BallDropPage() {
           <div className="ball-how-it-works">
             <p className="ball-how-title">How it works</p>
             <ul className="ball-how-list">
-              <li>1,200 numbered balls are released at Shore Green on 12 July</li>
+              <li>1,200 numbered balls are released at Festival Square on 12 July</li>
               <li>The first three balls down win the cash prizes</li>
               <li>1st wins €500 · 2nd wins €300 · 3rd wins €150</li>
               <li>You don't need to be present to win</li>

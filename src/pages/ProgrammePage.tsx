@@ -61,6 +61,12 @@ const PROGRAMME_DATA: Record<FestivalDay, ProgrammeEvent[]> = {
       registerLabel: 'Register your team',
     },
     {
+      time: '19:00',
+      title: 'Starfares Amusements',
+      venue: 'Festival Square',
+      strapline: 'Rides and amusements for all the family throughout the evening.',
+    },
+    {
       time: '19:30',
       title: 'Fire Brigade Car Rescue Demo',
       venue: 'Moville Pier',
@@ -78,9 +84,15 @@ const PROGRAMME_DATA: Record<FestivalDay, ProgrammeEvent[]> = {
     {
       time: '18:00',
       title: 'Car Treasure Hunt',
-      venue: "McGettigan's Bar",
+      venue: "Bonner's Corner",
       strapline:
         'Follow the clues, trust your instincts and blame the navigator if you don’t win.',
+    },
+    {
+      time: '19:00',
+      title: 'Starfares Amusements',
+      venue: 'Festival Square',
+      strapline: 'Rides and amusements for all the family throughout the evening.',
     },
     {
       time: '20:00–22:00',
@@ -119,6 +131,12 @@ const PROGRAMME_DATA: Record<FestivalDay, ProgrammeEvent[]> = {
     },
     {
       time: '19:00',
+      title: 'Starfares Amusements',
+      venue: 'Festival Square',
+      strapline: 'Rides and amusements for all the family throughout the evening.',
+    },
+    {
+      time: '19:00',
       title: 'Street Frolics',
       venue: 'Market Square',
       strapline:
@@ -143,6 +161,12 @@ const PROGRAMME_DATA: Record<FestivalDay, ProgrammeEvent[]> = {
     },
     {
       time: '10:00',
+      title: 'Community Games',
+      venue: 'Paul McGowan Fitness',
+      strapline: 'Community spirit in action — sport and fun for all ages.',
+    },
+    {
+      time: '10:00',
       title: 'Craft Fair',
       venue: 'Marquee, Festival Square',
       strapline: 'Local makers, artists, crafters and small businesses. A day of creativity, community and unique shopping.',
@@ -163,6 +187,18 @@ const PROGRAMME_DATA: Record<FestivalDay, ProgrammeEvent[]> = {
         "Moville's finest four-legged friends - big, small and full of personality.",
     },
     {
+      time: '11:30',
+      title: "Yoga with Lauren O'Farrelly",
+      venue: 'Tennis Court',
+      strapline: 'Start your Saturday morning with a stretch and some fresh air.',
+    },
+    {
+      time: '13:00',
+      title: 'Starfares Amusements',
+      venue: 'Festival Square',
+      strapline: 'Rides and amusements for all the family throughout the afternoon.',
+    },
+    {
       time: '14:00',
       title: 'Crab Fishing',
       venue: 'Moville Pier',
@@ -177,7 +213,7 @@ const PROGRAMME_DATA: Record<FestivalDay, ProgrammeEvent[]> = {
     {
       time: '16:00',
       title: 'Treasure Hunt',
-      venue: "McGettigan's Bar",
+      venue: 'Festival Square',
       strapline: 'X marks the spot. Follow the clues and see where they take you.',
     },
     {
@@ -208,6 +244,18 @@ const PROGRAMME_DATA: Record<FestivalDay, ProgrammeEvent[]> = {
       time: '09:00',
       title: '5K Fun Run or Walk',
       strapline: 'Run it, walk it or just enjoy the fresh start to Sunday.',
+    },
+    {
+      time: '10:00',
+      title: '((Bounce)) Carndonagh Free Pop Up',
+      venue: "St Eugene's Hall",
+      strapline: 'Free pop-up session from Carndonagh — fun for all ages.',
+    },
+    {
+      time: '12:00',
+      title: 'Starfares Amusements',
+      venue: 'Festival Square',
+      strapline: 'Rides and amusements for all the family.',
     },
     {
       time: '12:00',

@@ -12,7 +12,7 @@ export default function BallDropRulesPage() {
 
         <p>
           The Great Ball Drop is the centrepiece fundraiser of Moville Summer Festival.
-          1,200 numbered balls are released at Shore Green on Sunday 12 July 2026.
+          1,200 numbered balls are released at Festival Square on Sunday 12 July 2026.
           The first three balls down win cash prizes.
         </p>
 
@@ -20,7 +20,7 @@ export default function BallDropRulesPage() {
         <ul>
           <li><strong>Date:</strong> Sunday 12 July 2026</li>
           <li><strong>Time:</strong> 5.30pm</li>
-          <li><strong>Location:</strong> Shore Green, Moville</li>
+          <li><strong>Location:</strong> Festival Square, Moville</li>
         </ul>
 
         <h2>Prizes</h2>
@@ -32,7 +32,7 @@ export default function BallDropRulesPage() {
 
         <h2>How the winner is selected</h2>
         <ul>
-          <li>1,200 numbered balls are released simultaneously at Shore Green.</li>
+          <li>1,200 numbered balls are released simultaneously at Festival Square.</li>
           <li>The first three balls down determine the winners.</li>
           <li>1st ball down wins €500, 2nd wins €300, 3rd wins €150.</li>
           <li>The festival committee records the winning ball numbers on the day.</li>
@@ -42,7 +42,7 @@ export default function BallDropRulesPage() {
         <h2>Eligibility</h2>
         <ul>
           <li>You must be 18 or over to purchase a Ball Drop entry.</li>
-          <li>You do not need to be present at Shore Green to win.</li>
+          <li>You do not need to be present at Festival Square to win.</li>
           <li>Winners are contacted directly by the festival committee using the details provided at registration.</li>
         </ul>
 

@@ -209,7 +209,7 @@ function ballDropEmail(registration) {
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
       <div style="background: #1F4E5F; padding: 24px; text-align: center;">
         <h1 style="color: #fff; margin: 0 0 6px; font-size: 24px;">Moville Summer Festival 2026</h1>
-        <p style="color: rgba(255,255,255,0.75); margin: 0; font-size: 13px;">Ball Drop &middot; Sunday 12 July &middot; Shore Green</p>
+        <p style="color: rgba(255,255,255,0.75); margin: 0; font-size: 13px;">Ball Drop &middot; Sunday 12 July &middot; Festival Square</p>
       </div>
       <div style="padding: 32px 24px;">
         <h2 style="color: #1F4E5F;">You're in the Ball Drop!</h2>
@@ -225,7 +225,7 @@ function ballDropEmail(registration) {
           <table style="width: 100%; border-collapse: collapse;">
             <tr><td style="padding: 6px 0; color: #666;">Entry</td><td style="padding: 6px 0; font-weight: bold; text-align: right;">${numbers.length} ball${numbers.length > 1 ? 's' : ''}</td></tr>
             <tr><td style="padding: 6px 0; color: #666;">Amount paid</td><td style="padding: 6px 0; font-weight: bold; text-align: right;">€${(registration.amount_paid / 100).toFixed(2)}</td></tr>
-            <tr><td style="padding: 6px 0; color: #666;">Event</td><td style="padding: 6px 0; font-weight: bold; text-align: right;">Shore Green · Sunday 12 July</td></tr>
+            <tr><td style="padding: 6px 0; color: #666;">Event</td><td style="padding: 6px 0; font-weight: bold; text-align: right;">Festival Square · Sunday 12 July</td></tr>
             <tr><td style="padding: 6px 0; color: #666;">Time</td><td style="padding: 6px 0; font-weight: bold; text-align: right;">5.30pm</td></tr>
             <tr><td style="padding: 6px 0; color: #666;">Prizes</td><td style="padding: 6px 0; font-weight: bold; text-align: right;">1st €500 &middot; 2nd €300 &middot; 3rd €150</td></tr>
           </table>

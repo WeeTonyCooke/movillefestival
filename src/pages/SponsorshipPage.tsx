@@ -19,6 +19,7 @@ interface FormData {
   selectedTier: number | null; // cents, 0 = custom
   customAmount: string;
   message: string;
+  socialMediaConsent: boolean;
 }
 
 const INITIAL: FormData = {
@@ -29,6 +30,7 @@ const INITIAL: FormData = {
   selectedTier: 25000,
   customAmount: '',
   message: '',
+  socialMediaConsent: false,
 };
 
 export default function SponsorshipPage() {
@@ -75,6 +77,7 @@ export default function SponsorshipPage() {
           phone: form.phone,
           amountCents,
           message: form.message,
+          socialMediaConsent: form.socialMediaConsent,
         }),
       });
       const data = await res.json();
@@ -268,6 +271,17 @@ export default function SponsorshipPage() {
                 style={{ resize: 'vertical' }}
               />
             </div>
+
+            <label className="form-check">
+              <input
+                type="checkbox"
+                checked={form.socialMediaConsent}
+                onChange={e => setForm(p => ({ ...p, socialMediaConsent: e.target.checked }))}
+              />
+              <span className="form-check-label">
+                I'd like the festival to recognise and promote my business on social media.
+              </span>
+            </label>
           </div>
 
           {/* Submit */}

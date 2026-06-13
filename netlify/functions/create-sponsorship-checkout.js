@@ -19,7 +19,7 @@ export async function handler(event) {
     return { statusCode: 400, body: JSON.stringify({ error: 'Invalid request body' }) };
   }
 
-  const { businessName, contactName, email, phone, amountCents, message } = body;
+  const { businessName, contactName, email, phone, amountCents, message, socialMediaConsent } = body;
 
   const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!businessName || !contactName || !email || !emailRe.test(email) || !amountCents) {
@@ -47,6 +47,7 @@ export async function handler(event) {
         phone: phone || null,
         amount_paid: amountCents,
         message: message || null,
+        social_media_consent: socialMediaConsent || false,
         status: 'pending',
       })
       .select()

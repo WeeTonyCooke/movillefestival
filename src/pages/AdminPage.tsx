@@ -45,6 +45,7 @@ interface SponsorshipReg {
   phone: string;
   amount_paid: number;
   message: string;
+  social_media_consent: boolean;
   status: string;
   created_at: string;
 }
@@ -260,8 +261,8 @@ export default function AdminPage() {
   const exportSponsorship = () => {
     if (!data) return;
     downloadCSV('sponsorships.csv',
-      (data.sponsorships || []).map(r => [r.business_name, r.contact_name, r.email, r.phone || '', formatEuro(r.amount_paid), r.message || '', r.status, formatDate(r.created_at)]),
-      ['Business', 'Contact', 'Email', 'Phone', 'Amount', 'Message', 'Status', 'Date']
+      (data.sponsorships || []).map(r => [r.business_name, r.contact_name, r.email, r.phone || '', formatEuro(r.amount_paid), r.message || '', r.social_media_consent ? 'Yes' : 'No', r.status, formatDate(r.created_at)]),
+      ['Business', 'Contact', 'Email', 'Phone', 'Amount', 'Message', 'Social Media', 'Status', 'Date']
     );
   };
 
@@ -556,7 +557,7 @@ export default function AdminPage() {
             <table style={s.table}>
               <thead>
                 <tr>
-                  {['Business', 'Contact', 'Email', 'Phone', 'Amount', 'Message', 'Status', 'Date', 'Email'].map(h => (
+                  {['Business', 'Contact', 'Email', 'Phone', 'Amount', 'Message', 'Social Media', 'Status', 'Date', 'Email'].map(h => (
                     <th key={h} style={s.th}>{h}</th>
                   ))}
                 </tr>
@@ -576,6 +577,7 @@ export default function AdminPage() {
                       <td style={td({ color: '#555' })}>{r.phone || '—'}</td>
                       <td style={td({ fontWeight: 'bold', color: '#1A7A3C' })}>{formatEuro(r.amount_paid)}</td>
                       <td style={td({ color: '#555', maxWidth: '160px' })}>{r.message || '—'}</td>
+                      <td style={td()}>{r.social_media_consent ? '✓ Yes' : '—'}</td>
                       <td style={td()}><span style={badgeStyle(r.status)}>{r.status}</span></td>
                       <td style={td({ color: '#888', fontSize: '12px' })}>{formatDate(r.created_at)}</td>
                       <td style={td()}>

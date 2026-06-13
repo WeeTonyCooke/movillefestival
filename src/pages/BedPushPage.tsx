@@ -28,7 +28,7 @@ const INITIAL: FormData = {
   noRefund: false,
 };
 
-type Screen = 'form' | 'success' | 'full';
+type Screen = 'form' | 'success' | 'full' | 'cancelled';
 
 export default function BedPushPage() {
   const [form, setForm] = useState<FormData>(INITIAL);
@@ -39,7 +39,9 @@ export default function BedPushPage() {
     const params = new URLSearchParams(window.location.search);
     const status = params.get('status');
     const sessionId = params.get('session_id');
-    if (status === 'success' && sessionId) {
+    if (status === 'cancelled') {
+      setScreen('cancelled');
+    } else if (status === 'success' && sessionId) {
       setScreen('success');
       fetch(`/.netlify/functions/get-session?session_id=${sessionId}`)
         .then((res) => res.json())
@@ -114,6 +116,33 @@ export default function BedPushPage() {
       setSubmitting(false);
     }
   };
+
+  if (screen === 'cancelled') {
+    return (
+      <div className="form-page">
+        <div className="form-page-bg" aria-hidden="true" />
+        <div className="form-page-content page-shell--narrow">
+          <div className="form-card">
+            <div className="form-success">
+              <div className="form-success-icon" style={{ fontSize: '2rem' }}>ℹ️</div>
+              <h2 className="form-success-title">Payment cancelled</h2>
+              <p className="form-success-body">
+                No payment was taken and your team has not been registered.
+                You can try again below whenever you're ready.
+              </p>
+              <button
+                className="form-submit"
+                onClick={() => setScreen('form')}
+              >
+                Back to Bed Push registration
+              </button>
+              <p className="form-submit-note">Questions? Contact movillefestival@gmail.com</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (screen === 'full') {
     return (

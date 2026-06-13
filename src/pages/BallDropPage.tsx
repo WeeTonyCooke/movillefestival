@@ -6,7 +6,7 @@ const FEE_SINGLE = 5;
 const FEE_BUNDLE = 20;
 
 type Bundle = '1' | '5';
-type Screen = 'form' | 'success' | 'soldout';
+type Screen = 'form' | 'success' | 'soldout' | 'cancelled';
 
 interface FormData {
   bundle: Bundle;
@@ -37,7 +37,9 @@ export default function BallDropPage() {
     const params = new URLSearchParams(window.location.search);
     const status = params.get('status');
     const sessionId = params.get('session_id');
-    if (status === 'success' && sessionId) {
+    if (status === 'cancelled') {
+      setScreen('cancelled');
+    } else if (status === 'success' && sessionId) {
       setScreen('success');
       fetch(`/.netlify/functions/get-ball-numbers?session_id=${sessionId}`)
         .then((res) => res.json())
@@ -108,6 +110,34 @@ export default function BallDropPage() {
       setSubmitting(false);
     }
   };
+
+  if (screen === 'cancelled') {
+    return (
+      <div className="form-page">
+        <div className="form-page-bg" aria-hidden="true" />
+        <div className="form-page-content page-shell--narrow">
+          <div className="form-card">
+            <div className="form-success">
+              <div className="form-success-icon" style={{ fontSize: '2rem' }}>ℹ️</div>
+              <h2 className="form-success-title">Payment cancelled</h2>
+              <p className="form-success-body">
+                No payment was taken and no balls have been reserved for you.
+                You can try again below whenever you're ready.
+              </p>
+              <button
+                className="form-submit"
+                style={{ textDecoration: 'none' }}
+                onClick={() => setScreen('form')}
+              >
+                Back to Ball Drop
+              </button>
+              <p className="form-submit-note">Questions? Contact movillefestival@gmail.com</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (screen === 'soldout') {
     return (

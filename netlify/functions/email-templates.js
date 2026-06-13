@@ -1,206 +1,13 @@
-import Stripe from 'stripe';
-import { createClient } from '@supabase/supabase-js';
-import { Resend } from 'resend';
-
-export const config = {
-  bodyParser: false,
-};
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-const supabase = createClient(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY
-);
-const resend = new Resend(process.env.RESEND_API_KEY);
-
-export async function handler(event) {
-  if (event.httpMethod !== 'POST') {
-    return { statusCode: 405, body: 'Method not allowed' };
-  }
-
-  const sig = event.headers['stripe-signature'];
-  let stripeEvent;
-
-  try {
-    const rawBody = event.isBase64Encoded
-      ? Buffer.from(event.body, 'base64').toString('utf8')
-      : event.body;
-
-    stripeEvent = stripe.webhooks.constructEvent(
-      rawBody,
-      sig,
-      process.env.STRIPE_WEBHOOK_SECRET
-    );
-  } catch (err) {
-    console.error('Webhook signature error:', err.message);
-    return { statusCode: 400, body: `Webhook error: ${err.message}` };
-  }
-
-  if (stripeEvent.type === 'checkout.session.completed') {
-    const session = stripeEvent.data.object;
-    const eventType = session.metadata?.event;
-
-    if (eventType === 'craft_fair') {
-      await handleCraftFair(session);
-    } else if (eventType === 'bed_push') {
-      await handleBedPush(session);
-    } else if (eventType === 'ball_drop') {
-      await handleBallDrop(session);
-    } else if (eventType === 'sponsorship') {
-      await handleSponsorship(session);
-    }
-  }
-
-  return { statusCode: 200, body: 'OK' };
-}
-
-function escapeHtml(str) {
+export function escapeHtml(str) {
   if (!str) return '';
   return String(str)
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#x27;');
+    .replace(/"/g, '&quot;');
 }
 
-async function handleCraftFair(session) {
-  const registrationId = session.metadata?.registration_id;
-  if (!registrationId) return;
-
-  const { data: registration, error } = await supabase
-    .from('craft_fair_registrations')
-    .update({ status: 'paid' })
-    .eq('id', registrationId)
-    .select()
-    .single();
-
-  if (error) { console.error('Craft Fair update error:', error); return; }
-
-  if (registration.confirmation_email_sent) {
-    console.log('Confirmation email already sent for', registrationId);
-    return;
-  }
-
-  try {
-    await resend.emails.send({
-      from: 'Moville Summer Festival <noreply@movillefestival.com>',
-      to: registration.email,
-      subject: 'Your Craft Fair stall is booked — Moville Summer Festival 2026',
-      html: craftFairEmail(registration),
-    });
-    await supabase
-      .from('craft_fair_registrations')
-      .update({ confirmation_email_sent: true })
-      .eq('id', registrationId);
-  } catch (err) {
-    console.error('Craft Fair email error:', err);
-  }
-}
-
-async function handleBedPush(session) {
-  const registrationId = session.metadata?.registration_id;
-  if (!registrationId) return;
-
-  const { data: registration, error } = await supabase
-    .from('bed_push_registrations')
-    .update({ status: 'paid' })
-    .eq('id', registrationId)
-    .select()
-    .single();
-
-  if (error) { console.error('Bed Push update error:', error); return; }
-
-  if (registration.confirmation_email_sent) {
-    console.log('Confirmation email already sent for', registrationId);
-    return;
-  }
-
-  try {
-    await resend.emails.send({
-      from: 'Moville Summer Festival <noreply@movillefestival.com>',
-      to: registration.email,
-      subject: 'Your Bed Push Race entry is confirmed — Moville Summer Festival 2026',
-      html: bedPushEmail(registration),
-    });
-    await supabase
-      .from('bed_push_registrations')
-      .update({ confirmation_email_sent: true })
-      .eq('id', registrationId);
-  } catch (err) {
-    console.error('Bed Push email error:', err);
-  }
-}
-
-async function handleBallDrop(session) {
-  const registrationId = session.metadata?.registration_id;
-  const quantity = parseInt(session.metadata?.quantity || '1', 10);
-  if (!registrationId) return;
-
-  // Idempotency check — if already paid and balls allocated, skip allocation
-  const { data: existing, error: fetchError } = await supabase
-    .from('ball_drop_registrations')
-    .select('status, ball_numbers')
-    .eq('id', registrationId)
-    .single();
-
-  if (fetchError) {
-    console.error('Ball Drop fetch error:', fetchError);
-    return;
-  }
-
-  if (existing.status === 'paid' && existing.ball_numbers && existing.ball_numbers.length > 0) {
-    console.log('Ball Drop already processed for', registrationId, '— skipping allocation');
-    return;
-  }
-
-  // Allocate ball numbers atomically using Postgres function
-  const { data: ballNumbers, error: claimError } = await supabase
-    .rpc('claim_ball_numbers', {
-      p_quantity: quantity,
-      p_registration_id: registrationId,
-    });
-
-  if (claimError || !ballNumbers || ballNumbers.length < quantity) {
-    console.error('Ball allocation error:', claimError);
-    return;
-  }
-
-  // Update registration with ball numbers and paid status
-  const { data: registration, error: updateRegError } = await supabase
-    .from('ball_drop_registrations')
-    .update({ status: 'paid', ball_numbers: ballNumbers })
-    .eq('id', registrationId)
-    .select()
-    .single();
-
-  if (updateRegError) {
-    console.error('Ball Drop registration update error:', updateRegError);
-    return;
-  }
-
-  if (registration.confirmation_email_sent) {
-    console.log('Confirmation email already sent for', registrationId);
-    return;
-  }
-
-  try {
-    await resend.emails.send({
-      from: 'Moville Summer Festival <noreply@movillefestival.com>',
-      to: registration.email,
-      subject: 'Your Ball Drop numbers — Moville Summer Festival 2026',
-      html: ballDropEmail(registration),
-    });
-    await supabase
-      .from('ball_drop_registrations')
-      .update({ confirmation_email_sent: true })
-      .eq('id', registrationId);
-  } catch (err) {
-    console.error('Ball Drop email error:', err);
-  }
-}
-
-function ballDropEmail(registration) {
+export function ballDropEmail(registration) {
   const name = escapeHtml(registration.full_name);
   const numbers = registration.ball_numbers || [];
   const numbersList = numbers.map(n =>
@@ -211,33 +18,29 @@ function ballDropEmail(registration) {
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
       <div style="background: #1F4E5F; padding: 24px; text-align: center;">
         <h1 style="color: #fff; margin: 0 0 6px; font-size: 24px;">Moville Summer Festival 2026</h1>
-        <p style="color: rgba(255,255,255,0.75); margin: 0; font-size: 13px;">Ball Drop &middot; Sunday 12 July &middot; Festival Square</p>
+        <p style="color: rgba(255,255,255,0.75); margin: 0; font-size: 13px;">Ball Drop &middot; Sunday 12 July &middot; Shore Green</p>
       </div>
       <div style="padding: 32px 24px;">
         <h2 style="color: #1F4E5F;">You're in the Ball Drop!</h2>
         <p>Hi ${name},</p>
         <p>Payment confirmed. Here are your ball number${numbers.length > 1 ? 's' : ''}:</p>
-
         <div style="background: #F4E9D8; border-radius: 8px; padding: 24px 20px; margin: 24px 0; text-align: center;">
           <div style="margin-bottom: 12px;">${numbersList}</div>
           <p style="margin: 12px 0 0; font-size: 13px; color: #666;">Keep these safe — the committee will contact winners directly after the draw.</p>
         </div>
-
         <div style="background: #F4E9D8; border-radius: 8px; padding: 20px; margin: 24px 0;">
           <table style="width: 100%; border-collapse: collapse;">
             <tr><td style="padding: 6px 0; color: #666;">Entry</td><td style="padding: 6px 0; font-weight: bold; text-align: right;">${numbers.length} ball${numbers.length > 1 ? 's' : ''}</td></tr>
             <tr><td style="padding: 6px 0; color: #666;">Amount paid</td><td style="padding: 6px 0; font-weight: bold; text-align: right;">€${(registration.amount_paid / 100).toFixed(2)}</td></tr>
-            <tr><td style="padding: 6px 0; color: #666;">Event</td><td style="padding: 6px 0; font-weight: bold; text-align: right;">Festival Square · Sunday 12 July</td></tr>
+            <tr><td style="padding: 6px 0; color: #666;">Event</td><td style="padding: 6px 0; font-weight: bold; text-align: right;">Shore Green &middot; Sunday 12 July</td></tr>
             <tr><td style="padding: 6px 0; color: #666;">Time</td><td style="padding: 6px 0; font-weight: bold; text-align: right;">5.30pm</td></tr>
             <tr><td style="padding: 6px 0; color: #666;">Prizes</td><td style="padding: 6px 0; font-weight: bold; text-align: right;">1st €500 &middot; 2nd €300 &middot; 3rd €150</td></tr>
           </table>
         </div>
-
         <div style="border-left: 4px solid #F26A4B; padding: 12px 16px; margin: 16px 0; background: #fff8f6;">
           <strong>You don't need to be present to win</strong>
           <p style="margin: 4px 0 0;">If your ball is a winner, the festival committee will contact you directly using the details you provided.</p>
         </div>
-
         <p>Good luck on 12 July. Questions? <a href="mailto:movillefestival@gmail.com">movillefestival@gmail.com</a></p>
       </div>
       <div style="background: #f5f5f5; padding: 16px 24px; text-align: center; font-size: 12px; color: #888;">
@@ -247,7 +50,7 @@ function ballDropEmail(registration) {
   `;
 }
 
-function craftFairEmail(registration) {
+export function craftFairEmail(registration) {
   const name = escapeHtml(registration.full_name);
   const business = escapeHtml(registration.business_name);
   return `
@@ -289,7 +92,7 @@ function craftFairEmail(registration) {
   `;
 }
 
-function bedPushEmail(registration) {
+export function bedPushEmail(registration) {
   const captain = escapeHtml(registration.captain_name);
   const team = escapeHtml(registration.team_name);
   const org = escapeHtml(registration.organisation);
@@ -328,41 +131,7 @@ function bedPushEmail(registration) {
   `;
 }
 
-async function handleSponsorship(session) {
-  const registrationId = session.metadata?.registration_id;
-  if (!registrationId) return;
-
-  const { data: sponsorship, error } = await supabase
-    .from('sponsorship_registrations')
-    .update({ status: 'paid' })
-    .eq('id', registrationId)
-    .select()
-    .single();
-
-  if (error) { console.error('Sponsorship update error:', error); return; }
-
-  if (sponsorship.confirmation_email_sent) {
-    console.log('Confirmation email already sent for', registrationId);
-    return;
-  }
-
-  try {
-    await resend.emails.send({
-      from: 'Moville Summer Festival <noreply@movillefestival.com>',
-      to: sponsorship.email,
-      subject: 'Thank you for sponsoring Moville Summer Festival 2026',
-      html: sponsorshipEmail(sponsorship),
-    });
-    await supabase
-      .from('sponsorship_registrations')
-      .update({ confirmation_email_sent: true })
-      .eq('id', registrationId);
-  } catch (err) {
-    console.error('Sponsorship email error:', err);
-  }
-}
-
-function sponsorshipEmail(s) {
+export function sponsorshipEmail(s) {
   const amount = `€${(s.amount_paid / 100).toFixed(0)}`;
   const business = escapeHtml(s.business_name);
   const contact = escapeHtml(s.contact_name);

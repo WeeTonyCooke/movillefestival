@@ -13,11 +13,13 @@ export async function handler(event) {
     return { statusCode: 401, body: JSON.stringify({ error: 'Unauthorised' }) };
   }
   try {
-    const [ballDrop, bedPush, craftFair, ballsAvailable] = await Promise.all([
+    const [ballDrop, bedPush, craftFair, sponsorships, ballsAvailable, ballsSoldResult] = await Promise.all([
       supabase.from('ball_drop_registrations').select('*').order('created_at', { ascending: false }),
       supabase.from('bed_push_registrations').select('*').order('created_at', { ascending: false }),
       supabase.from('craft_fair_registrations').select('*').order('created_at', { ascending: false }),
+      supabase.from('sponsorship_registrations').select('*').order('created_at', { ascending: false }),
       supabase.from('ball_drop_balls').select('*', { count: 'exact', head: true }).eq('status', 'available'),
+      supabase.from('ball_drop_balls').select('*', { count: 'exact', head: true }).eq('status', 'sold'),
     ]);
 
     return {
@@ -27,7 +29,9 @@ export async function handler(event) {
         ballDrop: ballDrop.data || [],
         bedPush: bedPush.data || [],
         craftFair: craftFair.data || [],
+        sponsorships: sponsorships.data || [],
         ballsRemaining: ballsAvailable.count || 0,
+        ballsSold: ballsSoldResult.count || 0,
       }),
     };
   } catch (err) {

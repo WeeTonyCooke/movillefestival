@@ -50,16 +50,29 @@ interface SponsorshipReg {
   created_at: string;
 }
 
+interface FestivalPassReg {
+  id: string;
+  full_name: string;
+  email: string;
+  pass_type: string;
+  pass_ref: string | null;
+  amount_paid: number;
+  status: string;
+  confirmation_email_sent: boolean;
+  created_at: string;
+}
+
 interface AdminData {
   ballDrop: BallDropReg[];
   bedPush: BedPushReg[];
   craftFair: CraftFairReg[];
   sponsorships: SponsorshipReg[];
+  passes: FestivalPassReg[];
   ballsRemaining: number;
   ballsSold: number;
 }
 
-type Tab = 'balldrop' | 'bedpush' | 'craftfair' | 'sponsorship';
+type Tab = 'balldrop' | 'bedpush' | 'craftfair' | 'sponsorship' | 'passes';
 
 const TOTAL_BALLS = 1200;
 const ONLINE_DEFAULT = 700;
@@ -196,7 +209,7 @@ export default function AdminPage() {
 
   useEffect(() => { fetchData(); }, [fetchData]);
 
-  const handleResend = async (eventType: Tab, id: string) => {
+  const handleResend = async (eventType: string, id: string) => {
     const key = `${eventType}-${id}`;
     setResendState(prev => ({ ...prev, [key]: 'loading' }));
     try {
@@ -258,6 +271,29 @@ export default function AdminPage() {
     );
   };
 
+  const exportPasses = () => {
+    if (!data) return;
+    const PASS_LABELS: Record<string, string> = {
+      festival_pass: 'Festival Pass',
+      friday:        'Friday Day Pass',
+      saturday:      'Saturday Day Pass',
+      sunday:        'Sunday Day Pass',
+    };
+    downloadCSV('festival-passes.csv',
+      data.passes.map(r => [
+        r.full_name,
+        r.email,
+        PASS_LABELS[r.pass_type] || r.pass_type,
+        r.pass_ref || '',
+        formatEuro(r.amount_paid),
+        r.status,
+        r.confirmation_email_sent ? 'Yes' : 'No',
+        formatDate(r.created_at),
+      ]),
+      ['Name', 'Email', 'Pass Type', 'Pass Ref', 'Amount', 'Status', 'Email Sent', 'Date']
+    );
+  };
+
   const exportSponsorship = () => {
     if (!data) return;
     downloadCSV('sponsorships.csv',
@@ -270,6 +306,7 @@ export default function AdminPage() {
     if (tab === 'balldrop') exportBallDrop();
     else if (tab === 'bedpush') exportBedPush();
     else if (tab === 'craftfair') exportCraftFair();
+    else if (tab === 'passes') exportPasses();
     else exportSponsorship();
   };
 
@@ -310,13 +347,19 @@ export default function AdminPage() {
   const bedPaid = data.bedPush.filter(r => r.status === 'paid');
   const craftPaid = data.craftFair.filter(r => r.status === 'paid');
   const sponsorPaid = (data.sponsorships || []).filter(r => r.status === 'paid');
-  const totalRevenue = [...ballPaid, ...bedPaid, ...craftPaid, ...sponsorPaid].reduce((s, r) => s + r.amount_paid, 0);
+  const passesPaid = (data.passes || []).filter(r => r.status === 'paid');
+  const totalRevenue = [...ballPaid, ...bedPaid, ...craftPaid, ...sponsorPaid, ...passesPaid].reduce((s, r) => s + r.amount_paid, 0);
   const onlineBallsSold = ballPaid.reduce((s, r) => s + (r.quantity || 0), 0);
   const onlineBallsRemaining = onlineLimit - onlineBallsSold;
 
   const filteredBallDrop = filterRegs(data.ballDrop);
   const filteredBedPush = filterRegs(data.bedPush);
   const filteredCraftFair = filterRegs(data.craftFair);
+  const filteredPasses = (data.passes || []).filter(r => {
+    if (!search.trim()) return true;
+    const q = search.toLowerCase();
+    return [r.full_name, r.email, r.pass_ref].some(v => v && v.toLowerCase().includes(q));
+  });
   const sponsorshipPaid = (data.sponsorships || []).filter(r => r.status === 'paid');
   const filteredSponsorships = (data.sponsorships || []).filter(r => {
     if (!search.trim()) return true;
@@ -343,6 +386,7 @@ export default function AdminPage() {
             { label: 'Ball Drop', value: `${onlineBallsSold} balls sold`, sub: `${onlineBallsRemaining} of ${onlineLimit} online remaining` },
             { label: 'Bed Push', value: `${bedPaid.length} teams`, sub: `${BED_PUSH_CAPACITY - bedPaid.length} of ${BED_PUSH_CAPACITY} remaining` },
             { label: 'Craft Fair', value: craftPaid.length >= CRAFT_FAIR_CAPACITY ? 'Sold out' : `${craftPaid.length} stalls`, sub: craftPaid.length >= CRAFT_FAIR_CAPACITY ? `${CRAFT_FAIR_CAPACITY} stalls filled` : `${CRAFT_FAIR_CAPACITY - craftPaid.length} remaining` },
+            { label: 'Festival Passes', value: `${passesPaid.length} sold`, sub: `${formatEuro(passesPaid.reduce((s, r) => s + r.amount_paid, 0))} revenue` },
             { label: 'Sponsorships', value: formatEuro(sponsorPaid.reduce((s,r) => s + r.amount_paid, 0)), sub: `${sponsorPaid.length} sponsor${sponsorPaid.length !== 1 ? 's' : ''}` },
             { label: 'Total revenue', value: formatEuro(totalRevenue), sub: 'all events combined', green: true },
           ].map(({ label, value, sub, green }) => (
@@ -357,7 +401,7 @@ export default function AdminPage() {
         {/* Tabs + export */}
         <div style={s.sectionBar}>
           <div style={s.tabs}>
-            {([['balldrop', '🎱 Ball Drop'], ['bedpush', '🛏️ Bed Push'], ['craftfair', '🎨 Craft Fair'], ['sponsorship', '🤝 Sponsorships']] as [Tab, string][]).map(([t, label]) => (
+            {([['balldrop', '🎱 Ball Drop'], ['bedpush', '🛏️ Bed Push'], ['craftfair', '🎨 Craft Fair'], ['passes', '🎟️ Festival Passes'], ['sponsorship', '🤝 Sponsorships']] as [Tab, string][]).map(([t, label]) => (
               <button key={t} onClick={() => { setTab(t); setSearch(''); }} style={tabStyle(tab === t)}>{label}</button>
             ))}
           </div>
@@ -596,6 +640,59 @@ export default function AdminPage() {
             </table>
           </div>
         )}
+
+        {/* -- Festival Passes -- */}
+        {tab === 'passes' && (
+          <div style={s.tableWrap}>
+            <table style={s.table}>
+              <thead>
+                <tr>
+                  {['Name', 'Email', 'Pass Type', 'Pass Ref', 'Amount', 'Status', 'Date', 'Email'].map(h => (
+                    <th key={h} style={s.th}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {filteredPasses.length === 0 && (
+                  <tr><td colSpan={8} style={s.emptyRow}>No passes found</td></tr>
+                )}
+                {filteredPasses.map((r, i) => {
+                  const key = `festival_pass-${r.id}`;
+                  const rState = resendState[key] || 'idle';
+                  const PASS_TYPE_LABELS: Record<string, string> = {
+                    festival_pass: 'Festival Pass',
+                    friday: 'Friday Day Pass',
+                    saturday: 'Saturday Day Pass',
+                    sunday: 'Sunday Day Pass',
+                  };
+                  return (
+                    <tr key={r.id} style={rowStyle(i)}>
+                      <td style={td()}>{r.full_name}</td>
+                      <td style={td({ maxWidth: 180 })}>{r.email}</td>
+                      <td style={td()}>{PASS_TYPE_LABELS[r.pass_type] || r.pass_type}</td>
+                      <td style={td({ fontWeight: 'bold', letterSpacing: '1px', fontFamily: 'monospace' })}>{r.pass_ref || '—'}</td>
+                      <td style={td()}>{formatEuro(r.amount_paid)}</td>
+                      <td style={td()}><span style={badgeStyle(r.status)}>{r.status}</span></td>
+                      <td style={td({ color: '#888' })}>{formatDate(r.created_at)}</td>
+                      <td style={td()}>
+                        {r.status === 'paid' ? (
+                          <button
+                            onClick={() => rState === 'idle' && handleResend('festival_pass', r.id)}
+                            disabled={rState === 'loading' || rState === 'sent'}
+                            style={resendBtnStyle(rState === 'sent', rState === 'loading')}
+                          >
+                            {rState === 'loading' ? '…' : rState === 'sent' ? '✓ Sent' : rState === 'error' ? 'Failed' : 'Resend'}
+                          </button>
+                        ) : <span style={{ color: '#bbb', fontSize: 11 }}>—</span>}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
+
 
       </div>
     </div>

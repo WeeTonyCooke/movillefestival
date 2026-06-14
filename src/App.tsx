@@ -11,6 +11,9 @@ import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
 import TermsPage from './pages/TermsPage';
 import BallDropRulesPage from './pages/BallDropRulesPage';
 import SponsorshipPage from './pages/SponsorshipPage';
+import PassesPage from './pages/PassesPage';
+import PassSuccessPage from './pages/PassSuccessPage';
+import PassViewPage from './pages/PassViewPage';
 import { useNightMode } from './hooks/useNightMode';
 
 const REGISTRATIONS_OPEN = true;
@@ -33,6 +36,9 @@ function App() {
         <Route path="/terms" element={<TermsPage />} />
         <Route path="/ball-drop-rules" element={<BallDropRulesPage />} />
         <Route path="/sponsorship" element={<SponsorshipPage />} />
+        <Route path="/passes" element={<PassesPage />} />
+        <Route path="/passes/success" element={<PassSuccessPage />} />
+        <Route path="/passes/view" element={<PassViewPage />} />
       </Routes>
     </div>
   );

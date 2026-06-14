@@ -126,7 +126,7 @@ const PassViewPage: React.FC = () => {
           {qrDataUrl ? (
             <img
               src={qrDataUrl}
-              alt={`QR code for pass ${pass.pass_ref}`}
+              data-testid="qr-image" alt={`QR code for pass ${pass.pass_ref}`}
               style={{ width: 210, height: 210, display: 'block',
                        imageRendering: 'pixelated' }}
             />

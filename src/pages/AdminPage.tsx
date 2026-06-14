@@ -402,7 +402,7 @@ export default function AdminPage() {
         <div style={s.sectionBar}>
           <div style={s.tabs}>
             {([['balldrop', '🎱 Ball Drop'], ['bedpush', '🛏️ Bed Push'], ['craftfair', '🎨 Craft Fair'], ['passes', '🎟️ Festival Passes'], ['sponsorship', '🤝 Sponsorships']] as [Tab, string][]).map(([t, label]) => (
-              <button key={t} onClick={() => { setTab(t); setSearch(''); }} style={tabStyle(tab === t)}>{label}</button>
+              <button key={t} data-testid={`tab-${t}`} onClick={() => { setTab(t); setSearch(''); }} style={tabStyle(tab === t)}>{label}</button>
             ))}
           </div>
           <div style={s.actionRow}>

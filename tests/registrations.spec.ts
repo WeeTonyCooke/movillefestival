@@ -145,14 +145,16 @@ test.describe('Ball Drop', () => {
     await fillBallDropForm(page, { bundle: '1', email: 'bd02@example.com' });
     await page.locator('button.form-submit').click();
     await fillStripeCard(page, '4242 4242 4242 4242');
-    await expect(page.locator('text=/confirmed|thank you|ball/i')).toBeVisible({ timeout: 20000 });
+    await expect(page).toHaveURL(/ball-drop/, { timeout: 20000 });
+    await expect(page.locator('text=/confirmed|thank you|numbers/i').first()).toBeVisible({ timeout: 10000 });
   });
 
   test('BD-03 Successful 5-ball bundle purchase', async ({ page }) => {
     await fillBallDropForm(page, { bundle: '5', email: 'bd03@example.com' });
     await page.locator('button.form-submit').click();
     await fillStripeCard(page, '4242 4242 4242 4242');
-    await expect(page.locator('text=/confirmed|thank you|ball/i')).toBeVisible({ timeout: 20000 });
+    await expect(page).toHaveURL(/ball-drop/, { timeout: 20000 });
+    await expect(page.locator('text=/confirmed|thank you|numbers/i').first()).toBeVisible({ timeout: 10000 });
   });
 
   test('BD-04 Declined card — no registration created', async ({ page }) => {
@@ -219,7 +221,7 @@ test.describe('Bed Push Race', () => {
     await fillBedPushForm(page, { email: 'bp02@example.com' });
     await page.locator('button.form-submit').click();
     await fillStripeCard(page, '4242 4242 4242 4242');
-    await expect(page.locator('text=/confirmed|entered|registered/i')).toBeVisible({ timeout: 20000 });
+    await expect(page.locator('text=/confirmed|entered|registered/i').first()).toBeVisible({ timeout: 20000 });
   });
 
   test('BP-03 Declined card — no registration created', async ({ page }) => {
@@ -285,7 +287,8 @@ test.describe('Craft Fair', () => {
     await fillCraftFairForm(page, { email: 'cf02@example.com' });
     await page.locator('button.form-submit').click();
     await fillStripeCard(page, '4242 4242 4242 4242');
-    await expect(page.locator('text=/confirmed|booked|stall/i')).toBeVisible({ timeout: 20000 });
+    await expect(page).toHaveURL(/craft-fair/, { timeout: 20000 });
+    await expect(page.locator('text=/confirmed|booked|stall/i').first()).toBeVisible({ timeout: 10000 });
   });
 
   test('CF-03 Declined card — no registration created', async ({ page }) => {

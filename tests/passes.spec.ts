@@ -152,8 +152,8 @@ test.describe('Purchase flow', () => {
     await fillPassForm(page, { email: 'pf08@example.com' });
     const btn = page.locator('[data-testid="btn-buy"]');
     await btn.click();
-    await btn.click();
-    await expect(btn).toBeDisabled();
+    // Button should immediately become disabled with "Redirecting..." text
+    await expect(btn).toBeDisabled({ timeout: 5000 });
   });
 
   test('PF-09 Missing first name blocks submission', async ({ page }) => {
@@ -281,7 +281,7 @@ test.describe('Admin dashboard', () => {
   test('AD-02 Total revenue card visible', async ({ page }) => {
     await loginAdmin(page);
     await expect(page.locator('text=Total revenue')).toBeVisible();
-    await expect(page.locator('text=/€[\\d]+\\.\\d{2}/i')).toBeVisible();
+    await expect(page.locator('text=/€[\\d]+\\.\\d{2}/i').first()).toBeVisible();
   });
 
   test('AD-08 Resend only for paid passes', async ({ page }) => {

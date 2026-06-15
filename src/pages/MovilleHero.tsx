@@ -111,6 +111,9 @@ const MovilleHero: React.FC<MovilleHeroProps> = ({ isNight }) => {
               <button className="hero-cta" onClick={() => navigate('/programme')}>
                 View Programme
               </button>
+              <button className="hero-passes-link" onClick={() => navigate('/passes')}>
+                ✦ Buy Passes →
+              </button>
             </footer>
           </div>
         </div>

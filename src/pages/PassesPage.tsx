@@ -142,7 +142,12 @@ function Ticket({ pass, onSelect }: { pass: Pass; onSelect: () => void }) {
       tabIndex={0}
       role="button"
       aria-label={`Select ${pass.line1} ${pass.line2} — €${pass.price}`}
-      style={{ boxShadow: '0 6px 28px rgba(0,0,0,0.14)' }}
+      style={{
+        boxShadow: pass.id === 'festival_pass'
+          ? '0 8px 32px rgba(184,134,11,0.22), 0 2px 8px rgba(0,0,0,0.10)'
+          : '0 6px 28px rgba(0,0,0,0.14)',
+        outline: pass.id === 'festival_pass' ? '2px solid #B8860B' : 'none',
+      }}
     >
       <div className="ticket-lighthouse">
         <img src="/moville_lighthouse_passes.png" alt="Moville Festival" />
@@ -399,6 +404,12 @@ export default function PassesPage() {
                 </h1>
                 <p style={{ fontSize: 13, color: '#8A9ABB', marginBottom: 0 }}>
                   Passes required for ages 16 and over — under 16s enter free.
+                </p>
+              </div>
+
+              <div style={{ width: '100%', maxWidth: 680, marginBottom: 8, background: '#F0F4FB', borderRadius: 12, padding: '12px 18px', borderLeft: '3px solid #B8860B' }}>
+                <p style={{ margin: 0, fontSize: 13, color: '#1B2A4A', fontFamily: 'Inter, Arial, sans-serif' }}>
+                  <strong>Attending more than one day?</strong> The Festival Pass (€20) covers all admission-required events across the full festival — better value than two or more day passes.
                 </p>
               </div>
 

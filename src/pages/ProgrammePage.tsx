@@ -767,9 +767,9 @@ function ProgrammePage({ isNight }: { isNight: boolean }) {
                             <span className="prog-event-venue-text">{event.venue}</span>
 
                             {event.admission && (
-                              <span className="prog-event-admission-chip">
+                              <Link to="/passes" className="prog-event-admission-chip prog-event-admission-chip--link">
                                 Admission {event.admission}
-                              </span>
+                              </Link>
                             )}
                           </div>
                         )}

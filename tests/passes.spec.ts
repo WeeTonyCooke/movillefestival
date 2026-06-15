@@ -323,3 +323,44 @@ test.describe('Failure and recovery', () => {
   });
 
 });
+
+// ── Passes page — UX additions ───────────────────────────────────────────────
+
+test.describe('Passes page — UX additions', () => {
+
+  test('UP-01 Value banner visible on step 1', async ({ page }) => {
+    await page.goto(BASE + '/passes');
+    await expect(page.locator('text=/Attending more than one day/i')).toBeVisible({ timeout: 8000 });
+  });
+
+  test('UP-02 Value banner mentions Festival Pass price', async ({ page }) => {
+    await page.goto(BASE + '/passes');
+    await expect(page.locator('text=/€20/').first()).toBeVisible({ timeout: 8000 });
+  });
+
+  test('UP-03 Festival Pass card has gold outline emphasis', async ({ page }) => {
+    await page.goto(BASE + '/passes');
+    const card = page.locator('[data-testid="pass-card-festival_pass"]');
+    await expect(card).toBeVisible({ timeout: 8000 });
+    const outline = await card.evaluate(el => (el as HTMLElement).style.outline);
+    expect(outline).toContain('#B8860B');
+  });
+
+  test('UP-04 Day pass cards do not have gold outline', async ({ page }) => {
+    await page.goto(BASE + '/passes');
+    for (const id of ['friday', 'saturday', 'sunday']) {
+      const card = page.locator(`[data-testid="pass-card-${id}"]`);
+      await expect(card).toBeVisible({ timeout: 8000 });
+      const outline = await card.evaluate(el => (el as HTMLElement).style.outline);
+      expect(outline).not.toContain('#B8860B');
+    }
+  });
+
+  test('UP-05 Value banner not visible on step 2', async ({ page }) => {
+    await page.goto(BASE + '/passes');
+    await page.click('[data-testid="pass-card-friday"]');
+    await expect(page.locator('[data-testid="input-first-name"]')).toBeVisible({ timeout: 8000 });
+    await expect(page.locator('text=/Attending more than one day/i')).not.toBeVisible();
+  });
+
+});

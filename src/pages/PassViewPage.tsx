@@ -14,7 +14,7 @@ const STUB_COLOURS: Record<string, string> = {
 };
 
 const STUB_LABELS: Record<string, string> = {
-  festival_pass: 'Full Festival',
+  festival_pass: 'Full Festival Pass',
   friday:        'Friday',
   saturday:      'Saturday',
   sunday:        'Sunday',

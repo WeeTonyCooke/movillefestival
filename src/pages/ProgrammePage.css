@@ -368,6 +368,17 @@
   color: #ffb7a3;
 }
 
+.prog-event-admission-chip--link {
+  text-decoration: none;
+  cursor: pointer;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.prog-event-admission-chip--link:hover {
+  opacity: 0.8;
+  transform: translateY(-1px);
+}
+
 .prog-event-admission-label {
   color: var(--text-secondary);
 }

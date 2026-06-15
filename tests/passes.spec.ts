@@ -343,7 +343,8 @@ test.describe('Passes page — UX additions', () => {
     const card = page.locator('[data-testid="pass-card-festival_pass"]');
     await expect(card).toBeVisible({ timeout: 8000 });
     const outline = await card.evaluate(el => (el as HTMLElement).style.outline);
-    expect(outline).toContain('#B8860B');
+    // Browser normalises hex to rgb(184, 134, 11)
+    expect(outline).toMatch(/B8860B|184,\s*134,\s*11/i);
   });
 
   test('UP-04 Day pass cards do not have gold outline', async ({ page }) => {

@@ -182,7 +182,7 @@ const PassViewPage: React.FC = () => {
                 transform:      'translate(-50%, -50%)',
                 width:          180,
                 height:         180,
-                opacity:        0.04,
+                opacity:        0.07,
                 pointerEvents:  'none',
                 objectFit:      'contain',
               }}
@@ -349,7 +349,7 @@ const styles: Record<string, React.CSSProperties> = {
   },
   passTypeLabel: {
     margin:          0,
-    fontSize:        12,
+    fontSize:        14,
     fontWeight:      800,
     letterSpacing:   '1.5px',
     textTransform:   'uppercase' as const,
@@ -372,7 +372,7 @@ const styles: Record<string, React.CSSProperties> = {
   },
   holderName: {
     margin:          0,
-    fontSize:        18,
+    fontSize:        26,
     fontWeight:      700,
     color:           '#1F4E5F',
     fontFamily:      "'Playfair Display', Georgia, serif",

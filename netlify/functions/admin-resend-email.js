@@ -41,9 +41,11 @@ function escapeHtml(str) {
     .replace(/'/g, '&#x27;');
 }
 
-function buildPassEmail({ full_name, pass_type, pass_ref, amount_paid }) {
+function buildPassEmail({ full_name, pass_type, pass_ref, amount_paid, view_token }) {
   const siteUrl     = process.env.URL || 'https://movillefestival.com';
-  const passViewUrl = `${siteUrl}/passes/view?ref=${encodeURIComponent(pass_ref)}`;
+  const passViewUrl = view_token
+    ? `${siteUrl}/passes/view?token=${encodeURIComponent(view_token)}`
+    : `${siteUrl}/passes/view?ref=${encodeURIComponent(pass_ref)}`;
   const stubColour  = PASS_STUB_COLOURS[pass_type] || '#1F4E5F';
   const passLabel   = PASS_LABELS[pass_type]       || 'Festival Pass';
   const passDate    = PASS_DATES[pass_type]         || '';

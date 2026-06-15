@@ -14,6 +14,7 @@ import SponsorshipPage from './pages/SponsorshipPage';
 import PassesPage from './pages/PassesPage';
 import PassSuccessPage from './pages/PassSuccessPage';
 import PassViewPage from './pages/PassViewPage';
+import ScanPage from './pages/ScanPage';
 import { useNightMode } from './hooks/useNightMode';
 
 const REGISTRATIONS_OPEN = true;
@@ -39,6 +40,7 @@ function App() {
         <Route path="/passes" element={<PassesPage />} />
         <Route path="/passes/success" element={<PassSuccessPage />} />
         <Route path="/passes/view" element={<PassViewPage />} />
+        <Route path="/scan" element={<ScanPage />} />
       </Routes>
     </div>
   );

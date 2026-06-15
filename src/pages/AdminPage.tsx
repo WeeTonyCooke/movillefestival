@@ -207,7 +207,7 @@ export default function AdminPage() {
       .catch(() => setLoading(false));
   }, [authed, password]);
 
-  useEffect(() => { fetchData(); }, [fetchData]);
+  useEffect(() => { fetchData(); }, [fetchData]); // eslint-disable-line react-hooks/set-state-in-effect
 
   const handleResend = async (eventType: string, id: string) => {
     const key = `${eventType}-${id}`;
@@ -360,7 +360,6 @@ export default function AdminPage() {
     const q = search.toLowerCase();
     return [r.full_name, r.email, r.pass_ref].some(v => v && v.toLowerCase().includes(q));
   });
-  const sponsorshipPaid = (data.sponsorships || []).filter(r => r.status === 'paid');
   const filteredSponsorships = (data.sponsorships || []).filter(r => {
     if (!search.trim()) return true;
     const q = search.toLowerCase();

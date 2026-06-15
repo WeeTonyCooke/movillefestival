@@ -140,7 +140,7 @@ function ResultsPage() {
 
   useEffect(() => {
     if (!FEEDBACK_URL || FEEDBACK_URL === 'PASTE_YOUR_APPS_SCRIPT_URL_HERE') {
-      setError('Backend URL not configured yet. See SETUP-guide.md.');
+      setError('Backend URL not configured yet. See SETUP-guide.md.'); // eslint-disable-line react-hooks/set-state-in-effect
       setLoading(false);
       return;
     }

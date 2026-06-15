@@ -180,9 +180,9 @@ const PassViewPage: React.FC = () => {
                 top:            '50%',
                 left:           '50%',
                 transform:      'translate(-50%, -50%)',
-                width:          180,
-                height:         180,
-                opacity:        0.07,
+                width:          220,
+                height:         220,
+                opacity:        0.10,
                 pointerEvents:  'none',
                 objectFit:      'contain',
               }}

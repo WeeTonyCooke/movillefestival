@@ -121,7 +121,7 @@ const PassViewPage: React.FC = () => {
 
         {/* QR section — gate-facing, visible immediately without scrolling */}
         <div style={styles.qrSection}>
-          <p style={styles.scanLabel}>Scan at gate</p>
+          <p style={styles.scanLabel}>Scan at entrance</p>
 
           {qrDataUrl ? (
             <img

@@ -205,7 +205,7 @@ async function handleFestivalPass(session) {
           <p style="margin:0 0 8px;font-size:16px;color:#333;">Hi ${escapeHtml(fullName)},</p>
           <p style="margin:0 0 28px;font-size:16px;color:#333;line-height:1.6;">
             Thanks for your purchase. Tap the button below to view your festival pass.
-            Show that pass at the gate for scanning.
+            Show that pass at the entrance for scanning.
           </p>
 
           <table width="100%" cellpadding="0" cellspacing="0"
@@ -250,12 +250,18 @@ async function handleFestivalPass(session) {
           </table>
 
           <p style="margin:0 0 28px;font-size:13px;color:#888;text-align:center;line-height:1.6;">
-            Opens your pass with QR code — ready to scan at the gate.<br>
+            Opens your pass with QR code — ready to scan at the entrance.<br>
             Bookmark it or keep this email so you can open it on the day.
           </p>
 
           <hr style="border:none;border-top:1px solid #eee;margin:0 0 24px;">
 
+          <p style="margin:0 0 8px;font-size:13px;color:#777;line-height:1.6;">
+            <strong>Passes are required for ages 16 and over.</strong> Under 16s enter free and do not need a pass.
+          </p>
+          <p style="margin:0 0 8px;font-size:13px;color:#777;line-height:1.6;">
+            <strong>The name on this pass must match the person attending.</strong> Passes are not transferable.
+          </p>
           <p style="margin:0 0 8px;font-size:13px;color:#777;line-height:1.6;">
             <strong>Each pass admits one person.</strong> If others are joining you,
             each person needs their own pass purchased separately.

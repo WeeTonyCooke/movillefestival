@@ -47,7 +47,7 @@ const PassSuccessPage: React.FC = () => {
         <p style={{ margin: '0 0 24px', fontSize: 17, color: '#555', lineHeight: 1.6 }}>
           Your festival pass is booked. Check your email — there's a
           <strong> View Your Pass</strong> button that opens your pass with QR code,
-          ready to show at the gate.
+          ready to show at the entrance.
         </p>
 
         <p style={{ margin: '0 0 36px', fontSize: 14, color: '#888', lineHeight: 1.6 }}>

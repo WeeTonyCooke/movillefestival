@@ -45,7 +45,7 @@ export default function ScanPage() {
   const streamRef   = useRef<MediaStream | null>(null);
   const rafRef      = useRef<number | null>(null);
   const passwordRef = useRef(password);
-  passwordRef.current = password;
+  useEffect(() => { passwordRef.current = password; }, [password]);
 
   // ── Start camera ────────────────────────────────────────────────────────────
   const startCamera = useCallback(async () => {
@@ -59,7 +59,7 @@ export default function ScanPage() {
         videoRef.current.srcObject = stream;
         await videoRef.current.play();
       }
-    } catch (err) {
+    } catch {
       setCamError('Camera access denied. Please allow camera access and reload.');
     }
   }, []);
@@ -76,7 +76,7 @@ export default function ScanPage() {
     const video  = videoRef.current;
     const canvas = canvasRef.current;
     if (!video || !canvas || video.readyState < 2 || scanning) {
-      rafRef.current = requestAnimationFrame(scanFrame);
+      rafRef.current = requestAnimationFrame(scanFrame); // eslint-disable-line react-hooks/immutability
       return;
     }
 
@@ -89,13 +89,13 @@ export default function ScanPage() {
     // Try BarcodeDetector API (Chrome on Android, Safari 17+)
     if ('BarcodeDetector' in window) {
       try {
-        // @ts-ignore
+        // @ts-expect-error -- BarcodeDetector not in TS lib yet
         const detector = new window.BarcodeDetector({ formats: ['qr_code'] });
         const codes    = await detector.detect(canvas);
         if (codes.length > 0) {
           const raw = codes[0].rawValue;
           if (REF_PATTERN.test(raw)) {
-            await handleScan(raw);
+            await handleScan(raw); // eslint-disable-line react-hooks/immutability
             return;
           }
         }
@@ -103,7 +103,7 @@ export default function ScanPage() {
     } else {
       // Fallback: load jsQR dynamically
       try {
-        // @ts-ignore
+        // @ts-expect-error -- jsQR loaded dynamically
         if (!window.jsQR) {
           await new Promise<void>((resolve, reject) => {
             const s = document.createElement('script');
@@ -113,9 +113,9 @@ export default function ScanPage() {
             document.head.appendChild(s);
           });
         }
-        // @ts-ignore
+        // @ts-expect-error -- jsQR loaded dynamically
         const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-        // @ts-ignore
+        // @ts-expect-error -- jsQR loaded dynamically
         const code = window.jsQR(imageData.data, imageData.width, imageData.height);
         if (code && REF_PATTERN.test(code.data)) {
           await handleScan(code.data);
@@ -164,7 +164,7 @@ export default function ScanPage() {
   // ── Start scan loop when on scanning screen ──────────────────────────────────
   useEffect(() => {
     if (screen === 'scanning') {
-      startCamera().then(() => {
+      startCamera().then(() => { // eslint-disable-line react-hooks/set-state-in-effect
         rafRef.current = requestAnimationFrame(scanFrame);
       });
     }

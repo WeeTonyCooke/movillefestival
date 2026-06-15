@@ -19,13 +19,13 @@ export default function TermsPage() {
           <li>You must be 18 or over to purchase a Ball Drop entry.</li>
           <li>Ball Drop entries are available online at €5 per ball or 5 balls for €20.</li>
           <li>Ball numbers are allocated automatically at the time of purchase.</li>
-          <li>You do not need to be present on the day to win.</li>
+          <li>You do not need to be present at Festival Square on the day to win.</li>
         </ul>
 
         <h3>Winner selection</h3>
         <ul>
-          <li>The Ball Drop takes place on Sunday 12 July 2026 at Shore Green, Moville, at 5.30pm.</li>
-          <li>1,200 numbered balls are released at Shore Green, Moville. The first three balls down determine the winners.</li>
+          <li>The Ball Drop takes place on Sunday 12 July 2026 at Festival Square, Moville, at 5.30pm.</li>
+          <li>1,200 numbered balls are released at Festival Square. The first three balls down determine the winners.</li>
           <li>First ball down wins 1st Prize (€500), second wins 2nd Prize (€300), third wins 3rd Prize (€150).</li>
           <li>Winners are identified by ball number. The festival committee will contact winners directly using the contact details provided at registration.</li>
           <li>The committee's decision on the result is final.</li>
@@ -47,9 +47,9 @@ export default function TermsPage() {
         <h3>On the day</h3>
         <ul>
           <li>The Bed Push Race takes place on Wednesday 8 July 2026 at Festival Square and Quay Street, Moville.</li>
-          <li>Scrutineering takes place at 6:30pm sharp at Festival Square. All beds must pass a safety inspection before the race.</li>
+          <li>Scrutineering takes place at 6pm sharp at Festival Square. All beds must pass a safety inspection before the race.</li>
           <li>No helmet = no race. This rule will be enforced without exception.</li>
-          <li>The race starts at 7pm.</li>
+          <li>The race starts at 6.30pm.</li>
         </ul>
 
         <h3>Refunds</h3>
@@ -77,34 +77,11 @@ export default function TermsPage() {
         <h3>Refunds</h3>
         <p>Stall bookings are non-refundable once made, unless the event is cancelled by the organisers. If the event is cancelled, a full refund will be issued to the original payment method.</p>
 
-        <h2>Festival Passes</h2>
-
-        <h3>Entry</h3>
-        <ul>
-          <li>Anyone aged 16 or over attending festival events that require admission must hold a valid Festival Pass. Proof of age may be requested at the entrance.</li>
-          <li>Festival Passes are available online in four types: Full Festival Pass (€20), Friday Day Pass (€10), Saturday Day Pass (€10), and Sunday Day Pass (€10).</li>
-          <li>A Festival Pass admits one named person only. The name entered at the time of purchase must match the attendee.</li>
-          <li>Festival Passes are non-transferable and may not be resold.</li>
-        </ul>
-
-        <h3>On the day</h3>
-        <ul>
-          <li>Show your confirmation email or pass QR code at the festival entrance. A wristband may be issued on arrival where required.</li>
-          <li>A Full Festival Pass provides access to all festival events that require admission during the festival period (8–12 July 2026).</li>
-          <li>Day Passes provide access to all festival events that require admission on the named day only.</li>
-        </ul>
-
-        <h3>Refunds</h3>
-        <p>Festival Passes are non-refundable once purchased, unless the event is cancelled by the organisers. If the event is cancelled, a full refund will be issued to the original payment method.</p>
-
         <h2>Payments</h2>
         <p>All payments are processed securely by Stripe. Moville Summer Festival does not store your payment card details. In the event of a payment failure, no charge is made and no registration is created.</p>
 
         <h2>Data</h2>
         <p>By completing a registration or purchase, you agree that Moville Summer Festival may contact you regarding your registration. Please see our <Link to="/privacy">Privacy Policy</Link> for full details of how we handle your information.</p>
-
-        <h2>General</h2>
-        <p>The organisers reserve the right to amend event details where necessary due to weather, safety requirements or circumstances beyond their control.</p>
 
         <h2>Contact</h2>
         <p>If you have any questions about these terms, please contact us at <a href="mailto:movillefestival@gmail.com">movillefestival@gmail.com</a>.</p>

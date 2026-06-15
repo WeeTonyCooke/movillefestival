@@ -39,12 +39,6 @@
   gap: 14px;
 }
 
-.prog-header-weather-inline {
-  font-size: 0.78rem;
-  color: var(--text-secondary);
-  font-weight: 500;
-}
-
 .prog-buy-passes-wrap {
   margin: 20px 0 24px;
 }

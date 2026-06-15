@@ -579,25 +579,12 @@ function ProgrammePage({ isNight }: { isNight: boolean }) {
   const [activeDay, setActiveDay] = useState<FestivalDay>(() =>
     getDefaultFestivalDay(),
   );
-  const [temp, setTemp] = useState<number | null>(null);
+
   const [selectedVotes, setSelectedVotes] = useState<Record<string, Rating>>(
     {},
   );
 
-  useEffect(() => {
-    fetch('/.netlify/functions/weather')
-      .then((res) => res.json())
-      .then((data) => {
-        if (typeof data.temp === 'number') {
-          setTemp(data.temp);
-        } else {
-          setTemp(null);
-        }
-      })
-      .catch(() => {
-        setTemp(null);
-      });
-  }, []);
+
 
   const handleVote = (
     eventKey: string,
@@ -651,11 +638,6 @@ function ProgrammePage({ isNight }: { isNight: boolean }) {
               <h1 className="prog-title">Programme</h1>
               <span className="prog-header-date">
                 Tuesday 7 – Sunday 12 July
-                {temp !== null && (
-                  <span className="prog-header-weather-inline">
-                     · {isNight ? '🌜' : '☀️'} {temp}°C
-                  </span>
-                )}
               </span>
             </div>
           </div>

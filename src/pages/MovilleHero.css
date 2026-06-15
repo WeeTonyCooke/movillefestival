@@ -197,27 +197,7 @@
 
 .hero-footer {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 14px;
-}
-
-.hero-passes-link {
-  background: none;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-  color: rgba(255, 255, 255, 0.88);
-  font-family: var(--font-body, 'Outfit', sans-serif);
-  font-size: 0.88rem;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.55), 0 2px 16px rgba(0, 0, 0, 0.35);
-  transition: color 0.2s ease;
-}
-
-.hero-passes-link:hover {
-  color: rgba(255, 255, 255, 1);
+  justify-content: center;
 }
 
 .hero-cta {

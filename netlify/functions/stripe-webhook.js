@@ -1,6 +1,7 @@
 import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
 import { Resend } from 'resend';
+import { randomUUID } from 'crypto';
 
 export const config = {
   bodyParser: false,
@@ -134,6 +135,7 @@ async function handleFestivalPass(session) {
   const seq     = String(seqData).padStart(4, '0');
   const prefix  = PASS_REF_PREFIX[passType] || 'MF';
   const passRef = `${prefix}-${seq}`;
+  const viewToken = randomUUID();
 
   // ── Persist to DB ─────────────────────────────────────────────────────────
   // Two paths:
@@ -146,7 +148,7 @@ async function handleFestivalPass(session) {
     // Path A — normal case: pending row exists, mark it paid
     const { error } = await supabase
       .from('festival_passes')
-      .update({ status: 'paid', pass_ref: passRef })
+      .update({ status: 'paid', pass_ref: passRef, view_token: viewToken })
       .eq('stripe_session_id', session.id);
     dbError = error;
   } else {
@@ -162,6 +164,7 @@ async function handleFestivalPass(session) {
         stripe_session_id:  session.id,
         status:             'paid',
         pass_ref:           passRef,
+        view_token:         viewToken,
       });
     dbError = error;
   }
@@ -174,7 +177,7 @@ async function handleFestivalPass(session) {
 
   // Send confirmation email
   const siteUrl     = process.env.URL || 'https://movillefestival.com';
-  const passViewUrl = `${siteUrl}/passes/view?ref=${encodeURIComponent(passRef)}`;
+  const passViewUrl = `${siteUrl}/passes/view?token=${encodeURIComponent(viewToken)}`;
   const stubColour  = PASS_STUB_COLOURS[passType] || '#1F4E5F';
   const passLabel   = PASS_LABELS[passType]       || 'Festival Pass';
   const passDate    = PASS_DATES[passType]         || '';

@@ -650,11 +650,22 @@ function ProgrammePage({ isNight }: { isNight: boolean }) {
               <p className="prog-kicker">What’s On</p>
               <h1 className="prog-title">Programme</h1>
               <span className="prog-header-date">
-                Tuesday 7 - Sunday 12 July
+                Tuesday 7 – Sunday 12 July
+                {temp !== null && (
+                  <span className="prog-header-weather-inline">
+                     · {isNight ? '🌜' : '☀️'} {temp}°C
+                  </span>
+                )}
               </span>
             </div>
           </div>
         </header>
+
+        <div className="prog-buy-passes-wrap">
+          <Link to="/passes" className="prog-buy-passes-banner">
+            Buy Full Festival &amp; Day Passes
+          </Link>
+        </div>
 
         <nav className="prog-day-nav" aria-label="Festival days">
           <div className="prog-day-nav-inner">
@@ -673,25 +684,7 @@ function ProgrammePage({ isNight }: { isNight: boolean }) {
         </nav>
 
         <main className="prog-main">
-          <section className="prog-weather surface-card">
-            <span className="prog-weather-icon">{isNight ? '🌜' : '☀️'}</span>
 
-            <div className="prog-weather-copy">
-              <span className="prog-weather-line">
-                {temp !== null
-                  ? `${temp}°C in Moville`
-                  : isNight
-                    ? 'A lovely evening in Moville'
-                    : 'A fine day in Moville'}
-              </span>
-
-              <span className="prog-weather-subline">
-                {isNight
-                  ? 'Clear skies and a good night for heading into town.'
-                  : `A decent day for ${PROGRAMME_DATA[activeDay][0].title}.`}
-              </span>
-            </div>
-          </section>
 
           {DAY_ORDER.map((day) => {
             const dayEvents = PROGRAMME_DATA[day];
@@ -765,47 +758,51 @@ function ProgrammePage({ isNight }: { isNight: boolean }) {
                             </svg>
 
                             <span className="prog-event-venue-text">{event.venue}</span>
+                          </div>
+                        )}
 
+                        {(event.admission || event.registerUrl || isHeadliner) && (
+                          <div className="prog-event-actions">
                             {event.admission && (
                               <Link to="/passes" className="prog-event-admission-chip prog-event-admission-chip--link">
                                 Admission {event.admission}
                               </Link>
                             )}
+
+                            {event.registerUrl && (
+                              <Link
+                                to={event.registerUrl}
+                                className="prog-event-register"
+                              >
+                                {event.registerLabel || 'Register'} →
+                              </Link>
+                            )}
+
+                            {isHeadliner && (
+                              <button
+                                type="button"
+                                className="prog-event-cal"
+                                onClick={() => downloadICS(day, event)}
+                                aria-label={`Add ${event.title} to your calendar`}
+                              >
+                                <svg
+                                  width="14"
+                                  height="14"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  strokeWidth="2.2"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  aria-hidden="true"
+                                >
+                                  <rect x="3" y="5" width="18" height="16" rx="2" />
+                                  <path d="M8 3v4M16 3v4M3 10h18M12 14v4M10 16h4" />
+                                </svg>
+                                Add to calendar
+                              </button>
+                            )}
                           </div>
-                        )}
-
-                        {event.registerUrl && (
-                          <Link
-                            to={event.registerUrl}
-                            className="prog-event-register"
-                          >
-                            {event.registerLabel || 'Register'} →
-                          </Link>
-                        )}
-
-                        {isHeadliner && (
-                          <button
-                            type="button"
-                            className="prog-event-cal"
-                            onClick={() => downloadICS(day, event)}
-                            aria-label={`Add ${event.title} to your calendar`}
-                          >
-                            <svg
-                              width="14"
-                              height="14"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              strokeWidth="2.2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              aria-hidden="true"
-                            >
-                              <rect x="3" y="5" width="18" height="16" rx="2" />
-                              <path d="M8 3v4M16 3v4M3 10h18M12 14v4M10 16h4" />
-                            </svg>
-                            Add to calendar
-                          </button>
                         )}
 
                         {eventFinished && (

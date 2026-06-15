@@ -1,17 +1,18 @@
 // netlify/functions/validate-pass-scan.js
 // Called by the /scan page when a QR code is read.
-// Validates the pass ref, checks it's paid and not already scanned,
-// then marks it as scanned atomically.
+// Validates the pass ref, checks it's paid, then applies re-entry rules:
+//
+//   Day pass (friday/saturday/sunday):
+//     — Admit only if scan_dates is empty (never been scanned)
+//     — Reject if already has any scan date
+//
+//   Full Festival Pass:
+//     — Admit once per day (Irish time)
+//     — Reject if today's date is already in scan_dates
+//     — Append today's date on admission
 //
 // POST body: { ref: "MF-FRI-0001" }
-// Header:    x-admin-password (same password as admin panel)
-//
-// Responses:
-//   200 { valid: true,  full_name, pass_type, pass_ref }  — admit
-//   200 { valid: false, reason }                          — reject
-//   400  invalid format / missing ref
-//   401  wrong password
-//   405  wrong method
+// Header:    x-admin-password (same as admin panel)
 
 const { createClient } = require('@supabase/supabase-js');
 
@@ -30,6 +31,16 @@ const headers = {
   'Access-Control-Allow-Headers': 'Content-Type, x-admin-password',
 };
 
+// Get today's date in Irish time as 'YYYY-MM-DD'
+function todayIrish() {
+  return new Date().toLocaleDateString('en-IE', {
+    timeZone: 'Europe/Dublin',
+    year:     'numeric',
+    month:    '2-digit',
+    day:      '2-digit',
+  }).split('/').reverse().join('-'); // DD/MM/YYYY → YYYY-MM-DD
+}
+
 exports.handler = async (event) => {
   if (event.httpMethod === 'OPTIONS') {
     return { statusCode: 204, headers };
@@ -39,7 +50,7 @@ exports.handler = async (event) => {
     return { statusCode: 405, headers, body: JSON.stringify({ error: 'Method not allowed' }) };
   }
 
-  // Password check — same mechanism as admin panel
+  // Password check
   const supplied = event.headers['x-admin-password'];
   if (!supplied || supplied !== ADMIN_PASSWORD) {
     return { statusCode: 401, headers, body: JSON.stringify({ error: 'Unauthorised' }) };
@@ -64,7 +75,7 @@ exports.handler = async (event) => {
   // Fetch the pass
   const { data, error } = await supabase
     .from('festival_passes')
-    .select('full_name, pass_type, pass_ref, status, scanned_at')
+    .select('full_name, pass_type, pass_ref, status, scan_dates')
     .eq('pass_ref', ref)
     .single();
 
@@ -84,27 +95,45 @@ exports.handler = async (event) => {
     };
   }
 
-  if (data.scanned_at) {
-    const scannedTime = new Date(data.scanned_at).toLocaleTimeString('en-IE', {
-      hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Dublin',
-    });
-    return {
-      statusCode: 200,
-      headers,
-      body: JSON.stringify({
-        valid: false,
-        reason: `Already scanned at ${scannedTime}. Do not admit.`,
-      }),
-    };
+  const scanDates = data.scan_dates || [];
+  const today     = todayIrish();
+  const isFestivalPass = data.pass_type === 'festival_pass';
+
+  // ── Re-entry rules ────────────────────────────────────────────────────────
+  if (isFestivalPass) {
+    // Full Festival Pass — allow once per day
+    if (scanDates.includes(today)) {
+      return {
+        statusCode: 200,
+        headers,
+        body: JSON.stringify({
+          valid:  false,
+          reason: 'Full Festival Pass already used today. Do not admit.',
+        }),
+      };
+    }
+  } else {
+    // Day pass — allow only once ever
+    if (scanDates.length > 0) {
+      return {
+        statusCode: 200,
+        headers,
+        body: JSON.stringify({
+          valid:  false,
+          reason: 'Day pass already used. Do not admit.',
+        }),
+      };
+    }
   }
 
-  // Mark as scanned — atomic update
+  // ── Record the scan ───────────────────────────────────────────────────────
+  const updatedDates = [...scanDates, today];
+
   const { error: updateError } = await supabase
     .from('festival_passes')
-    .update({ scanned_at: new Date().toISOString() })
+    .update({ scan_dates: updatedDates })
     .eq('pass_ref', ref)
-    .eq('status', 'paid')
-    .is('scanned_at', null); // extra safety — only update if still unscanned
+    .eq('status', 'paid');
 
   if (updateError) {
     console.error('Scan update error:', updateError);

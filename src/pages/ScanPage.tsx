@@ -1,4 +1,4 @@
-// src/pages/ScanPage.tsx
+ // src/pages/ScanPage.tsx
 // Festival entrance QR scanner — committee use only, password protected.
 // Uses the device camera via jsQR (loaded from CDN via a script tag approach
 // doesn't work in React — we use the browser's BarcodeDetector API where

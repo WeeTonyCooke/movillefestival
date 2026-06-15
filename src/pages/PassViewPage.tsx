@@ -1,5 +1,5 @@
 // src/pages/PassViewPage.tsx
-// Accessible at /passes/view?ref=MF-SAT-0042
+// Accessible at /passes/view?token=<view_token>
 // FIX 2: Fetches pass via /.netlify/functions/get-pass-by-ref — no direct Supabase
 //         access from the browser, no anon key exposed.
 // FIX 5: QR encodes pass_ref only (e.g. "MF-SAT-0042") — not a URL.
@@ -75,7 +75,7 @@ const PassViewPage: React.FC = () => {
       // QR encodes pass_ref only — the token is not encoded in the QR
       try {
         const qrRes = await fetch(
-          `/.netlify/functions/generate-pass-qr?ref=${encodeURIComponent(ref)}`
+          `/.netlify/functions/generate-pass-qr?ref=${encodeURIComponent(data.pass_ref)}`
         );
         if (qrRes.ok) {
           const { qr } = await qrRes.json();
@@ -89,7 +89,7 @@ const PassViewPage: React.FC = () => {
     };
 
     load();
-  }, [ref]);
+  }, [token]);
 
   if (loading) {
     return (

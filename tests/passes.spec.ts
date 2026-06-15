@@ -6,7 +6,7 @@
  *
  * Environment variables:
  *   TEST_BASE_URL    — default https://stagingmf.netlify.app
- *   TEST_PASS_REF    — a known paid pass ref (e.g. MF-FRI-0001)
+ *   TEST_PASS_TOKEN  — a known paid pass view_token (UUID from festival_passes table)
  *   TEST_ADMIN_PASS  — admin panel password
  *
  * Stripe test cards:
@@ -16,8 +16,9 @@
 
 import { test, expect, Page } from '@playwright/test';
 
-const BASE  = process.env.TEST_BASE_URL  || 'https://stagingmf.netlify.app';
-const ADMIN = process.env.TEST_ADMIN_PASS || 'testpassword';
+const BASE  = process.env.TEST_BASE_URL   || 'https://stagingmf.netlify.app';
+const ADMIN = process.env.TEST_ADMIN_PASS  || 'testpassword';
+const TOKEN = process.env.TEST_PASS_TOKEN  || '';
 
 async function selectPass(page: Page, passId: string) {
   await page.goto(BASE + '/passes');
@@ -179,23 +180,20 @@ test.describe('Purchase flow', () => {
 
 test.describe('Ticket generation', () => {
 
-  test('TG-03 Pass view loads with valid paid ref', async ({ page }) => {
-    const ref = process.env.TEST_PASS_REF;
-    if (!ref) { test.skip(true, 'Set TEST_PASS_REF to a known paid pass ref'); return; }
-    await page.goto(`${BASE}/passes/view?ref=${encodeURIComponent(ref)}`);
-    // QR code image or pass ref text should appear
-    await expect(page.locator(`text=${ref}`)).toBeVisible({ timeout: 10000 });
-    await expect(page.locator('img').first()).toBeVisible({ timeout: 5000 });
+  test('TG-03 Pass view loads with valid token', async ({ page }) => {
+    if (!TOKEN) { test.skip(true, 'Set TEST_PASS_TOKEN to a known paid pass view_token'); return; }
+    await page.goto(`${BASE}/passes/view?token=${encodeURIComponent(TOKEN)}`);
+    await expect(page.locator('[data-testid="qr-image"]')).toBeVisible({ timeout: 10000 });
   });
 
-  test('TG-07 Invalid ref shows friendly error', async ({ page }) => {
-    await page.goto(`${BASE}/passes/view?ref=INVALID-9999`);
+  test('TG-07 Invalid token shows friendly error', async ({ page }) => {
+    await page.goto(`${BASE}/passes/view?token=00000000-0000-0000-0000-000000000000`);
     await expect(page.locator('text=/not found|check the link/i')).toBeVisible({ timeout: 8000 });
   });
 
-  test('TG-07b Missing ref param shows error', async ({ page }) => {
+  test('TG-07b Missing token param shows error', async ({ page }) => {
     await page.goto(`${BASE}/passes/view`);
-    await expect(page.locator('text=/no pass reference|not found/i')).toBeVisible({ timeout: 8000 });
+    await expect(page.locator('text=/no pass token|not found|check the link/i')).toBeVisible({ timeout: 8000 });
   });
 
   test('TG-04 QR endpoint rejects invalid format', async ({ page }) => {

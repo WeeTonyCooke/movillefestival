@@ -15,9 +15,16 @@ const STUB_COLOURS: Record<string, string> = {
 
 const STUB_LABELS: Record<string, string> = {
   festival_pass: 'Full Festival Pass',
-  friday:        'Friday',
-  saturday:      'Saturday',
-  sunday:        'Sunday',
+  friday:        'Friday Pass',
+  saturday:      'Saturday Pass',
+  sunday:        'Sunday Pass',
+};
+
+const PASS_TYPE_LABELS: Record<string, string> = {
+  festival_pass: 'Full Festival Pass',
+  friday:        'Friday Pass',
+  saturday:      'Saturday Pass',
+  sunday:        'Sunday Pass',
 };
 
 const PASS_DATES: Record<string, string> = {
@@ -164,39 +171,33 @@ const PassViewPage: React.FC = () => {
           {/* Holder section with lighthouse watermark */}
           <div style={styles.holderSection}>
 
-            {/* Lighthouse watermark — real logo, ghosted */}
+            {/* Lighthouse watermark — centred, very subtle */}
             <img
               src="/bimi-logo.svg"
               aria-hidden="true"
               style={{
                 position:       'absolute',
-                right:          -10,
                 top:            '50%',
-                transform:      'translateY(-50%)',
-                width:          100,
-                height:         100,
-                opacity:        0.06,
+                left:           '50%',
+                transform:      'translate(-50%, -50%)',
+                width:          180,
+                height:         180,
+                opacity:        0.04,
                 pointerEvents:  'none',
                 objectFit:      'contain',
               }}
             />
 
-            {/* Festival logo mark + name */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8,
-                          position: 'relative', zIndex: 1 }}>
-              <img
-                src="/bimi-logo.svg"
-                alt="Moville Festival"
-                style={{ width: 24, height: 24, borderRadius: '50%',
-                         background: '#1F4E5F', padding: 3, objectFit: 'contain' }}
-              />
-              <span style={styles.festivalName}>Moville<br />Summer Festival</span>
-            </div>
-
-            {/* Pass holder name — Playfair Display for keepsake quality */}
+            {/* Pass holder */}
             <div style={{ position: 'relative', zIndex: 1 }}>
               <p style={styles.holderLabel}>Pass Holder</p>
-              <p style={styles.holderName}>{pass.full_name}</p>
+              <p style={{ ...styles.holderName, color: stubColour }}>{pass.full_name}</p>
+            </div>
+
+            {/* Pass type + date */}
+            <div style={{ position: 'relative', zIndex: 1 }}>
+              <p style={{ ...styles.passTypeLabel, color: stubColour }}>{PASS_TYPE_LABELS[pass.pass_type] ?? stubLabel}</p>
+              <p style={styles.passDateLabel}>{passDate}</p>
             </div>
 
           </div>
@@ -337,21 +338,29 @@ const styles: Record<string, React.CSSProperties> = {
   },
   holderSection: {
     flex:            1,
-    padding:         '0 16px 0 22px',
+    padding:         '20px 16px 20px 22px',
     display:         'flex',
     flexDirection:   'column',
     justifyContent:  'center',
-    gap:             10,
+    gap:             14,
     position:        'relative',
     overflow:        'hidden',
+    minHeight:       160,
   },
-  festivalName: {
-    fontSize:        8,
-    fontWeight:      700,
+  passTypeLabel: {
+    margin:          0,
+    fontSize:        12,
+    fontWeight:      800,
     letterSpacing:   '1.5px',
     textTransform:   'uppercase' as const,
     color:           '#1F4E5F',
-    lineHeight:      1.4,
+  },
+  passDateLabel: {
+    margin:          '3px 0 0',
+    fontSize:        11,
+    fontWeight:      500,
+    color:           '#888',
+    letterSpacing:   '0.5px',
   },
   holderLabel: {
     margin:          '0 0 2px',

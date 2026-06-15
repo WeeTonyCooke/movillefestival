@@ -1,6 +1,8 @@
 // src/pages/PassViewPage.tsx
 // Accessible at /passes/view?ref=MF-SAT-0042
 // FIX 2: Fetches pass via /.netlify/functions/get-pass-by-ref — no direct Supabase
+//         access from the browser, no anon key exposed.
+// FIX 5: QR encodes pass_ref only (e.g. "MF-SAT-0042") — not a URL.
 
 import React, { useEffect, useState } from 'react';
 
@@ -44,18 +46,19 @@ const PassViewPage: React.FC = () => {
   const [loading, setLoading]   = useState(true);
   const [error, setError]       = useState<string | null>(null);
 
-  const ref = new URLSearchParams(window.location.search).get('ref');
+  const token = new URLSearchParams(window.location.search).get('token');
 
   useEffect(() => {
-    if (!ref) {
-      setError('No pass reference found in the link.'); // eslint-disable-line react-hooks/set-state-in-effect
+    if (!token) {
+      setError('No pass token found in the link. Please use the link from your confirmation email.');
       setLoading(false);
       return;
     }
 
     const load = async () => {
+      // FIX 2: Call our server-side function — never touch Supabase directly
       const passRes = await fetch(
-        `/.netlify/functions/get-pass-by-ref?ref=${encodeURIComponent(ref)}`
+        `/.netlify/functions/get-pass-by-ref?token=${encodeURIComponent(token)}`
       );
 
       if (!passRes.ok) {
@@ -69,6 +72,7 @@ const PassViewPage: React.FC = () => {
       const data: PassRecord = await passRes.json();
       setPass(data);
 
+      // QR encodes pass_ref only — the token is not encoded in the QR
       try {
         const qrRes = await fetch(
           `/.netlify/functions/generate-pass-qr?ref=${encodeURIComponent(ref)}`
@@ -178,7 +182,7 @@ const PassViewPage: React.FC = () => {
                 transform:      'translate(-50%, -50%)',
                 width:          220,
                 height:         220,
-                opacity:        0.06,
+                opacity:        0.07,
                 pointerEvents:  'none',
                 objectFit:      'contain',
               }}

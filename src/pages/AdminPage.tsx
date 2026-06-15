@@ -219,7 +219,7 @@ export default function AdminPage() {
         body: JSON.stringify({ event: eventType, id }),
       });
       setResendState(prev => ({ ...prev, [key]: res.ok ? 'sent' : 'error' }));
-      if (!res.ok) setTimeout(() => setResendState(prev => ({ ...prev, [key]: 'idle' })), 3000);
+      setTimeout(() => setResendState(prev => ({ ...prev, [key]: 'idle' })), 5000);
     } catch {
       setResendState(prev => ({ ...prev, [key]: 'error' }));
       setTimeout(() => setResendState(prev => ({ ...prev, [key]: 'idle' })), 3000);

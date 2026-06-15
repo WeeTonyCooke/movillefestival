@@ -37,12 +37,12 @@ export default function SponsorshipPage() {
   const [form, setForm] = useState<FormData>(INITIAL);
   const [screen, setScreen] = useState<Screen>('form');
   const [submitting, setSubmitting] = useState(false);
-  const [, setConfirmedBusiness] = useState('');
+  const [confirmedBusiness, setConfirmedBusiness] = useState('');
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const status = params.get('status');
-    if (status === 'success') setScreen('success'); // eslint-disable-line react-hooks/set-state-in-effect
+    if (status === 'success') setScreen('success');
     if (status === 'cancelled') setScreen('cancelled');
   }, []);
 

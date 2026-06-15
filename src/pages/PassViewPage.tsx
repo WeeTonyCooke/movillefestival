@@ -182,7 +182,7 @@ const PassViewPage: React.FC = () => {
                 transform:      'translate(-50%, -50%)',
                 width:          220,
                 height:         220,
-                opacity:        0.10,
+                opacity:        0.07,
                 pointerEvents:  'none',
                 objectFit:      'contain',
               }}
@@ -197,7 +197,7 @@ const PassViewPage: React.FC = () => {
             {/* Pass type + date */}
             <div style={{ position: 'relative', zIndex: 1 }}>
               <p style={{ ...styles.passTypeLabel, color: stubColour }}>{PASS_TYPE_LABELS[pass.pass_type] ?? stubLabel}</p>
-              <p style={styles.passDateLabel}>{passDate}</p>
+              <p style={styles.passDateLabel}>Valid {passDate}</p>
             </div>
 
           </div>
@@ -368,7 +368,7 @@ const styles: Record<string, React.CSSProperties> = {
     fontWeight:      700,
     letterSpacing:   '1.5px',
     textTransform:   'uppercase' as const,
-    color:           '#aaa',
+    color:           '#999',
   },
   holderName: {
     margin:          0,

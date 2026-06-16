@@ -449,7 +449,7 @@ test.describe('Site navigation', () => {
   test('NAV-08 Unknown route does not crash', async ({ page }) => {
     await page.goto(BASE + '/this-page-does-not-exist');
     // React router may redirect to home — just confirm no server error
-    await expect(page.locator('body')).not.toContainText(/500|server error/i);
+    await expect(page.locator('body')).not.toContainText(/internal server error|application error|something went wrong/i);
   });
 
 });

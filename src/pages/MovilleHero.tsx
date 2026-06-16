@@ -126,6 +126,14 @@ const MovilleHero: React.FC<MovilleHeroProps> = ({ isNight }) => {
         <span className="hero-balldrop-badge-cta">Buy tickets</span>
       </button>
 
+      <button
+        className="hero-sponsor-band"
+        onClick={() => navigate('/sponsorship')}
+        aria-label="Become a Festival Sponsor"
+      >
+        Become a Festival Sponsor <span className="hero-sponsor-band-arrow">→</span>
+      </button>
+
       <div className="hero-credit">
         Photo:{' '}
         <a

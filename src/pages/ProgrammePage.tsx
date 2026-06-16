@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './ProgrammePage.css';
 
@@ -6,6 +6,7 @@ const FEEDBACK_URL =
   'https://script.google.com/macros/s/AKfycbwADI9Ld2vGjlkjST4VTHHR-y5QbuoBPmFjhE8IX2sZVS8mXxfPWQL5nWoCNSJdHQ9oxg/exec';
 
 const DEFAULT_EVENT_DURATION_MIN = 90;
+const MAX_STALLS = 15;
 
 type FestivalDay = 'TUE' | 'WED' | 'THU' | 'FRI' | 'SAT' | 'SUN';
 type Rating = 1 | 2 | 3 | 4;
@@ -584,6 +585,15 @@ function ProgrammePage() {
     {},
   );
 
+  const [craftFairSoldOut, setCraftFairSoldOut] = useState(false);
+
+  useEffect(() => {
+    fetch('/.netlify/functions/get-availability')
+      .then((res) => res.json())
+      .then((data) => setCraftFairSoldOut(data.stallsBooked >= MAX_STALLS))
+      .catch(() => setCraftFairSoldOut(true)); // fail closed
+  }, []);
+
 
 
   const handleVote = (
@@ -751,7 +761,9 @@ function ProgrammePage() {
                               </Link>
                             )}
 
-                            {event.registerUrl && (
+                            {event.registerUrl && event.registerUrl === '/craft-fair' && craftFairSoldOut ? (
+                              <span className="prog-event-soldout">Sold Out</span>
+                            ) : event.registerUrl && (
                               <Link
                                 to={event.registerUrl}
                                 className="prog-event-register"

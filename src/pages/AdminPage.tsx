@@ -107,7 +107,7 @@ const s: Record<string, React.CSSProperties> = {
   tableWrap: { background: '#fff', borderRadius: '8px', overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.07)', overflowX: 'auto' as const },
   table: { width: '100%', borderCollapse: 'collapse' as const, fontSize: '13px', minWidth: '700px' },
   th: { padding: '10px 12px', textAlign: 'left' as const, color: '#fff', fontSize: '12px', fontWeight: 'bold', background: '#1F4E5F', whiteSpace: 'nowrap' as const },
-  tdBase: { padding: '9px 12px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' as const },
+  tdBase: { padding: '9px 12px', wordBreak: 'break-word' as const },
   emptyRow: { padding: '24px', textAlign: 'center' as const, color: '#888', fontSize: '14px' },
 };
 
@@ -478,15 +478,15 @@ export default function AdminPage() {
                     const rState = resendState[key] || 'idle';
                     return (
                       <tr key={r.id} style={rowStyle(i)}>
-                        <td style={td()}>{r.full_name}</td>
-                        <td style={td({ color: '#555' })}>{r.email}</td>
-                        <td style={td({ color: '#555' })}>{r.phone || '—'}</td>
-                        <td style={td()}>{r.quantity}</td>
-                        <td style={td({ color: '#1F4E5F', fontWeight: 'bold' })}>{(r.ball_numbers || []).join(', ') || '—'}</td>
-                        <td style={td()}>{formatEuro(r.amount_paid)}</td>
-                        <td style={td()}><span style={badgeStyle(r.status)}>{r.status}</span></td>
-                        <td style={td({ color: '#888', fontSize: '12px' })}>{formatDate(r.created_at)}</td>
-                        <td style={td()}>
+                        <td style={td({ maxWidth: 130 })}>{r.full_name}</td>
+                        <td style={td({ color: '#555', maxWidth: 170 })}>{r.email}</td>
+                        <td style={td({ color: '#555', maxWidth: 100, whiteSpace: 'nowrap' })}>{r.phone || '—'}</td>
+                        <td style={td({ whiteSpace: 'nowrap' })}>{r.quantity}</td>
+                        <td style={td({ color: '#1F4E5F', fontWeight: 'bold', maxWidth: 150 })}>{(r.ball_numbers || []).join(', ') || '—'}</td>
+                        <td style={td({ whiteSpace: 'nowrap' })}>{formatEuro(r.amount_paid)}</td>
+                        <td style={td({ whiteSpace: 'nowrap' })}><span style={badgeStyle(r.status)}>{r.status}</span></td>
+                        <td style={td({ color: '#888', fontSize: '12px', whiteSpace: 'nowrap' })}>{formatDate(r.created_at)}</td>
+                        <td style={td({ whiteSpace: 'nowrap' })}>
                           <button
                             onClick={() => rState === 'idle' && handleResend('balldrop', r.id)}
                             disabled={rState === 'loading' || rState === 'sent'}
@@ -524,15 +524,15 @@ export default function AdminPage() {
                   const rState = resendState[key] || 'idle';
                   return (
                     <tr key={r.id} style={rowStyle(i)}>
-                      <td style={td({ fontWeight: 'bold' })}>{r.team_name}</td>
-                      <td style={td({ color: '#555' })}>{r.organisation || '—'}</td>
-                      <td style={td()}>{r.captain_name}</td>
-                      <td style={td({ color: '#555' })}>{r.email}</td>
-                      <td style={td({ color: '#555' })}>{r.phone}</td>
-                      <td style={td()}>{formatEuro(r.amount_paid)}</td>
-                      <td style={td()}><span style={badgeStyle(r.status)}>{r.status}</span></td>
-                      <td style={td({ color: '#888', fontSize: '12px' })}>{formatDate(r.created_at)}</td>
-                      <td style={td()}>
+                      <td style={td({ fontWeight: 'bold', maxWidth: 120 })}>{r.team_name}</td>
+                      <td style={td({ color: '#555', maxWidth: 120 })}>{r.organisation || '—'}</td>
+                      <td style={td({ maxWidth: 110 })}>{r.captain_name}</td>
+                      <td style={td({ color: '#555', maxWidth: 160 })}>{r.email}</td>
+                      <td style={td({ color: '#555', maxWidth: 100, whiteSpace: 'nowrap' })}>{r.phone}</td>
+                      <td style={td({ whiteSpace: 'nowrap' })}>{formatEuro(r.amount_paid)}</td>
+                      <td style={td({ whiteSpace: 'nowrap' })}><span style={badgeStyle(r.status)}>{r.status}</span></td>
+                      <td style={td({ color: '#888', fontSize: '12px', whiteSpace: 'nowrap' })}>{formatDate(r.created_at)}</td>
+                      <td style={td({ whiteSpace: 'nowrap' })}>
                         <button
                           onClick={() => rState === 'idle' && handleResend('bedpush', r.id)}
                           disabled={rState === 'loading' || rState === 'sent'}
@@ -569,15 +569,15 @@ export default function AdminPage() {
                   const rState = resendState[key] || 'idle';
                   return (
                     <tr key={r.id} style={rowStyle(i)}>
-                      <td style={td()}>{r.full_name}</td>
-                      <td style={td({ color: '#555' })}>{r.business_name || '—'}</td>
-                      <td style={td({ color: '#555' })}>{r.email}</td>
-                      <td style={td({ color: '#555' })}>{r.phone}</td>
-                      <td style={td({ color: '#555', maxWidth: '160px' })}>{r.products}</td>
-                      <td style={td()}>{formatEuro(r.amount_paid)}</td>
-                      <td style={td()}><span style={badgeStyle(r.status)}>{r.status}</span></td>
-                      <td style={td({ color: '#888', fontSize: '12px' })}>{formatDate(r.created_at)}</td>
-                      <td style={td()}>
+                      <td style={td({ maxWidth: 120 })}>{r.full_name}</td>
+                      <td style={td({ color: '#555', maxWidth: 110 })}>{r.business_name || '—'}</td>
+                      <td style={td({ color: '#555', maxWidth: 160 })}>{r.email}</td>
+                      <td style={td({ color: '#555', maxWidth: 100, whiteSpace: 'nowrap' })}>{r.phone}</td>
+                      <td style={td({ color: '#555', maxWidth: '150px' })}>{r.products}</td>
+                      <td style={td({ whiteSpace: 'nowrap' })}>{formatEuro(r.amount_paid)}</td>
+                      <td style={td({ whiteSpace: 'nowrap' })}><span style={badgeStyle(r.status)}>{r.status}</span></td>
+                      <td style={td({ color: '#888', fontSize: '12px', whiteSpace: 'nowrap' })}>{formatDate(r.created_at)}</td>
+                      <td style={td({ whiteSpace: 'nowrap' })}>
                         <button
                           onClick={() => rState === 'idle' && handleResend('craftfair', r.id)}
                           disabled={rState === 'loading' || rState === 'sent'}
@@ -614,16 +614,16 @@ export default function AdminPage() {
                   const rState = resendState[key] || 'idle';
                   return (
                     <tr key={r.id} style={rowStyle(i)}>
-                      <td style={td({ fontWeight: 'bold' })}>{r.business_name}</td>
-                      <td style={td()}>{r.contact_name}</td>
-                      <td style={td({ color: '#555' })}>{r.email}</td>
-                      <td style={td({ color: '#555' })}>{r.phone || '—'}</td>
-                      <td style={td({ fontWeight: 'bold', color: '#1A7A3C' })}>{formatEuro(r.amount_paid)}</td>
-                      <td style={td({ color: '#555', maxWidth: '160px' })}>{r.message || '—'}</td>
-                      <td style={td()}>{r.social_media_consent ? '✓ Yes' : '—'}</td>
-                      <td style={td()}><span style={badgeStyle(r.status)}>{r.status}</span></td>
-                      <td style={td({ color: '#888', fontSize: '12px' })}>{formatDate(r.created_at)}</td>
-                      <td style={td()}>
+                      <td style={td({ fontWeight: 'bold', maxWidth: 120 })}>{r.business_name}</td>
+                      <td style={td({ maxWidth: 100 })}>{r.contact_name}</td>
+                      <td style={td({ color: '#555', maxWidth: 130 })}>{r.email}</td>
+                      <td style={td({ color: '#555', maxWidth: 100, whiteSpace: 'nowrap' })}>{r.phone || '—'}</td>
+                      <td style={td({ fontWeight: 'bold', color: '#1A7A3C', whiteSpace: 'nowrap' })}>{formatEuro(r.amount_paid)}</td>
+                      <td style={td({ color: '#555', maxWidth: '130px' })}>{r.message || '—'}</td>
+                      <td style={td({ whiteSpace: 'nowrap' })}>{r.social_media_consent ? '✓ Yes' : '—'}</td>
+                      <td style={td({ whiteSpace: 'nowrap' })}><span style={badgeStyle(r.status)}>{r.status}</span></td>
+                      <td style={td({ color: '#888', fontSize: '12px', whiteSpace: 'nowrap' })}>{formatDate(r.created_at)}</td>
+                      <td style={td({ whiteSpace: 'nowrap' })}>
                         <button
                           onClick={() => rState === 'idle' && handleResend('sponsorship' as Tab, r.id)}
                           disabled={rState === 'loading' || rState === 'sent'}
@@ -666,14 +666,14 @@ export default function AdminPage() {
                   };
                   return (
                     <tr key={r.id} style={rowStyle(i)}>
-                      <td style={td()}>{r.full_name}</td>
-                      <td style={td({ maxWidth: 180 })}>{r.email}</td>
-                      <td style={td()}>{PASS_TYPE_LABELS[r.pass_type] || r.pass_type}</td>
-                      <td style={td({ fontWeight: 'bold', letterSpacing: '1px', fontFamily: 'monospace' })}>{r.pass_ref || '—'}</td>
-                      <td style={td()}>{formatEuro(r.amount_paid)}</td>
-                      <td style={td()}><span style={badgeStyle(r.status)}>{r.status}</span></td>
-                      <td style={td({ color: '#888' })}>{formatDate(r.created_at)}</td>
-                      <td style={td()}>
+                      <td style={td({ maxWidth: 130 })}>{r.full_name}</td>
+                      <td style={td({ maxWidth: 170 })}>{r.email}</td>
+                      <td style={td({ whiteSpace: 'nowrap' })}>{PASS_TYPE_LABELS[r.pass_type] || r.pass_type}</td>
+                      <td style={td({ fontWeight: 'bold', letterSpacing: '1px', fontFamily: 'monospace', whiteSpace: 'nowrap' })}>{r.pass_ref || '—'}</td>
+                      <td style={td({ whiteSpace: 'nowrap' })}>{formatEuro(r.amount_paid)}</td>
+                      <td style={td({ whiteSpace: 'nowrap' })}><span style={badgeStyle(r.status)}>{r.status}</span></td>
+                      <td style={td({ color: '#888', whiteSpace: 'nowrap' })}>{formatDate(r.created_at)}</td>
+                      <td style={td({ whiteSpace: 'nowrap' })}>
                         {r.status === 'paid' ? (
                           <button
                             onClick={() => rState === 'idle' && handleResend('festival_pass', r.id)}

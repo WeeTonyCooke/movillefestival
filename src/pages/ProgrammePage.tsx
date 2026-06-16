@@ -7,6 +7,7 @@ const FEEDBACK_URL =
 
 const DEFAULT_EVENT_DURATION_MIN = 90;
 const MAX_STALLS = 15;
+const MAX_TEAMS = 20;
 
 type FestivalDay = 'TUE' | 'WED' | 'THU' | 'FRI' | 'SAT' | 'SUN';
 type Rating = 1 | 2 | 3 | 4;
@@ -586,12 +587,23 @@ function ProgrammePage() {
   );
 
   const [craftFairSoldOut, setCraftFairSoldOut] = useState(false);
+  const [bedPushFull, setBedPushFull] = useState(false);
+  const [ballDropSoldOut, setBallDropSoldOut] = useState(false);
 
   useEffect(() => {
     fetch('/.netlify/functions/get-availability')
       .then((res) => res.json())
-      .then((data) => setCraftFairSoldOut(data.stallsBooked >= MAX_STALLS))
-      .catch(() => setCraftFairSoldOut(true)); // fail closed
+      .then((data) => {
+        setCraftFairSoldOut(data.stallsBooked >= MAX_STALLS);
+        setBedPushFull(data.teamsRegistered >= MAX_TEAMS);
+        setBallDropSoldOut(data.ballsAvailable <= 0);
+      })
+      .catch(() => {
+        // fail closed
+        setCraftFairSoldOut(true);
+        setBedPushFull(true);
+        setBallDropSoldOut(true);
+      });
   }, []);
 
 
@@ -761,8 +773,14 @@ function ProgrammePage() {
                               </Link>
                             )}
 
-                            {event.registerUrl && event.registerUrl === '/craft-fair' && craftFairSoldOut ? (
-                              <span className="prog-event-soldout">Sold Out</span>
+                            {event.registerUrl && (
+                              (event.registerUrl === '/craft-fair' && craftFairSoldOut) ||
+                              (event.registerUrl === '/bed-push' && bedPushFull) ||
+                              (event.registerUrl === '/ball-drop' && ballDropSoldOut)
+                            ) ? (
+                              <span className="prog-event-soldout">
+                                {event.registerUrl === '/bed-push' ? 'Full' : 'Sold Out'}
+                              </span>
                             ) : event.registerUrl && (
                               <Link
                                 to={event.registerUrl}

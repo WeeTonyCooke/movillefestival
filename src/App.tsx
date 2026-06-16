@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import ProgrammePage from './pages/ProgrammePage';
 import ArchivePage from './pages/ArchivePage';
@@ -41,6 +41,7 @@ function App() {
         <Route path="/passes/success" element={<PassSuccessPage />} />
         <Route path="/passes/view" element={<PassViewPage />} />
         <Route path="/scan" element={<ScanPage />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </div>
   );

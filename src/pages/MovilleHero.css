@@ -234,7 +234,7 @@
 .hero-credit {
   position: absolute;
   right: 22px;
-  bottom: 18px;
+  bottom: 88px;
   z-index: 4;
   font-size: 0.68rem;
   font-weight: 600;
@@ -401,7 +401,7 @@
   }
 
   .hero-footer-wrap {
-    top: 84svh;
+    top: 80svh;
     padding: 0 14px;
   }
 
@@ -423,7 +423,7 @@
   }
 
   .hero-footer-wrap {
-    top: 85svh;
+    top: 81svh;
   }
 }
 /* ── Ball Drop floating badge ────────────────────────────────── */
@@ -510,4 +510,58 @@
 @keyframes badge-fade-in {
   from { opacity: 0; transform: scale(0.8); }
   to   { opacity: 1; transform: scale(1); }
+}
+
+/* ── Sponsorship band — full-width, pinned to hero's bottom edge ── */
+/* Anchored with bottom:0 so it's always visible without scrolling, */
+/* regardless of viewport quirks. Fades in shortly after the badge. */
+
+.hero-sponsor-band {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 16;
+  height: 64px;
+  background: #123844;
+  border: none;
+  color: #E3D2B8;
+  font-family: var(--font-hero);
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  opacity: 0;
+  animation: band-fade-in 0.5s ease 2s both;
+  transition: background 0.2s ease;
+}
+
+.hero-sponsor-band:hover {
+  background: #0d2a33;
+}
+
+.hero-sponsor-band-arrow {
+  font-family: var(--font-body, 'Outfit', sans-serif);
+  font-size: 0.95rem;
+  font-weight: 400;
+}
+
+@keyframes band-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@media (min-width: 768px) {
+  .hero-sponsor-band {
+    height: 76px;
+    font-size: 1.3rem;
+  }
+
+  .hero-sponsor-band-arrow {
+    font-size: 1.15rem;
+  }
 }

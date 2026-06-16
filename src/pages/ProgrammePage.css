@@ -524,6 +524,20 @@
   transition: background 0.18s, transform 0.14s;
 }
 
+.prog-event-soldout {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 14px;
+  padding: 8px 16px;
+  border-radius: var(--radius-pill);
+  background: #d8d6cf;
+  color: #6b6a63;
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
 .prog-event-register:hover {
   background: var(--accent-strong);
   transform: translateY(-1px);

@@ -1,273 +1,70 @@
-/* ── Ball Drop featured section ─────────────────────────────── */
+/* ── Sponsorship section — own visual identity, reached by scrolling past the hero's sponsor band ── */
 
-.home-balldrop {
-  background: #1F4E5F;
-  padding: 40px 16px 48px;
-}
-
-.home-balldrop-inner {
-  max-width: 480px;
-  margin: 0 auto;
+.home-sponsorship {
+  background: #123844;
+  padding: 56px 24px 72px;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 24px;
-  text-align: center;
-}
-
-.home-balldrop-eyebrow {
-  font-family: var(--font-body, 'Outfit', sans-serif);
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.6);
-  margin: 0;
-}
-
-.home-balldrop-title {
-  font-family: var(--font-display, 'Playfair Display', serif);
-  font-size: clamp(1.8rem, 6vw, 2.4rem);
-  font-weight: 700;
-  color: #fff;
-  margin: 6px 0 0;
-  line-height: 1.15;
-}
-
-.home-balldrop-desc {
-  font-family: var(--font-body, 'Outfit', sans-serif);
-  font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.75);
-  line-height: 1.7;
-  margin: 0;
-}
-
-.home-balldrop-header {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-}
-
-.home-balldrop-prizes {
-  display: flex;
-  gap: 12px;
-  width: 100%;
   justify-content: center;
 }
 
-.home-balldrop-prize {
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 12px;
-  padding: 14px 16px;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
+.home-sponsorship-inner {
+  max-width: 560px;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
 }
 
-.home-balldrop-prize-place {
-  font-family: var(--font-body, 'Outfit', sans-serif);
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.5);
+.home-sponsorship.is-visible .home-sponsorship-inner {
+  opacity: 1;
+  transform: translateY(0);
 }
 
-.home-balldrop-prize-amount {
+.home-sponsorship-title {
   font-family: var(--font-display, 'Playfair Display', serif);
-  font-size: 1.4rem;
-  font-weight: 700;
-  color: #fff;
+  font-size: clamp(1.8rem, 5vw, 2.6rem);
+  color: #E3D2B8;
+  margin: 0 0 16px;
+  line-height: 1.15;
 }
 
-.home-balldrop-options {
-  display: flex;
-  gap: 10px;
-  width: 100%;
-}
-
-.home-balldrop-option {
-  flex: 1;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1.5px solid rgba(255, 255, 255, 0.15);
-  border-radius: 12px;
-  padding: 14px 10px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  position: relative;
-}
-
-.home-balldrop-option--featured {
-  background: rgba(45, 138, 78, 0.25);
-  border-color: #2D8A4E;
-}
-
-.home-balldrop-option-badge {
+.home-sponsorship-desc {
   font-family: var(--font-body, 'Outfit', sans-serif);
-  font-size: 0.65rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  background: #2D8A4E;
-  color: #fff;
-  padding: 2px 8px;
-  border-radius: 99px;
-  margin-bottom: 4px;
-}
-
-.home-balldrop-option-price {
-  font-family: var(--font-display, 'Playfair Display', serif);
-  font-size: 1.6rem;
-  font-weight: 700;
-  color: #fff;
-  line-height: 1;
-}
-
-.home-balldrop-option-desc {
-  font-family: var(--font-body, 'Outfit', sans-serif);
-  font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.8);
-  font-weight: 600;
-}
-
-.home-balldrop-option-per {
-  font-family: var(--font-body, 'Outfit', sans-serif);
-  font-size: 0.72rem;
-  color: rgba(255, 255, 255, 0.5);
-}
-
-.home-balldrop-btn {
-  width: 100%;
-  padding: 16px;
-  background: #2D8A4E;
-  color: #fff;
-  border: none;
-  border-radius: 12px;
-  font-family: var(--font-body, 'Outfit', sans-serif);
-  font-size: 1.05rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: opacity 0.15s ease;
-}
-
-.home-balldrop-btn:hover {
-  opacity: 0.9;
-}
-
-.home-balldrop-note {
-  font-family: var(--font-body, 'Outfit', sans-serif);
-  font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.4);
-  margin: -12px 0 0;
-}
-
-/* ── Other events ───────────────────────────────────────────── */
-
-.home-events {
-  background: #F4E9D8;
-  padding: 32px 16px 48px;
-}
-
-.home-events-inner {
-  max-width: 640px;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.home-event-card {
-  background: #fff;
-  border-radius: 16px;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  border-left: 5px solid transparent;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-}
-
-.home-event-card--bedpush {
-  border-left-color: #6BAFA7;
-}
-
-.home-event-card--craftfair {
-  border-left-color: #F26A4B;
-}
-
-.home-event-card-icon {
-  font-size: 2rem;
-  line-height: 1;
-}
-
-.home-event-card-title {
-  font-family: var(--font-display, 'Playfair Display', serif);
-  font-size: 1.3rem;
-  font-weight: 700;
-  color: #1F4E5F;
-  margin: 0 0 6px;
-  line-height: 1.2;
-}
-
-.home-event-card-desc {
-  font-family: var(--font-body, 'Outfit', sans-serif);
-  font-size: 0.88rem;
-  color: #444;
+  font-size: 1rem;
+  color: rgba(244, 233, 216, 0.78);
   line-height: 1.6;
-  margin: 0;
+  margin: 0 0 32px;
 }
 
-.home-event-card-meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-top: 4px;
-}
-
-.home-event-card-meta span {
-  font-family: var(--font-body, 'Outfit', sans-serif);
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: #555;
-  background: #f5f5f5;
-  padding: 3px 10px;
-  border-radius: 99px;
-}
-
-.home-event-card-btn {
-  width: 100%;
-  padding: 13px;
-  border: none;
-  border-radius: 10px;
+.home-sponsorship-btn {
   font-family: var(--font-body, 'Outfit', sans-serif);
   font-size: 0.95rem;
-  font-weight: 600;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  background: #D8C3A5;
+  color: #123844;
+  border: none;
+  border-radius: 999px;
+  padding: 15px 30px;
   cursor: pointer;
-  transition: opacity 0.15s ease;
-  margin-top: 4px;
-  color: #fff;
+  transition: transform 0.2s ease, opacity 0.2s ease;
 }
 
-.home-event-card-btn:hover {
-  opacity: 0.9;
+.home-sponsorship-btn:hover {
+  transform: translateY(-1px);
+  opacity: 0.92;
 }
 
-.home-event-card--bedpush .home-event-card-btn {
-  background: #6BAFA7;
+@media (prefers-reduced-motion: reduce) {
+  .home-sponsorship-inner {
+    transition: none;
+    opacity: 1;
+    transform: none;
+  }
 }
 
-.home-event-card--craftfair .home-event-card-btn {
-  background: #F26A4B;
-}
-
-@media (min-width: 640px) {
-  .home-events-inner {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
+@media (min-width: 768px) {
+  .home-sponsorship {
+    padding: 80px 24px 96px;
   }
 }

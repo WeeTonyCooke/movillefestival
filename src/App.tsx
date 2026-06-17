@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import ProgrammePage from './pages/ProgrammePage';
 import ArchivePage from './pages/ArchivePage';
@@ -15,15 +15,23 @@ import PassesPage from './pages/PassesPage';
 import PassSuccessPage from './pages/PassSuccessPage';
 import PassViewPage from './pages/PassViewPage';
 import ScanPage from './pages/ScanPage';
+import SiteFooter from './components/SiteFooter';
+import ScrollToTop from './components/ScrollToTop';
 import { useNightMode } from './hooks/useNightMode';
 
 const REGISTRATIONS_OPEN = true;
 
 function App() {
   const isNight = useNightMode();
+  const location = useLocation();
+  const hideFooter =
+    location.pathname === '/admin' ||
+    location.pathname === '/scan' ||
+    location.pathname.startsWith('/passes/view');
 
   return (
     <div className={isNight ? 'theme-night' : 'theme-day'}>
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<HomePage isNight={isNight} />} />
         <Route path="/programme" element={<ProgrammePage isNight={isNight} />} />
@@ -43,6 +51,7 @@ function App() {
         <Route path="/scan" element={<ScanPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
+      {!hideFooter && <SiteFooter />}
     </div>
   );
 }

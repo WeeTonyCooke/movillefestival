@@ -263,6 +263,7 @@ test.describe('Admin dashboard', () => {
   test('AD-04 CSV export for Festival Passes', async ({ page }) => {
     await loginAdmin(page);
     await page.click('[data-testid="tab-passes"]');
+    page.once('dialog', dialog => dialog.accept());
     const [download] = await Promise.all([
       page.waitForEvent('download', { timeout: 8000 }),
       page.click('button:has-text("Export CSV")'),

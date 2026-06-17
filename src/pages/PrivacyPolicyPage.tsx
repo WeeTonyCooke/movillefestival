@@ -35,14 +35,14 @@ export default function PrivacyPolicyPage() {
         <p>We will not use your information for marketing or share it with third parties outside of what is necessary to run the festival.</p>
 
         <h2>How long we keep it</h2>
-        <p>We keep your registration and contact information for two years after the festival. This allows us to reference it during planning for the following year's festival. After two years, all personal data is permanently deleted.</p>
+        <p>We keep your registration and contact information for 18 months after the end of the festival. This allows us to reference it during planning for the following year's festival. After 18 months, all personal data is permanently deleted.</p>
 
         <h2>Your rights</h2>
         <p>You have the right to ask us to:</p>
         <ul>
           <li>Tell you what information we hold about you</li>
           <li>Correct any information that is wrong</li>
-          <li>Delete your information before the two-year period ends</li>
+          <li>Delete your information before the 18-month period ends</li>
         </ul>
         <p>To make any of these requests, email us at <a href="mailto:movillefestival@gmail.com">movillefestival@gmail.com</a> and we will respond within 30 days.</p>
 

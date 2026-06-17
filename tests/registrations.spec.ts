@@ -205,6 +205,16 @@ test.describe('Ball Drop', () => {
     await expect(page.locator('h1')).toContainText(/ball drop/i);
   });
 
+  test('BD-09 Returning to homepage scrolls to top (ANT-40)', async ({ page }) => {
+    await page.goto(BASE + '/ball-drop?status=success');
+    await expect(page.locator('text=/you.?re in/i')).toBeVisible({ timeout: 8000 });
+    await page.evaluate(() => window.scrollTo(0, 600));
+    await page.click('a:has-text("Back to festival site")');
+    await page.waitForURL(BASE + '/');
+    const scrollY = await page.evaluate(() => window.scrollY);
+    expect(scrollY).toBe(0);
+  });
+
 });
 
 // ── BP: Bed Push Race ─────────────────────────────────────────────────────────
@@ -365,6 +375,7 @@ test.describe('Admin — registration data', () => {
   test('Admin-04 CSV export works for Ball Drop', async ({ page }) => {
     await loginAdmin(page);
     await page.click('[data-testid="tab-balldrop"]');
+    page.once('dialog', dialog => dialog.accept());
     const [download] = await Promise.all([
       page.waitForEvent('download', { timeout: 8000 }),
       page.click('button:has-text("Export CSV")'),
@@ -375,6 +386,7 @@ test.describe('Admin — registration data', () => {
   test('Admin-05 CSV export works for Bed Push', async ({ page }) => {
     await loginAdmin(page);
     await page.click('[data-testid="tab-bedpush"]');
+    page.once('dialog', dialog => dialog.accept());
     const [download] = await Promise.all([
       page.waitForEvent('download', { timeout: 8000 }),
       page.click('button:has-text("Export CSV")'),
@@ -385,6 +397,7 @@ test.describe('Admin — registration data', () => {
   test('Admin-06 CSV export works for Craft Fair', async ({ page }) => {
     await loginAdmin(page);
     await page.click('[data-testid="tab-craftfair"]');
+    page.once('dialog', dialog => dialog.accept());
     const [download] = await Promise.all([
       page.waitForEvent('download', { timeout: 8000 }),
       page.click('button:has-text("Export CSV")'),
@@ -403,6 +416,37 @@ test.describe('Admin — registration data', () => {
     await loginAdmin(page);
     await expect(page.locator('text=Total revenue')).toBeVisible();
     await expect(page.locator('text=/€[\\d]+\\.\\d{2}/').first()).toBeVisible();
+  });
+
+  test('Admin-09 Email addresses are masked in Ball Drop table (ANT-41)', async ({ page }) => {
+    await loginAdmin(page);
+    await page.click('[data-testid="tab-balldrop"]');
+    const cell = page.locator('table tbody tr').first().locator('td').nth(1);
+    await expect(cell).toBeVisible({ timeout: 6000 });
+    const text = (await cell.textContent()) || '';
+    expect(text).toMatch(/\.\.\.@/);
+  });
+
+  test('Admin-10 Phone numbers are masked in Ball Drop table (ANT-42)', async ({ page }) => {
+    await loginAdmin(page);
+    await page.click('[data-testid="tab-balldrop"]');
+    const cell = page.locator('table tbody tr').first().locator('td').nth(2);
+    await expect(cell).toBeVisible({ timeout: 6000 });
+    const text = (await cell.textContent()) || '';
+    expect(text).toMatch(/^\d{2,4}\*+\d{2,4}$/);
+  });
+
+  test('Admin-11 CSV export shows GDPR warning before download (ANT-46)', async ({ page }) => {
+    await loginAdmin(page);
+    await page.click('[data-testid="tab-balldrop"]');
+    let dialogMessage = '';
+    page.once('dialog', dialog => {
+      dialogMessage = dialog.message();
+      dialog.dismiss();
+    });
+    await page.click('button:has-text("Export CSV")');
+    await page.waitForTimeout(500);
+    expect(dialogMessage).toMatch(/personal data/i);
   });
 
 });
@@ -450,6 +494,17 @@ test.describe('Site navigation', () => {
     await page.goto(BASE + '/this-page-does-not-exist');
     // React router may redirect to home — just confirm no server error
     await expect(page.locator('body')).not.toContainText(/internal server error|application error|something went wrong/i);
+  });
+
+  test('NAV-09 Footer shows Privacy and Terms links on homepage (ANT-50)', async ({ page }) => {
+    await page.goto(BASE);
+    await expect(page.locator('footer a[href="/privacy"]')).toBeVisible();
+    await expect(page.locator('footer a[href="/terms"]')).toBeVisible();
+  });
+
+  test('NAV-10 Footer is hidden on the admin page', async ({ page }) => {
+    await loginAdmin(page);
+    await expect(page.locator('footer a[href="/privacy"]')).toHaveCount(0);
   });
 
 });

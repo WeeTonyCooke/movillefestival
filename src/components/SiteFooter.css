@@ -1,0 +1,49 @@
+.site-footer {
+  padding: var(--space-5, 24px) var(--space-3, 16px);
+  border-top: 1px solid var(--border-soft, rgba(30, 50, 68, 0.08));
+  background: transparent;
+}
+
+.site-footer-inner {
+  max-width: var(--container-width, 1100px);
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2, 12px);
+  font-family: var(--font-sans, 'Outfit', sans-serif);
+}
+
+.site-footer-copy {
+  font-size: 0.8rem;
+  color: var(--text-muted, rgba(29, 39, 48, 0.52));
+}
+
+.site-footer-links {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1, 8px);
+  font-size: 0.8rem;
+}
+
+.site-footer-links a {
+  color: var(--text-secondary, rgba(29, 39, 48, 0.72));
+  text-decoration: none;
+}
+
+.site-footer-links a:hover {
+  color: var(--accent, #1F4E5F);
+  text-decoration: underline;
+}
+
+.site-footer-dot {
+  color: var(--text-muted, rgba(29, 39, 48, 0.52));
+}
+
+@media (max-width: 480px) {
+  .site-footer-inner {
+    flex-direction: column;
+    text-align: center;
+  }
+}

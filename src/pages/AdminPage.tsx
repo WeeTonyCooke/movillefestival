@@ -164,6 +164,26 @@ function formatEuro(cents: number) {
   return `€${(cents / 100).toFixed(2)}`;
 }
 
+function maskEmail(email?: string) {
+  if (!email) return '—';
+  const at = email.indexOf('@');
+  if (at <= 0) return email;
+  const local = email.slice(0, at);
+  const domain = email.slice(at);
+  const visible = local.length <= 7 ? local : local.slice(0, 7);
+  return `${visible}...${domain}`;
+}
+
+function maskPhone(phone?: string) {
+  if (!phone) return '—';
+  const trimmed = phone.trim();
+  if (trimmed.length <= 6) return trimmed;
+  const prefix = trimmed.slice(0, 3);
+  const suffix = trimmed.slice(-3);
+  const maskedLen = Math.max(trimmed.length - 6, 3);
+  return `${prefix}${'*'.repeat(maskedLen)}${suffix}`;
+}
+
 function downloadCSV(filename: string, rows: string[][], headers: string[]) {
   const escape = (v: string) => `"${String(v ?? '').replace(/"/g, '""')}"`;
   const lines = [headers.map(escape).join(','), ...rows.map(r => r.map(escape).join(','))];
@@ -303,6 +323,10 @@ export default function AdminPage() {
   };
 
   const handleExport = () => {
+    const confirmed = window.confirm(
+      'This export contains personal data. Please store and share responsibly.'
+    );
+    if (!confirmed) return;
     if (tab === 'balldrop') exportBallDrop();
     else if (tab === 'bedpush') exportBedPush();
     else if (tab === 'craftfair') exportCraftFair();
@@ -479,8 +503,8 @@ export default function AdminPage() {
                     return (
                       <tr key={r.id} style={rowStyle(i)}>
                         <td style={td({ maxWidth: 130 })}>{r.full_name}</td>
-                        <td style={td({ color: '#555', maxWidth: 170 })}>{r.email}</td>
-                        <td style={td({ color: '#555', maxWidth: 100, whiteSpace: 'nowrap' })}>{r.phone || '—'}</td>
+                        <td style={td({ color: '#555', maxWidth: 170 })}>{maskEmail(r.email)}</td>
+                        <td style={td({ color: '#555', maxWidth: 100, whiteSpace: 'nowrap' })}>{maskPhone(r.phone)}</td>
                         <td style={td({ whiteSpace: 'nowrap' })}>{r.quantity}</td>
                         <td style={td({ color: '#1F4E5F', fontWeight: 'bold', maxWidth: 150 })}>{(r.ball_numbers || []).join(', ') || '—'}</td>
                         <td style={td({ whiteSpace: 'nowrap' })}>{formatEuro(r.amount_paid)}</td>
@@ -527,8 +551,8 @@ export default function AdminPage() {
                       <td style={td({ fontWeight: 'bold', maxWidth: 120 })}>{r.team_name}</td>
                       <td style={td({ color: '#555', maxWidth: 120 })}>{r.organisation || '—'}</td>
                       <td style={td({ maxWidth: 110 })}>{r.captain_name}</td>
-                      <td style={td({ color: '#555', maxWidth: 160 })}>{r.email}</td>
-                      <td style={td({ color: '#555', maxWidth: 100, whiteSpace: 'nowrap' })}>{r.phone}</td>
+                      <td style={td({ color: '#555', maxWidth: 160 })}>{maskEmail(r.email)}</td>
+                      <td style={td({ color: '#555', maxWidth: 100, whiteSpace: 'nowrap' })}>{maskPhone(r.phone)}</td>
                       <td style={td({ whiteSpace: 'nowrap' })}>{formatEuro(r.amount_paid)}</td>
                       <td style={td({ whiteSpace: 'nowrap' })}><span style={badgeStyle(r.status)}>{r.status}</span></td>
                       <td style={td({ color: '#888', fontSize: '12px', whiteSpace: 'nowrap' })}>{formatDate(r.created_at)}</td>
@@ -571,8 +595,8 @@ export default function AdminPage() {
                     <tr key={r.id} style={rowStyle(i)}>
                       <td style={td({ maxWidth: 120 })}>{r.full_name}</td>
                       <td style={td({ color: '#555', maxWidth: 110 })}>{r.business_name || '—'}</td>
-                      <td style={td({ color: '#555', maxWidth: 160 })}>{r.email}</td>
-                      <td style={td({ color: '#555', maxWidth: 100, whiteSpace: 'nowrap' })}>{r.phone}</td>
+                      <td style={td({ color: '#555', maxWidth: 160 })}>{maskEmail(r.email)}</td>
+                      <td style={td({ color: '#555', maxWidth: 100, whiteSpace: 'nowrap' })}>{maskPhone(r.phone)}</td>
                       <td style={td({ color: '#555', maxWidth: '150px' })}>{r.products}</td>
                       <td style={td({ whiteSpace: 'nowrap' })}>{formatEuro(r.amount_paid)}</td>
                       <td style={td({ whiteSpace: 'nowrap' })}><span style={badgeStyle(r.status)}>{r.status}</span></td>
@@ -616,8 +640,8 @@ export default function AdminPage() {
                     <tr key={r.id} style={rowStyle(i)}>
                       <td style={td({ fontWeight: 'bold', maxWidth: 120 })}>{r.business_name}</td>
                       <td style={td({ maxWidth: 100 })}>{r.contact_name}</td>
-                      <td style={td({ color: '#555', maxWidth: 130 })}>{r.email}</td>
-                      <td style={td({ color: '#555', maxWidth: 100, whiteSpace: 'nowrap' })}>{r.phone || '—'}</td>
+                      <td style={td({ color: '#555', maxWidth: 130 })}>{maskEmail(r.email)}</td>
+                      <td style={td({ color: '#555', maxWidth: 100, whiteSpace: 'nowrap' })}>{maskPhone(r.phone)}</td>
                       <td style={td({ fontWeight: 'bold', color: '#1A7A3C', whiteSpace: 'nowrap' })}>{formatEuro(r.amount_paid)}</td>
                       <td style={td({ color: '#555', maxWidth: '130px' })}>{r.message || '—'}</td>
                       <td style={td({ whiteSpace: 'nowrap' })}>{r.social_media_consent ? '✓ Yes' : '—'}</td>
@@ -667,7 +691,7 @@ export default function AdminPage() {
                   return (
                     <tr key={r.id} style={rowStyle(i)}>
                       <td style={td({ maxWidth: 130 })}>{r.full_name}</td>
-                      <td style={td({ maxWidth: 170 })}>{r.email}</td>
+                      <td style={td({ maxWidth: 170 })}>{maskEmail(r.email)}</td>
                       <td style={td({ whiteSpace: 'nowrap' })}>{PASS_TYPE_LABELS[r.pass_type] || r.pass_type}</td>
                       <td style={td({ fontWeight: 'bold', letterSpacing: '1px', fontFamily: 'monospace', whiteSpace: 'nowrap' })}>{r.pass_ref || '—'}</td>
                       <td style={td({ whiteSpace: 'nowrap' })}>{formatEuro(r.amount_paid)}</td>

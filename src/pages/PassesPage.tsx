@@ -193,7 +193,7 @@ function Ticket({ pass, onSelect }: { pass: Pass; onSelect: () => void }) {
 }
 
 // Compact non-interactive version shown on step 2
-function TicketSummary({ pass }: { pass: Pass }) {
+function TicketSummary({ pass, onChangePass }: { pass: Pass; onChangePass?: () => void }) {
   return (
     <div className="ticket-card-static" style={{ boxShadow: '0 4px 16px rgba(0,0,0,0.12)' }}>
       <div className="ticket-lighthouse ticket-lighthouse-sm">
@@ -203,8 +203,18 @@ function TicketSummary({ pass }: { pass: Pass }) {
         <div style={{ fontSize: 22, fontWeight: 900, color: '#1B2A4A', textTransform: 'uppercase', letterSpacing: '-0.5px' }}>
           {pass.line1} {pass.line2}
         </div>
-        <div style={{ fontSize: 10, fontWeight: 700, color: pass.accent, letterSpacing: '2px', textTransform: 'uppercase', marginTop: 6 }}>
-          {pass.date}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 6 }}>
+          <div style={{ fontSize: 10, fontWeight: 700, color: pass.accent, letterSpacing: '2px', textTransform: 'uppercase' }}>
+            {pass.date}
+          </div>
+          {onChangePass && (
+            <button
+              onClick={onChangePass}
+              style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontSize: 11, fontWeight: 600, color: '#8A9ABB', textDecoration: 'underline', fontFamily: 'Inter, Arial, sans-serif' }}
+            >
+              Change pass
+            </button>
+          )}
         </div>
       </div>
       <div className="ticket-stub" style={{ background: pass.accent, width: 120 }}>
@@ -262,19 +272,8 @@ function CheckoutForm({ pass, onChangePass }: { pass: Pass; onChangePass: () => 
   return (
     <div style={{ width: '100%', maxWidth: 680 }}>
 
-      {/* Step header */}
-      <div style={{ display: 'flex', alignItems: 'center', marginBottom: 20 }}>
-        <button
-          onClick={onChangePass}
-          style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, fontWeight: 600, color: '#1B2A4A', opacity: 0.55, padding: 0, fontFamily: 'Inter, Arial, sans-serif' }}
-        >
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M15 18l-6-6 6-6" /></svg>
-          Change pass
-        </button>
-      </div>
-
       {/* Selected pass summary */}
-      <TicketSummary pass={pass} />
+      <TicketSummary pass={pass} onChangePass={onChangePass} />
 
       {/* Age + name guidance */}
       <div style={{ background: '#F0F4FB', borderRadius: 10, padding: '12px 16px', margin: '16px 0', borderLeft: `3px solid ${pass.accent}` }}>

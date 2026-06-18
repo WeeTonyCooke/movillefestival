@@ -48,31 +48,31 @@
   text-align: center;
   padding: 12px 28px;
   border-radius: var(--radius-pill);
-  background: #B8860B;
+  background: #3FA76D;
   color: #fff;
   font-size: 0.84rem;
   font-weight: 700;
   letter-spacing: 0.03em;
   text-decoration: none;
-  box-shadow: 0 2px 12px rgba(184, 134, 11, 0.35);
+  box-shadow: 0 2px 12px rgba(63, 167, 109, 0.35);
   transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .prog-buy-passes-banner:hover {
-  background: #9a6f09;
+  background: #368E5D;
   transform: translateY(-1px);
-  box-shadow: 0 4px 18px rgba(184, 134, 11, 0.45);
+  box-shadow: 0 4px 18px rgba(63, 167, 109, 0.45);
 }
 
 .prog-buy-passes-banner:active {
-  background: #7a5807;
+  background: #2E794F;
   transform: translateY(1px);
-  box-shadow: 0 1px 6px rgba(184, 134, 11, 0.3);
+  box-shadow: 0 1px 6px rgba(63, 167, 109, 0.3);
   transition: background 0.08s ease, transform 0.08s ease, box-shadow 0.08s ease;
 }
 
 .theme-night .prog-buy-passes-banner {
-  background: #B8860B;
+  background: #3FA76D;
   color: #fff;
 }
 

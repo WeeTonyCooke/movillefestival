@@ -34,7 +34,7 @@ const REF_PATTERN = /^MF-[A-Z]+-\d{4}$/;
 
 // ── ScanPage ──────────────────────────────────────────────────────────────────
 export default function ScanPage() {
-  const [screen,   setScreen]   = useState<Screen>('login');
+  const [screen,   setScreen]   = useState<Screen>(() => sessionStorage.getItem('movilleAdminPassword') ? 'scanning' : 'login');
   const [password, setPassword] = useState(() => sessionStorage.getItem('movilleAdminPassword') || '');
   const [authError, setAuthError] = useState('');
   const [result,   setResult]   = useState<ScanResult | null>(null);
@@ -47,14 +47,6 @@ export default function ScanPage() {
   const rafRef      = useRef<number | null>(null);
   const passwordRef = useRef(password);
   useEffect(() => { passwordRef.current = password; }, [password]);
-
-  useEffect(() => {
-    const storedPassword = sessionStorage.getItem('movilleAdminPassword');
-    if (storedPassword) {
-      setPassword(storedPassword);
-      setScreen('scanning');
-    }
-  }, []);
 
   // ── Start camera ────────────────────────────────────────────────────────────
   const startCamera = useCallback(async () => {
@@ -237,6 +229,8 @@ export default function ScanPage() {
         <button onClick={handleScanNext} style={styles.nextBtn}>
           Scan Next Pass
         </button>
+
+        <Link to="/admin" style={styles.resultMenuLink}>← Back to menu</Link>
       </div>
     );
   }
@@ -494,5 +488,11 @@ const styles: Record<string, React.CSSProperties> = {
     fontWeight:   700,
     cursor:       'pointer',
     backdropFilter: 'blur(8px)',
+  },
+  resultMenuLink: {
+    marginTop:      18,
+    fontSize:       13,
+    color:          'rgba(255,255,255,0.65)',
+    textDecoration: 'none',
   },
 };

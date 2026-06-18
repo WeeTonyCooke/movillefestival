@@ -131,10 +131,11 @@ async function loginAdmin(page: Page) {
   await page.goto(BASE + '/admin');
   await page.fill('[type="password"]', ADMIN);
   await page.click('button:has-text("Sign in")');
+  await expect(page.locator('[data-testid="tile-reports-admin"]')).toBeVisible({ timeout: 12000 });
+  await page.click('[data-testid="tile-reports-admin"]');
 
-  // Do not wait for the text "Committee admin" here: it also appears on the
-  // login card, so the old helper could report a successful login before auth
-  // had actually completed. Wait for a dashboard-only element instead.
+  // The admin page now lands on a two-choice menu. Enter Reports & Admin,
+  // then wait for a dashboard-only element so login is genuinely complete.
   await expect(page.locator('[data-testid="tab-balldrop"]')).toBeVisible({ timeout: 12000 });
 }
 

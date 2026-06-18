@@ -25,10 +25,31 @@ export default function ScrollToTop() {
 
   useEffect(() => {
     const root = document.documentElement;
-    const previousBehavior = root.style.scrollBehavior;
+    const body = document.body;
+    const previousRootBehavior = root.style.scrollBehavior;
+    const previousBodyBehavior = body.style.scrollBehavior;
+
     root.style.scrollBehavior = 'auto';
-    window.scrollTo(0, 0);
-    root.style.scrollBehavior = previousBehavior;
+    body.style.scrollBehavior = 'auto';
+
+    const reset = () => {
+      window.scrollTo(0, 0);
+      root.scrollTop = 0;
+      body.scrollTop = 0;
+    };
+
+    reset();
+
+    const raf = window.requestAnimationFrame(() => {
+      reset();
+      window.setTimeout(() => {
+        reset();
+        root.style.scrollBehavior = previousRootBehavior;
+        body.style.scrollBehavior = previousBodyBehavior;
+      }, 0);
+    });
+
+    return () => window.cancelAnimationFrame(raf);
   }, [pathname]);
 
   return null;

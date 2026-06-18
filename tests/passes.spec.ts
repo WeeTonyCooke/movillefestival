@@ -43,10 +43,18 @@ async function fillStripeCard(page: Page, cardNumber: string) {
 }
 
 async function loginAdmin(page: Page) {
+  if (!process.env.TEST_ADMIN_PASS) {
+    throw new Error('TEST_ADMIN_PASS is not set. Admin tests need the real staging admin password.');
+  }
+
   await page.goto(BASE + '/admin');
   await page.fill('[type="password"]', ADMIN);
   await page.click('button:has-text("Sign in")');
-  await expect(page.locator('text=/Committee admin/i')).toBeVisible({ timeout: 8000 });
+
+  // Do not wait for the text "Committee admin" here: it also appears on the
+  // login card, so the old helper could report a successful login before auth
+  // had actually completed. Wait for a dashboard-only element instead.
+  await expect(page.locator('[data-testid="tab-passes"]')).toBeVisible({ timeout: 12000 });
 }
 
 // ── Step 1: Pass selection ────────────────────────────────────────────────────

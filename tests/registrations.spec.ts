@@ -131,6 +131,7 @@ async function loginAdmin(page: Page) {
   await page.goto(BASE + '/admin');
   await page.fill('[type="password"]', ADMIN);
   await page.click('button:has-text("Sign in")');
+  await page.click('[data-testid="tile-reports-admin"]');
 
   // Do not wait for the text "Committee admin" here: it also appears on the
   // login card, so the old helper could report a successful login before auth

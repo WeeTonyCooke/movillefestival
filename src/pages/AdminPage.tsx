@@ -505,8 +505,7 @@ export default function AdminPage() {
           <p style={s.headerSub}>Committee admin</p>
         </div>
         <div style={s.headerActions}>
-          <button onClick={() => setView('choice')} style={s.backLink}>← Choose another option</button>
-          <Link to="/" style={s.backLink}>Exit to site</Link>
+          <button onClick={() => setView('choice')} style={s.backLink}>← Back to menu</button>
         </div>
       </div>
 

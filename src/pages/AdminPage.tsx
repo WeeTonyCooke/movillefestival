@@ -82,10 +82,16 @@ const CRAFT_FAIR_CAPACITY = 15;
 
 const s: Record<string, React.CSSProperties> = {
   wrap: { fontFamily: 'Arial, sans-serif', minHeight: '100vh', background: '#f5f5f5' },
-  header: { background: '#1F4E5F', padding: '14px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' },
+  header: { background: '#1F4E5F', padding: '14px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '16px' },
   headerTitle: { color: '#fff', margin: 0, fontSize: '18px', fontWeight: 'bold' },
   headerSub: { color: '#a8c8d4', margin: '2px 0 0', fontSize: '13px' },
+  headerActions: { display: 'flex', gap: '10px', alignItems: 'center', flexWrap: 'wrap' as const, justifyContent: 'flex-end' as const },
+  backLink: { color: '#d9edf3', fontSize: '13px', textDecoration: 'none', padding: '8px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.22)' },
   body: { maxWidth: '1200px', margin: '0 auto', padding: '24px 16px' },
+  scannerCta: { marginBottom: '18px', background: 'linear-gradient(135deg, #F3B23C 0%, #E86D3C 100%)', borderRadius: '10px', padding: '16px 18px', boxShadow: '0 3px 10px rgba(0,0,0,0.14)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '16px', flexWrap: 'wrap' as const },
+  scannerTitle: { margin: 0, color: '#1f2933', fontSize: '18px', fontWeight: 'bold' },
+  scannerSub: { margin: '3px 0 0', color: '#374151', fontSize: '13px' },
+  scannerButton: { display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: '#1F4E5F', color: '#fff', textDecoration: 'none', fontWeight: 'bold', fontSize: '15px', padding: '12px 18px', borderRadius: '8px', boxShadow: '0 2px 6px rgba(0,0,0,0.18)', whiteSpace: 'nowrap' as const },
   metricGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '14px', marginBottom: '28px' },
   metricCard: { background: '#fff', borderRadius: '8px', padding: '16px 18px', boxShadow: '0 1px 4px rgba(0,0,0,0.07)' },
   metricLabel: { margin: '0 0 4px', fontSize: '11px', color: '#888', textTransform: 'uppercase' as const, letterSpacing: '0.06em' },
@@ -398,13 +404,19 @@ export default function AdminPage() {
           <h1 style={s.headerTitle}>Moville Summer Festival 2026</h1>
           <p style={s.headerSub}>Committee admin</p>
         </div>
-        <div style={{ display: 'flex', gap: '18px', alignItems: 'center' }}>
-          <Link to="/scan" style={{ color: '#a8c8d4', fontSize: '13px', textDecoration: 'none' }}>Entrance Scanner →</Link>
-          <Link to="/" style={{ color: '#a8c8d4', fontSize: '13px', textDecoration: 'none' }}>← Back to site</Link>
+        <div style={s.headerActions}>
+          <Link to="/" style={s.backLink}>← Back to public site</Link>
         </div>
       </div>
 
       <div style={s.body}>
+        <div style={s.scannerCta}>
+          <div>
+            <p style={s.scannerTitle}>Entrance scanning</p>
+            <p style={s.scannerSub}>Use this at the gate to check festival passes quickly.</p>
+          </div>
+          <Link to="/scan" style={s.scannerButton}>🎟️ Open Entrance Scanner →</Link>
+        </div>
 
         {/* Summary cards */}
         <div style={s.metricGrid}>

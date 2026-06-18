@@ -95,8 +95,8 @@ const s: Record<string, React.CSSProperties> = {
   choiceBody: { flex: 1, display: 'flex', flexDirection: 'column' as const, justifyContent: 'center', alignItems: 'center', padding: '20px 24px 40px', gap: '16px' },
   scanTile: { width: '100%', maxWidth: '420px', background: 'radial-gradient(circle at 50% 40%, #1B7A48 0%, #126B3D 48%, #0E4F31 100%)', border: '1px solid rgba(255,255,255,0.18)', borderRadius: '22px', padding: '44px 24px 42px', display: 'flex', flexDirection: 'column' as const, alignItems: 'center', textAlign: 'center' as const, gap: '8px', textDecoration: 'none', cursor: 'pointer', boxShadow: '0 22px 60px rgba(0,0,0,0.36), inset 0 1px 0 rgba(255,255,255,0.14)' },
   scanTileTitle: { fontFamily: "'Playfair Display', Georgia, serif", fontSize: '32px', fontWeight: 800, color: '#fff', margin: '12px 0 0', letterSpacing: '-0.02em' },
-  reportsTile: { width: '100%', maxWidth: '420px', background: 'linear-gradient(135deg, #F6815E 0%, #F26A4B 55%, #D9512F 100%)', borderRadius: '18px', padding: '18px 20px', display: 'flex', alignItems: 'center', gap: '14px', cursor: 'pointer', font: 'inherit', boxShadow: '0 10px 30px rgba(0,0,0,0.26)' },
-  reportsTileTitle: { fontSize: '15px', fontWeight: 700, color: '#fff', margin: 0 },
+  reportsTile: { width: '100%', maxWidth: '420px', background: '#122030', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '18px', padding: '18px 20px', display: 'flex', alignItems: 'center', gap: '14px', cursor: 'pointer', font: 'inherit', boxShadow: '0 10px 30px rgba(0,0,0,0.26)' },
+  reportsTileTitle: { fontSize: '15px', fontWeight: 700, color: '#f4efe5', margin: 0 },
   choiceFooter: { display: 'flex', justifyContent: 'space-between', padding: '0 24px 20px', fontSize: '11px', color: 'rgba(255,255,255,0.34)' },
   choiceSignOut: { color: 'rgba(255,255,255,0.42)', fontSize: '11px', textDecoration: 'none', cursor: 'pointer', background: 'none', border: 'none', font: 'inherit', padding: 0 },
   body: { maxWidth: '1200px', margin: '0 auto', padding: '24px 16px' },
@@ -430,16 +430,16 @@ export default function AdminPage() {
               <rect x="63" y="53" width="7" height="7" rx="1" fill="#FFFFFF" />
               <rect x="52" y="64" width="7" height="7" rx="1" fill="#FFFFFF" />
               <rect x="63" y="64" width="7" height="7" rx="1" fill="#FFFFFF" />
-              <line x1="17" y1="48" x2="79" y2="48" stroke="#DC2626" strokeWidth="3" strokeLinecap="round" />
+              <line x1="17" y1="48" x2="79" y2="48" stroke="#F26A4B" strokeWidth="3" strokeLinecap="round" />
             </svg>
             <span style={s.scanTileTitle}>Scan Passes</span>
           </Link>
 
           <button data-testid="tile-reports-admin" onClick={() => setView('dashboard')} style={s.reportsTile}>
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style={{ flexShrink: 0 }}>
-              <rect x="3" y="13" width="4" height="8" rx="1" fill="#fff" />
-              <rect x="10" y="7" width="4" height="14" rx="1" fill="#fff" />
-              <rect x="17" y="3" width="4" height="18" rx="1" fill="#fff" />
+              <rect x="3" y="13" width="4" height="8" rx="1" fill="#6BAFA7" />
+              <rect x="10" y="7" width="4" height="14" rx="1" fill="#F26A4B" />
+              <rect x="17" y="3" width="4" height="18" rx="1" fill="#F4E9D8" />
             </svg>
             <div style={{ textAlign: 'left' as const }}>
               <p style={s.reportsTileTitle}>Reports &amp; Admin</p>

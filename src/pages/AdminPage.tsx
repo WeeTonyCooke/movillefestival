@@ -82,9 +82,25 @@ const CRAFT_FAIR_CAPACITY = 15;
 
 const s: Record<string, React.CSSProperties> = {
   wrap: { fontFamily: 'Arial, sans-serif', minHeight: '100vh', background: '#f5f5f5' },
-  header: { background: '#1F4E5F', padding: '14px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' },
+  header: { background: '#1F4E5F', padding: '14px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '16px' },
   headerTitle: { color: '#fff', margin: 0, fontSize: '18px', fontWeight: 'bold' },
   headerSub: { color: '#a8c8d4', margin: '2px 0 0', fontSize: '13px' },
+  headerActions: { display: 'flex', gap: '10px', alignItems: 'center', flexWrap: 'wrap' as const, justifyContent: 'flex-end' as const },
+  backLink: { color: '#a8c8d4', fontSize: '13px', textDecoration: 'none', background: 'none', border: 'none', cursor: 'pointer', padding: '4px 2px', fontFamily: 'Arial' },
+  choiceWrap: { minHeight: '100vh', background: 'radial-gradient(circle at 50% 0%, #163F34 0%, #0B2D2A 42%, #071821 100%)', display: 'flex', flexDirection: 'column' as const, fontFamily: "'Outfit', Arial, sans-serif" },
+  choiceHeader: { display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', padding: '22px 24px' },
+  choiceHeaderTitle: { color: '#fff', margin: 0, fontSize: '16px', fontWeight: 700, fontFamily: "'Playfair Display', Georgia, serif" },
+  choiceHeaderSub: { color: 'rgba(255,255,255,0.58)', margin: '2px 0 0', fontSize: '12px' },
+  exitLink: { color: 'rgba(255,255,255,0.68)', fontSize: '13px', textDecoration: 'none', padding: '6px 0' },
+  choiceBody: { flex: 1, display: 'flex', flexDirection: 'column' as const, justifyContent: 'center', alignItems: 'center', padding: '20px 24px 40px', gap: '16px' },
+  scanTile: { width: '100%', maxWidth: '420px', background: 'radial-gradient(circle at 50% 40%, #1B7A48 0%, #126B3D 48%, #0E4F31 100%)', border: '1px solid rgba(255,255,255,0.18)', borderRadius: '22px', padding: '44px 24px 42px', display: 'flex', flexDirection: 'column' as const, alignItems: 'center', textAlign: 'center' as const, gap: '8px', textDecoration: 'none', cursor: 'pointer', boxShadow: '0 22px 60px rgba(0,0,0,0.36), inset 0 1px 0 rgba(255,255,255,0.14)' },
+  scanTileTitle: { fontFamily: "'Playfair Display', Georgia, serif", fontSize: '32px', fontWeight: 800, color: '#fff', margin: '12px 0 0', letterSpacing: '-0.02em' },
+  scanTileSub: { fontSize: '13px', color: 'rgba(255,255,255,0.76)', margin: 0 },
+  reportsTile: { width: '100%', maxWidth: '420px', background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.18)', borderRadius: '18px', padding: '18px 20px', display: 'flex', alignItems: 'center', gap: '14px', cursor: 'pointer', font: 'inherit', boxShadow: '0 10px 30px rgba(0,0,0,0.18)' },
+  reportsTileTitle: { fontSize: '15px', fontWeight: 700, color: '#F4E9D8', margin: 0 },
+  reportsTileSub: { fontSize: '12px', color: 'rgba(255,255,255,0.52)', margin: '2px 0 0' },
+  choiceFooter: { display: 'flex', justifyContent: 'space-between', padding: '0 24px 20px', fontSize: '11px', color: 'rgba(255,255,255,0.34)' },
+  choiceSignOut: { color: 'rgba(255,255,255,0.42)', fontSize: '11px', textDecoration: 'none', cursor: 'pointer', background: 'none', border: 'none', font: 'inherit', padding: 0 },
   body: { maxWidth: '1200px', margin: '0 auto', padding: '24px 16px' },
   metricGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '14px', marginBottom: '28px' },
   metricCard: { background: '#fff', borderRadius: '8px', padding: '16px 18px', boxShadow: '0 1px 4px rgba(0,0,0,0.07)' },
@@ -194,9 +210,12 @@ function downloadCSV(filename: string, rows: string[][], headers: string[]) {
   URL.revokeObjectURL(url);
 }
 
+// Shared session key — must match the one read in ScanPage.tsx ('movilleAdminPassword')
+const SESSION_PW_KEY = 'movilleAdminPassword';
+
 export default function AdminPage() {
-  const [authed, setAuthed] = useState(false);
-  const [password, setPassword] = useState('');
+  const [authed, setAuthed] = useState(() => !!sessionStorage.getItem(SESSION_PW_KEY));
+  const [password, setPassword] = useState(() => sessionStorage.getItem(SESSION_PW_KEY) || '');
   const [error, setError] = useState('');
   const [data, setData] = useState<AdminData | null>(null);
   const [loading, setLoading] = useState(false);
@@ -206,26 +225,50 @@ export default function AdminPage() {
   const [onlineLimit, setOnlineLimit] = useState(ONLINE_DEFAULT);
   const [onlineLimitInput, setOnlineLimitInput] = useState(String(ONLINE_DEFAULT));
   const [savingLimit, setSavingLimit] = useState(false);
+  const [view, setView] = useState<'choice' | 'dashboard'>('choice');
+  const [checkingLogin, setCheckingLogin] = useState(false);
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (password.trim() === '') { setError('Please enter a password'); return; }
-    setAuthed(true);
-    setError('');
+    setCheckingLogin(true);
+    try {
+      const res = await fetch('/.netlify/functions/get-admin-data', {
+        headers: { 'x-admin-password': password },
+      });
+      if (res.status === 401) {
+        setError('Incorrect password');
+        setCheckingLogin(false);
+        return;
+      }
+      sessionStorage.setItem(SESSION_PW_KEY, password);
+      setAuthed(true);
+      setError('');
+    } catch {
+      setError('Could not reach the server. Check your connection.');
+    }
+    setCheckingLogin(false);
+  };
+
+  const handleSignOut = () => {
+    sessionStorage.removeItem(SESSION_PW_KEY);
+    setAuthed(false);
+    setPassword('');
+    setView('choice');
   };
 
   const fetchData = useCallback(() => {
-    if (!authed) return;
+    if (!authed || view !== 'dashboard') return;
     setLoading(true);
     fetch('/.netlify/functions/get-admin-data', {
       headers: { 'x-admin-password': password },
     })
       .then(res => {
-        if (res.status === 401) { setAuthed(false); setError('Incorrect password'); setLoading(false); return null; }
+        if (res.status === 401) { sessionStorage.removeItem(SESSION_PW_KEY); setAuthed(false); setView('choice'); setError('Incorrect password'); setLoading(false); return null; }
         return res.json();
       })
       .then(d => { if (d) { setData(d); setLoading(false); } })
       .catch(() => setLoading(false));
-  }, [authed, password]);
+  }, [authed, password, view]);
 
   useEffect(() => { fetchData(); }, [fetchData]); // eslint-disable-line react-hooks/set-state-in-effect
 
@@ -341,17 +384,88 @@ export default function AdminPage() {
         <div style={{ background: '#fff', padding: '40px', borderRadius: '12px', boxShadow: '0 2px 16px rgba(0,0,0,0.1)', width: '320px' }}>
           <h1 style={{ fontFamily: 'Arial', fontSize: '20px', color: '#1F4E5F', marginBottom: '4px' }}>Committee Admin</h1>
           <p style={{ fontFamily: 'Arial', fontSize: '14px', color: '#888', marginBottom: '24px' }}>Moville Summer Festival 2026</p>
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={e => setPassword(e.target.value)}
-            onKeyDown={e => e.key === 'Enter' && handleLogin()}
-            style={{ width: '100%', padding: '10px 12px', border: '1px solid #ddd', borderRadius: '6px', fontFamily: 'Arial', fontSize: '15px', boxSizing: 'border-box', marginBottom: '12px' }}
-          />
-          {error && <p style={{ color: '#c0392b', fontFamily: 'Arial', fontSize: '13px', marginBottom: '12px' }}>{error}</p>}
-          <button onClick={handleLogin} style={{ ...btnStyle('primary'), width: '100%', padding: '12px', fontSize: '15px' }}>
-            Sign in
+          <form onSubmit={e => { e.preventDefault(); handleLogin(); }} style={{ width: '100%' }}>
+            <input
+              type="text"
+              name="username"
+              autoComplete="username"
+              value="Committee"
+              readOnly
+              tabIndex={-1}
+              aria-hidden="true"
+              style={{ position: 'absolute', width: '1px', height: '1px', opacity: 0, pointerEvents: 'none' }}
+            />
+            <input
+              type="password"
+              name="password"
+              autoComplete="current-password"
+              placeholder="Password"
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+              style={{ width: '100%', padding: '10px 12px', border: '1px solid #ddd', borderRadius: '6px', fontFamily: 'Arial', fontSize: '15px', boxSizing: 'border-box', marginBottom: '12px' }}
+            />
+            {error && <p style={{ color: '#c0392b', fontFamily: 'Arial', fontSize: '13px', marginBottom: '12px' }}>{error}</p>}
+            <button type="submit" disabled={checkingLogin} style={{ ...btnStyle('primary'), width: '100%', padding: '12px', fontSize: '15px', opacity: checkingLogin ? 0.7 : 1 }}>
+              {checkingLogin ? 'Checking…' : 'Sign in'}
+            </button>
+          </form>
+        </div>
+      </div>
+    );
+  }
+
+  // ── Choice screen: scan or reports, financials stay hidden until chosen ──
+  if (view === 'choice') {
+    return (
+      <div style={s.choiceWrap}>
+        <div style={s.choiceHeader}>
+          <div>
+            <p style={s.choiceHeaderTitle}>Moville Summer Festival 2026</p>
+            <p style={s.choiceHeaderSub}>Committee access</p>
+          </div>
+          <Link to="/" style={s.exitLink}>Exit to site →</Link>
+        </div>
+
+        <div style={s.choiceBody}>
+          <Link to="/scan" style={s.scanTile}>
+            <svg width="96" height="96" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style={{ filter: 'drop-shadow(0 14px 24px rgba(0,0,0,0.22))' }}>
+              <path d="M12 30V17C12 14.2386 14.2386 12 17 12H30" stroke="#FFFFFF" strokeWidth="8" strokeLinecap="round" />
+              <path d="M66 12H79C81.7614 12 84 14.2386 84 17V30" stroke="#FFFFFF" strokeWidth="8" strokeLinecap="round" />
+              <path d="M12 66V79C12 81.7614 14.2386 84 17 84H30" stroke="#FFFFFF" strokeWidth="8" strokeLinecap="round" />
+              <path d="M66 84H79C81.7614 84 84 81.7614 84 79V66" stroke="#FFFFFF" strokeWidth="8" strokeLinecap="round" />
+              <rect x="28" y="28" width="13" height="13" rx="1.5" stroke="#FFFFFF" strokeWidth="5" />
+              <rect x="55" y="28" width="13" height="13" rx="1.5" stroke="#FFFFFF" strokeWidth="5" />
+              <rect x="28" y="56" width="13" height="13" rx="1.5" stroke="#FFFFFF" strokeWidth="5" />
+              <rect x="52" y="53" width="7" height="7" rx="1" fill="#FFFFFF" />
+              <rect x="63" y="53" width="7" height="7" rx="1" fill="#FFFFFF" />
+              <rect x="52" y="64" width="7" height="7" rx="1" fill="#FFFFFF" />
+              <rect x="63" y="64" width="7" height="7" rx="1" fill="#FFFFFF" />
+              <line x1="17" y1="48" x2="79" y2="48" stroke="#6ECF83" strokeWidth="6" strokeLinecap="round" />
+            </svg>
+            <span style={s.scanTileTitle}>Scan Passes</span>
+            <span style={s.scanTileSub}>Check guests in at the gate</span>
+          </Link>
+
+          <button onClick={() => setView('dashboard')} style={s.reportsTile}>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style={{ flexShrink: 0 }}>
+              <rect x="3" y="13" width="4" height="8" rx="1" fill="#6BAFA7" />
+              <rect x="10" y="7" width="4" height="14" rx="1" fill="#F26A4B" />
+              <rect x="17" y="3" width="4" height="18" rx="1" fill="#F4E9D8" />
+            </svg>
+            <div style={{ textAlign: 'left' as const }}>
+              <p style={s.reportsTileTitle}>Reports &amp; admin</p>
+              <p style={s.reportsTileSub}>Sales, stats &amp; settings</p>
+            </div>
+          </button>
+        </div>
+
+        <div style={s.choiceFooter}>
+          <span>Committee password accepted</span>
+          <button
+            onClick={handleSignOut}
+            style={s.choiceSignOut}
+          >
+            Sign out
           </button>
         </div>
       </div>
@@ -398,9 +512,8 @@ export default function AdminPage() {
           <h1 style={s.headerTitle}>Moville Summer Festival 2026</h1>
           <p style={s.headerSub}>Committee admin</p>
         </div>
-        <div style={{ display: 'flex', gap: '18px', alignItems: 'center' }}>
-          <Link to="/scan" style={{ color: '#a8c8d4', fontSize: '13px', textDecoration: 'none' }}>Entrance Scanner →</Link>
-          <Link to="/" style={{ color: '#a8c8d4', fontSize: '13px', textDecoration: 'none' }}>← Back to site</Link>
+        <div style={s.headerActions}>
+          <button onClick={() => setView('choice')} style={s.backLink}>← Back to menu</button>
         </div>
       </div>
 

@@ -210,12 +210,9 @@ function downloadCSV(filename: string, rows: string[][], headers: string[]) {
   URL.revokeObjectURL(url);
 }
 
-// Shared session key — must match the one read in ScanPage.tsx ('movilleAdminPassword')
-const SESSION_PW_KEY = 'movilleAdminPassword';
-
 export default function AdminPage() {
-  const [authed, setAuthed] = useState(() => !!sessionStorage.getItem(SESSION_PW_KEY));
-  const [password, setPassword] = useState(() => sessionStorage.getItem(SESSION_PW_KEY) || '');
+  const [authed, setAuthed] = useState(false);
+  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [data, setData] = useState<AdminData | null>(null);
   const [loading, setLoading] = useState(false);
@@ -226,34 +223,11 @@ export default function AdminPage() {
   const [onlineLimitInput, setOnlineLimitInput] = useState(String(ONLINE_DEFAULT));
   const [savingLimit, setSavingLimit] = useState(false);
   const [view, setView] = useState<'choice' | 'dashboard'>('choice');
-  const [checkingLogin, setCheckingLogin] = useState(false);
 
-  const handleLogin = async () => {
+  const handleLogin = () => {
     if (password.trim() === '') { setError('Please enter a password'); return; }
-    setCheckingLogin(true);
-    try {
-      const res = await fetch('/.netlify/functions/get-admin-data', {
-        headers: { 'x-admin-password': password },
-      });
-      if (res.status === 401) {
-        setError('Incorrect password');
-        setCheckingLogin(false);
-        return;
-      }
-      sessionStorage.setItem(SESSION_PW_KEY, password);
-      setAuthed(true);
-      setError('');
-    } catch {
-      setError('Could not reach the server. Check your connection.');
-    }
-    setCheckingLogin(false);
-  };
-
-  const handleSignOut = () => {
-    sessionStorage.removeItem(SESSION_PW_KEY);
-    setAuthed(false);
-    setPassword('');
-    setView('choice');
+    setAuthed(true);
+    setError('');
   };
 
   const fetchData = useCallback(() => {
@@ -263,7 +237,7 @@ export default function AdminPage() {
       headers: { 'x-admin-password': password },
     })
       .then(res => {
-        if (res.status === 401) { sessionStorage.removeItem(SESSION_PW_KEY); setAuthed(false); setView('choice'); setError('Incorrect password'); setLoading(false); return null; }
+        if (res.status === 401) { setAuthed(false); setView('choice'); setError('Incorrect password'); setLoading(false); return null; }
         return res.json();
       })
       .then(d => { if (d) { setData(d); setLoading(false); } })
@@ -384,31 +358,18 @@ export default function AdminPage() {
         <div style={{ background: '#fff', padding: '40px', borderRadius: '12px', boxShadow: '0 2px 16px rgba(0,0,0,0.1)', width: '320px' }}>
           <h1 style={{ fontFamily: 'Arial', fontSize: '20px', color: '#1F4E5F', marginBottom: '4px' }}>Committee Admin</h1>
           <p style={{ fontFamily: 'Arial', fontSize: '14px', color: '#888', marginBottom: '24px' }}>Moville Summer Festival 2026</p>
-          <form onSubmit={e => { e.preventDefault(); handleLogin(); }} style={{ width: '100%' }}>
-            <input
-              type="text"
-              name="username"
-              autoComplete="username"
-              value="Committee"
-              readOnly
-              tabIndex={-1}
-              aria-hidden="true"
-              style={{ position: 'absolute', width: '1px', height: '1px', opacity: 0, pointerEvents: 'none' }}
-            />
-            <input
-              type="password"
-              name="password"
-              autoComplete="current-password"
-              placeholder="Password"
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-              style={{ width: '100%', padding: '10px 12px', border: '1px solid #ddd', borderRadius: '6px', fontFamily: 'Arial', fontSize: '15px', boxSizing: 'border-box', marginBottom: '12px' }}
-            />
-            {error && <p style={{ color: '#c0392b', fontFamily: 'Arial', fontSize: '13px', marginBottom: '12px' }}>{error}</p>}
-            <button type="submit" disabled={checkingLogin} style={{ ...btnStyle('primary'), width: '100%', padding: '12px', fontSize: '15px', opacity: checkingLogin ? 0.7 : 1 }}>
-              {checkingLogin ? 'Checking…' : 'Sign in'}
-            </button>
-          </form>
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            onKeyDown={e => e.key === 'Enter' && handleLogin()}
+            style={{ width: '100%', padding: '10px 12px', border: '1px solid #ddd', borderRadius: '6px', fontFamily: 'Arial', fontSize: '15px', boxSizing: 'border-box', marginBottom: '12px' }}
+          />
+          {error && <p style={{ color: '#c0392b', fontFamily: 'Arial', fontSize: '13px', marginBottom: '12px' }}>{error}</p>}
+          <button onClick={handleLogin} style={{ ...btnStyle('primary'), width: '100%', padding: '12px', fontSize: '15px' }}>
+            Sign in
+          </button>
         </div>
       </div>
     );
@@ -462,7 +423,7 @@ export default function AdminPage() {
         <div style={s.choiceFooter}>
           <span>Committee password accepted</span>
           <button
-            onClick={handleSignOut}
+            onClick={() => { setAuthed(false); setPassword(''); setView('choice'); }}
             style={s.choiceSignOut}
           >
             Sign out
@@ -513,7 +474,8 @@ export default function AdminPage() {
           <p style={s.headerSub}>Committee admin</p>
         </div>
         <div style={s.headerActions}>
-          <button onClick={() => setView('choice')} style={s.backLink}>← Back to menu</button>
+          <button onClick={() => setView('choice')} style={s.backLink}>← Choose another option</button>
+          <Link to="/" style={s.backLink}>Exit to site</Link>
         </div>
       </div>
 

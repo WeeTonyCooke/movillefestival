@@ -384,18 +384,31 @@ export default function AdminPage() {
         <div style={{ background: '#fff', padding: '40px', borderRadius: '12px', boxShadow: '0 2px 16px rgba(0,0,0,0.1)', width: '320px' }}>
           <h1 style={{ fontFamily: 'Arial', fontSize: '20px', color: '#1F4E5F', marginBottom: '4px' }}>Committee Admin</h1>
           <p style={{ fontFamily: 'Arial', fontSize: '14px', color: '#888', marginBottom: '24px' }}>Moville Summer Festival 2026</p>
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={e => setPassword(e.target.value)}
-            onKeyDown={e => e.key === 'Enter' && handleLogin()}
-            style={{ width: '100%', padding: '10px 12px', border: '1px solid #ddd', borderRadius: '6px', fontFamily: 'Arial', fontSize: '15px', boxSizing: 'border-box', marginBottom: '12px' }}
-          />
-          {error && <p style={{ color: '#c0392b', fontFamily: 'Arial', fontSize: '13px', marginBottom: '12px' }}>{error}</p>}
-          <button onClick={handleLogin} disabled={checkingLogin} style={{ ...btnStyle('primary'), width: '100%', padding: '12px', fontSize: '15px', opacity: checkingLogin ? 0.7 : 1 }}>
-            {checkingLogin ? 'Checking…' : 'Sign in'}
-          </button>
+          <form onSubmit={e => { e.preventDefault(); handleLogin(); }} style={{ width: '100%' }}>
+            <input
+              type="text"
+              name="username"
+              autoComplete="username"
+              value="Committee"
+              readOnly
+              tabIndex={-1}
+              aria-hidden="true"
+              style={{ position: 'absolute', width: '1px', height: '1px', opacity: 0, pointerEvents: 'none' }}
+            />
+            <input
+              type="password"
+              name="password"
+              autoComplete="current-password"
+              placeholder="Password"
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+              style={{ width: '100%', padding: '10px 12px', border: '1px solid #ddd', borderRadius: '6px', fontFamily: 'Arial', fontSize: '15px', boxSizing: 'border-box', marginBottom: '12px' }}
+            />
+            {error && <p style={{ color: '#c0392b', fontFamily: 'Arial', fontSize: '13px', marginBottom: '12px' }}>{error}</p>}
+            <button type="submit" disabled={checkingLogin} style={{ ...btnStyle('primary'), width: '100%', padding: '12px', fontSize: '15px', opacity: checkingLogin ? 0.7 : 1 }}>
+              {checkingLogin ? 'Checking…' : 'Sign in'}
+            </button>
+          </form>
         </div>
       </div>
     );
@@ -501,7 +514,6 @@ export default function AdminPage() {
         </div>
         <div style={s.headerActions}>
           <button onClick={() => setView('choice')} style={s.backLink}>← Back to menu</button>
-          <Link to="/" style={s.backLink}>Exit to site</Link>
         </div>
       </div>
 

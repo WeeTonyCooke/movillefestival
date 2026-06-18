@@ -127,13 +127,23 @@ exports.handler = async (event) => {
   }
 
   // ── Record the scan ───────────────────────────────────────────────────────
+  // Optimistic lock: only write if scan_dates still matches what we just read.
+  // If another device scanned this exact pass in the moment between our read
+  // and our write, this update will match zero rows and we correctly reject
+  // instead of admitting twice.
   const updatedDates = [...scanDates, today];
 
-  const { error: updateError } = await supabase
+  let updateQuery = supabase
     .from('festival_passes')
     .update({ scan_dates: updatedDates })
     .eq('pass_ref', ref)
     .eq('status', 'paid');
+
+  updateQuery = data.scan_dates === null
+    ? updateQuery.is('scan_dates', null)
+    : updateQuery.eq('scan_dates', data.scan_dates);
+
+  const { data: updateResult, error: updateError } = await updateQuery.select();
 
   if (updateError) {
     console.error('Scan update error:', updateError);
@@ -141,6 +151,19 @@ exports.handler = async (event) => {
       statusCode: 200,
       headers,
       body: JSON.stringify({ valid: false, reason: 'Scan could not be recorded. Try again.' }),
+    };
+  }
+
+  if (!updateResult || updateResult.length === 0) {
+    // Lost the race — another scan landed first. Re-check which rule applies
+    // so the rejection message matches what actually happened.
+    const message = isFestivalPass
+      ? 'Full Festival Pass already used today. Do not admit.'
+      : 'Day pass already used. Do not admit.';
+    return {
+      statusCode: 200,
+      headers,
+      body: JSON.stringify({ valid: false, reason: message }),
     };
   }
 

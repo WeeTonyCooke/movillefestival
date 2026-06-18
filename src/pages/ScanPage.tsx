@@ -188,7 +188,7 @@ export default function ScanPage() {
       <div style={styles.screen}>
         <div style={styles.loginCard}>
           <div style={styles.loginLogo}>
-            <img src="/bimi-logo.svg" alt="Moville Festival" style={{ width: 48, height: 48, objectFit: 'contain' }} />
+            <img src="/lighthouse-mark.svg" alt="Moville Festival" style={{ width: 48, height: 48, objectFit: 'contain' }} />
           </div>
           <h1 style={styles.loginTitle}>Scanner access</h1>
           <p style={styles.loginSub}>Sign in through Committee Admin first.</p>
@@ -240,10 +240,10 @@ export default function ScanPage() {
     <div style={styles.screen}>
       <div style={styles.scanHeader}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <img src="/bimi-logo.svg" alt="" style={{ width: 28, height: 28, objectFit: 'contain' }} />
+          <img src="/lighthouse-mark.svg" alt="" style={{ width: 28, height: 28, objectFit: 'contain' }} />
           <span style={styles.scanHeaderText}>Moville Festival · Scanner</span>
         </div>
-        <Link to="/admin" style={styles.scanHeaderLink}>Menu</Link>
+        <Link to="/admin" style={styles.scanHeaderLink}>← Menu</Link>
       </div>
 
       {camError ? (

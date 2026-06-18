@@ -208,7 +208,7 @@ test.describe('Ball Drop', () => {
   test('BD-09 Returning to homepage scrolls to top (ANT-40)', async ({ page }) => {
     await page.goto(BASE + '/ball-drop?status=success');
     await expect(page.locator('text=/you.?re in/i')).toBeVisible({ timeout: 8000 });
-    await page.evaluate(() => window.scrollTo(0, 600));
+    await page.evaluate(() => window.scrollTo({ top: 600, left: 0, behavior: 'instant' }));
     await page.click('a:has-text("Back to festival site")');
     await page.waitForURL(BASE + '/');
     const scrollY = await page.evaluate(() => window.scrollY);

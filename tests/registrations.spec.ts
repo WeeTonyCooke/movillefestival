@@ -131,7 +131,6 @@ async function loginAdmin(page: Page) {
   await page.goto(BASE + '/admin');
   await page.fill('[type="password"]', ADMIN);
   await page.click('button:has-text("Sign in")');
-  await expect(page.locator('[data-testid="tile-reports-admin"]')).toBeVisible({ timeout: 12000 });
   await page.click('[data-testid="tile-reports-admin"]');
 
   // The admin page now lands on a two-choice menu. Enter Reports & Admin,

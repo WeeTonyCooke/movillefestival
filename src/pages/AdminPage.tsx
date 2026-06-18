@@ -398,7 +398,10 @@ export default function AdminPage() {
           <h1 style={s.headerTitle}>Moville Summer Festival 2026</h1>
           <p style={s.headerSub}>Committee admin</p>
         </div>
-        <Link to="/" style={{ color: '#a8c8d4', fontSize: '13px', textDecoration: 'none' }}>← Back to site</Link>
+        <div style={{ display: 'flex', gap: '18px', alignItems: 'center' }}>
+          <Link to="/scan" style={{ color: '#a8c8d4', fontSize: '13px', textDecoration: 'none' }}>Entrance Scanner →</Link>
+          <Link to="/" style={{ color: '#a8c8d4', fontSize: '13px', textDecoration: 'none' }}>← Back to site</Link>
+        </div>
       </div>
 
       <div style={s.body}>

@@ -37,13 +37,18 @@ export async function handler(event) {
     return { statusCode: 400, body: `Webhook error: ${err.message}` };
   }
 
-  if (stripeEvent.type === 'checkout.session.completed') {
-    const session = stripeEvent.data.object;
+  if (stripeEvent.type !== 'checkout.session.completed') {
+    console.log(`Event ignored: ${stripeEvent.type} (${stripeEvent.id})`);
+    return { statusCode: 200, body: 'Event ignored' };
+  }
 
-    // festival_pass uses metadata.type; all other events use metadata.event
-    const metaType  = session.metadata?.type;
-    const metaEvent = session.metadata?.event;
+  const session = stripeEvent.data.object;
 
+  // festival_pass uses metadata.type; all other events use metadata.event
+  const metaType  = session.metadata?.type;
+  const metaEvent = session.metadata?.event;
+
+  try {
     if (metaType === 'festival_pass') {
       await handleFestivalPass(session);
     } else if (metaEvent === 'craft_fair') {
@@ -54,7 +59,16 @@ export async function handler(event) {
       await handleBallDrop(session);
     } else if (metaEvent === 'sponsorship') {
       await handleSponsorship(session);
+    } else {
+      console.warn(`checkout.session.completed with unrecognised metadata — session ${session.id}`, session.metadata);
     }
+  } catch (err) {
+    // Idempotency checks in each handler (ball number allocation, pass ref
+    // generation, confirmation_email_sent flags) make Stripe retries safe —
+    // so a genuine unexpected exception should return 500, not a clean 200,
+    // to trigger Stripe's automatic retry.
+    console.error(`Unhandled exception processing session ${session.id}:`, err);
+    return { statusCode: 500, body: 'Internal error — Stripe should retry' };
   }
 
   return { statusCode: 200, body: 'OK' };
@@ -115,7 +129,7 @@ async function handleFestivalPass(session) {
     .maybeSingle();
 
   if (lookupError) {
-    console.error('Festival pass lookup error:', lookupError);
+    console.error(`Festival pass lookup error (session ${session.id}):`, lookupError);
     return; // Fail loudly — do not proceed without a reliable DB read
   }
 
@@ -128,7 +142,7 @@ async function handleFestivalPass(session) {
   const { data: seqData, error: seqError } = await supabase.rpc('next_pass_seq');
 
   if (seqError || !seqData) {
-    console.error('Sequence error:', seqError);
+    console.error(`Pass sequence error (session ${session.id}):`, seqError);
     return;
   }
 
@@ -171,7 +185,7 @@ async function handleFestivalPass(session) {
 
   if (dbError) {
     // Fail loudly — do NOT send email if ref wasn't saved; the view link would 404
-    console.error('Festival pass DB error (ref not saved — email suppressed):', dbError);
+    console.error(`Festival pass DB error (session ${session.id}, ref not saved — email suppressed):`, dbError);
     return;
   }
 
@@ -310,7 +324,7 @@ async function handleFestivalPass(session) {
 
     console.log(`Pass confirmed: ${passRef} for ${email}`);
   } catch (err) {
-    console.error('Festival pass email error:', err);
+    console.error(`Festival pass email error (${passRef}, ${email}):`, err);
   }
 }
 
@@ -339,7 +353,7 @@ async function handleCraftFair(session) {
     .select()
     .single();
 
-  if (error) { console.error('Craft Fair update error:', error); return; }
+  if (error) { console.error(`Craft Fair update error (registration ${registrationId}):`, error); return; }
 
   if (registration.confirmation_email_sent) {
     console.log('Confirmation email already sent for', registrationId);
@@ -358,7 +372,7 @@ async function handleCraftFair(session) {
       .update({ confirmation_email_sent: true })
       .eq('id', registrationId);
   } catch (err) {
-    console.error('Craft Fair email error:', err);
+    console.error(`Craft Fair email error (registration ${registrationId}):`, err);
   }
 }
 
@@ -373,7 +387,7 @@ async function handleBedPush(session) {
     .select()
     .single();
 
-  if (error) { console.error('Bed Push update error:', error); return; }
+  if (error) { console.error(`Bed Push update error (registration ${registrationId}):`, error); return; }
 
   if (registration.confirmation_email_sent) {
     console.log('Confirmation email already sent for', registrationId);
@@ -392,7 +406,7 @@ async function handleBedPush(session) {
       .update({ confirmation_email_sent: true })
       .eq('id', registrationId);
   } catch (err) {
-    console.error('Bed Push email error:', err);
+    console.error(`Bed Push email error (registration ${registrationId}):`, err);
   }
 }
 
@@ -408,7 +422,7 @@ async function handleBallDrop(session) {
     .single();
 
   if (fetchError) {
-    console.error('Ball Drop fetch error:', fetchError);
+    console.error(`Ball Drop fetch error (registration ${registrationId}):`, fetchError);
     return;
   }
 
@@ -424,7 +438,7 @@ async function handleBallDrop(session) {
     });
 
   if (claimError || !ballNumbers || ballNumbers.length < quantity) {
-    console.error('Ball allocation error:', claimError);
+    console.error(`Ball allocation error (registration ${registrationId}):`, claimError);
     return;
   }
 
@@ -436,7 +450,7 @@ async function handleBallDrop(session) {
     .single();
 
   if (updateRegError) {
-    console.error('Ball Drop registration update error:', updateRegError);
+    console.error(`Ball Drop registration update error (registration ${registrationId}):`, updateRegError);
     return;
   }
 
@@ -457,7 +471,7 @@ async function handleBallDrop(session) {
       .update({ confirmation_email_sent: true })
       .eq('id', registrationId);
   } catch (err) {
-    console.error('Ball Drop email error:', err);
+    console.error(`Ball Drop email error (registration ${registrationId}):`, err);
   }
 }
 
@@ -472,7 +486,7 @@ async function handleSponsorship(session) {
     .select()
     .single();
 
-  if (error) { console.error('Sponsorship update error:', error); return; }
+  if (error) { console.error(`Sponsorship update error (registration ${registrationId}):`, error); return; }
 
   if (sponsorship.confirmation_email_sent) {
     console.log('Confirmation email already sent for', registrationId);
@@ -491,7 +505,7 @@ async function handleSponsorship(session) {
       .update({ confirmation_email_sent: true })
       .eq('id', registrationId);
   } catch (err) {
-    console.error('Sponsorship email error:', err);
+    console.error(`Sponsorship email error (registration ${registrationId}):`, err);
   }
 }
 

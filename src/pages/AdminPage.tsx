@@ -432,10 +432,9 @@ export default function AdminPage() {
               <rect x="63" y="53" width="7" height="7" rx="1" fill="#FFFFFF" />
               <rect x="52" y="64" width="7" height="7" rx="1" fill="#FFFFFF" />
               <rect x="63" y="64" width="7" height="7" rx="1" fill="#FFFFFF" />
-              <line x1="17" y1="48" x2="79" y2="48" stroke="#6ECF83" strokeWidth="6" strokeLinecap="round" />
+              <line x1="17" y1="48" x2="79" y2="48" stroke="#6ECF83" strokeWidth="3" strokeLinecap="round" />
             </svg>
             <span style={s.scanTileTitle}>Scan Passes</span>
-            <span style={s.scanTileSub}>Check guests in at the gate</span>
           </Link>
 
           <button data-testid="tile-reports-admin" onClick={() => setView('dashboard')} style={s.reportsTile}>
@@ -446,7 +445,6 @@ export default function AdminPage() {
             </svg>
             <div style={{ textAlign: 'left' as const }}>
               <p style={s.reportsTileTitle}>Reports &amp; admin</p>
-              <p style={s.reportsTileSub}>Sales, stats &amp; settings</p>
             </div>
           </button>
         </div>

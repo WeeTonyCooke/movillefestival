@@ -427,7 +427,7 @@ export default function AdminPage() {
         </div>
 
         <div style={s.choiceBody}>
-          <Link to="/scan" style={s.scanTile}>
+          <Link to="/scan" data-testid="tile-scan-passes" style={s.scanTile}>
             <svg width="96" height="96" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style={{ filter: 'drop-shadow(0 14px 24px rgba(0,0,0,0.22))' }}>
               <path d="M12 30V17C12 14.2386 14.2386 12 17 12H30" stroke="#FFFFFF" strokeWidth="8" strokeLinecap="round" />
               <path d="M66 12H79C81.7614 12 84 14.2386 84 17V30" stroke="#FFFFFF" strokeWidth="8" strokeLinecap="round" />
@@ -443,18 +443,16 @@ export default function AdminPage() {
               <line x1="17" y1="48" x2="79" y2="48" stroke="#6ECF83" strokeWidth="6" strokeLinecap="round" />
             </svg>
             <span style={s.scanTileTitle}>Scan Passes</span>
-            <span style={s.scanTileSub}>Check guests in at the gate</span>
-          </Link>
+                      </Link>
 
-          <button onClick={() => setView('dashboard')} style={s.reportsTile}>
+          <button type="button" data-testid="tile-reports-admin" onClick={() => setView('dashboard')} style={s.reportsTile}>
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style={{ flexShrink: 0 }}>
               <rect x="3" y="13" width="4" height="8" rx="1" fill="#6BAFA7" />
               <rect x="10" y="7" width="4" height="14" rx="1" fill="#F26A4B" />
               <rect x="17" y="3" width="4" height="18" rx="1" fill="#F4E9D8" />
             </svg>
             <div style={{ textAlign: 'left' as const }}>
-              <p style={s.reportsTileTitle}>Reports &amp; admin</p>
-              <p style={s.reportsTileSub}>Sales, stats &amp; settings</p>
+              <p style={s.reportsTileTitle}>Reports &amp; Admin</p>
             </div>
           </button>
         </div>

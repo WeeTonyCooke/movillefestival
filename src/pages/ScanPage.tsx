@@ -1,15 +1,16 @@
  // src/pages/ScanPage.tsx
-// Festival entrance QR scanner — committee use only, password protected.
+// Festival entrance QR scanner — committee use only.
 // Uses the device camera via jsQR (loaded from CDN via a script tag approach
 // doesn't work in React — we use the browser's BarcodeDetector API where
 // available, with a jsQR canvas fallback).
 //
 // Flow:
-//   1. Password screen
+//   1. Admin login grants access
 //   2. Camera view — continuous scan
 //   3. Result: green (admit) or red (reject) — tap to scan next
 
 import React, { useEffect, useRef, useState, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 type Screen = 'login' | 'scanning' | 'result';
@@ -34,7 +35,7 @@ const REF_PATTERN = /^MF-[A-Z]+-\d{4}$/;
 // ── ScanPage ──────────────────────────────────────────────────────────────────
 export default function ScanPage() {
   const [screen,   setScreen]   = useState<Screen>('login');
-  const [password, setPassword] = useState('');
+  const [password, setPassword] = useState(() => sessionStorage.getItem('movilleAdminPassword') || '');
   const [authError, setAuthError] = useState('');
   const [result,   setResult]   = useState<ScanResult | null>(null);
   const [scanning, setScanning] = useState(false);
@@ -46,6 +47,14 @@ export default function ScanPage() {
   const rafRef      = useRef<number | null>(null);
   const passwordRef = useRef(password);
   useEffect(() => { passwordRef.current = password; }, [password]);
+
+  useEffect(() => {
+    const storedPassword = sessionStorage.getItem('movilleAdminPassword');
+    if (storedPassword) {
+      setPassword(storedPassword);
+      setScreen('scanning');
+    }
+  }, []);
 
   // ── Start camera ────────────────────────────────────────────────────────────
   const startCamera = useCallback(async () => {
@@ -144,8 +153,10 @@ export default function ScanPage() {
       });
 
       if (res.status === 401) {
+        sessionStorage.removeItem('movilleAdminPassword');
+        setPassword('');
         setScreen('login');
-        setAuthError('Session expired. Please log in again.');
+        setAuthError('Session expired. Please return to admin and sign in again.');
         setScanning(false);
         stopCamera();
         return;
@@ -173,30 +184,13 @@ export default function ScanPage() {
     };
   }, [screen]); // eslint-disable-line
 
-  // ── Login submit ─────────────────────────────────────────────────────────────
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!password.trim()) { setAuthError('Please enter the password'); return; }
-
-    // Validate password against the admin endpoint
-    const res = await fetch('/.netlify/functions/get-admin-data', {
-      headers: { 'x-admin-password': password },
-    });
-    if (res.status === 401) {
-      setAuthError('Incorrect password');
-      return;
-    }
-    setAuthError('');
-    setScreen('scanning');
-  };
-
   // ── Scan next ────────────────────────────────────────────────────────────────
   const handleScanNext = () => {
     setResult(null);
     setScreen('scanning');
   };
 
-  // ── Render: Login ────────────────────────────────────────────────────────────
+  // ── Render: access required ───────────────────────────────────────────────────
   if (screen === 'login') {
     return (
       <div style={styles.screen}>
@@ -204,23 +198,14 @@ export default function ScanPage() {
           <div style={styles.loginLogo}>
             <img src="/bimi-logo.svg" alt="Moville Festival" style={{ width: 48, height: 48, objectFit: 'contain' }} />
           </div>
-          <h1 style={styles.loginTitle}>Entrance Scanner</h1>
-          <p style={styles.loginSub}>Moville Summer Festival 2026</p>
+          <h1 style={styles.loginTitle}>Scanner access</h1>
+          <p style={styles.loginSub}>Sign in through Committee Admin first.</p>
 
-          <form onSubmit={handleLogin} style={{ width: '100%' }}>
-            <input
-              type="password"
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-              placeholder="Committee password"
-              style={styles.loginInput}
-              autoFocus
-            />
-            {authError && <p style={styles.errorText}>{authError}</p>}
-            <button type="submit" style={styles.loginBtn}>
-              Open Scanner
-            </button>
-          </form>
+          {authError && <p style={styles.errorText}>{authError}</p>}
+
+          <Link to="/admin" style={styles.loginBtn}>
+            Go to Admin Login
+          </Link>
         </div>
       </div>
     );
@@ -260,8 +245,11 @@ export default function ScanPage() {
   return (
     <div style={styles.screen}>
       <div style={styles.scanHeader}>
-        <img src="/bimi-logo.svg" alt="" style={{ width: 28, height: 28, objectFit: 'contain' }} />
-        <span style={styles.scanHeaderText}>Moville Festival · Entrance Scanner</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <img src="/bimi-logo.svg" alt="" style={{ width: 28, height: 28, objectFit: 'contain' }} />
+          <span style={styles.scanHeaderText}>Moville Festival · Scanner</span>
+        </div>
+        <Link to="/admin" style={styles.scanHeaderLink}>Menu</Link>
       </div>
 
       {camError ? (
@@ -363,6 +351,9 @@ const styles: Record<string, React.CSSProperties> = {
     fontWeight:   700,
     cursor:       'pointer',
     marginTop:    4,
+    textDecoration: 'none',
+    textAlign:    'center',
+    boxSizing:    'border-box',
   },
   errorText: {
     margin:   '0 0 8px',
@@ -378,6 +369,7 @@ const styles: Record<string, React.CSSProperties> = {
     padding:    '14px 16px',
     display:    'flex',
     alignItems: 'center',
+    justifyContent: 'space-between',
     gap:        10,
     background: 'rgba(0,0,0,0.6)',
   },
@@ -385,6 +377,15 @@ const styles: Record<string, React.CSSProperties> = {
     fontSize:   13,
     fontWeight: 600,
     color:      'rgba(255,255,255,0.85)',
+  },
+  scanHeaderLink: {
+    color:      'rgba(255,255,255,0.82)',
+    fontSize:   13,
+    fontWeight: 700,
+    textDecoration: 'none',
+    padding:    '6px 10px',
+    border:     '1px solid rgba(255,255,255,0.25)',
+    borderRadius: 999,
   },
   videoWrap: {
     position:     'relative',

@@ -210,7 +210,6 @@ function downloadCSV(filename: string, rows: string[][], headers: string[]) {
   URL.revokeObjectURL(url);
 }
 
-// Shared session key — must match the one read in ScanPage.tsx ('movilleAdminPassword')
 const SESSION_PW_KEY = 'movilleAdminPassword';
 
 export default function AdminPage() {
@@ -247,13 +246,6 @@ export default function AdminPage() {
       setError('Could not reach the server. Check your connection.');
     }
     setCheckingLogin(false);
-  };
-
-  const handleSignOut = () => {
-    sessionStorage.removeItem(SESSION_PW_KEY);
-    setAuthed(false);
-    setPassword('');
-    setView('choice');
   };
 
   const fetchData = useCallback(() => {
@@ -427,7 +419,7 @@ export default function AdminPage() {
         </div>
 
         <div style={s.choiceBody}>
-          <Link to="/scan" style={s.scanTile}>
+          <Link to="/scan" data-testid="tile-scan-passes" style={s.scanTile}>
             <svg width="96" height="96" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style={{ filter: 'drop-shadow(0 14px 24px rgba(0,0,0,0.22))' }}>
               <path d="M12 30V17C12 14.2386 14.2386 12 17 12H30" stroke="#FFFFFF" strokeWidth="8" strokeLinecap="round" />
               <path d="M66 12H79C81.7614 12 84 14.2386 84 17V30" stroke="#FFFFFF" strokeWidth="8" strokeLinecap="round" />
@@ -446,7 +438,7 @@ export default function AdminPage() {
             <span style={s.scanTileSub}>Check guests in at the gate</span>
           </Link>
 
-          <button onClick={() => setView('dashboard')} style={s.reportsTile}>
+          <button data-testid="tile-reports-admin" onClick={() => setView('dashboard')} style={s.reportsTile}>
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style={{ flexShrink: 0 }}>
               <rect x="3" y="13" width="4" height="8" rx="1" fill="#6BAFA7" />
               <rect x="10" y="7" width="4" height="14" rx="1" fill="#F26A4B" />
@@ -462,7 +454,7 @@ export default function AdminPage() {
         <div style={s.choiceFooter}>
           <span>Committee password accepted</span>
           <button
-            onClick={handleSignOut}
+            onClick={() => { sessionStorage.removeItem('movilleAdminPassword'); setAuthed(false); setPassword(''); setView('choice'); }}
             style={s.choiceSignOut}
           >
             Sign out

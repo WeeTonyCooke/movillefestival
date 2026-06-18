@@ -4,6 +4,13 @@
 
 [functions]
   directory = "netlify/functions"
+  # @playwright/test (added for local/CI testing, ANT-55) is a devDependency
+  # that no function imports — but esbuild's bundler still scans it while
+  # walking node_modules, and playwright-core's optional Chromium-BiDi
+  # support uses dynamic require() calls esbuild can't statically resolve.
+  # Marking these external stops the bundler from touching them at all,
+  # which is safe since nothing here actually needs them at runtime.
+  external_node_modules = ["playwright", "playwright-core", "chromium-bidi", "@playwright/test"]
 
 [functions."daily-summary"]
   schedule = "0 20 * * *"

@@ -280,7 +280,7 @@ function CheckoutForm({ pass, onChangePass }: { pass: Pass; onChangePass: () => 
         <p style={{ margin: '0 0 4px', fontSize: 13, fontWeight: 600, color: '#1B2A4A', fontFamily: 'Outfit, system-ui, sans-serif' }}>
           Passes are required for ages 16 and over — under 16s enter free.
         </p>
-        <p style={{ margin: 0, fontSize: 12, color: '#666', fontFamily: 'Outfit, system-ui, sans-serif' }}>
+        <p style={{ margin: 0, fontSize: 12, color: 'rgba(22,50,60,0.52)', fontFamily: 'Outfit, system-ui, sans-serif' }}>
           Enter the name of the person attending. A parent or guardian may purchase on behalf of a 16+ attendee.
         </p>
       </div>
@@ -321,7 +321,7 @@ function CheckoutForm({ pass, onChangePass }: { pass: Pass; onChangePass: () => 
           </div>
 
           {error && (
-            <div style={{ background: '#fff5f5', border: '1px solid #fca5a5', borderRadius: 8, padding: '10px 14px', marginBottom: 14, fontSize: 13, color: '#b91c1c' }}>
+            <div style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.35)', borderRadius: 8, padding: '10px 14px', marginBottom: 14, fontSize: 13, color: '#b91c1c' }}>
               {error}
             </div>
           )}

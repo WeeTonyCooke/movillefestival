@@ -22,7 +22,7 @@ const PassSuccessPage: React.FC = () => {
           width:          72,
           height:         72,
           borderRadius:   '50%',
-          background:     '#1F4E5F',
+          background:     'var(--accent, #1F4E5F)',
           display:        'flex',
           alignItems:     'center',
           justifyContent: 'center',
@@ -44,16 +44,16 @@ const PassSuccessPage: React.FC = () => {
           Purchase Confirmed
         </h1>
 
-        <p style={{ margin: '0 0 24px', fontSize: 17, color: '#555', lineHeight: 1.6 }}>
+        <p style={{ margin: '0 0 24px', fontSize: 17, color: 'rgba(22,50,60,0.72)', lineHeight: 1.6 }}>
           Your festival pass is booked. Check your email — there's a
           <strong> View Your Pass</strong> button that opens your pass with QR code,
           ready to show at the entrance.
         </p>
 
-        <p style={{ margin: '0 0 36px', fontSize: 14, color: '#888', lineHeight: 1.6 }}>
+        <p style={{ margin: '0 0 36px', fontSize: 14, color: 'rgba(22,50,60,0.52)', lineHeight: 1.6 }}>
           The email may take a couple of minutes to arrive. If you don't see it,
           check your spam folder or contact{' '}
-          <a href="mailto:movillefestival@gmail.com" style={{ color: '#1F4E5F' }}>
+          <a href="mailto:movillefestival@gmail.com" style={{ color: 'var(--accent, #1F4E5F)' }}>
             movillefestival@gmail.com
           </a>.
         </p>

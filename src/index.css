@@ -130,8 +130,8 @@ button {
 .theme-night {
   --bg-base: #0c1a22;
   --bg-soft: #101e28;
-  --bg-surface: rgba(18, 36, 48, 0.76);
-  --bg-surface-strong: rgba(16, 32, 44, 0.92);
+  --bg-surface: #122430;
+  --bg-surface-strong: #16293a;
   --bg-paper: #122030;
 
   --text-primary: #f4efe5;
@@ -174,4 +174,4 @@ button {
     padding-left: 18px;
     padding-right: 18px;
   }
-}/* harbour-light */
+}

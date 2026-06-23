@@ -282,7 +282,7 @@ export default function ScanPage() {
 const styles: Record<string, React.CSSProperties> = {
   screen: {
     minHeight:      '100vh',
-    background:     '#0f1923',
+    background:     '#0E2730',
     display:        'flex',
     flexDirection:  'column',
     alignItems:     'center',
@@ -327,8 +327,8 @@ const styles: Record<string, React.CSSProperties> = {
   loginInput: {
     width:        '100%',
     padding:      '12px 14px',
-    border:       '1px solid #D1D5DB',
-    borderRadius: 8,
+    border:       '1.5px solid rgba(22,50,60,0.16)',
+    borderRadius: 12,
     fontSize:     15,
     marginBottom: 8,
     boxSizing:    'border-box',
@@ -340,7 +340,7 @@ const styles: Record<string, React.CSSProperties> = {
     background:   '#1F4E5F',
     color:        '#fff',
     border:       'none',
-    borderRadius: 10,
+    borderRadius: 999,
     fontSize:     15,
     fontWeight:   700,
     cursor:       'pointer',
@@ -487,7 +487,6 @@ const styles: Record<string, React.CSSProperties> = {
     fontSize:     15,
     fontWeight:   700,
     cursor:       'pointer',
-    backdropFilter: 'blur(8px)',
   },
   resultMenuLink: {
     marginTop:      18,

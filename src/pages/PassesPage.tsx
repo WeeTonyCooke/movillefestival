@@ -210,7 +210,7 @@ function TicketSummary({ pass, onChangePass }: { pass: Pass; onChangePass?: () =
           {onChangePass && (
             <button
               onClick={onChangePass}
-              style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontSize: 11, fontWeight: 600, color: '#8A9ABB', textDecoration: 'underline', fontFamily: 'Inter, Arial, sans-serif' }}
+              style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontSize: 11, fontWeight: 600, color: '#8A9ABB', textDecoration: 'underline', fontFamily: 'Outfit, system-ui, sans-serif' }}
             >
               Change pass
             </button>
@@ -259,9 +259,9 @@ function CheckoutForm({ pass, onChangePass }: { pass: Pass; onChangePass: () => 
   };
 
   const inputStyle: React.CSSProperties = {
-    border: '1px solid rgba(27,42,74,0.18)', borderRadius: 8, padding: '10px 12px',
-    fontSize: 14, fontWeight: 500, color: '#1B2A4A', fontFamily: 'Inter, Arial, sans-serif',
-    outline: 'none', background: '#F8F9FC', width: '100%',
+    border: '1.5px solid rgba(22,50,60,0.16)', borderRadius: 12, padding: '11px 14px',
+    fontSize: 14, fontWeight: 500, color: '#1B2A4A', fontFamily: 'Outfit, system-ui, sans-serif',
+    outline: 'none', background: '#fff', width: '100%',
   };
 
   const labelStyle: React.CSSProperties = {
@@ -276,17 +276,17 @@ function CheckoutForm({ pass, onChangePass }: { pass: Pass; onChangePass: () => 
       <TicketSummary pass={pass} onChangePass={onChangePass} />
 
       {/* Age + name guidance */}
-      <div style={{ background: '#F0F4FB', borderRadius: 10, padding: '12px 16px', margin: '16px 0', borderLeft: `3px solid ${pass.accent}` }}>
-        <p style={{ margin: '0 0 4px', fontSize: 13, fontWeight: 600, color: '#1B2A4A', fontFamily: 'Inter, Arial, sans-serif' }}>
+      <div style={{ background: '#fff', border: '1px solid rgba(22,50,60,0.1)', borderRadius: 12, padding: '12px 16px', margin: '16px 0', borderLeft: `3px solid ${pass.accent}` }}>
+        <p style={{ margin: '0 0 4px', fontSize: 13, fontWeight: 600, color: '#1B2A4A', fontFamily: 'Outfit, system-ui, sans-serif' }}>
           Passes are required for ages 16 and over — under 16s enter free.
         </p>
-        <p style={{ margin: 0, fontSize: 12, color: '#666', fontFamily: 'Inter, Arial, sans-serif' }}>
+        <p style={{ margin: 0, fontSize: 12, color: '#666', fontFamily: 'Outfit, system-ui, sans-serif' }}>
           Enter the name of the person attending. A parent or guardian may purchase on behalf of a 16+ attendee.
         </p>
       </div>
 
       {/* Form */}
-      <div style={{ background: '#fff', borderRadius: 16, padding: 28, boxShadow: '0 4px 20px rgba(0,0,0,0.10)', marginTop: 8 }}>
+      <div style={{ background: '#fff', border: '1px solid rgba(22,50,60,0.1)', borderRadius: 16, padding: 28, boxShadow: '0 12px 30px rgba(12,20,28,0.06)', marginTop: 8 }}>
         <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '2px', textTransform: 'uppercase', color: '#8A9ABB', marginBottom: 16 }}>
           Attendee details
         </div>
@@ -343,10 +343,10 @@ function CheckoutForm({ pass, onChangePass }: { pass: Pass; onChangePass: () => 
             style={{
               display: 'block', width: '100%',
               background: loading ? '#aaa' : pass.accent,
-              color: '#fff', border: 'none', borderRadius: 10, padding: 14,
+              color: '#fff', border: 'none', borderRadius: 999, padding: 14,
               fontSize: 14, fontWeight: 700, letterSpacing: '0.5px', textTransform: 'uppercase',
               cursor: loading ? 'not-allowed' : 'pointer',
-              fontFamily: 'Inter, Arial, sans-serif', transition: 'background 0.2s',
+              fontFamily: 'Outfit, system-ui, sans-serif', transition: 'background 0.2s',
             }}
           >
             {loading ? 'Redirecting to payment…' : pass.btnLabel}
@@ -377,7 +377,7 @@ export default function PassesPage() {
   return (
     <>
       <style>{responsiveStyles}</style>
-      <div style={{ background: '#EAECF0', minHeight: '100vh', padding: '40px 20px 60px', fontFamily: 'Inter, Arial, sans-serif' }}>
+      <div style={{ background: '#FAF8F4', minHeight: '100vh', padding: '40px 20px 60px', fontFamily: 'Outfit, system-ui, sans-serif' }}>
 
         {/* Back to site */}
         <div style={{ marginBottom: 24, maxWidth: 680, margin: '0 auto 24px' }}>
@@ -395,10 +395,10 @@ export default function PassesPage() {
           {step === 'select' && (
             <>
               <div style={{ width: '100%', maxWidth: 680, marginBottom: 28 }}>
-                <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '3px', textTransform: 'uppercase', color: '#888', marginBottom: 10 }}>
+                <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '3px', textTransform: 'uppercase', color: '#B0894F', marginBottom: 10 }}>
                   Moville Summer Festival 2026
                 </div>
-                <h1 style={{ fontSize: 26, fontWeight: 900, color: '#1B2A4A', letterSpacing: '-0.5px', marginBottom: 5 }}>
+                <h1 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: 34, fontWeight: 700, color: '#16323C', letterSpacing: '-0.01em', marginBottom: 6 }}>
                   Choose your pass
                 </h1>
                 <p style={{ fontSize: 13, color: '#8A9ABB', marginBottom: 0 }}>
@@ -406,8 +406,8 @@ export default function PassesPage() {
                 </p>
               </div>
 
-              <div style={{ width: '100%', maxWidth: 680, marginBottom: 8, background: '#F0F4FB', borderRadius: 12, padding: '12px 18px', borderLeft: '3px solid #B8860B' }}>
-                <p style={{ margin: 0, fontSize: 13, color: '#1B2A4A', fontFamily: 'Inter, Arial, sans-serif' }}>
+              <div style={{ width: '100%', maxWidth: 680, marginBottom: 8, background: '#fff', border: '1px solid rgba(22,50,60,0.1)', borderRadius: 12, padding: '12px 18px', borderLeft: '3px solid #B8860B' }}>
+                <p style={{ margin: 0, fontSize: 13, color: '#1B2A4A', fontFamily: 'Outfit, system-ui, sans-serif' }}>
                   <strong>Attending more than one day?</strong> The Festival Pass (€20) covers all admission-required events across the full festival — better value than two or more day passes.
                 </p>
               </div>

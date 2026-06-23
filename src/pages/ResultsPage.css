@@ -12,7 +12,7 @@
   z-index: 0;
   background:
     radial-gradient(circle at top, rgba(255, 255, 255, 0.28), transparent 30%),
-    linear-gradient(to bottom, #eef5fa 0%, #e7f0f6 52%, #dde8ef 100%);
+    #FAF8F4;
 }
 
 .theme-night .results-bg {

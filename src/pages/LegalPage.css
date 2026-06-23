@@ -19,7 +19,7 @@
   color: var(--accent, #1F4E5F);
   text-decoration: none;
   margin-bottom: 32px;
-  font-family: var(--font-body, Arial, sans-serif);
+  font-family: var(--font-sans);
 }
 
 .legal-back:hover {
@@ -38,11 +38,11 @@
   font-size: 0.82rem;
   color: #888;
   margin: 0 0 32px;
-  font-family: var(--font-body, Arial, sans-serif);
+  font-family: var(--font-sans);
 }
 
 .legal-content h2 {
-  font-family: var(--font-body, Arial, sans-serif);
+  font-family: var(--font-sans);
   font-size: 1.1rem;
   font-weight: 700;
   color: var(--accent, #1F4E5F);
@@ -52,7 +52,7 @@
 }
 
 .legal-content h3 {
-  font-family: var(--font-body, Arial, sans-serif);
+  font-family: var(--font-sans);
   font-size: 0.95rem;
   font-weight: 700;
   color: #333;
@@ -60,7 +60,7 @@
 }
 
 .legal-content p {
-  font-family: var(--font-body, Arial, sans-serif);
+  font-family: var(--font-sans);
   font-size: 0.9rem;
   line-height: 1.7;
   color: #444;
@@ -73,7 +73,7 @@
 }
 
 .legal-content li {
-  font-family: var(--font-body, Arial, sans-serif);
+  font-family: var(--font-sans);
   font-size: 0.9rem;
   line-height: 1.7;
   color: #444;
@@ -94,7 +94,7 @@
   padding-top: 20px;
   border-top: 1px solid #eee;
   text-align: center;
-  font-family: var(--font-body, Arial, sans-serif);
+  font-family: var(--font-sans);
   font-size: 0.85rem;
 }
 

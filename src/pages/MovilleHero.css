@@ -211,8 +211,6 @@
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
   transition:
     transform 0.25s ease,
     background 0.25s ease,

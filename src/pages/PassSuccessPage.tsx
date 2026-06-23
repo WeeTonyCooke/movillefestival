@@ -9,7 +9,7 @@ const PassSuccessPage: React.FC = () => {
   return (
     <div style={{
       minHeight:      '100vh',
-      background:     '#F4E9D8',
+      background:     '#FAF8F4',
       fontFamily:     "'Outfit', sans-serif",
       display:        'flex',
       alignItems:     'center',
@@ -38,7 +38,7 @@ const PassSuccessPage: React.FC = () => {
           margin:     '0 0 16px',
           fontFamily: "'Playfair Display', Georgia, serif",
           fontSize:   'clamp(24px, 5vw, 34px)',
-          color:      '#1F4E5F',
+          color:      '#16323C',
           fontWeight: 700,
         }}>
           Purchase Confirmed
@@ -64,8 +64,8 @@ const PassSuccessPage: React.FC = () => {
             style={{
               display:        'inline-block',
               padding:        '14px 32px',
-              borderRadius:   8,
-              background:     '#F26A4B',
+              borderRadius:   999,
+              background:     '#16323C',
               color:          '#fff',
               fontWeight:     700,
               fontSize:       15,
@@ -79,10 +79,10 @@ const PassSuccessPage: React.FC = () => {
             style={{
               display:        'inline-block',
               padding:        '14px 32px',
-              borderRadius:   8,
+              borderRadius:   999,
               background:     'transparent',
-              border:         '1.5px solid #1F4E5F',
-              color:          '#1F4E5F',
+              border:         '1.5px solid rgba(22,50,60,0.22)',
+              color:          '#16323C',
               fontWeight:     600,
               fontSize:       15,
               textDecoration: 'none',

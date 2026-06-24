@@ -1190,3 +1190,31 @@
   border-color: var(--border-strong);
   color: var(--text-secondary);
 }
+
+.theme-night .ball-prize-banner {
+  background: var(--bg-surface);
+  color: var(--text-primary);
+}
+
+.theme-night .ball-prize-place {
+  color: var(--text-muted);
+}
+
+.theme-night .ball-prize-amount {
+  color: var(--text-primary);
+}
+
+.theme-night .ball-how-it-works {
+  background: var(--bg-soft);
+  border-color: var(--border-strong);
+}
+
+.theme-night .ball-how-it-works li,
+.theme-night .ball-intro {
+  color: var(--text-secondary);
+}
+
+.theme-night .ball-numbers-display {
+  background: var(--bg-soft);
+  border-color: var(--border-strong);
+}

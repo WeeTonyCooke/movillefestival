@@ -417,7 +417,8 @@
 /* ── Night mode overrides ─────────────────────────────────────────── */
 
 .theme-night .home-balldrop-prize {
-  background: var(--bg-paper);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-soft);
 }
 
 .theme-night .home-balldrop-prize-place {
@@ -442,4 +443,14 @@
 .theme-night .home-event-card {
   background: var(--bg-surface);
   border-color: var(--border-soft);
+}
+
+.theme-night .home-social-link {
+  background: var(--bg-surface);
+  border-color: var(--border-strong);
+  color: var(--text-primary);
+}
+
+.theme-night .home-social-link:hover {
+  background: var(--bg-soft);
 }

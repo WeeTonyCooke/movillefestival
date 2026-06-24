@@ -81,19 +81,19 @@ const responsiveStyles = `
   .ticket-lighthouse {
     width: 150px;
     flex-shrink: 0;
-    background: var(--bg-soft, #F0F4FB);
+    background: #F0F4FB;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 16px 12px;
-    border-right: 1px solid var(--border-soft, rgba(27,42,74,0.10));
+    border-right: 1px solid rgba(27,42,74,0.10);
   }
   .ticket-lighthouse img { width: 115px; height: auto; display: block; }
   .ticket-lighthouse-sm img { width: 80px; }
   .ticket-body {
     flex: 1;
     min-width: 0;
-    background: var(--bg-soft, #F0F4FB);
+    background: #F0F4FB;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -116,7 +116,7 @@ const responsiveStyles = `
     transform: translateY(-50%);
     width: 20px;
     height: 20px;
-    background: var(--bg-soft, #EAECF0);
+    background: #EAECF0;
     border-radius: 50%;
   }
   .ticket-price { font-size: 58px; font-weight: 900; color: #fff; line-height: 1; letter-spacing: -2px; }

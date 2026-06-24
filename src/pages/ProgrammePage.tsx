@@ -703,13 +703,13 @@ function ProgrammePage({ isNight }: { isNight: boolean }) {
                 {temp !== null
                   ? `${temp}°C in Moville`
                   : isNight
-                    ? 'A lovely evening in Moville'
+                    ? 'A fine evening in Moville'
                     : 'A fine day in Moville'}
               </span>
               <span className="prog-weather-subline">
                 {isNight
-                  ? 'Clear skies and a good night for heading into town.'
-                  : `A decent day for ${PROGRAMME_DATA[activeDay][0].title}.`}
+                  ? 'A good night for heading into town.'
+                  : 'A great day to be out and about in Moville.'}
               </span>
             </div>
           </div>

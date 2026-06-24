@@ -82,9 +82,11 @@ async function fillBedPushForm(page: Page, opts: {
     const checkboxes = page.locator('input[type="checkbox"]');
     const count = await checkboxes.count();
     for (let i = 0; i < count; i++) {
-      if (!(await checkboxes.nth(i).isChecked())) {
-        await checkboxes.nth(i).click();
-        await page.waitForTimeout(100);
+      const cb = checkboxes.nth(i);
+      await cb.waitFor({ state: 'attached', timeout: 3000 });
+      if (!(await cb.isChecked())) {
+        await cb.click({ force: true });
+        await page.waitForTimeout(150);
       }
     }
   }
@@ -113,9 +115,11 @@ async function fillCraftFairForm(page: Page, opts: {
     const checkboxes = page.locator('input[type="checkbox"]');
     const count = await checkboxes.count();
     for (let i = 0; i < count; i++) {
-      if (!(await checkboxes.nth(i).isChecked())) {
-        await checkboxes.nth(i).click();
-        await page.waitForTimeout(100);
+      const cb = checkboxes.nth(i);
+      await cb.waitFor({ state: 'attached', timeout: 3000 });
+      if (!(await cb.isChecked())) {
+        await cb.click({ force: true });
+        await page.waitForTimeout(150);
       }
     }
   }
@@ -268,7 +272,12 @@ test.describe('Bed Push Race', () => {
     await page.waitForTimeout(400);
     const checkboxes = page.locator('input[type="checkbox"]');
     const count = await checkboxes.count();
-    for (let i = 0; i < count; i++) await checkboxes.nth(i).click();
+    for (let i = 0; i < count; i++) {
+      const cb = checkboxes.nth(i);
+      await cb.waitFor({ state: 'attached', timeout: 3000 });
+      await cb.click({ force: true });
+      await page.waitForTimeout(150);
+    }
     // Button should remain disabled without team name
     await expect(page.locator('button.form-submit')).toBeDisabled();
   });
@@ -335,7 +344,12 @@ test.describe('Craft Fair', () => {
     await page.waitForTimeout(400);
     const checkboxes = page.locator('input[type="checkbox"]');
     const count = await checkboxes.count();
-    for (let i = 0; i < count; i++) await checkboxes.nth(i).click();
+    for (let i = 0; i < count; i++) {
+      const cb = checkboxes.nth(i);
+      await cb.waitFor({ state: 'attached', timeout: 3000 });
+      await cb.click({ force: true });
+      await page.waitForTimeout(150);
+    }
     await expect(page.locator('button.form-submit')).toBeDisabled();
   });
 

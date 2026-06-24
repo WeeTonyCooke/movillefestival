@@ -76,10 +76,6 @@
   --coral-soft:         rgba(224, 91, 60, 0.10);
 }
 
-html {
-  scroll-behavior: smooth;
-}
-
 html,
 body,
 #root {

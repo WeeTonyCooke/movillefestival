@@ -79,14 +79,16 @@ async function fillBedPushForm(page: Page, opts: {
   await page.waitForTimeout(400);
 
   if (opts.checkboxes !== false) {
+    // Wait for all 4 checkboxes to be present before interacting
     const checkboxes = page.locator('input[type="checkbox"]');
-    const count = await checkboxes.count();
-    for (let i = 0; i < count; i++) {
-      const cb = checkboxes.nth(i);
-      await cb.waitFor({ state: 'attached', timeout: 3000 });
+    await expect(checkboxes).toHaveCount(4, { timeout: 5000 });
+    // Click each by stable index with a fresh locator each time
+    for (let i = 0; i < 4; i++) {
+      const cb = page.locator('input[type="checkbox"]').nth(i);
+      await cb.waitFor({ state: 'visible', timeout: 5000 });
       if (!(await cb.isChecked())) {
-        await cb.click({ force: true });
-        await page.waitForTimeout(150);
+        await cb.check();
+        await page.waitForTimeout(100);
       }
     }
   }
@@ -112,14 +114,16 @@ async function fillCraftFairForm(page: Page, opts: {
   await page.waitForTimeout(400);
 
   if (opts.checkboxes !== false) {
+    // Wait for all 4 checkboxes to be present before interacting
     const checkboxes = page.locator('input[type="checkbox"]');
-    const count = await checkboxes.count();
-    for (let i = 0; i < count; i++) {
-      const cb = checkboxes.nth(i);
-      await cb.waitFor({ state: 'attached', timeout: 3000 });
+    await expect(checkboxes).toHaveCount(4, { timeout: 5000 });
+    // Click each by stable index with a fresh locator each time
+    for (let i = 0; i < 4; i++) {
+      const cb = page.locator('input[type="checkbox"]').nth(i);
+      await cb.waitFor({ state: 'visible', timeout: 5000 });
       if (!(await cb.isChecked())) {
-        await cb.click({ force: true });
-        await page.waitForTimeout(150);
+        await cb.check();
+        await page.waitForTimeout(100);
       }
     }
   }
@@ -272,11 +276,11 @@ test.describe('Bed Push Race', () => {
     await page.waitForTimeout(400);
     const checkboxes = page.locator('input[type="checkbox"]');
     const count = await checkboxes.count();
-    for (let i = 0; i < count; i++) {
-      const cb = checkboxes.nth(i);
-      await cb.waitFor({ state: 'attached', timeout: 3000 });
-      await cb.click({ force: true });
-      await page.waitForTimeout(150);
+    for (let i = 0; i < 4; i++) {
+      const cb = page.locator('input[type="checkbox"]').nth(i);
+      await cb.waitFor({ state: 'visible', timeout: 5000 });
+      await cb.check();
+      await page.waitForTimeout(100);
     }
     // Button should remain disabled without team name
     await expect(page.locator('button.form-submit')).toBeDisabled();
@@ -344,11 +348,11 @@ test.describe('Craft Fair', () => {
     await page.waitForTimeout(400);
     const checkboxes = page.locator('input[type="checkbox"]');
     const count = await checkboxes.count();
-    for (let i = 0; i < count; i++) {
-      const cb = checkboxes.nth(i);
-      await cb.waitFor({ state: 'attached', timeout: 3000 });
-      await cb.click({ force: true });
-      await page.waitForTimeout(150);
+    for (let i = 0; i < 4; i++) {
+      const cb = page.locator('input[type="checkbox"]').nth(i);
+      await cb.waitFor({ state: 'visible', timeout: 5000 });
+      await cb.check();
+      await page.waitForTimeout(100);
     }
     await expect(page.locator('button.form-submit')).toBeDisabled();
   });

@@ -597,7 +597,11 @@ function ProgrammePage({ isNight }: { isNight: boolean }) {
   const [activeDay, setActiveDay] = useState<FestivalDay>(() =>
     getDefaultFestivalDay(),
   );
-  const [temp, setTemp] = useState<number | null>(null);
+  type DayForecast = {
+    high: number; low: number; code: number;
+    description: string; emoji: string; rain: number; wind: number;
+  };
+  const [forecast, setForecast] = useState<Record<string, DayForecast>>({});
   const [selectedVotes, setSelectedVotes] = useState<Record<string, Rating>>(
     {},
   );
@@ -606,15 +610,9 @@ function ProgrammePage({ isNight }: { isNight: boolean }) {
     fetch('/.netlify/functions/weather')
       .then((res) => res.json())
       .then((data) => {
-        if (typeof data.temp === 'number') {
-          setTemp(data.temp);
-        } else {
-          setTemp(null);
-        }
+        if (data.forecast) setForecast(data.forecast);
       })
-      .catch(() => {
-        setTemp(null);
-      });
+      .catch(() => {});
   }, []);
 
   const handleVote = (
@@ -694,25 +692,28 @@ function ProgrammePage({ isNight }: { isNight: boolean }) {
         <main className="prog-main">
 
           {/* ── Weather strip ── */}
-          <div className="prog-weather">
-            <span className="prog-weather-icon" aria-hidden="true">
-              {isNight ? '🌙' : '☀️'}
-            </span>
-            <div className="prog-weather-copy">
-              <span className="prog-weather-line">
-                {temp !== null
-                  ? `${temp}°C in Moville`
-                  : isNight
-                    ? 'A fine evening in Moville'
-                    : 'A fine day in Moville'}
-              </span>
-              <span className="prog-weather-subline">
-                {isNight
-                  ? 'A good night for heading into town.'
-                  : 'A great day to be out and about in Moville.'}
-              </span>
-            </div>
-          </div>
+          {(() => {
+            const w = forecast[activeDay];
+            return (
+              <div className="prog-weather">
+                <span className="prog-weather-icon" aria-hidden="true">
+                  {w ? w.emoji : isNight ? '🌙' : '☀️'}
+                </span>
+                <div className="prog-weather-copy">
+                  <span className="prog-weather-line">
+                    {w
+                      ? `${w.description} · ${w.high}°C / ${w.low}°C`
+                      : 'Moville, Co. Donegal'}
+                  </span>
+                  <span className="prog-weather-subline">
+                    {w
+                      ? `${w.rain}% chance of rain · Wind ${w.wind} km/h`
+                      : 'Weather forecast loading…'}
+                  </span>
+                </div>
+              </div>
+            );
+          })()}
 
           {/* ── Schedule — one per day, hidden when not active ── */}
           {DAY_ORDER.map((day) => {

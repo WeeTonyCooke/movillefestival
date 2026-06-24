@@ -238,6 +238,13 @@ const PROGRAMME_DATA: Record<FestivalDay, ProgrammeEvent[]> = {
       strapline:
         'One of Ireland’s best-loved bands brings the big Saturday night to Market Square.',
     },
+    {
+      time: '00:00',
+      title: 'Keith Fletcher — Over 35s Rave',
+      venue: "Annie’s Bar",
+      strapline:
+        'Highland Radio DJ Keith Fletcher plays a non-stop night of 90s and 00s dance anthems and club classics. Doors midnight. Over 35s event.',
+    },
   ],
   SUN: [
     {
@@ -294,6 +301,13 @@ const PROGRAMME_DATA: Record<FestivalDay, ProgrammeEvent[]> = {
       headline: true,
       strapline:
         'Ireland’s premier ABBA tribute band hits the Square for the festival finale. Glitter optional, but encouraged.',
+    },
+    {
+      time: '23:30',
+      title: 'DJ Col Hamilton — LUSH! Portrush',
+      venue: "Annie’s Bar",
+      strapline:
+        'Promoter and resident DJ of the iconic LUSH! Portrush takes to the decks for classic dance anthems and club favourites. Warm-up set from local favourite DJ Paddy Hegarty from earlier in the evening.',
     },
   ],
 };

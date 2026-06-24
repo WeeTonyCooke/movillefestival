@@ -83,14 +83,23 @@ async function fillBedPushForm(page: Page, opts: {
     // If sold out, form renders without checkboxes — skip gracefully
     const count = await checkboxes.count();
     if (count === 0) return;
-    for (let i = 0; i < count; i++) {
-      const cb = page.locator('input[type="checkbox"]').nth(i);
-      await cb.waitFor({ state: 'visible', timeout: 5000 });
-      if (!(await cb.isChecked())) {
-        await cb.check();
-        await page.waitForTimeout(100);
-      }
-    }
+    // Wait for form to settle before interacting with checkboxes
+    await page.waitForTimeout(300);
+    // Use dispatchEvent to fire React synthetic events — avoids DOM stability issues
+    await page.evaluate(() => {
+      const inputs = Array.from(document.querySelectorAll('input[type="checkbox"]'));
+      inputs.forEach(input => {
+        const el = input as HTMLInputElement;
+        if (!el.checked) {
+          const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
+            window.HTMLInputElement.prototype, 'checked'
+          )?.set;
+          nativeInputValueSetter?.call(el, true);
+          el.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+      });
+    });
+    await page.waitForTimeout(200);
   }
 }
 
@@ -118,14 +127,23 @@ async function fillCraftFairForm(page: Page, opts: {
     // If sold out, form renders without checkboxes — skip gracefully
     const count = await checkboxes.count();
     if (count === 0) return;
-    for (let i = 0; i < count; i++) {
-      const cb = page.locator('input[type="checkbox"]').nth(i);
-      await cb.waitFor({ state: 'visible', timeout: 5000 });
-      if (!(await cb.isChecked())) {
-        await cb.check();
-        await page.waitForTimeout(100);
-      }
-    }
+    // Wait for form to settle before interacting with checkboxes
+    await page.waitForTimeout(300);
+    // Use dispatchEvent to fire React synthetic events — avoids DOM stability issues
+    await page.evaluate(() => {
+      const inputs = Array.from(document.querySelectorAll('input[type="checkbox"]'));
+      inputs.forEach(input => {
+        const el = input as HTMLInputElement;
+        if (!el.checked) {
+          const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
+            window.HTMLInputElement.prototype, 'checked'
+          )?.set;
+          nativeInputValueSetter?.call(el, true);
+          el.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+      });
+    });
+    await page.waitForTimeout(200);
   }
 }
 

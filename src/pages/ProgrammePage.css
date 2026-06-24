@@ -787,8 +787,9 @@
 }
 
 .theme-night .prog-social-link {
-  background: rgba(255,255,255,0.06);
-  border-color: rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.08);
+  border-color: rgba(255,255,255,0.28);
+  color: rgba(244,239,229,0.7);
 }
 
 /* ── Print ────────────────────────────────────────────────────────── */

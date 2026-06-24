@@ -380,14 +380,22 @@ export default function PassesPage() {
       <div style={{ background: '#FAF8F4', minHeight: '100vh', padding: '40px 20px 60px', fontFamily: "'Outfit', system-ui, sans-serif" }}>
 
         {/* Back to site */}
-        <div style={{ maxWidth: 680, margin: '0 auto 24px', display: 'flex', alignItems: 'center', gap: 12 }}>
+        <div style={{ maxWidth: 680, margin: '0 auto 28px', display: 'flex', alignItems: 'flex-start', gap: 16 }}>
           <Link
             to="/"
             aria-label="Back to home"
-            style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 40, height: 40, borderRadius: '50%', border: '1px solid rgba(22,50,60,0.18)', background: '#FFFCF6', color: '#16323C', textDecoration: 'none', flexShrink: 0 }}
+            style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 40, height: 40, borderRadius: '50%', border: '1px solid rgba(22,50,60,0.18)', background: '#FFFCF6', color: '#16323C', textDecoration: 'none', flexShrink: 0, marginTop: 4 }}
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4"><path d="M15 18l-6-6 6-6" /></svg>
           </Link>
+          <div>
+            <p style={{ margin: '0 0 4px', fontFamily: "'Outfit', sans-serif", fontSize: '0.66rem', fontWeight: 700, letterSpacing: '0.24em', textTransform: 'uppercase', color: '#B0894F' }}>
+              Moville Summer Festival 2026
+            </p>
+            <h1 style={{ margin: 0, fontFamily: "'Playfair Display', serif", fontSize: 'clamp(1.8rem, 5vw, 2.6rem)', fontWeight: 700, color: '#16323C', lineHeight: 1.1, letterSpacing: '-0.01em' }}>
+              Festival Passes
+            </h1>
+          </div>
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -395,12 +403,6 @@ export default function PassesPage() {
           {step === 'select' && (
             <>
               <div style={{ width: '100%', maxWidth: 680, marginBottom: 28 }}>
-                <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '3px', textTransform: 'uppercase', color: '#888', marginBottom: 10 }}>
-                  Moville Summer Festival 2026
-                </div>
-                <h1 style={{ fontSize: 26, fontWeight: 900, color: '#16323C', letterSpacing: '-0.5px', marginBottom: 5 }}>
-                  Choose your pass
-                </h1>
                 <p style={{ fontSize: 13, color: 'rgba(22,50,60,0.5)', marginBottom: 0 }}>
                   Passes required for ages 16 and over — under 16s enter free.
                 </p>

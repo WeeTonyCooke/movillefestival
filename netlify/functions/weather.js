@@ -90,8 +90,11 @@ exports.handler = async function () {
       const key = FESTIVAL_DATES[date];
       if (!key) return; // skip non-festival dates
       const code = data.daily.weathercode[i];
+      const high = Math.round(data.daily.temperature_2m_max[i]);
+      // Skip days where Open-Meteo has no data yet (beyond forecast range)
+      if (code === null || code === undefined || high === 0) return;
       forecast[key] = {
-        high:        Math.round(data.daily.temperature_2m_max[i]),
+        high,
         low:         Math.round(data.daily.temperature_2m_min[i]),
         code,
         description: describeCode(code),

@@ -163,7 +163,7 @@
 /* Active — navy underline */
 .prog-day-pill.is-active {
   color: var(--text-primary);
-  border-bottom-color: var(--harbour-teal);
+  border-bottom-color: var(--accent);
 }
 
 /* ── Main content ─────────────────────────────────────────────────── */

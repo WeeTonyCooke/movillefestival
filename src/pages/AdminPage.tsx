@@ -83,10 +83,10 @@ const CRAFT_FAIR_CAPACITY = 15;
 const s: Record<string, React.CSSProperties> = {
   wrap: { fontFamily: 'Outfit, system-ui, sans-serif', minHeight: '100vh', background: '#FAF8F4' },
   header: { background: '#16323C', padding: '14px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '16px' },
-  headerTitle: { color: '#fff', margin: 0, fontSize: '18px', fontWeight: 'bold' },
-  headerSub: { color: 'rgba(201,168,120,0.85)', margin: '2px 0 0', fontSize: '13px' },
+  headerTitle: { color: '#f4efe5', margin: 0, fontSize: '15px', fontWeight: 600, fontFamily: "'Outfit', system-ui, sans-serif" },
+  headerSub: { color: '#B0894F', margin: '2px 0 0', fontSize: '10px', fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase' as const },
   headerActions: { display: 'flex', gap: '10px', alignItems: 'center', flexWrap: 'wrap' as const, justifyContent: 'flex-end' as const },
-  backLink: { color: 'rgba(201,168,120,0.85)', fontSize: '13px', textDecoration: 'none', background: 'none', border: 'none', cursor: 'pointer', padding: '4px 2px', fontFamily: 'Outfit, system-ui, sans-serif' },
+  backLink: { color: 'rgba(244,239,229,0.7)', fontSize: '13px', textDecoration: 'none', background: 'none', border: 'none', cursor: 'pointer', padding: '4px 2px', fontFamily: "'Outfit', system-ui, sans-serif" },
   choiceWrap: { minHeight: '100vh', background: '#16323C', display: 'flex', flexDirection: 'column' as const, fontFamily: "'Outfit', system-ui, sans-serif" },
   choiceHeader: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '20px 28px', borderBottom: '1px solid rgba(255,255,255,0.08)' },
   choiceHeaderLeft: { display: 'flex', flexDirection: 'column' as const, gap: '2px' },
@@ -510,8 +510,8 @@ export default function AdminPage() {
       {/* Header */}
       <div style={s.header}>
         <div>
-          <h1 style={s.headerTitle}>Moville Summer Festival 2026</h1>
-          <p style={s.headerSub}>Committee admin</p>
+          <p style={s.headerTitle}>Moville Summer Festival 2026</p>
+          <p style={s.headerSub}>Committee Admin</p>
         </div>
         <div style={s.headerActions}>
           <button onClick={() => setView('choice')} style={s.backLink}>← Back to menu</button>
@@ -528,9 +528,9 @@ export default function AdminPage() {
             { label: 'Craft Fair', value: craftPaid.length >= CRAFT_FAIR_CAPACITY ? 'Sold out' : `${craftPaid.length} stalls`, sub: craftPaid.length >= CRAFT_FAIR_CAPACITY ? `${CRAFT_FAIR_CAPACITY} stalls filled` : `${CRAFT_FAIR_CAPACITY - craftPaid.length} remaining` },
             { label: 'Festival Passes', value: `${passesPaid.length} sold`, sub: `${formatEuro(passesPaid.reduce((s, r) => s + r.amount_paid, 0))} revenue` },
             { label: 'Sponsorships', value: formatEuro(sponsorPaid.reduce((s,r) => s + r.amount_paid, 0)), sub: `${sponsorPaid.length} sponsor${sponsorPaid.length !== 1 ? 's' : ''}` },
-            { label: 'Total revenue', value: formatEuro(totalRevenue), sub: 'all events combined', green: true },
-          ].map(({ label, value, sub, green }) => (
-            <div key={label} style={s.metricCard}>
+            { label: 'Total revenue', value: formatEuro(totalRevenue), sub: 'all events combined', green: true, accent: true },
+          ].map(({ label, value, sub, green, accent }) => (
+            <div key={label} style={{ ...s.metricCard, ...(accent ? { borderColor: '#1D9E75', borderWidth: '1.5px' } : {}) }}>
               <p style={s.metricLabel}>{label}</p>
               <p style={{ ...s.metricValue, color: green ? '#246B52' : '#16323C' }}>{value}</p>
               <p style={s.metricSub}>{sub}</p>

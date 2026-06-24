@@ -52,7 +52,7 @@ const PassSuccessPage: React.FC = () => {
           margin:     '0 0 16px',
           fontFamily: "'Playfair Display', Georgia, serif",
           fontSize:   'clamp(24px, 5vw, 34px)',
-          color:      '#16323C',
+          color:      textPri,
           fontWeight: 700,
         }}>
           Purchase Confirmed
@@ -67,7 +67,7 @@ const PassSuccessPage: React.FC = () => {
         <p style={{ margin: '0 0 36px', fontSize: 14, color: textMut, lineHeight: 1.6 }}>
           The email may take a couple of minutes to arrive. If you don't see it,
           check your spam folder or contact{' '}
-          <a href="mailto:movillefestival@gmail.com" style={{ color: 'var(--accent, #1F4E5F)' }}>
+          <a href="mailto:movillefestival@gmail.com" style={{ color: isNight ? '#C9A56A' : 'var(--accent, #1F4E5F)' }}>
             movillefestival@gmail.com
           </a>.
         </p>
@@ -95,8 +95,8 @@ const PassSuccessPage: React.FC = () => {
               padding:        '14px 32px',
               borderRadius:   999,
               background:     'transparent',
-              border:         '1.5px solid rgba(22,50,60,0.22)',
-              color:          '#16323C',
+              border:         `1.5px solid ${isNight ? 'rgba(244,239,229,0.25)' : 'rgba(22,50,60,0.22)'}`,
+              color:          textPri,
               fontWeight:     600,
               fontSize:       15,
               textDecoration: 'none',

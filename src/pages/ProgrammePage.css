@@ -233,7 +233,7 @@
   font-style: italic;
   font-weight: 600;
   font-size: 1.15rem;
-  color: var(--harbour-teal);
+  color: var(--accent);
   white-space: nowrap;
 }
 
@@ -356,6 +356,7 @@
   padding: 18px 18px 18px 20px;
   margin-left: -20px;
   margin-right: -4px;
+  margin-bottom: 16px;
 }
 
 /* Headliner — larger gold dot, positioned on left border of card */

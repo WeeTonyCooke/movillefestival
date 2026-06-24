@@ -1,14 +1,313 @@
-/* ── Sponsorship section — own visual identity, reached by scrolling past the hero's sponsor band ── */
+/* ══════════════════════════════════════════════════════════════════════
+   HomePage — Harbour Light redesign
+   Below-hero sections: Ball Drop feature, Event cards, Sponsorship band
+   ══════════════════════════════════════════════════════════════════════ */
+
+/* ── Ball Drop featured section ───────────────────────────────────── */
+
+.home-balldrop {
+  background: var(--bg-base);
+  padding: 64px 24px 72px;
+  display: flex;
+  justify-content: center;
+}
+
+.home-balldrop-inner {
+  width: 100%;
+  max-width: 560px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.home-balldrop-header {
+  margin-bottom: 36px;
+}
+
+.home-balldrop-eyebrow {
+  font-family: var(--font-sans);
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 0 0 10px;
+}
+
+.home-balldrop-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+}
+
+.home-balldrop-desc {
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  line-height: 1.65;
+  margin: 0;
+  max-width: 42ch;
+}
+
+/* Prize row */
+.home-balldrop-prizes {
+  display: flex;
+  gap: 1px;
+  width: 100%;
+  max-width: 420px;
+  background: var(--border-soft);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--border-soft);
+  margin-bottom: 28px;
+}
+
+.home-balldrop-prize {
+  flex: 1;
+  background: var(--paper, #FFFCF6);
+  padding: 18px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.home-balldrop-prize-place {
+  font-family: var(--font-sans);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.home-balldrop-prize-amount {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1;
+}
+
+/* Bundle options */
+.home-balldrop-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  width: 100%;
+  max-width: 420px;
+  margin-bottom: 24px;
+}
+
+.home-balldrop-option {
+  background: var(--paper, #FFFCF6);
+  border: 1.5px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  padding: 18px 16px;
+  text-align: left;
+  position: relative;
+}
+
+.home-balldrop-option--featured {
+  border-color: var(--accent);
+  background: rgba(22, 50, 60, 0.03);
+}
+
+.home-balldrop-option-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: var(--cream, #F4EDE0);
+  background: var(--accent);
+  border-radius: var(--radius-pill);
+  padding: 2px 9px;
+  margin-bottom: 10px;
+}
+
+.home-balldrop-option-price {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 2px;
+  line-height: 1;
+}
+
+.home-balldrop-option-desc {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  margin: 0 0 4px;
+}
+
+.home-balldrop-option-per {
+  font-size: 0.74rem;
+  color: var(--text-muted);
+}
+
+/* CTA button — navy primary */
+.home-balldrop-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 32px;
+  border-radius: var(--radius-pill);
+  background: var(--text-primary);
+  color: var(--cream, #F4EDE0);
+  font-family: var(--font-sans);
+  font-size: 0.88rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  box-shadow: var(--shadow-soft);
+  transition: background 0.18s ease, transform 0.14s ease;
+  margin-bottom: 10px;
+}
+
+.home-balldrop-btn:hover {
+  background: #0E2730;
+  transform: translateY(-1px);
+}
+
+.home-balldrop-btn:active {
+  transform: translateY(0);
+}
+
+.home-balldrop-note {
+  font-size: 0.74rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+/* ── Other events section ──────────────────────────────────────────── */
+
+.home-events {
+  background: var(--paper, #FFFCF6);
+  border-top: 1px solid var(--border-soft);
+  border-bottom: 1px solid var(--border-soft);
+  padding: 56px 24px;
+}
+
+.home-events-inner {
+  max-width: 640px;
+  margin: 0 auto;
+  display: grid;
+  gap: 14px;
+}
+
+.home-event-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-md);
+  padding: 28px 24px;
+  box-shadow: var(--shadow-soft);
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.home-event-card-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-sm);
+  background: rgba(22, 50, 60, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--text-primary);
+}
+
+.home-event-card-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.home-event-card-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.home-event-card-title {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 6px;
+  line-height: 1.2;
+}
+
+.home-event-card-desc {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin: 0 0 12px;
+}
+
+.home-event-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.home-event-card-meta span {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  background: rgba(22, 50, 60, 0.05);
+  border-radius: 99px;
+  padding: 3px 10px;
+}
+
+.home-event-card-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 18px;
+  border-radius: var(--radius-pill);
+  border: 1.5px solid var(--border-strong);
+  background: transparent;
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  align-self: center;
+  transition: border-color 0.18s, background 0.18s, color 0.18s, transform 0.14s;
+}
+
+.home-event-card-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(176, 137, 79, 0.06);
+  transform: translateY(-1px);
+}
+
+/* ── Sponsorship section ──────────────────────────────────────────── */
 
 .home-sponsorship {
-  background: #123844;
-  padding: 56px 24px 72px;
+  background: var(--text-primary);
+  padding: 64px 24px 80px;
   display: flex;
   justify-content: center;
 }
 
 .home-sponsorship-inner {
-  max-width: 560px;
+  max-width: 520px;
   text-align: center;
   opacity: 0;
   transform: translateY(24px);
@@ -20,39 +319,54 @@
   transform: translateY(0);
 }
 
+.home-sponsorship-eyebrow {
+  font-family: var(--font-sans);
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 0 0 12px;
+}
+
 .home-sponsorship-title {
-  font-family: var(--font-display, 'Playfair Display', serif);
+  font-family: var(--font-display);
   font-size: clamp(1.8rem, 5vw, 2.6rem);
-  color: #E3D2B8;
+  color: var(--cream, #F4EDE0);
   margin: 0 0 16px;
-  line-height: 1.15;
+  line-height: 1.12;
+  letter-spacing: -0.01em;
 }
 
 .home-sponsorship-desc {
-  font-family: var(--font-body, 'Outfit', sans-serif);
-  font-size: 1rem;
-  color: rgba(244, 233, 216, 0.78);
-  line-height: 1.6;
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  color: rgba(244, 237, 224, 0.75);
+  line-height: 1.65;
   margin: 0 0 32px;
 }
 
 .home-sponsorship-btn {
-  font-family: var(--font-body, 'Outfit', sans-serif);
-  font-size: 0.95rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 32px;
+  border-radius: var(--radius-pill);
+  background: var(--accent);
+  color: var(--cream, #F4EDE0);
+  font-family: var(--font-sans);
+  font-size: 0.88rem;
   font-weight: 700;
-  letter-spacing: 0.02em;
-  background: #D8C3A5;
-  color: #123844;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
   border: none;
-  border-radius: 999px;
-  padding: 15px 30px;
   cursor: pointer;
-  transition: transform 0.2s ease, opacity 0.2s ease;
+  transition: background 0.18s ease, transform 0.14s ease;
 }
 
 .home-sponsorship-btn:hover {
+  background: #8E6B36;
   transform: translateY(-1px);
-  opacity: 0.92;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -63,8 +377,38 @@
   }
 }
 
+/* ── Responsive ────────────────────────────────────────────────────── */
+
 @media (min-width: 768px) {
-  .home-sponsorship {
-    padding: 80px 24px 96px;
+  .home-events-inner {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .home-event-card {
+    flex-direction: column;
+  }
+
+  .home-event-card-btn {
+    align-self: flex-start;
+    margin-top: 4px;
+  }
+}
+
+@media (max-width: 540px) {
+  .home-balldrop {
+    padding: 48px 18px 56px;
+  }
+
+  .home-balldrop-options {
+    grid-template-columns: 1fr;
+  }
+
+  .home-event-card {
+    gap: 14px;
+  }
+
+  .home-event-card-btn {
+    flex-shrink: 0;
+    align-self: flex-end;
   }
 }

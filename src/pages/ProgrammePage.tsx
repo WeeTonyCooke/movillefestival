@@ -799,9 +799,9 @@ function ProgrammePage({ isNight }: { isNight: boolean }) {
                           {isHeadliner && (
                             <div className="prog-event-actions">
                               {event.admission && (
-                                <span className="prog-event-admission-chip">
+                                <Link to="/passes" className="prog-event-admission-chip">
                                   Admission {event.admission}
-                                </span>
+                                </Link>
                               )}
                               <button
                                 type="button"

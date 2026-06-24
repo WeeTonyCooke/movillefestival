@@ -373,10 +373,17 @@ export default function AdminPage() {
   // ── Login screen ──
   if (!authed) {
     return (
-      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#FAF8F4' }}>
-        <div style={{ background: '#fff', padding: '40px', borderRadius: '12px', boxShadow: '0 2px 16px rgba(0,0,0,0.1)', width: '320px' }}>
-          <h1 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: '22px', color: '#16323C', marginBottom: '4px' }}>Committee Admin</h1>
-          <p style={{ fontFamily: 'Outfit, system-ui, sans-serif', fontSize: '14px', color: '#888', marginBottom: '24px' }}>Moville Summer Festival 2026</p>
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#F4F6F8', fontFamily: "'Outfit', system-ui, sans-serif" }}>
+        <div style={{ background: '#fff', borderRadius: '16px', boxShadow: '0 4px 24px rgba(22,50,60,0.10)', width: '100%', maxWidth: '360px', padding: '40px 36px 36px', display: 'flex', flexDirection: 'column' as const, alignItems: 'center' }}>
+
+          {/* Lighthouse mark */}
+          <div style={{ width: '56px', height: '56px', borderRadius: '50%', background: '#16323C', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
+            <img src="/lighthouse-mark.svg" alt="" aria-hidden="true" style={{ width: '30px', height: '30px', filter: 'brightness(0) invert(1)' }} />
+          </div>
+
+          <h1 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: '22px', fontWeight: 700, color: '#16323C', margin: '0 0 4px', textAlign: 'center' as const }}>Committee Admin</h1>
+          <p style={{ fontFamily: "'Outfit', system-ui, sans-serif", fontSize: '13px', color: '#888', margin: '0 0 28px', textAlign: 'center' as const }}>Moville Summer Festival 2026</p>
+
           <form onSubmit={e => { e.preventDefault(); handleLogin(); }} style={{ width: '100%' }}>
             <input
               type="text"
@@ -395,10 +402,10 @@ export default function AdminPage() {
               placeholder="Password"
               value={password}
               onChange={e => setPassword(e.target.value)}
-              style={{ width: '100%', padding: '11px 14px', border: '1.5px solid rgba(22,50,60,0.16)', borderRadius: '12px', fontFamily: 'Outfit, system-ui, sans-serif', fontSize: '15px', boxSizing: 'border-box', marginBottom: '12px' }}
+              style={{ width: '100%', padding: '11px 14px', border: '1.5px solid rgba(22,50,60,0.16)', borderRadius: '12px', fontFamily: "'Outfit', system-ui, sans-serif", fontSize: '15px', boxSizing: 'border-box' as const, marginBottom: '12px', outline: 'none' }}
             />
-            {error && <p style={{ color: '#c0392b', fontFamily: 'Outfit, system-ui, sans-serif', fontSize: '13px', marginBottom: '12px' }}>{error}</p>}
-            <button type="submit" disabled={checkingLogin} style={{ ...btnStyle('primary'), width: '100%', padding: '12px', fontSize: '15px', opacity: checkingLogin ? 0.7 : 1 }}>
+            {error && <p style={{ color: '#c0392b', fontFamily: "'Outfit', system-ui, sans-serif", fontSize: '13px', marginBottom: '12px', margin: '0 0 12px' }}>{error}</p>}
+            <button type="submit" disabled={checkingLogin} style={{ ...btnStyle('primary'), width: '100%', padding: '13px', fontSize: '15px', fontWeight: 700, borderRadius: '999px', opacity: checkingLogin ? 0.7 : 1 }}>
               {checkingLogin ? 'Checking…' : 'Sign in'}
             </button>
           </form>

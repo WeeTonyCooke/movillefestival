@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useNightMode } from '../hooks/useNightMode';
 
 const PASSES = [
   {
@@ -360,6 +361,14 @@ function CheckoutForm({ pass, onChangePass }: { pass: Pass; onChangePass: () => 
 export default function PassesPage() {
   const [step,     setStep]     = useState<Step>('select');
   const [selected, setSelected] = useState<string | null>(null);
+  const isNight = useNightMode();
+
+  // Night mode colour tokens
+  const bg       = isNight ? '#0c1a22' : '#FAF8F4';
+  const surface  = isNight ? 'rgba(18,36,48,0.76)' : '#FFFCF6';
+  const textPri  = isNight ? '#f4efe5' : '#16323C';
+  const textSec  = isNight ? 'rgba(244,239,229,0.64)' : 'rgba(22,50,60,0.52)';
+  const border   = isNight ? 'rgba(255,255,255,0.10)' : 'rgba(22,50,60,0.12)';
 
   const selectedPass = PASSES.find(p => p.id === selected) ?? null;
 
@@ -377,14 +386,14 @@ export default function PassesPage() {
   return (
     <>
       <style>{responsiveStyles}</style>
-      <div style={{ background: '#FAF8F4', minHeight: '100vh', padding: '40px 20px 60px', fontFamily: "'Outfit', system-ui, sans-serif" }}>
+      <div style={{ background: bg, minHeight: '100vh', padding: '40px 20px 60px', fontFamily: "'Outfit', system-ui, sans-serif" }}>
 
         {/* Back to site */}
         <div style={{ maxWidth: 680, margin: '0 auto 28px', display: 'flex', alignItems: 'flex-start', gap: 16 }}>
           <Link
             to="/"
             aria-label="Back to home"
-            style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 40, height: 40, borderRadius: '50%', border: '1px solid rgba(22,50,60,0.18)', background: '#FFFCF6', color: '#16323C', textDecoration: 'none', flexShrink: 0, marginTop: 4 }}
+            style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 40, height: 40, borderRadius: '50%', border: `1px solid ${border}`, background: surface, color: textPri, textDecoration: 'none', flexShrink: 0, marginTop: 4 }}
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4"><path d="M15 18l-6-6 6-6" /></svg>
           </Link>
@@ -392,7 +401,7 @@ export default function PassesPage() {
             <p style={{ margin: '0 0 4px', fontFamily: "'Outfit', sans-serif", fontSize: '0.66rem', fontWeight: 700, letterSpacing: '0.24em', textTransform: 'uppercase', color: '#B0894F' }}>
               Moville Summer Festival 2026
             </p>
-            <h1 style={{ margin: 0, fontFamily: "'Playfair Display', serif", fontSize: 'clamp(1.8rem, 5vw, 2.6rem)', fontWeight: 700, color: '#16323C', lineHeight: 1.1, letterSpacing: '-0.01em' }}>
+            <h1 style={{ margin: 0, fontFamily: "'Playfair Display', serif", fontSize: 'clamp(1.8rem, 5vw, 2.6rem)', fontWeight: 700, color: textPri, lineHeight: 1.1, letterSpacing: '-0.01em' }}>
               Festival Passes
             </h1>
           </div>
@@ -403,7 +412,7 @@ export default function PassesPage() {
           {step === 'select' && (
             <>
               <div style={{ width: '100%', maxWidth: 680, marginBottom: 28 }}>
-                <p style={{ fontSize: 13, color: 'rgba(22,50,60,0.5)', marginBottom: 0 }}>
+                <p style={{ fontSize: 13, color: textSec, marginBottom: 0 }}>
                   Passes required for ages 16 and over — under 16s enter free.
                 </p>
               </div>

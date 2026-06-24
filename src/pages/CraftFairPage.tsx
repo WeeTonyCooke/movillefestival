@@ -134,7 +134,7 @@ export default function CraftFairPage() {
         <div className="form-page-content page-shell--narrow">
           <div className="form-card">
             <div className="form-success">
-              <div className="form-success-icon" style={{ fontSize: '2rem' }}>ℹ️</div>
+              <div className="form-success-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></div>
               <h2 className="form-success-title">Payment cancelled</h2>
               <p className="form-success-body">
                 No payment was taken and your stall has not been booked.
@@ -161,7 +161,7 @@ export default function CraftFairPage() {
         <div className="form-page-content page-shell--narrow">
           <div className="form-card">
             <div className="form-success">
-              <div className="form-success-icon" style={{ fontSize: '2rem' }}>🎨</div>
+              <div className="form-success-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8 12h8M12 8v8"/></svg></div>
               <h2 className="form-success-title">All stalls are taken!</h2>
               <p className="form-success-body">
                 The Craft Fair is fully booked. Come along to Festival Square on Saturday 11 July
@@ -177,7 +177,7 @@ export default function CraftFairPage() {
                 <p className="form-info-body">Follow us on social media to hear when applications
                   open for 2027.</p>
               </div>
-              <Link to="/programme" className="form-submit" style={{ textAlign: 'center', textDecoration: 'none' }}>
+              <Link to="/programme" className="form-submit form-submit--link">
                 View the full festival programme
               </Link>
               <p className="form-submit-note">Questions? Contact Rona at movillefestival@gmail.com</p>
@@ -305,10 +305,10 @@ export default function CraftFairPage() {
 
           {/* Info bullets */}
           <ul className="form-info-list">
-            <li>🪑 A 6ft trestle table is supplied for each stall.</li>
-            <li>⚡ Please note — electricity is not available at this event.</li>
-            <li>🕘 Arrival from 9am to set up. Fair opens at 10am sharp.</li>
-            <li>💬 A WhatsApp group will be created for all registered stallholders.</li>
+            <li>A 6ft trestle table is supplied for each stall.</li>
+            <li>Please note — electricity is not available at this event.</li>
+            <li>Arrival from 9am to set up. Fair opens at 10am sharp.</li>
+            <li>A WhatsApp group will be created for all registered stallholders.</li>
           </ul>
 
           {/* Your details */}

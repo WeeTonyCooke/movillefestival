@@ -282,7 +282,7 @@ export default function ScanPage() {
 const styles: Record<string, React.CSSProperties> = {
   screen: {
     minHeight:      '100vh',
-    background:     '#0E2730',
+    background:     '#0f1923',
     display:        'flex',
     flexDirection:  'column',
     alignItems:     'center',
@@ -305,7 +305,7 @@ const styles: Record<string, React.CSSProperties> = {
     width:        72,
     height:       72,
     borderRadius: '50%',
-    background:   'var(--accent, #1F4E5F)',
+    background:   'var(--accent)',
     display:      'flex',
     alignItems:   'center',
     justifyContent:'center',
@@ -316,7 +316,7 @@ const styles: Record<string, React.CSSProperties> = {
     margin:      0,
     fontSize:    22,
     fontWeight:  800,
-    color:       'var(--accent, #1F4E5F)',
+    color:       'var(--accent)',
     fontFamily:  "'Playfair Display', Georgia, serif",
   },
   loginSub: {
@@ -327,8 +327,8 @@ const styles: Record<string, React.CSSProperties> = {
   loginInput: {
     width:        '100%',
     padding:      '12px 14px',
-    border:       '1.5px solid rgba(22,50,60,0.16)',
-    borderRadius: 12,
+    border:       '1px solid #D1D5DB',
+    borderRadius: 8,
     fontSize:     15,
     marginBottom: 8,
     boxSizing:    'border-box',
@@ -337,10 +337,10 @@ const styles: Record<string, React.CSSProperties> = {
   loginBtn: {
     width:        '100%',
     padding:      '13px',
-    background:   'var(--accent, #1F4E5F)',
+    background:   'var(--accent)',
     color:        '#fff',
     border:       'none',
-    borderRadius: 999,
+    borderRadius: 10,
     fontSize:     15,
     fontWeight:   700,
     cursor:       'pointer',
@@ -487,6 +487,7 @@ const styles: Record<string, React.CSSProperties> = {
     fontSize:     15,
     fontWeight:   700,
     cursor:       'pointer',
+    backdropFilter: 'blur(8px)',
   },
   resultMenuLink: {
     marginTop:      18,

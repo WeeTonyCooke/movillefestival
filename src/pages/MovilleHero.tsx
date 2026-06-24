@@ -50,6 +50,7 @@ const MovilleHero: React.FC<MovilleHeroProps> = ({ isNight }) => {
   const isHeroNight = heroPhase === 'night' || isNight;
 
   return (
+    <>
     <section className={`moville-hero hero-${heroPhase}`}>
       {/* Day — mobile */}
       <div
@@ -126,14 +127,6 @@ const MovilleHero: React.FC<MovilleHeroProps> = ({ isNight }) => {
         <span className="hero-balldrop-badge-cta">Buy tickets</span>
       </button>
 
-      <button
-        className="hero-sponsor-band"
-        onClick={() => navigate('/sponsorship')}
-        aria-label="Sponsor the Festival"
-      >
-        Sponsor the Festival <span className="hero-sponsor-band-arrow">→</span>
-      </button>
-
       <div className="hero-credit">
         Photo:{' '}
         <a
@@ -145,6 +138,15 @@ const MovilleHero: React.FC<MovilleHeroProps> = ({ isNight }) => {
         </a>
       </div>
     </section>
+
+    <button
+      className="hero-sponsor-band"
+      onClick={() => navigate('/sponsorship')}
+      aria-label="Sponsor the Festival"
+    >
+      Sponsor the Festival <span className="hero-sponsor-band-arrow">→</span>
+    </button>
+    </>
   );
 };
 

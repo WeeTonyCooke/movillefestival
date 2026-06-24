@@ -431,7 +431,7 @@
   top: 20px;
   right: 16px;
   z-index: 20;
-  background: #2D8A4E;
+  background: var(--navy, #16323C);
   border: none;
   border-radius: 50%;
   width: 104px;
@@ -515,15 +515,13 @@
 /* regardless of viewport quirks. Fades in shortly after the badge. */
 
 .hero-sponsor-band {
-  position: absolute;
-  bottom: 0;
-  left: 0;
+  position: relative;
   width: 100%;
-  z-index: 16;
+  z-index: 4;
   height: 64px;
-  background: #123844;
+  background: #16323C;
   border: none;
-  color: #E3D2B8;
+  color: #F4EDE0;
   font-family: var(--font-hero);
   font-size: 1rem;
   font-weight: 500;
@@ -539,7 +537,7 @@
 }
 
 .hero-sponsor-band:hover {
-  background: #0d2a33;
+  background: #0E2730;
 }
 
 .hero-sponsor-band-arrow {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import './ProgrammePage.css';
 
@@ -6,8 +6,6 @@ const FEEDBACK_URL =
   'https://script.google.com/macros/s/AKfycbwADI9Ld2vGjlkjST4VTHHR-y5QbuoBPmFjhE8IX2sZVS8mXxfPWQL5nWoCNSJdHQ9oxg/exec';
 
 const DEFAULT_EVENT_DURATION_MIN = 90;
-const MAX_STALLS = 15;
-const MAX_TEAMS = 20;
 
 type FestivalDay = 'TUE' | 'WED' | 'THU' | 'FRI' | 'SAT' | 'SUN';
 type Rating = 1 | 2 | 3 | 4;
@@ -240,13 +238,6 @@ const PROGRAMME_DATA: Record<FestivalDay, ProgrammeEvent[]> = {
       strapline:
         'One of Ireland’s best-loved bands brings the big Saturday night to Market Square.',
     },
-    {
-      time: '00:00',
-      title: 'Keith Fletcher — Over 35s Rave',
-      venue: "Annie’s Bar",
-      strapline:
-        'Highland Radio DJ Keith Fletcher plays a non-stop night of 90s and 00s dance anthems and club classics. Doors midnight. Over 35s event.',
-    },
   ],
   SUN: [
     {
@@ -304,13 +295,6 @@ const PROGRAMME_DATA: Record<FestivalDay, ProgrammeEvent[]> = {
       strapline:
         'Ireland’s premier ABBA tribute band hits the Square for the festival finale. Glitter optional, but encouraged.',
     },
-    {
-      time: '23:30',
-      title: 'DJ Col Hamilton — LUSH! Portrush',
-      venue: "Annie’s Bar",
-      strapline:
-        'Promoter and resident DJ of the iconic LUSH! Portrush takes to the decks for classic dance anthems and club favourites. Warm-up set from local favourite DJ Paddy Hegarty from earlier in the evening.',
-    },
   ],
 };
 
@@ -321,6 +305,24 @@ const DAY_LABELS: Record<FestivalDay, string> = {
   FRI: 'Fri, 10 Jul',
   SAT: 'Sat, 11 Jul',
   SUN: 'Sun, 12 Jul',
+};
+
+const DAY_NAMES: Record<FestivalDay, string> = {
+  TUE: 'Tuesday',
+  WED: 'Wednesday',
+  THU: 'Thursday',
+  FRI: 'Friday',
+  SAT: 'Saturday',
+  SUN: 'Sunday',
+};
+
+const DATE_LABELS: Record<FestivalDay, string> = {
+  TUE: '7 July',
+  WED: '8 July',
+  THU: '9 July',
+  FRI: '10 July',
+  SAT: '11 July',
+  SUN: '12 July',
 };
 
 const DAY_ORDER: FestivalDay[] = ['TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
@@ -591,36 +593,29 @@ function getDefaultFestivalDay(): FestivalDay {
   }
 }
 
-function ProgrammePage() {
+function ProgrammePage({ isNight }: { isNight: boolean }) {
   const [activeDay, setActiveDay] = useState<FestivalDay>(() =>
     getDefaultFestivalDay(),
   );
-
+  const [temp, setTemp] = useState<number | null>(null);
   const [selectedVotes, setSelectedVotes] = useState<Record<string, Rating>>(
     {},
   );
 
-  const [craftFairSoldOut, setCraftFairSoldOut] = useState(false);
-  const [bedPushFull, setBedPushFull] = useState(false);
-  const [ballDropSoldOut, setBallDropSoldOut] = useState(false);
-
   useEffect(() => {
-    fetch('/.netlify/functions/get-availability')
+    fetch('/.netlify/functions/weather')
       .then((res) => res.json())
       .then((data) => {
-        setCraftFairSoldOut(data.stallsBooked >= MAX_STALLS);
-        setBedPushFull(data.teamsRegistered >= MAX_TEAMS);
-        setBallDropSoldOut(data.ballsAvailable <= 0);
+        if (typeof data.temp === 'number') {
+          setTemp(data.temp);
+        } else {
+          setTemp(null);
+        }
       })
       .catch(() => {
-        // fail closed
-        setCraftFairSoldOut(true);
-        setBedPushFull(true);
-        setBallDropSoldOut(true);
+        setTemp(null);
       });
   }, []);
-
-
 
   const handleVote = (
     eventKey: string,
@@ -651,46 +646,41 @@ function ProgrammePage() {
 
   return (
     <div className="prog-page">
-      <div className="prog-bg" aria-hidden="true" />
 
       <div className="prog-content page-shell--narrow">
+
+        {/* ── Header ── */}
         <header className="prog-header">
           <div className="prog-header-top">
             <Link to="/" className="prog-back" aria-label="Back to home">
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="3"
-              >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4">
                 <path d="M15 18l-6-6 6-6" />
               </svg>
             </Link>
 
             <div className="prog-header-meta">
-              <p className="prog-kicker">What’s On</p>
+              <p className="prog-kicker">What's On</p>
               <h1 className="prog-title">Programme</h1>
-              <span className="prog-header-date">
-                Tuesday 7 – Sunday 12 July
-              </span>
+              <span className="prog-header-date">Tue 7 — Sun 12 July 2026</span>
             </div>
+          </div>
+
+          {/* Buy passes — tertiary link with hairline rule */}
+          <div className="prog-buy-passes-wrap">
+            <span className="prog-buy-passes-rule" aria-hidden="true" />
+            <Link to="/passes" className="prog-buy-passes-banner">
+              Buy passes →
+            </Link>
           </div>
         </header>
 
-        <div className="prog-buy-passes-wrap">
-          <Link to="/passes" className="prog-buy-passes-banner">
-            Buy Full Festival &amp; Day Passes
-          </Link>
-        </div>
-
+        {/* ── Day nav — flat segmented control ── */}
         <nav className="prog-day-nav" aria-label="Festival days">
           <div className="prog-day-nav-inner">
             {DAY_ORDER.map((day) => (
               <button
                 key={day}
-                className={`prog-day-pill ${activeDay === day ? 'is-active' : ''}`}
+                className={`prog-day-pill${activeDay === day ? ' is-active' : ''}`}
                 onClick={() => setActiveDay(day)}
                 type="button"
                 aria-pressed={activeDay === day}
@@ -703,311 +693,218 @@ function ProgrammePage() {
 
         <main className="prog-main">
 
+          {/* ── Weather strip ── */}
+          <div className="prog-weather">
+            <span className="prog-weather-icon" aria-hidden="true">
+              {isNight ? '🌙' : '☀️'}
+            </span>
+            <div className="prog-weather-copy">
+              <span className="prog-weather-line">
+                {temp !== null
+                  ? `${temp}°C in Moville`
+                  : isNight
+                    ? 'A lovely evening in Moville'
+                    : 'A fine day in Moville'}
+              </span>
+              <span className="prog-weather-subline">
+                {isNight
+                  ? 'Clear skies and a good night for heading into town.'
+                  : `A decent day for ${PROGRAMME_DATA[activeDay][0].title}.`}
+              </span>
+            </div>
+          </div>
 
+          {/* ── Schedule — one per day, hidden when not active ── */}
           {DAY_ORDER.map((day) => {
             const dayEvents = PROGRAMME_DATA[day];
             let lastBucket: TimeBucket | null = null;
 
             return (
               <section
-                className={`prog-schedule surface-card prog-day-block${
-                  day === activeDay ? ' is-active' : ''
-                }`}
                 key={day}
+                className={`prog-schedule prog-day-block${day === activeDay ? ' is-active' : ''}`}
                 aria-hidden={day === activeDay ? undefined : true}
               >
+                {/* Day header: italic Playfair name + muted date + hairline */}
                 <div className="prog-day-header">
-                  <span className="prog-day-header-text">
-                    {DAY_LABELS[day].toUpperCase()}
+                  <span className="prog-day-header-name">
+                    {DAY_LABELS[day].split(',')[0]}
                   </span>
+                  <span className="prog-day-header-date">
+                    {DAY_LABELS[day].split(',')[1]?.trim().toUpperCase()}
+                  </span>
+                  <span className="prog-day-header-rule" aria-hidden="true" />
                 </div>
 
-                <div className="prog-day-rule" aria-hidden="true" />
+                {/* Timeline */}
+                <div className="prog-timeline">
+                  {dayEvents.map((event) => {
+                    const eventKey = `${day}-${event.time}-${event.title}`;
+                    const selectedRating = selectedVotes[eventKey];
+                    const eventFinished = hasEventFinished(day, event);
+                    const isHeadliner = Boolean(event.headline || event.admission);
 
-                {dayEvents.map((event) => {
-                  const eventKey = `${day}-${event.time}-${event.title}`;
-                  const selectedRating = selectedVotes[eventKey];
-                  const eventFinished = hasEventFinished(day, event);
+                    const bucket = bucketForTime(getStartTime(event));
+                    const showBucket = bucket !== lastBucket && dayEvents.length > 3;
+                    lastBucket = bucket;
 
-                  // Any ticketed (admission) event is treated as a headliner:
-                  // coral accent, badge, add-to-calendar.
-                  const isHeadliner = Boolean(event.headline || event.admission);
+                    return (
+                      <React.Fragment key={eventKey}>
 
-                  const bucket = bucketForTime(getStartTime(event));
-                  const showBucket = bucket !== lastBucket && dayEvents.length > 3;
-                  lastBucket = bucket;
-
-                  return (
-                    <React.Fragment key={eventKey}>
-                      {showBucket && (
-                        <div
-                          className={`prog-time-divider prog-time-divider--${bucket}`}
-                          aria-hidden="true"
-                        >
-                          <span>{BUCKET_LABELS[bucket]}</span>
-                        </div>
-                      )}
-
-                      <article
-                        className={`prog-event${isHeadliner ? ' is-headline' : ''}`}
-                      >
-                        <div className="prog-event-time">
-                          {event.time}
-                          {isHeadliner && (
-                            <span className="prog-event-badge">Headline</span>
-                          )}
-                        </div>
-
-                        <h3 className="prog-event-title">{event.title}</h3>
-
-                        {event.strapline && (
-                          <p className="prog-event-strapline">{event.strapline}</p>
-                        )}
-
-                        {event.venue && (
-                          <div className="prog-event-venue">
-                            <svg
-                              width="13"
-                              height="13"
-                              viewBox="0 0 24 24"
-                              aria-hidden="true"
-                            >
-                              <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z" />
-                            </svg>
-
-                            <span className="prog-event-venue-text">{event.venue}</span>
+                        {/* Time-of-day divider */}
+                        {showBucket && (
+                          <div
+                            className={`prog-time-divider prog-time-divider--${bucket}`}
+                            aria-hidden="true"
+                          >
+                            <span>{BUCKET_LABELS[bucket]}</span>
                           </div>
                         )}
 
-                        {(event.admission || event.registerUrl || isHeadliner) && (
-                          <div className="prog-event-actions">
-                            {event.admission && (
-                              <Link to="/passes" className="prog-event-admission-chip prog-event-admission-chip--link">
-                                Admission {event.admission}
-                              </Link>
-                            )}
+                        {/* Event row */}
+                        <article className={`prog-event${isHeadliner ? ' is-headline' : ''}`}>
 
-                            {event.registerUrl && (
-                              (event.registerUrl === '/craft-fair' && craftFairSoldOut) ||
-                              (event.registerUrl === '/bed-push' && bedPushFull) ||
-                              (event.registerUrl === '/ball-drop' && ballDropSoldOut)
-                            ) ? (
-                              <span className="prog-event-soldout">
-                                {event.registerUrl === '/bed-push' ? 'Full' : 'Sold Out'}
-                              </span>
-                            ) : event.registerUrl && (
-                              <Link
-                                to={event.registerUrl}
-                                className="prog-event-register"
-                              >
-                                {event.registerLabel || 'Register'} →
-                              </Link>
-                            )}
+                          {/* Time — sits in left gutter via absolute position */}
+                          <div className="prog-event-time">{event.time}</div>
 
-                            {isHeadliner && (
+                          {/* Headliner label */}
+                          {isHeadliner && (
+                            <div className="prog-event-badge">
+                              <span>Headliner</span>
+                            </div>
+                          )}
+
+                          <h3 className="prog-event-title">{event.title}</h3>
+
+                          {event.strapline && (
+                            <p className="prog-event-strapline">{event.strapline}</p>
+                          )}
+
+                          {event.venue && (
+                            <div className="prog-event-venue">
+                              <svg width="12" height="12" viewBox="0 0 24 24" aria-hidden="true" fill="#1F4E5F">
+                                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z" />
+                              </svg>
+                              <span className="prog-event-venue-text">{event.venue}</span>
+                            </div>
+                          )}
+
+                          {event.registerUrl && (
+                            <Link to={event.registerUrl} className="prog-event-register">
+                              {event.registerLabel || 'Register'} →
+                            </Link>
+                          )}
+
+                          {/* Admission + calendar on one row */}
+                          {isHeadliner && (
+                            <div className="prog-event-actions">
+                              {event.admission && (
+                                <span className="prog-event-admission-chip">
+                                  Admission {event.admission}
+                                </span>
+                              )}
                               <button
                                 type="button"
                                 className="prog-event-cal"
                                 onClick={() => downloadICS(day, event)}
                                 aria-label={`Add ${event.title} to your calendar`}
                               >
-                                <svg
-                                  width="14"
-                                  height="14"
-                                  viewBox="0 0 24 24"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  strokeWidth="2.2"
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  aria-hidden="true"
-                                >
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                                   <rect x="3" y="5" width="18" height="16" rx="2" />
-                                  <path d="M8 3v4M16 3v4M3 10h18M12 14v4M10 16h4" />
+                                  <path d="M8 3v4M16 3v4M3 10h18" />
                                 </svg>
                                 Add to calendar
                               </button>
-                            )}
-                          </div>
-                        )}
+                            </div>
+                          )}
 
-                        {eventFinished && (
-                          <>
-                            <p className="prog-event-vote-heading">
-                              Tell us what you thought
-                            </p>
-
-                            <div
-                              className="prog-event-vote"
-                              role="group"
-                              aria-label={`Your reaction to ${event.title}`}
-                            >
-                              {RATING_CONFIG.map(
-                                ({ rating, className, label, Smiley }) => {
+                          {/* Post-event voting */}
+                          {eventFinished && (
+                            <>
+                              <p className="prog-event-vote-heading">Tell us what you thought</p>
+                              <div className="prog-event-vote" role="group" aria-label={`Your reaction to ${event.title}`}>
+                                {RATING_CONFIG.map(({ rating, className, label, Smiley }) => {
                                   const isSelected = selectedRating === rating;
-
                                   return (
                                     <button
                                       key={rating}
                                       type="button"
-                                      className={`prog-event-vote-face ${className}${
-                                        isSelected ? ' is-voted' : ''
-                                      }`}
-                                      onClick={() =>
-                                        handleVote(
-                                          eventKey,
-                                          event.title,
-                                          day,
-                                          event,
-                                          rating,
-                                        )
-                                      }
+                                      className={`prog-event-vote-face ${className}${isSelected ? ' is-voted' : ''}`}
+                                      onClick={() => handleVote(eventKey, event.title, day, event, rating)}
                                       aria-label={`${label} about ${event.title}`}
                                       aria-pressed={isSelected}
                                     >
                                       <Smiley />
-
                                       {isSelected && (
-                                        <span
-                                          className="prog-event-vote-tick"
-                                          aria-hidden="true"
-                                        >
+                                        <span className="prog-event-vote-tick" aria-hidden="true">
                                           <VoteTick />
                                         </span>
                                       )}
                                     </button>
                                   );
-                                },
-                              )}
-                            </div>
-                          </>
-                        )}
-                      </article>
-                    </React.Fragment>
-                  );
-                })}
+                                })}
+                              </div>
+                            </>
+                          )}
+
+                        </article>
+                      </React.Fragment>
+                    );
+                  })}
+                </div>
               </section>
             );
           })}
 
+          {/* ── Archive link ── */}
           <div className="prog-archive-link">
-            <Link
-              to="/archive"
-              className="prog-archive-anchor"
-              aria-label="Go to archive"
-            >
+            <Link to="/archive" className="prog-archive-anchor" aria-label="Go to archive">
               <div className="prog-archive-mark">
-                <img
-                  src="/moville_lighthouse_icon.png"
-                  alt=""
-                  className="prog-archive-logo"
-                />
-                <span className="prog-archive-years">Archive | 1958 - 2026</span>
+                <img src="/moville_lighthouse_icon.png" alt="" className="prog-archive-logo" />
+                <span className="prog-archive-years">Archive | 1958 – 2026</span>
               </div>
             </Link>
-            </div>
+          </div>
 
-<div className="directions-footer">
-  <Link
-    to="/getting-to-moville"
-    className="directions-footer-anchor"
-    aria-label="Getting to Moville"
-  >
-    <svg
-      viewBox="0 0 24 24"
-      className="directions-footer-icon"
-      aria-hidden="true"
-    >
-      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z" />
-    </svg>
-    <span className="directions-footer-text">Getting to Moville</span>
-  </Link>
-</div>
+          {/* ── Getting to Moville ── */}
+          <div className="directions-footer">
+            <Link to="/getting-to-moville" className="directions-footer-anchor" aria-label="Getting to Moville">
+              <svg viewBox="0 0 24 24" className="directions-footer-icon" aria-hidden="true">
+                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z" />
+              </svg>
+              <span className="directions-footer-text">Getting to Moville</span>
+            </Link>
+          </div>
 
-<section className="prog-social" aria-label="Moville Festival social links">
-  <a
-    className="prog-social-link"
-    href="https://www.instagram.com/movillefestival"
-    target="_blank"
-    rel="noreferrer"
-    aria-label="Moville Festival on Instagram"
-  >
-    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <rect
-        x="3.5"
-        y="3.5"
-        width="17"
-        height="17"
-        rx="5"
-        stroke="currentColor"
-        strokeWidth="1.8"
-      />
-      <circle
-        cx="12"
-        cy="12"
-        r="4"
-        stroke="currentColor"
-        strokeWidth="1.8"
-      />
-      <circle cx="17.3" cy="6.7" r="1.1" fill="currentColor" />
-    </svg>
-  </a>
+          {/* ── Social links ── */}
+          <section className="prog-social" aria-label="Moville Festival social links">
+            <a className="prog-social-link" href="https://www.instagram.com/movillefestival" target="_blank" rel="noreferrer" aria-label="Moville Festival on Instagram">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <rect x="3.5" y="3.5" width="17" height="17" rx="5" stroke="currentColor" strokeWidth="1.8" />
+                <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="1.8" />
+                <circle cx="17.3" cy="6.7" r="1.1" fill="currentColor" />
+              </svg>
+            </a>
+            <a className="prog-social-link" href="https://www.facebook.com/p/Moville-Festival-100092674825683/" target="_blank" rel="noreferrer" aria-label="Moville Festival on Facebook">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M13.2 20v-7h2.4l.4-3h-2.8V8.1c0-.87.24-1.46 1.49-1.46H16V4.02c-.23-.03-1.03-.1-1.96-.1-1.94 0-3.27 1.18-3.27 3.36V10H8v3h2.77v7h2.43Z" fill="currentColor" />
+              </svg>
+            </a>
+            <a className="prog-social-link" href="https://www.tiktok.com/@movillefestival" target="_blank" rel="noreferrer" aria-label="Moville Festival on TikTok">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M14.6 3.8c.42 1.2 1.31 2.25 2.46 2.87.78.42 1.63.63 2.5.63v2.63a7.6 7.6 0 0 1-3.36-.77v5.37c0 2.9-2.35 5.25-5.25 5.25S5.7 17.43 5.7 14.53c0-2.9 2.35-5.25 5.25-5.25.27 0 .54.02.8.06v2.72a2.64 2.64 0 0 0-.8-.12 2.59 2.59 0 1 0 2.59 2.59V3.8h1.06Z" fill="currentColor" />
+              </svg>
+            </a>
+            <a className="prog-social-link" href="https://www.instagram.com/christybutterz/" target="_blank" rel="noreferrer" aria-label="Photography by Christy Butterz">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M7 7.5h2.1l1-1.7h3.8l1 1.7H17a2 2 0 0 1 2 2V16a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V9.5a2 2 0 0 1 2-2Z" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
+                <circle cx="12" cy="12.5" r="3.1" stroke="currentColor" strokeWidth="1.8" />
+                <circle cx="16.6" cy="9.7" r="0.9" fill="currentColor" />
+              </svg>
+            </a>
+          </section>
 
-  <a
-    className="prog-social-link"
-    href="https://www.facebook.com/p/Moville-Festival-100092674825683/"
-    target="_blank"
-    rel="noreferrer"
-    aria-label="Moville Festival on Facebook"
-  >
-    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path
-        d="M13.2 20v-7h2.4l.4-3h-2.8V8.1c0-.87.24-1.46 1.49-1.46H16V4.02c-.23-.03-1.03-.1-1.96-.1-1.94 0-3.27 1.18-3.27 3.36V10H8v3h2.77v7h2.43Z"
-        fill="currentColor"
-      />
-    </svg>
-  </a>
-
-  <a
-    className="prog-social-link"
-    href="https://www.tiktok.com/@movillefestival"
-    target="_blank"
-    rel="noreferrer"
-    aria-label="Moville Festival on TikTok"
-  >
-    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path
-        d="M14.6 3.8c.42 1.2 1.31 2.25 2.46 2.87.78.42 1.63.63 2.5.63v2.63a7.6 7.6 0 0 1-3.36-.77v5.37c0 2.9-2.35 5.25-5.25 5.25S5.7 17.43 5.7 14.53c0-2.9 2.35-5.25 5.25-5.25.27 0 .54.02.8.06v2.72a2.64 2.64 0 0 0-.8-.12 2.59 2.59 0 1 0 2.59 2.59V3.8h1.06Z"
-        fill="currentColor"
-      />
-    </svg>
-  </a>
-
-  <a
-    className="prog-social-link"
-    href="https://www.instagram.com/christybutterz/"
-    target="_blank"
-    rel="noreferrer"
-    aria-label="Photography by Christy Butterz"
-  >
-    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path
-        d="M7 7.5h2.1l1-1.7h3.8l1 1.7H17a2 2 0 0 1 2 2V16a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V9.5a2 2 0 0 1 2-2Z"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        strokeLinejoin="round"
-      />
-      <circle
-        cx="12"
-        cy="12.5"
-        r="3.1"
-        stroke="currentColor"
-        strokeWidth="1.8"
-      />
-      <circle cx="16.6" cy="9.7" r="0.9" fill="currentColor" />
-    </svg>
-  </a>
-</section></main>
+        </main>
       </div>
     </div>
   );

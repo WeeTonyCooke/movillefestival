@@ -1,4 +1,8 @@
-/* ── Registration Forms — Shared Styles ─────────────────────────────── */
+/* ══════════════════════════════════════════════════════════════════════
+   Registration Forms — Harbour Light redesign
+   Palette: Navy #16323C · Cream #F4EDE0 · Gold #B0894F
+   Shared by: BallDrop, BedPush, CraftFair, Sponsorship
+   ══════════════════════════════════════════════════════════════════════ */
 
 .form-page {
   min-height: 100vh;
@@ -6,13 +10,12 @@
   padding-bottom: 80px;
 }
 
+/* Flat cream — no radial gradient noise */
 .form-page-bg {
   position: fixed;
   inset: 0;
   z-index: 0;
-  background:
-    radial-gradient(ellipse 80% 50% at 110% -10%, rgba(var(--accent-rgb), 0.13) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 40% at -10% 110%, rgba(var(--accent-rgb), 0.09) 0%, transparent 55%);
+  background: var(--bg-base);
   pointer-events: none;
 }
 
@@ -21,7 +24,7 @@
   z-index: 1;
 }
 
-/* ── Header ─────────────────────────────────────────────────────────── */
+/* ── Header ───────────────────────────────────────────────────────── */
 
 .form-header {
   padding: 28px 0 20px;
@@ -41,53 +44,56 @@
   height: 38px;
   border-radius: 50%;
   background: var(--bg-surface);
-  border: 1px solid var(--border-soft);
+  border: 1px solid var(--border-strong);
   color: var(--text-secondary);
   text-decoration: none;
   flex-shrink: 0;
-  transition: background 0.18s, color 0.18s;
+  transition: background 0.18s, color 0.18s, border-color 0.18s;
 }
 
 .form-back:hover {
-  background: var(--bg-surface-strong);
+  background: var(--paper, #FFFCF6);
   color: var(--text-primary);
+  border-color: rgba(22, 50, 60, 0.28);
 }
 
-.form-header-meta {
-  flex: 1;
-}
+.form-header-meta { flex: 1; }
 
+/* Gold eyebrow */
 .form-eyebrow {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: 0.66rem;
   font-weight: 700;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.24em;
   text-transform: uppercase;
   color: var(--accent);
   margin: 0 0 4px;
 }
 
+/* Playfair display heading */
 .form-title {
   font-family: var(--font-display);
   font-size: clamp(1.6rem, 4vw, 2.4rem);
   font-weight: 700;
   color: var(--text-primary);
   margin: 0;
-  line-height: 1.15;
+  line-height: 1.12;
+  letter-spacing: -0.01em;
 }
 
 .form-subtitle {
-  font-size: 0.95rem;
+  font-size: 0.92rem;
   color: var(--text-secondary);
   margin: 6px 0 0;
+  line-height: 1.5;
 }
 
-/* ── Card ───────────────────────────────────────────────────────────── */
+/* ── Card — paper surface, hairline border, single shadow ─────────── */
 
 .form-card {
-  background: var(--bg-surface-strong);
+  background: var(--bg-surface);
   border: 1px solid var(--border-soft);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-md);
   box-shadow: var(--shadow-card);
   padding: 40px;
   margin-top: 24px;
@@ -95,26 +101,21 @@
 
 @media (max-width: 640px) {
   .form-card {
-    padding: 24px 20px;
-    border-radius: var(--radius-md);
+    padding: 24px 18px;
+    border-radius: var(--radius-sm);
   }
 }
 
-/* ── Sections ───────────────────────────────────────────────────────── */
+/* ── Sections ─────────────────────────────────────────────────────── */
 
-.form-section {
-  margin-bottom: 36px;
-}
-
-.form-section:last-of-type {
-  margin-bottom: 0;
-}
+.form-section { margin-bottom: 36px; }
+.form-section:last-of-type { margin-bottom: 0; }
 
 .form-section-title {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: 0.66rem;
   font-weight: 700;
-  letter-spacing: 0.11em;
+  letter-spacing: 0.24em;
   text-transform: uppercase;
   color: var(--accent);
   margin: 0 0 18px;
@@ -122,7 +123,7 @@
   border-bottom: 1px solid var(--border-soft);
 }
 
-/* ── Fields ─────────────────────────────────────────────────────────── */
+/* ── Fields ───────────────────────────────────────────────────────── */
 
 .form-row {
   display: grid;
@@ -131,9 +132,7 @@
 }
 
 @media (max-width: 540px) {
-  .form-row {
-    grid-template-columns: 1fr;
-  }
+  .form-row { grid-template-columns: 1fr; }
 }
 
 .form-field {
@@ -143,12 +142,11 @@
   margin-bottom: 16px;
 }
 
-.form-field:last-child {
-  margin-bottom: 0;
-}
+.form-field:last-child { margin-bottom: 0; }
 
 .form-label {
-  font-size: 0.8rem;
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
   font-weight: 600;
   color: var(--text-secondary);
   letter-spacing: 0.04em;
@@ -180,13 +178,11 @@
 .form-textarea:focus,
 .form-select:focus {
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.15);
+  box-shadow: 0 0 0 3px rgba(22, 50, 60, 0.10);
 }
 
 .form-input::placeholder,
-.form-textarea::placeholder {
-  color: var(--text-muted);
-}
+.form-textarea::placeholder { color: var(--text-muted); }
 
 .form-textarea {
   resize: vertical;
@@ -194,7 +190,7 @@
 }
 
 .form-select {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%231d2730' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2316323C' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 12px center;
   padding-right: 38px;
@@ -202,12 +198,13 @@
 }
 
 .form-hint {
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   color: var(--text-muted);
   margin-top: 2px;
+  line-height: 1.4;
 }
 
-/* ── Checkboxes ─────────────────────────────────────────────────────── */
+/* ── Checkboxes ───────────────────────────────────────────────────── */
 
 .form-check {
   display: flex;
@@ -222,13 +219,11 @@
   margin-bottom: 10px;
 }
 
-.form-check:last-of-type {
-  margin-bottom: 0;
-}
+.form-check:last-of-type { margin-bottom: 0; }
 
 .form-check:hover {
   border-color: var(--accent);
-  background: rgba(var(--accent-rgb), 0.06);
+  background: rgba(22, 50, 60, 0.04);
 }
 
 .form-check input[type="checkbox"] {
@@ -246,7 +241,7 @@
   line-height: 1.5;
 }
 
-/* ── Submit button ──────────────────────────────────────────────────── */
+/* ── Submit button — navy primary ─────────────────────────────────── */
 
 .form-submit-wrap {
   margin-top: 32px;
@@ -262,40 +257,39 @@
   width: 100%;
   padding: 15px 28px;
   border-radius: var(--radius-pill);
-  background: var(--accent);
-  color: #fff;
+  background: var(--text-primary);
+  color: var(--cream, #F4EDE0);
   font-family: var(--font-sans);
-  font-size: 1rem;
+  font-size: 0.9rem;
   font-weight: 700;
   border: none;
   cursor: pointer;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
   transition: background 0.18s, transform 0.14s;
-  letter-spacing: 0.02em;
 }
 
 .form-submit:hover {
-  background: var(--accent-strong);
+  background: #0E2730;
   transform: translateY(-1px);
 }
 
-.form-submit:active {
-  transform: translateY(0);
-}
+.form-submit:active { transform: translateY(0); }
 
 .form-submit:disabled {
-  opacity: 0.55;
+  opacity: 0.45;
   cursor: not-allowed;
   transform: none;
 }
 
 .form-submit-note {
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   color: var(--text-muted);
   text-align: center;
   margin-top: 10px;
 }
 
-/* ── Success state ──────────────────────────────────────────────────── */
+/* ── Success state ────────────────────────────────────────────────── */
 
 .form-success {
   text-align: center;
@@ -306,7 +300,7 @@
   width: 64px;
   height: 64px;
   border-radius: 50%;
-  background: rgba(var(--accent-rgb), 0.12);
+  background: rgba(22, 50, 60, 0.08);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -322,7 +316,7 @@
 }
 
 .form-success-body {
-  font-size: 0.95rem;
+  font-size: 0.92rem;
   color: var(--text-secondary);
   line-height: 1.6;
   max-width: 420px;
@@ -335,24 +329,23 @@
   gap: 8px;
   padding: 12px 24px;
   border-radius: var(--radius-pill);
-  background: var(--accent);
-  color: #fff;
-  font-weight: 600;
-  font-size: 0.9rem;
+  background: var(--text-primary);
+  color: var(--cream, #F4EDE0);
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 0.84rem;
   text-decoration: none;
+  letter-spacing: 0.04em;
   transition: background 0.18s;
 }
 
-.form-success-back:hover {
-  background: var(--accent-strong);
-}
+.form-success-back:hover { background: #0E2730; }
 
-/* ── Stepper (quantity) ─────────────────────────────────────────────── */
+/* ── Stepper ──────────────────────────────────────────────────────── */
 
 .form-stepper {
   display: flex;
   align-items: center;
-  gap: 0;
   border: 1.5px solid var(--border-strong);
   border-radius: var(--radius-sm);
   overflow: hidden;
@@ -368,18 +361,12 @@
   font-size: 1.2rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.14s;
   flex-shrink: 0;
+  transition: background 0.14s;
 }
 
-.form-stepper button:hover {
-  background: rgba(var(--accent-rgb), 0.1);
-}
-
-.form-stepper button:disabled {
-  opacity: 0.35;
-  cursor: not-allowed;
-}
+.form-stepper button:hover { background: rgba(22, 50, 60, 0.06); }
+.form-stepper button:disabled { opacity: 0.35; cursor: not-allowed; }
 
 .form-stepper-value {
   min-width: 56px;
@@ -394,16 +381,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--bg-surface-strong);
+  background: var(--paper, #FFFCF6);
 }
 
 .form-stepper-total {
-  font-size: 0.88rem;
+  font-size: 0.86rem;
   color: var(--text-muted);
   margin-top: 8px;
 }
 
-/* ── Ball bundle cards ──────────────────────────────────────────────── */
+/* ── Ball bundle cards ────────────────────────────────────────────── */
 
 .ball-options {
   display: grid;
@@ -412,9 +399,7 @@
 }
 
 @media (max-width: 480px) {
-  .ball-options {
-    grid-template-columns: 1fr;
-  }
+  .ball-options { grid-template-columns: 1fr; }
 }
 
 .ball-option {
@@ -435,28 +420,28 @@
 
 .ball-option.selected {
   border-color: var(--accent);
-  background: rgba(var(--accent-rgb), 0.07);
+  background: rgba(22, 50, 60, 0.05);
 }
 
 .ball-option.featured {
   border-color: var(--accent);
-  background: rgba(var(--accent-rgb), 0.06);
+  background: rgba(22, 50, 60, 0.04);
 }
 
 .ball-option.selected.featured {
-  background: rgba(var(--accent-rgb), 0.12);
+  background: rgba(22, 50, 60, 0.09);
 }
 
+/* Best-value badge — gold */
 .ball-badge {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  font-size: 0.7rem;
+  font-size: 0.66rem;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.10em;
   text-transform: uppercase;
-  color: var(--accent);
-  background: rgba(var(--accent-rgb), 0.14);
+  color: var(--cream, #F4EDE0);
+  background: var(--accent);
   border-radius: var(--radius-pill);
   padding: 3px 10px;
   margin-bottom: 10px;
@@ -471,26 +456,27 @@
 }
 
 .ball-option-desc {
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   color: var(--text-muted);
   margin: 0 0 12px;
 }
 
 .ball-option-price {
+  font-family: var(--font-display);
   font-size: 1.6rem;
-  font-weight: 800;
-  color: var(--accent);
+  font-weight: 700;
+  color: var(--text-primary);
   margin: 0 0 2px;
 }
 
 .ball-option-per {
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   color: var(--text-muted);
 }
 
 .ball-option-saving {
-  font-size: 0.78rem;
-  color: var(--coral);
+  font-size: 0.76rem;
+  color: var(--accent);
   font-weight: 600;
   margin-top: 4px;
 }
@@ -510,11 +496,9 @@
   transition: opacity 0.18s;
 }
 
-.ball-option.selected .ball-selected-indicator {
-  opacity: 1;
-}
+.ball-option.selected .ball-selected-indicator { opacity: 1; }
 
-/* ── Live counter banner ────────────────────────────────────────────── */
+/* ── Live counter ─────────────────────────────────────────────────── */
 
 .ball-counter-banner {
   display: grid;
@@ -524,11 +508,11 @@
   border-radius: var(--radius-md);
   overflow: hidden;
   margin-bottom: 28px;
-  border: 1px solid var(--border-strong);
+  border: 1px solid var(--border-soft);
 }
 
 .ball-counter-item {
-  background: var(--bg-surface-strong);
+  background: var(--bg-surface);
   padding: 16px 12px;
   text-align: center;
 }
@@ -537,20 +521,20 @@
   font-family: var(--font-display);
   font-size: 1.6rem;
   font-weight: 700;
-  color: var(--accent);
+  color: var(--text-primary);
   line-height: 1;
   margin-bottom: 4px;
 }
 
 .ball-counter-label {
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--text-muted);
 }
 
-/* ── Craft Fair / shared additions ─────────────────────────── */
+/* ── Shared additions ─────────────────────────────────────────────── */
 
 .form-chips {
   display: flex;
@@ -560,13 +544,13 @@
 }
 
 .form-chip {
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   font-weight: 600;
   padding: 4px 10px;
   border-radius: 99px;
-  background: var(--bg-surface-strong);
+  background: var(--paper, #FFFCF6);
   color: var(--text-secondary);
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-soft);
 }
 
 .form-availability {
@@ -592,7 +576,7 @@
   flex: 1;
   min-width: 80px;
   height: 4px;
-  background: var(--border);
+  background: var(--border-soft);
   border-radius: 99px;
   overflow: hidden;
   position: relative;
@@ -600,27 +584,18 @@
 
 .form-progress-bar {
   height: 100%;
-  background: var(--coral);
+  background: var(--accent);
   border-radius: 99px;
   transition: width 0.4s ease;
 }
 
-.form-progress-label {
-  position: absolute;
-  right: 4px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 0.65rem;
-  font-weight: 700;
-  color: var(--text-muted);
-}
-
+/* Info notices — gold left rule */
 .form-notice {
-  background: var(--bg-surface-strong);
+  background: var(--paper, #FFFCF6);
   border-left: 3px solid var(--accent);
   border-radius: var(--radius-sm);
   padding: 12px 14px;
-  font-size: 0.85rem;
+  font-size: 0.84rem;
   color: var(--text-secondary);
   margin-bottom: 20px;
   line-height: 1.5;
@@ -636,7 +611,7 @@
 }
 
 .form-info-list li {
-  font-size: 0.85rem;
+  font-size: 0.84rem;
   color: var(--text-secondary);
   line-height: 1.5;
 }
@@ -644,8 +619,9 @@
 .form-counter-wrap {
   text-align: center;
   padding: 20px;
-  background: var(--bg-surface-strong);
+  background: var(--paper, #FFFCF6);
   border-radius: var(--radius-md);
+  border: 1px solid var(--border-soft);
   margin: 16px 0;
 }
 
@@ -657,14 +633,15 @@
 }
 
 .form-counter-label {
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   color: var(--text-muted);
   margin-top: 2px;
 }
 
 .form-confirm-card {
-  background: var(--bg-surface-strong);
+  background: var(--paper, #FFFCF6);
   border-radius: var(--radius-md);
+  border: 1px solid var(--border-soft);
   padding: 16px;
   text-align: center;
   margin: 16px 0;
@@ -679,7 +656,7 @@
 }
 
 .form-confirm-sub {
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   color: var(--text-muted);
   margin: 0;
 }
@@ -688,9 +665,8 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 0;
   margin: 16px 0;
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-soft);
   border-radius: var(--radius-md);
   overflow: hidden;
 }
@@ -700,30 +676,22 @@
   justify-content: space-between;
   align-items: center;
   padding: 10px 14px;
-  font-size: 0.85rem;
-  border-bottom: 1px solid var(--border);
+  font-size: 0.84rem;
+  border-bottom: 1px solid var(--border-soft);
 }
 
-.form-summary-row:last-child {
-  border-bottom: none;
-}
+.form-summary-row:last-child { border-bottom: none; }
+.form-summary-row span { color: var(--text-muted); }
+.form-summary-row strong { color: var(--text-primary); font-weight: 600; }
 
-.form-summary-row span {
-  color: var(--text-muted);
-}
-
-.form-summary-row strong {
-  color: var(--text-primary);
-  font-weight: 600;
-}
-
+/* Info block — coral left rule (for warnings / important notices) */
 .form-info-block {
-  background: var(--bg-surface-strong);
+  background: var(--paper, #FFFCF6);
   border-left: 3px solid var(--coral);
   border-radius: var(--radius-sm);
   padding: 12px 14px;
   margin: 10px 0;
-  font-size: 0.85rem;
+  font-size: 0.84rem;
 }
 
 .form-info-block .form-info-title {
@@ -738,10 +706,10 @@
   line-height: 1.5;
 }
 
-/* ── Bed Push additions ─────────────────────────────────────── */
+/* ── Bed Push additions ───────────────────────────────────────────── */
 
 .form-section-hint {
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   color: var(--text-muted);
   margin: -8px 0 12px;
 }
@@ -750,16 +718,14 @@
   display: flex;
   align-items: flex-start;
   gap: 12px;
-  background: var(--bg-surface-strong);
+  background: var(--paper, #FFFCF6);
   border-radius: var(--radius-md);
+  border: 1px solid var(--border-soft);
   padding: 14px;
   margin-top: 8px;
 }
 
-.form-team-size-icon {
-  font-size: 1.4rem;
-  flex-shrink: 0;
-}
+.form-team-size-icon { font-size: 1.4rem; flex-shrink: 0; }
 
 .form-team-size-notice strong {
   display: block;
@@ -778,7 +744,7 @@
   display: flex;
   align-items: flex-start;
   gap: 12px;
-  background: var(--bg-surface-strong);
+  background: var(--paper, #FFFCF6);
   border-left: 3px solid var(--coral);
   border-radius: var(--radius-sm);
   padding: 14px;
@@ -808,24 +774,23 @@
   line-height: 1.5;
 }
 
-/* ── Consent text ───────────────────────────────────────────── */
-
 .form-consent {
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   color: var(--text-muted);
   text-align: center;
   margin: 0 0 12px;
   line-height: 1.5;
 }
 
-/* ── Ball Drop additions ─────────────────────────────────────── */
+/* ── Ball Drop additions ──────────────────────────────────────────── */
 
+/* Prize banner — navy background, cream text */
 .ball-prize-banner {
-  background: var(--accent);
+  background: var(--text-primary);
   border-radius: var(--radius-md);
   padding: 16px;
   margin-bottom: 16px;
-  color: #fff;
+  color: var(--cream, #F4EDE0);
   text-align: center;
 }
 
@@ -833,7 +798,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0;
   margin-bottom: 8px;
 }
 
@@ -845,12 +809,11 @@
 }
 
 .ball-prize-place {
-  font-family: var(--font-body);
-  font-size: 0.65rem;
+  font-size: 0.62rem;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.10em;
   text-transform: uppercase;
-  opacity: 0.8;
+  opacity: 0.7;
   margin-bottom: 2px;
 }
 
@@ -864,14 +827,14 @@
 .ball-prize-divider {
   width: 1px;
   height: 36px;
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(244, 237, 224, 0.3);
   flex-shrink: 0;
 }
 
 .ball-prize-sub {
-  font-size: 0.75rem;
-  opacity: 0.8;
-  margin-top: 0;
+  font-size: 0.72rem;
+  opacity: 0.75;
+  margin-top: 2px;
 }
 
 .ball-intro {
@@ -879,20 +842,20 @@
   color: var(--text-secondary);
   line-height: 1.6;
   margin-bottom: 20px;
-  padding: 0 2px;
 }
 
 .ball-how-it-works {
-  background: var(--bg-surface-strong);
+  background: var(--paper, #FFFCF6);
   border-radius: var(--radius-md);
+  border: 1px solid var(--border-soft);
   padding: 14px 16px;
   margin-bottom: 20px;
 }
 
 .ball-how-title {
-  font-size: 0.78rem;
+  font-size: 0.66rem;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--text-muted);
   margin: 0 0 8px;
@@ -908,7 +871,7 @@
 }
 
 .ball-how-list li {
-  font-size: 0.85rem;
+  font-size: 0.84rem;
   color: var(--text-secondary);
   padding-left: 16px;
   position: relative;
@@ -919,37 +882,34 @@
   content: '·';
   position: absolute;
   left: 4px;
-  color: var(--coral);
+  color: var(--accent);
   font-weight: 700;
 }
 
 .ball-rules-link {
   display: inline-block;
   margin-top: 10px;
-  font-size: 0.8rem;
-  color: var(--accent);
-  text-decoration: none;
+  font-size: 0.78rem;
+  color: var(--harbour-teal, #1F4E5F);
+  text-decoration: underline;
+  text-underline-offset: 2px;
   font-weight: 600;
 }
 
-.ball-rules-link:hover {
-  text-decoration: underline;
-}
-
-/* ── Ball number display ─────────────────────────────────────── */
-
+/* Ball number chips */
 .ball-numbers-display {
-  background: var(--bg-surface-strong);
+  background: var(--paper, #FFFCF6);
   border-radius: var(--radius-md);
+  border: 1px solid var(--border-soft);
   padding: 16px;
   margin: 16px 0;
   text-align: center;
 }
 
 .ball-numbers-label {
-  font-size: 0.78rem;
+  font-size: 0.66rem;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--text-muted);
   margin: 0 0 12px;
@@ -963,12 +923,13 @@
   margin-bottom: 10px;
 }
 
+/* Navy circle chips */
 .ball-number-chip {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: var(--accent);
-  color: #fff;
+  background: var(--text-primary);
+  color: var(--cream, #F4EDE0);
   font-family: var(--font-display);
   font-size: 1.1rem;
   font-weight: 700;
@@ -978,39 +939,61 @@
 }
 
 .ball-numbers-note {
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   color: var(--text-muted);
   margin: 0;
 }
 
-/* ── Pre-payment summary & share button ─────────────────────── */
-
 .form-payment-summary {
-  background: var(--bg-surface-strong);
+  background: var(--paper, #FFFCF6);
   border-radius: var(--radius-sm);
+  border: 1px solid var(--border-soft);
   padding: 10px 14px;
-  font-size: 0.85rem;
+  font-size: 0.84rem;
   color: var(--text-secondary);
   text-align: center;
   margin-bottom: 12px;
   line-height: 1.5;
 }
 
+/* Share button — gold secondary */
 .form-share-btn {
   width: 100%;
   padding: 14px;
-  background: var(--coral);
-  color: #fff;
+  background: var(--accent);
+  color: var(--cream, #F4EDE0);
   border: none;
-  border-radius: var(--radius-md);
-  font-family: var(--font-body);
-  font-size: 1rem;
-  font-weight: 600;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-sans);
+  font-size: 0.88rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
   cursor: pointer;
   margin-bottom: 10px;
-  transition: opacity 0.15s ease;
+  transition: background 0.15s ease, transform 0.14s;
 }
 
 .form-share-btn:hover {
-  opacity: 0.9;
+  background: #8E6B36;
+  transform: translateY(-1px);
+}
+
+/* ── Utility additions ────────────────────────────────────────────── */
+
+/* Link-styled submit button (used on sold-out / full screens) */
+.form-submit--link {
+  text-align: center;
+  text-decoration: none;
+  display: flex;
+  justify-content: center;
+}
+
+/* Full progress bar */
+.form-progress-bar--full {
+  width: 100%;
+}
+
+/* Field with top margin spacing */
+.form-field--mt {
+  margin-top: 12px;
 }

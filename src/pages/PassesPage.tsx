@@ -241,6 +241,8 @@ function CheckoutForm({ pass, onChangePass }: { pass: Pass; onChangePass: () => 
     setLoading(true);
     setError(null);
     try {
+      // Store pass accent so success page can match tick colour
+      if (pass?.accent) sessionStorage.setItem('lastPassAccent', pass.accent);
       const res = await fetch('/.netlify/functions/create-pass-checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

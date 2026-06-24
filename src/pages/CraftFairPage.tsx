@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import './forms.css';
 
@@ -68,14 +68,14 @@ export default function CraftFairPage() {
     }
   }, []);
 
-  const set = (field: keyof FormData) =>
+  const set = useCallback((field: keyof FormData) =>
     (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       const value =
         e.target instanceof HTMLInputElement && e.target.type === 'checkbox'
           ? (e.target as HTMLInputElement).checked
           : e.target.value;
       setForm((prev) => ({ ...prev, [field]: value }));
-    };
+    }, []);
 
   const valid =
     form.fullName.trim() &&

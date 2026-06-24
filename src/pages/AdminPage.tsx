@@ -87,18 +87,21 @@ const s: Record<string, React.CSSProperties> = {
   headerSub: { color: 'rgba(201,168,120,0.85)', margin: '2px 0 0', fontSize: '13px' },
   headerActions: { display: 'flex', gap: '10px', alignItems: 'center', flexWrap: 'wrap' as const, justifyContent: 'flex-end' as const },
   backLink: { color: 'rgba(201,168,120,0.85)', fontSize: '13px', textDecoration: 'none', background: 'none', border: 'none', cursor: 'pointer', padding: '4px 2px', fontFamily: 'Outfit, system-ui, sans-serif' },
-  choiceWrap: { minHeight: '100vh', background: '#0E2730', display: 'flex', flexDirection: 'column' as const, fontFamily: "'Outfit', system-ui, sans-serif" },
-  choiceHeader: { display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', padding: '22px 24px' },
-  choiceHeaderTitle: { color: '#fff', margin: 0, fontSize: '16px', fontWeight: 700, fontFamily: "'Playfair Display', Georgia, serif" },
-  choiceHeaderSub: { color: 'rgba(255,255,255,0.58)', margin: '2px 0 0', fontSize: '12px' },
-  exitLink: { color: 'rgba(255,255,255,0.68)', fontSize: '13px', textDecoration: 'none', padding: '6px 0' },
-  choiceBody: { flex: 1, display: 'flex', flexDirection: 'column' as const, justifyContent: 'center', alignItems: 'center', padding: '20px 24px 40px', gap: '16px' },
-  scanTile: { width: '100%', maxWidth: '420px', background: '#1B7A48', border: '1px solid rgba(201,168,120,0.4)', borderRadius: '18px', padding: '44px 24px 42px', display: 'flex', flexDirection: 'column' as const, alignItems: 'center', textAlign: 'center' as const, gap: '8px', textDecoration: 'none', cursor: 'pointer', boxShadow: '0 12px 30px rgba(12,20,28,0.18)' },
-  scanTileTitle: { fontFamily: "'Playfair Display', Georgia, serif", fontSize: '32px', fontWeight: 800, color: '#fff', margin: '12px 0 0', letterSpacing: '-0.02em' },
-  reportsTile: { width: '100%', maxWidth: '420px', background: '#122030', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '18px', padding: '18px 20px', display: 'flex', alignItems: 'center', gap: '14px', cursor: 'pointer', font: 'inherit', boxShadow: '0 10px 30px rgba(0,0,0,0.26)' },
-  reportsTileTitle: { fontSize: '15px', fontWeight: 700, color: '#f4efe5', margin: 0 },
-  choiceFooter: { display: 'flex', justifyContent: 'space-between', padding: '0 24px 20px', fontSize: '11px', color: 'rgba(255,255,255,0.34)' },
-  choiceSignOut: { color: 'rgba(255,255,255,0.42)', fontSize: '11px', textDecoration: 'none', cursor: 'pointer', background: 'none', border: 'none', font: 'inherit', padding: 0 },
+  choiceWrap: { minHeight: '100vh', background: '#16323C', display: 'flex', flexDirection: 'column' as const, fontFamily: "'Outfit', system-ui, sans-serif" },
+  choiceHeader: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '20px 28px', borderBottom: '1px solid rgba(255,255,255,0.08)' },
+  choiceHeaderLeft: { display: 'flex', flexDirection: 'column' as const, gap: '2px' },
+  choiceHeaderTitle: { color: '#f4efe5', margin: 0, fontSize: '15px', fontWeight: 600, fontFamily: "'Outfit', system-ui, sans-serif" },
+  choiceHeaderSub: { color: '#B0894F', margin: 0, fontSize: '10px', fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase' as const },
+  exitLink: { color: 'rgba(244,239,229,0.58)', fontSize: '13px', textDecoration: 'none', padding: '6px 0' },
+  choiceBody: { flex: 1, display: 'flex', flexDirection: 'column' as const, justifyContent: 'center', alignItems: 'center', padding: '40px 28px 40px' },
+  choiceTileGrid: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', width: '100%', maxWidth: '680px' },
+  choiceTile: { background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.10)', borderRadius: '16px', padding: '28px 24px 24px', display: 'flex', flexDirection: 'column' as const, gap: '0', textDecoration: 'none', cursor: 'pointer', font: 'inherit', textAlign: 'left' as const, transition: 'background 0.18s, border-color 0.18s' },
+  choiceTileIconWrap: { width: '44px', height: '44px', borderRadius: '12px', background: 'rgba(255,255,255,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' },
+  choiceTileTitle: { fontFamily: "'Playfair Display', Georgia, serif", fontSize: '22px', fontWeight: 700, color: '#f4efe5', margin: '0 0 8px', letterSpacing: '-0.01em' },
+  choiceTileDesc: { fontSize: '13px', color: 'rgba(244,239,229,0.58)', margin: '0 0 20px', lineHeight: 1.5 },
+  choiceTileLink: { fontSize: '11px', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase' as const, color: '#B0894F', margin: 0 },
+  choiceFooter: { display: 'flex', justifyContent: 'space-between', padding: '0 28px 24px', fontSize: '11px', color: 'rgba(255,255,255,0.28)' },
+  choiceSignOut: { color: 'rgba(255,255,255,0.38)', fontSize: '11px', textDecoration: 'none', cursor: 'pointer', background: 'none', border: 'none', font: 'inherit', padding: 0 },
   body: { maxWidth: '1200px', margin: '0 auto', padding: '24px 16px' },
   metricGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '14px', marginBottom: '28px' },
   metricCard: { background: '#fff', border: '1px solid rgba(22,50,60,0.1)', borderRadius: '16px', padding: '16px 18px', boxShadow: '0 12px 30px rgba(12,20,28,0.05)' },
@@ -409,42 +412,45 @@ export default function AdminPage() {
     return (
       <div style={s.choiceWrap}>
         <div style={s.choiceHeader}>
-          <div>
+          <div style={s.choiceHeaderLeft}>
             <p style={s.choiceHeaderTitle}>Moville Summer Festival 2026</p>
-            <p style={s.choiceHeaderSub}>Committee access</p>
+            <p style={s.choiceHeaderSub}>Committee Access</p>
           </div>
           <Link to="/" style={s.exitLink}>Exit to site →</Link>
         </div>
 
         <div style={s.choiceBody}>
-          <Link to="/scan" data-testid="tile-scan-passes" style={s.scanTile}>
-            <svg width="96" height="96" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style={{ filter: 'drop-shadow(0 14px 24px rgba(0,0,0,0.22))' }}>
-              <path d="M12 30V17C12 14.2386 14.2386 12 17 12H30" stroke="#FFFFFF" strokeWidth="8" strokeLinecap="round" />
-              <path d="M66 12H79C81.7614 12 84 14.2386 84 17V30" stroke="#FFFFFF" strokeWidth="8" strokeLinecap="round" />
-              <path d="M12 66V79C12 81.7614 14.2386 84 17 84H30" stroke="#FFFFFF" strokeWidth="8" strokeLinecap="round" />
-              <path d="M66 84H79C81.7614 84 84 81.7614 84 79V66" stroke="#FFFFFF" strokeWidth="8" strokeLinecap="round" />
-              <rect x="28" y="28" width="13" height="13" rx="1.5" stroke="#FFFFFF" strokeWidth="5" />
-              <rect x="55" y="28" width="13" height="13" rx="1.5" stroke="#FFFFFF" strokeWidth="5" />
-              <rect x="28" y="56" width="13" height="13" rx="1.5" stroke="#FFFFFF" strokeWidth="5" />
-              <rect x="52" y="53" width="7" height="7" rx="1" fill="#FFFFFF" />
-              <rect x="63" y="53" width="7" height="7" rx="1" fill="#FFFFFF" />
-              <rect x="52" y="64" width="7" height="7" rx="1" fill="#FFFFFF" />
-              <rect x="63" y="64" width="7" height="7" rx="1" fill="#FFFFFF" />
-              <line x1="17" y1="48" x2="79" y2="48" stroke="#F26A4B" strokeWidth="3" strokeLinecap="round" />
-            </svg>
-            <span style={s.scanTileTitle}>Scan Passes</span>
-          </Link>
+          <div style={s.choiceTileGrid}>
 
-          <button data-testid="tile-reports-admin" onClick={() => setView('dashboard')} style={s.reportsTile}>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style={{ flexShrink: 0 }}>
-              <rect x="3" y="13" width="4" height="8" rx="1" fill="#6BAFA7" />
-              <rect x="10" y="7" width="4" height="14" rx="1" fill="#F26A4B" />
-              <rect x="17" y="3" width="4" height="18" rx="1" fill="#F4E9D8" />
-            </svg>
-            <div style={{ textAlign: 'left' as const }}>
-              <p style={s.reportsTileTitle}>Reports &amp; Admin</p>
-            </div>
-          </button>
+            {/* Scan Passes tile */}
+            <Link to="/scan" data-testid="tile-scan-passes" style={s.choiceTile}>
+              <div style={s.choiceTileIconWrap}>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#B0894F" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+                  <path d="M3 7V5a2 2 0 0 1 2-2h2" /><path d="M17 3h2a2 2 0 0 1 2 2v2" />
+                  <path d="M21 17v2a2 2 0 0 1-2 2h-2" /><path d="M7 21H5a2 2 0 0 1-2-2v-2" />
+                  <rect x="7" y="7" width="3" height="3" /><rect x="14" y="7" width="3" height="3" />
+                  <rect x="7" y="14" width="3" height="3" /><rect x="14" y="14" width="3" height="3" />
+                </svg>
+              </div>
+              <p style={s.choiceTileTitle}>Scan Passes</p>
+              <p style={s.choiceTileDesc}>Check tickets at the gate, on the door, anywhere.</p>
+              <p style={s.choiceTileLink}>Open scanner →</p>
+            </Link>
+
+            {/* Reports & Admin tile */}
+            <button data-testid="tile-reports-admin" onClick={() => setView('dashboard')} style={s.choiceTile}>
+              <div style={s.choiceTileIconWrap}>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#B0894F" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+                  <line x1="18" y1="20" x2="18" y2="10" /><line x1="12" y1="20" x2="12" y2="4" />
+                  <line x1="6" y1="20" x2="6" y2="14" />
+                </svg>
+              </div>
+              <p style={s.choiceTileTitle}>Reports &amp; Admin</p>
+              <p style={s.choiceTileDesc}>Registrations, revenue and CSV exports.</p>
+              <p style={s.choiceTileLink}>View dashboard →</p>
+            </button>
+
+          </div>
         </div>
 
         <div style={s.choiceFooter}>

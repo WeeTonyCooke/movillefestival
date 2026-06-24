@@ -412,3 +412,34 @@
     align-self: flex-end;
   }
 }
+
+
+/* ── Night mode overrides ─────────────────────────────────────────── */
+
+.theme-night .home-balldrop-prize {
+  background: var(--bg-paper);
+}
+
+.theme-night .home-balldrop-prize-place {
+  color: var(--text-muted);
+}
+
+.theme-night .home-balldrop-prize-amount {
+  color: var(--text-primary);
+}
+
+.theme-night .home-balldrop-options {
+  background: var(--bg-paper);
+  border-color: var(--border-strong);
+}
+
+.theme-night .home-balldrop-option {
+  background: var(--bg-surface);
+  border-color: var(--border-strong);
+  color: var(--text-primary);
+}
+
+.theme-night .home-event-card {
+  background: var(--bg-surface);
+  border-color: var(--border-soft);
+}

@@ -997,3 +997,68 @@
 .form-field--mt {
   margin-top: 12px;
 }
+
+
+/* ═══════════════════════════════════════
+   Night mode overrides
+   ═══════════════════════════════════════ */
+
+.theme-night .form-card {
+  background: var(--bg-surface);
+  border-color: var(--border-soft);
+}
+
+.theme-night .form-input,
+.theme-night .form-textarea,
+.theme-night .form-select {
+  background: var(--bg-soft);
+  border-color: var(--border-strong);
+  color: var(--text-primary);
+}
+
+.theme-night .form-input:focus,
+.theme-night .form-textarea:focus,
+.theme-night .form-select:focus {
+  border-color: var(--accent);
+  background: var(--bg-surface);
+}
+
+.theme-night .form-info-box {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--border-strong);
+}
+
+.theme-night .form-tag {
+  background: var(--bg-soft);
+  border-color: var(--border-strong);
+  color: var(--text-primary);
+}
+
+.theme-night .form-option-card {
+  background: var(--bg-surface);
+  border-color: var(--border-strong);
+  color: var(--text-primary);
+}
+
+.theme-night .form-option-card.is-selected {
+  border-color: var(--accent);
+  background: rgba(176, 137, 79, 0.10);
+}
+
+.theme-night .form-back {
+  background: var(--bg-surface);
+  border-color: var(--border-strong);
+  color: var(--text-primary);
+}
+
+.theme-night .form-checkbox-label {
+  color: var(--text-secondary);
+}
+
+.theme-night .form-label {
+  color: var(--text-secondary);
+}
+
+.theme-night .form-eyebrow {
+  color: var(--accent);
+}

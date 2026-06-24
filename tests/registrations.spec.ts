@@ -219,6 +219,8 @@ test.describe('Ball Drop', () => {
     await page.evaluate(() => window.scrollTo({ top: 600, left: 0, behavior: 'instant' }));
     await page.click('a:has-text("Back to festival site")');
     await page.waitForURL(BASE + '/');
+    // Wait for ScrollToTop useEffect to fire and scroll to settle
+    await page.waitForFunction(() => window.scrollY === 0, { timeout: 3000 });
     const scrollY = await page.evaluate(() => window.scrollY);
     expect(scrollY).toBe(0);
   });

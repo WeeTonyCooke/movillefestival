@@ -561,3 +561,15 @@
     font-size: 1.15rem;
   }
 }
+
+/* Day hero — CTA pill needs stronger contrast on bright background */
+.hero-day .hero-cta {
+  border-color: rgba(255, 255, 255, 0.55);
+  background: rgba(0, 0, 0, 0.28);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.hero-day .hero-cta:hover {
+  background: rgba(0, 0, 0, 0.38);
+  border-color: rgba(255, 255, 255, 0.7);
+}

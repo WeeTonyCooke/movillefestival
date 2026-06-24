@@ -6,7 +6,7 @@ const FEE_SINGLE = 5;
 const FEE_BUNDLE = 20;
 
 type Bundle = '1' | '5';
-type Screen = 'form' | 'success' | 'soldout' | 'cancelled';
+type Screen = 'form' | 'success' | 'soldout';
 
 interface FormData {
   bundle: Bundle;
@@ -37,9 +37,7 @@ export default function BallDropPage() {
     const params = new URLSearchParams(window.location.search);
     const status = params.get('status');
     const sessionId = params.get('session_id');
-    if (status === 'cancelled') {
-      setScreen('cancelled');
-    } else if (status === 'success' && sessionId) {
+    if (status === 'success' && sessionId) {
       setScreen('success');
       fetch(`/.netlify/functions/get-ball-numbers?session_id=${sessionId}`)
         .then((res) => res.json())
@@ -111,34 +109,6 @@ export default function BallDropPage() {
     }
   };
 
-  if (screen === 'cancelled') {
-    return (
-      <div className="form-page">
-        <div className="form-page-bg" aria-hidden="true" />
-        <div className="form-page-content page-shell--narrow">
-          <div className="form-card">
-            <div className="form-success">
-              <div className="form-success-icon" style={{ fontSize: '2rem' }}>ℹ️</div>
-              <h2 className="form-success-title">Payment cancelled</h2>
-              <p className="form-success-body">
-                No payment was taken and no balls have been reserved for you.
-                You can try again below whenever you're ready.
-              </p>
-              <button
-                className="form-submit"
-                style={{ textDecoration: 'none' }}
-                onClick={() => setScreen('form')}
-              >
-                Back to Ball Drop
-              </button>
-              <p className="form-submit-note">Questions? Contact movillefestival@gmail.com</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   if (screen === 'soldout') {
     return (
       <div className="form-page">
@@ -146,7 +116,7 @@ export default function BallDropPage() {
         <div className="form-page-content page-shell--narrow">
           <div className="form-card">
             <div className="form-success">
-              <div className="form-success-icon" style={{ fontSize: '2rem' }}>🏆</div>
+              <div className="form-success-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M8 21h8M12 17v4M5 3h14l-1.5 9H6.5L5 3z"/><path d="M5 3a2 2 0 0 0-2 2v1h18V5a2 2 0 0 0-2-2"/></svg></div>
               <h2 className="form-success-title">Online Ball Drop sales are now closed</h2>
               <p className="form-success-body">
                 All online balls have been sold. The draw takes place at Festival Square on
@@ -161,7 +131,7 @@ export default function BallDropPage() {
                 <p className="form-info-body">A small number of balls may still be available
                   on the day from committee members at the festival.</p>
               </div>
-              <Link to="/programme" className="form-submit" style={{ textAlign: 'center', textDecoration: 'none' }}>
+              <Link to="/programme" className="form-submit form-submit--link">
                 View the full festival programme
               </Link>
               <p className="form-submit-note">Questions? Contact movillefestival@gmail.com</p>
@@ -330,7 +300,7 @@ export default function BallDropPage() {
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
                     stroke="#fff" strokeWidth="3"><path d="M20 6L9 17l-5-5" /></svg>
                 </div>
-                <div className="ball-badge">⭐ Best Value</div>
+                <div className="ball-badge">Best value</div>
                 <div className="ball-option-count">5 Balls — €20</div>
                 <div className="ball-option-desc">5 chances to win · save €5</div>
                 <div className="ball-option-per">€4 each</div>

@@ -113,7 +113,7 @@ export default function SponsorshipPage() {
                 <p className="form-info-title">What happens next</p>
                 <p className="form-info-body">A confirmation email is on its way to you. A committee member will follow up regarding any recognition or listing on the website.</p>
               </div>
-              <Link to="/" className="form-submit" style={{ textAlign: 'center', textDecoration: 'none' }}>
+              <Link to="/" className="form-submit form-submit--link">
                 Back to festival site
               </Link>
               <p className="form-submit-note">Questions? Contact movillefestival@gmail.com</p>
@@ -131,7 +131,7 @@ export default function SponsorshipPage() {
         <div className="form-page-content page-shell--narrow">
           <div className="form-card">
             <div className="form-success">
-              <div className="form-success-icon" style={{ fontSize: '2rem' }}>ℹ️</div>
+              <div className="form-success-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></div>
               <h2 className="form-success-title">Payment cancelled</h2>
               <p className="form-success-body">
                 No payment was taken. You can try again below whenever you're ready.
@@ -176,7 +176,7 @@ export default function SponsorshipPage() {
           {/* Tier selection */}
           <div className="form-section">
             <p className="form-section-title">Choose an amount</p>
-            <div className="ball-options" style={{ gridTemplateColumns: 'repeat(2, 1fr)' }}>
+            <div className="ball-options">
               {TIERS.map((tier) => (
                 <button
                   key={tier.label}
@@ -196,7 +196,7 @@ export default function SponsorshipPage() {
             </div>
 
             {form.selectedTier === 0 && (
-              <div className="form-field" style={{ marginTop: '12px' }}>
+              <div className="form-field form-field--mt">
                 <label className="form-label">Your amount (€) <span className="required">*</span></label>
                 <input
                   className="form-input"
@@ -263,12 +263,11 @@ export default function SponsorshipPage() {
             <div className="form-field">
               <label className="form-label">Message to the committee (optional)</label>
               <textarea
-                className="form-input"
+                className="form-textarea"
                 rows={3}
                 placeholder="Anything you'd like the committee to know"
                 value={form.message}
                 onChange={set('message')}
-                style={{ resize: 'vertical' }}
               />
             </div>
 

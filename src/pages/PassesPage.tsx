@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useNightMode } from '../hooks/useNightMode';
 
 const PASSES = [
   {
@@ -154,7 +155,7 @@ function Ticket({ pass, onSelect }: { pass: Pass; onSelect: () => void }) {
       </div>
       <div className="ticket-body">
         <div>
-          <div style={{ fontSize: 28, fontWeight: 900, color: '#1B2A4A', lineHeight: 1.05, textTransform: 'uppercase', letterSpacing: '-0.5px' }}>
+          <div style={{ fontSize: 28, fontWeight: 900, color: '#16323C', lineHeight: 1.05, textTransform: 'uppercase', letterSpacing: '-0.5px' }}>
             {pass.line1}<br />{pass.line2}
           </div>
           <div style={{ borderTop: '1px solid rgba(27,42,74,0.12)', margin: '9px 0 7px' }} />
@@ -166,12 +167,12 @@ function Ticket({ pass, onSelect }: { pass: Pass; onSelect: () => void }) {
           <div style={{ borderTop: '1px solid rgba(27,42,74,0.12)', marginBottom: 10 }} />
           <div style={{ display: 'flex', gap: 28 }}>
             <div>
-              <div style={{ fontSize: 8, fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', color: '#8A9ABB' }}>Date</div>
-              <div style={{ fontSize: 13, fontWeight: 700, color: '#1B2A4A', marginTop: 2 }}>{pass.date}</div>
+              <div style={{ fontSize: 8, fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', color: 'rgba(22,50,60,0.5)' }}>Date</div>
+              <div style={{ fontSize: 13, fontWeight: 700, color: '#16323C', marginTop: 2 }}>{pass.date}</div>
             </div>
             <div>
-              <div style={{ fontSize: 8, fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', color: '#8A9ABB' }}>Ticket</div>
-              <div style={{ fontSize: 13, fontWeight: 700, color: '#1B2A4A', marginTop: 2 }}>{pass.type}</div>
+              <div style={{ fontSize: 8, fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', color: 'rgba(22,50,60,0.5)' }}>Ticket</div>
+              <div style={{ fontSize: 13, fontWeight: 700, color: '#16323C', marginTop: 2 }}>{pass.type}</div>
             </div>
           </div>
         </div>
@@ -200,7 +201,7 @@ function TicketSummary({ pass, onChangePass }: { pass: Pass; onChangePass?: () =
         <img src="/moville_lighthouse_passes.png" alt="Moville Festival" />
       </div>
       <div className="ticket-body" style={{ padding: '14px 20px' }}>
-        <div style={{ fontSize: 22, fontWeight: 900, color: '#1B2A4A', textTransform: 'uppercase', letterSpacing: '-0.5px' }}>
+        <div style={{ fontSize: 22, fontWeight: 900, color: '#16323C', textTransform: 'uppercase', letterSpacing: '-0.5px' }}>
           {pass.line1} {pass.line2}
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 6 }}>
@@ -210,7 +211,7 @@ function TicketSummary({ pass, onChangePass }: { pass: Pass; onChangePass?: () =
           {onChangePass && (
             <button
               onClick={onChangePass}
-              style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontSize: 11, fontWeight: 600, color: '#8A9ABB', textDecoration: 'underline', fontFamily: 'Inter, Arial, sans-serif' }}
+              style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontSize: 11, fontWeight: 600, color: 'rgba(22,50,60,0.5)', textDecoration: 'underline', fontFamily: "'Outfit', system-ui, sans-serif" }}
             >
               Change pass
             </button>
@@ -240,6 +241,8 @@ function CheckoutForm({ pass, onChangePass }: { pass: Pass; onChangePass: () => 
     setLoading(true);
     setError(null);
     try {
+      // Store pass accent so success page can match tick colour
+      if (pass?.accent) sessionStorage.setItem('lastPassAccent', pass.accent);
       const res = await fetch('/.netlify/functions/create-pass-checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -260,13 +263,13 @@ function CheckoutForm({ pass, onChangePass }: { pass: Pass; onChangePass: () => 
 
   const inputStyle: React.CSSProperties = {
     border: '1px solid rgba(27,42,74,0.18)', borderRadius: 8, padding: '10px 12px',
-    fontSize: 14, fontWeight: 500, color: '#1B2A4A', fontFamily: 'Inter, Arial, sans-serif',
-    outline: 'none', background: '#F8F9FC', width: '100%',
+    fontSize: 14, fontWeight: 500, color: '#16323C', fontFamily: "'Outfit', system-ui, sans-serif",
+    outline: 'none', background: '#FFFCF6', width: '100%',
   };
 
   const labelStyle: React.CSSProperties = {
     fontSize: 10, fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase',
-    color: '#8A9ABB', display: 'block', marginBottom: 6,
+    color: 'rgba(22,50,60,0.5)', display: 'block', marginBottom: 6,
   };
 
   return (
@@ -276,18 +279,18 @@ function CheckoutForm({ pass, onChangePass }: { pass: Pass; onChangePass: () => 
       <TicketSummary pass={pass} onChangePass={onChangePass} />
 
       {/* Age + name guidance */}
-      <div style={{ background: '#F0F4FB', borderRadius: 10, padding: '12px 16px', margin: '16px 0', borderLeft: `3px solid ${pass.accent}` }}>
-        <p style={{ margin: '0 0 4px', fontSize: 13, fontWeight: 600, color: '#1B2A4A', fontFamily: 'Inter, Arial, sans-serif' }}>
+      <div style={{ background: '#FFFCF6', borderRadius: 10, padding: '12px 16px', margin: '16px 0', borderLeft: `3px solid ${pass.accent}` }}>
+        <p style={{ margin: '0 0 4px', fontSize: 13, fontWeight: 600, color: '#16323C', fontFamily: "'Outfit', system-ui, sans-serif" }}>
           Passes are required for ages 16 and over — under 16s enter free.
         </p>
-        <p style={{ margin: 0, fontSize: 12, color: '#666', fontFamily: 'Inter, Arial, sans-serif' }}>
+        <p style={{ margin: 0, fontSize: 12, color: 'var(--text-muted)', fontFamily: "'Outfit', system-ui, sans-serif" }}>
           Enter the name of the person attending. A parent or guardian may purchase on behalf of a 16+ attendee.
         </p>
       </div>
 
       {/* Form */}
-      <div style={{ background: '#fff', borderRadius: 16, padding: 28, boxShadow: '0 4px 20px rgba(0,0,0,0.10)', marginTop: 8 }}>
-        <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '2px', textTransform: 'uppercase', color: '#8A9ABB', marginBottom: 16 }}>
+      <div style={{ background: '#FFFCF6', borderRadius: 16, padding: 28, boxShadow: '0 4px 20px rgba(0,0,0,0.10)', marginTop: 8 }}>
+        <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '2px', textTransform: 'uppercase', color: 'rgba(22,50,60,0.5)', marginBottom: 16 }}>
           Attendee details
         </div>
 
@@ -321,7 +324,7 @@ function CheckoutForm({ pass, onChangePass }: { pass: Pass; onChangePass: () => 
           </div>
 
           {error && (
-            <div style={{ background: '#fff5f5', border: '1px solid #fca5a5', borderRadius: 8, padding: '10px 14px', marginBottom: 14, fontSize: 13, color: '#b91c1c' }}>
+            <div style={{ background: '#fff5f5', border: '1px solid rgba(239,68,68,0.35)', borderRadius: 8, padding: '10px 14px', marginBottom: 14, fontSize: 13, color: '#b91c1c' }}>
               {error}
             </div>
           )}
@@ -330,10 +333,10 @@ function CheckoutForm({ pass, onChangePass }: { pass: Pass; onChangePass: () => 
 
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
             <div>
-              <div style={{ fontSize: 14, fontWeight: 700, color: '#1B2A4A' }}>{pass.line1} {pass.line2}</div>
-              <div style={{ fontSize: 11, color: '#8A9ABB', marginTop: 2 }}>{pass.date}</div>
+              <div style={{ fontSize: 14, fontWeight: 700, color: '#16323C' }}>{pass.line1} {pass.line2}</div>
+              <div style={{ fontSize: 11, color: 'rgba(22,50,60,0.5)', marginTop: 2 }}>{pass.date}</div>
             </div>
-            <div style={{ fontSize: 24, fontWeight: 900, color: '#1B2A4A', letterSpacing: '-0.5px' }}>€{pass.price}</div>
+            <div style={{ fontSize: 24, fontWeight: 900, color: '#16323C', letterSpacing: '-0.5px' }}>€{pass.price}</div>
           </div>
 
           <button
@@ -346,7 +349,7 @@ function CheckoutForm({ pass, onChangePass }: { pass: Pass; onChangePass: () => 
               color: '#fff', border: 'none', borderRadius: 10, padding: 14,
               fontSize: 14, fontWeight: 700, letterSpacing: '0.5px', textTransform: 'uppercase',
               cursor: loading ? 'not-allowed' : 'pointer',
-              fontFamily: 'Inter, Arial, sans-serif', transition: 'background 0.2s',
+              fontFamily: "'Outfit', system-ui, sans-serif", transition: 'background 0.2s',
             }}
           >
             {loading ? 'Redirecting to payment…' : pass.btnLabel}
@@ -360,6 +363,14 @@ function CheckoutForm({ pass, onChangePass }: { pass: Pass; onChangePass: () => 
 export default function PassesPage() {
   const [step,     setStep]     = useState<Step>('select');
   const [selected, setSelected] = useState<string | null>(null);
+  const isNight = useNightMode();
+
+  // Night mode colour tokens
+  const bg       = isNight ? '#0c1a22' : '#FAF8F4';
+  const surface  = isNight ? 'rgba(18,36,48,0.76)' : '#FFFCF6';
+  const textPri  = isNight ? '#f4efe5' : '#16323C';
+  const textSec  = isNight ? 'rgba(244,239,229,0.64)' : 'rgba(22,50,60,0.52)';
+  const border   = isNight ? 'rgba(255,255,255,0.10)' : 'rgba(22,50,60,0.12)';
 
   const selectedPass = PASSES.find(p => p.id === selected) ?? null;
 
@@ -377,17 +388,25 @@ export default function PassesPage() {
   return (
     <>
       <style>{responsiveStyles}</style>
-      <div style={{ background: '#EAECF0', minHeight: '100vh', padding: '40px 20px 60px', fontFamily: 'Inter, Arial, sans-serif' }}>
+      <div style={{ background: bg, minHeight: '100vh', padding: '40px 20px 60px', fontFamily: "'Outfit', system-ui, sans-serif" }}>
 
         {/* Back to site */}
-        <div style={{ marginBottom: 24, maxWidth: 680, margin: '0 auto 24px' }}>
+        <div style={{ maxWidth: 680, margin: '0 auto 28px', display: 'flex', alignItems: 'flex-start', gap: 16 }}>
           <Link
             to="/"
-            style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 13, fontWeight: 600, color: '#1B2A4A', textDecoration: 'none', opacity: 0.6 }}
+            aria-label="Back to home"
+            style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 40, height: 40, borderRadius: '50%', border: `1px solid ${border}`, background: surface, color: textPri, textDecoration: 'none', flexShrink: 0, marginTop: 4 }}
           >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M15 18l-6-6 6-6" /></svg>
-            Back to festival site
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4"><path d="M15 18l-6-6 6-6" /></svg>
           </Link>
+          <div>
+            <p style={{ margin: '0 0 4px', fontFamily: "'Outfit', sans-serif", fontSize: '0.66rem', fontWeight: 700, letterSpacing: '0.24em', textTransform: 'uppercase', color: '#B0894F' }}>
+              Moville Summer Festival 2026
+            </p>
+            <h1 style={{ margin: 0, fontFamily: "'Playfair Display', serif", fontSize: 'clamp(1.8rem, 5vw, 2.6rem)', fontWeight: 700, color: textPri, lineHeight: 1.1, letterSpacing: '-0.01em' }}>
+              Festival Passes
+            </h1>
+          </div>
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -395,19 +414,13 @@ export default function PassesPage() {
           {step === 'select' && (
             <>
               <div style={{ width: '100%', maxWidth: 680, marginBottom: 28 }}>
-                <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '3px', textTransform: 'uppercase', color: '#888', marginBottom: 10 }}>
-                  Moville Summer Festival 2026
-                </div>
-                <h1 style={{ fontSize: 26, fontWeight: 900, color: '#1B2A4A', letterSpacing: '-0.5px', marginBottom: 5 }}>
-                  Choose your pass
-                </h1>
-                <p style={{ fontSize: 13, color: '#8A9ABB', marginBottom: 0 }}>
+                <p style={{ fontSize: 13, color: textSec, marginBottom: 0 }}>
                   Passes required for ages 16 and over — under 16s enter free.
                 </p>
               </div>
 
-              <div style={{ width: '100%', maxWidth: 680, marginBottom: 8, background: '#F0F4FB', borderRadius: 12, padding: '12px 18px', borderLeft: '3px solid #B8860B' }}>
-                <p style={{ margin: 0, fontSize: 13, color: '#1B2A4A', fontFamily: 'Inter, Arial, sans-serif' }}>
+              <div style={{ width: '100%', maxWidth: 680, marginBottom: 8, background: '#FFFCF6', borderRadius: 12, padding: '12px 18px', borderLeft: '3px solid #B8860B' }}>
+                <p style={{ margin: 0, fontSize: 13, color: '#16323C', fontFamily: "'Outfit', system-ui, sans-serif" }}>
                   <strong>Attending more than one day?</strong> The Festival Pass (€20) covers all admission-required events across the full festival — better value than two or more day passes.
                 </p>
               </div>

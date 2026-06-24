@@ -6,10 +6,10 @@ const DAY_IMG = '/mobile_lighthouse_day.webp';
 const DAY_DESKTOP_IMG = '/movillelight-day-desktop.jpeg';
 
 const EVENING_IMG = '/mobile_lighthouse_evening.webp';
-const EVENING_DESKTOP_IMG = '/the-fid-evening-desktop.jpeg';
+const EVENING_DESKTOP_IMG = '/moville-light-evening-desktop.jpeg';
 
 const NIGHT_IMG = '/mobile_lighthouse_night.webp';
-const NIGHT_DESKTOP_IMG = '/the-fid-night-desktop.jpeg';
+const NIGHT_DESKTOP_IMG = '/moville-light-evening-desktop.jpeg';
 
 type MovilleHeroProps = {
   isNight: boolean;
@@ -50,6 +50,7 @@ const MovilleHero: React.FC<MovilleHeroProps> = ({ isNight }) => {
   const isHeroNight = heroPhase === 'night' || isNight;
 
   return (
+    <>
     <section className={`moville-hero hero-${heroPhase}`}>
       {/* Day — mobile */}
       <div
@@ -126,25 +127,28 @@ const MovilleHero: React.FC<MovilleHeroProps> = ({ isNight }) => {
         <span className="hero-balldrop-badge-cta">Buy tickets</span>
       </button>
 
-      <button
-        className="hero-sponsor-band"
-        onClick={() => navigate('/sponsorship')}
-        aria-label="Sponsor the Festival"
-      >
-        Sponsor the Festival <span className="hero-sponsor-band-arrow">→</span>
-      </button>
-
-      <div className="hero-credit">
-        Photo:{' '}
-        <a
-          href="https://www.instagram.com/christybutterz/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          @christybutterz
-        </a>
-      </div>
+      {(heroPhase === 'evening' || heroPhase === 'night') && (
+        <div className="hero-credit">
+          Photo:{' '}
+          <a
+            href="https://www.instagram.com/christybutterz/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            @christybutterz
+          </a>
+        </div>
+      )}
     </section>
+
+    <button
+      className="hero-sponsor-band"
+      onClick={() => navigate('/sponsorship')}
+      aria-label="Sponsor the Festival"
+    >
+      Sponsor the Festival <span className="hero-sponsor-band-arrow">→</span>
+    </button>
+    </>
   );
 };
 

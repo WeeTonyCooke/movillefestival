@@ -140,9 +140,9 @@ const PassViewPage: React.FC = () => {
           ) : (
             // Fallback if QR function fails — ref is still human-readable
             <div style={styles.qrFallback}>
-              <p style={{ margin: 0, fontSize: 11, color: '#aaa' }}>QR unavailable</p>
+              <p style={{ margin: 0, fontSize: 11, color: 'rgba(22,50,60,0.45)' }}>QR unavailable</p>
               <p style={{ margin: '8px 0 0', fontSize: 20, fontWeight: 800,
-                          color: '#1F4E5F', letterSpacing: 2 }}>
+                          color: 'var(--harbour-teal)', letterSpacing: 2 }}>
                 {pass.pass_ref}
               </p>
             </div>
@@ -257,12 +257,12 @@ const styles: Record<string, React.CSSProperties> = {
     fontWeight:      700,
     letterSpacing:   '2px',
     textTransform:   'uppercase' as const,
-    color:           '#aaa',
+    color:           'var(--text-muted)',
   },
   qrFallback: {
     width:           210,
     height:          210,
-    border:          '2px dashed #eee',
+    border:          '2px dashed var(--border-soft)',
     borderRadius:    8,
     display:         'flex',
     flexDirection:   'column',
@@ -273,11 +273,11 @@ const styles: Record<string, React.CSSProperties> = {
     margin:          0,
     fontSize:        22,
     fontWeight:      800,
-    color:           '#1F4E5F',
+    color:           'var(--harbour-teal)',
     letterSpacing:   '2px',
   },
   perf: {
-    borderTop:       '1.5px dashed #ddd',
+    borderTop:       '1.5px dashed var(--border-soft)',
     margin:          '0 16px',
   },
   passFooter: {
@@ -353,7 +353,7 @@ const styles: Record<string, React.CSSProperties> = {
     fontWeight:      800,
     letterSpacing:   '1.5px',
     textTransform:   'uppercase' as const,
-    color:           '#1F4E5F',
+    color:           'var(--harbour-teal)',
   },
   passDateLabel: {
     margin:          '3px 0 0',
@@ -374,7 +374,7 @@ const styles: Record<string, React.CSSProperties> = {
     margin:          0,
     fontSize:        26,
     fontWeight:      700,
-    color:           '#1F4E5F',
+    color:           'var(--harbour-teal)',
     fontFamily:      "'Playfair Display', Georgia, serif",
     lineHeight:      1.2,
   },

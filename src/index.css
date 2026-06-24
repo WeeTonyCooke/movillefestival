@@ -1,17 +1,17 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600;1,700&display=swap');
 
 :root {
   --font-sans: 'Outfit', system-ui, -apple-system, sans-serif;
   --font-display: 'Playfair Display', serif;
   --font-hero: 'Playfair Display', serif;
 
-  --radius-sm: 14px;
-  --radius-md: 22px;
-  --radius-lg: 30px;
+  --radius-sm: 12px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
   --radius-pill: 999px;
 
-  --shadow-soft: 0 10px 30px rgba(12, 20, 28, 0.06);
-  --shadow-card: 0 18px 44px rgba(12, 20, 28, 0.08);
+  --shadow-soft: 0 12px 30px rgba(22, 50, 60, 0.06);
+  --shadow-card: 0 12px 30px rgba(22, 50, 60, 0.08);
 
   --container-width: 1100px;
   --container-wide: 1200px;
@@ -26,35 +26,54 @@
   --space-6: 32px;
   --space-7: 40px;
   --space-8: 56px;
-  --space-9: 72px;
+  --space-9: 84px;
 
-  --bg-base: #eaf2f7;
-  --bg-soft: #f4f8fb;
-  --bg-surface: rgba(255, 255, 255, 0.62);
-  --bg-surface-strong: rgba(255, 255, 255, 0.82);
-  --bg-paper: #edf4f5;
+  /* ── Harbour Light palette ─────────────────────────── */
+  /* Core trio */
+  --navy:         #16323C;  /* text, structure, primary buttons */
+  --cream:        #F4EDE0;  /* page surface, warmth */
+  --gold:         #B0894F;  /* accent, rules, headliners */
 
-  --text-primary: #1d2730;
-  --text-secondary: rgba(29, 39, 48, 0.72);
-  --text-muted: rgba(29, 39, 48, 0.52);
+  /* Supporting */
+  --paper:        #FFFCF6;  /* card surfaces */
+  --sand:         #E3D2B8;  /* borders, muted elements */
+  --harbour-teal: #1F4E5F;  /* links */
 
-  --border-soft: rgba(30, 50, 68, 0.08);
-  --border-strong: rgba(30, 50, 68, 0.14);
+  /* Hairline: navy @ 10% */
+  --hairline:     rgba(22, 50, 60, 0.10);
 
-  --accent: #1F4E5F;
-  --accent-strong: #163844;
-  --accent-pill-top: #357A8E;
-  --accent-pill-text: #ffffff;
-  --accent-rgb: 31, 78, 95;
+  /* Category accents — badges / passes / event types only */
+  --cat-music:    #E05B3C;  /* Music & headliners */
+  --cat-sport:    #2F8F6E;  /* Sport & outdoors */
+  --cat-family:   #2A6F8E;  /* Family & kids */
 
-  /* Festival palette accents */
-  --coral: #F26A4B;
-  --coral-strong: #DB4F2F;
-  --coral-soft: rgba(242, 106, 75, 0.12);
-}
+  /* ── Semantic tokens mapping to Harbour Light ──────── */
+  --bg-base:            #FAF8F4;                /* Paper — page background */
+  --bg-soft:            #F4EDE0;                /* Cream — section surfaces */
+  --bg-surface:         #FFFCF6;                /* Paper white — cards */
+  --bg-surface-strong:  #FFFCF6;
+  --bg-paper:           #FFFCF6;
 
-html {
-  scroll-behavior: smooth;
+  --text-primary:       var(--navy);            /* #16323C */
+  --text-secondary:     rgba(22, 50, 60, 0.72);
+  --text-muted:         rgba(22, 50, 60, 0.52);
+
+  --border-soft:        var(--hairline);        /* navy @ 10% */
+  --border-strong:      rgba(22, 50, 60, 0.18);
+
+  /* accent = gold for UI highlights */
+  --accent:             var(--gold);            /* #B0894F */
+  --accent-strong:      #8E6B36;
+  --accent-pill-top:    var(--navy);            /* primary buttons: navy */
+  --accent-pill-text:   var(--cream);
+
+  /* accent-rgb used by forms.css radial gradients */
+  --accent-rgb:         22, 50, 60;             /* navy rgb */
+
+  /* coral kept for legacy references in forms/programme */
+  --coral:              var(--cat-music);       /* #E05B3C */
+  --coral-strong:       #c44a2e;
+  --coral-soft:         rgba(224, 91, 60, 0.10);
 }
 
 html,
@@ -85,7 +104,7 @@ img {
 }
 
 a {
-  color: inherit;
+  color: var(--harbour-teal);
 }
 
 button,
@@ -115,49 +134,46 @@ button {
   padding-right: 28px;
 }
 
+/* Cards: hairline border + single shadow, no backdrop blur */
 .surface-card {
   background: var(--bg-surface);
   border: 1px solid var(--border-soft);
-  box-shadow: var(--shadow-soft);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  box-shadow: var(--shadow-card);
 }
 
+/* ── Night mode ──────────────────────────────────────────────── */
 .theme-night {
-  --bg-base: #0c1a22;
-  --bg-soft: #101e28;
-  --bg-surface: rgba(18, 36, 48, 0.76);
-  --bg-surface-strong: rgba(16, 32, 44, 0.92);
-  --bg-paper: #122030;
+  --bg-base:            #0c1a22;
+  --bg-soft:            #101e28;
+  --bg-surface:         rgba(18, 36, 48, 0.90);
+  --bg-surface-strong:  rgba(16, 32, 44, 0.96);
+  --bg-paper:           #122030;
+  --paper:              rgba(18,36,48,0.76);
 
-  --text-primary: #f4efe5;
-  --text-secondary: rgba(244, 239, 229, 0.74);
-  --text-muted: rgba(244, 239, 229, 0.54);
+  --text-primary:       #F4EDE0;
+  --text-secondary:     rgba(244, 237, 224, 0.74);
+  --text-muted:         rgba(244, 237, 224, 0.54);
 
-  --border-soft: rgba(255, 255, 255, 0.08);
-  --border-strong: rgba(255, 255, 255, 0.14);
+  --border-soft:        rgba(255, 255, 255, 0.08);
+  --border-strong:      rgba(255, 255, 255, 0.14);
 
-  --shadow-soft: 0 18px 48px rgba(0, 0, 0, 0.34);
-  --shadow-card: 0 24px 60px rgba(0, 0, 0, 0.42);
+  --shadow-soft:        0 12px 40px rgba(0, 0, 0, 0.30);
+  --shadow-card:        0 12px 40px rgba(0, 0, 0, 0.38);
 
-  /* Seafoam family for night — pairs with the dark navy background */
-  --accent: #6BAFA7;
-  --accent-strong: #4f9990;
-  --accent-pill-top: #7FC0B8;
-  --accent-pill-text: #0c1a22;
-  --accent-rgb: 107, 175, 167;
+  /* Night accent: gold still works on dark */
+  --accent:             #C9A56A;
+  --accent-strong:      #B0894F;
+  --accent-pill-top:    #C9A56A;
+  --accent-pill-text:   #0c1a22;
+  --accent-rgb:         201, 165, 106;
 }
 
 @media (min-width: 1200px) {
-  .page-shell {
-    max-width: var(--container-wide);
-  }
+  .page-shell { max-width: var(--container-wide); }
 }
 
 @media (min-width: 1400px) {
-  .page-shell {
-    max-width: var(--container-xl);
-  }
+  .page-shell { max-width: var(--container-xl); }
 }
 
 @media (max-width: 640px) {

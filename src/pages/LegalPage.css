@@ -1,109 +1,140 @@
+/* ══════════════════════════════════════════════════════════════════════
+   Legal pages (Privacy Policy, Terms) — Harbour Light redesign
+   ══════════════════════════════════════════════════════════════════════ */
+
 .legal-page {
   min-height: 100vh;
-  background: var(--bg-base, #f5f5f5);
-  padding: 40px 16px;
+  background: var(--bg-base);
+  padding: 44px 16px 88px;
 }
 
 .legal-content {
   max-width: 720px;
   margin: 0 auto;
-  background: #fff;
-  border-radius: 12px;
+  background: var(--paper, #FFFCF6);
+  border-radius: var(--radius-md);
   padding: 40px 48px;
-  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.06);
+  border: 1px solid var(--border-soft);
+  box-shadow: var(--shadow-card);
 }
 
 .legal-back {
-  display: inline-block;
-  font-size: 0.85rem;
-  color: var(--accent, #1F4E5F);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-sans);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: var(--accent);
   text-decoration: none;
   margin-bottom: 32px;
-  font-family: var(--font-body, Arial, sans-serif);
+  transition: color 0.18s ease;
 }
 
 .legal-back:hover {
-  text-decoration: underline;
+  color: #8E6B36;
 }
 
 .legal-content h1 {
-  font-family: var(--font-display, 'Playfair Display', serif);
-  font-size: 2rem;
-  color: var(--accent, #1F4E5F);
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 4vw, 2.4rem);
+  font-weight: 700;
+  color: var(--text-primary);
   margin: 0 0 8px;
-  line-height: 1.2;
+  line-height: 1.12;
+  letter-spacing: -0.01em;
 }
 
 .legal-updated {
-  font-size: 0.82rem;
-  color: #888;
-  margin: 0 0 32px;
-  font-family: var(--font-body, Arial, sans-serif);
+  font-family: var(--font-sans);
+  font-size: 0.76rem;
+  font-weight: 600;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin: 0 0 36px;
 }
 
 .legal-content h2 {
-  font-family: var(--font-body, Arial, sans-serif);
-  font-size: 1.1rem;
+  font-family: var(--font-sans);
+  font-size: 0.66rem;
   font-weight: 700;
-  color: var(--accent, #1F4E5F);
-  margin: 32px 0 12px;
-  padding-bottom: 6px;
-  border-bottom: 2px solid var(--sand, #F4E9D8);
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 36px 0 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border-soft);
 }
 
 .legal-content h3 {
-  font-family: var(--font-body, Arial, sans-serif);
-  font-size: 0.95rem;
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
   font-weight: 700;
-  color: #333;
+  color: var(--text-primary);
   margin: 20px 0 8px;
 }
 
 .legal-content p {
-  font-family: var(--font-body, Arial, sans-serif);
-  font-size: 0.9rem;
+  font-family: var(--font-sans);
+  font-size: 0.92rem;
+  color: var(--text-secondary);
   line-height: 1.7;
-  color: #444;
-  margin: 0 0 12px;
+  margin: 0 0 14px;
 }
 
-.legal-content ul {
-  margin: 0 0 12px;
+.legal-content ul,
+.legal-content ol {
+  font-family: var(--font-sans);
+  font-size: 0.92rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin: 0 0 14px;
   padding-left: 20px;
 }
 
 .legal-content li {
-  font-family: var(--font-body, Arial, sans-serif);
-  font-size: 0.9rem;
-  line-height: 1.7;
-  color: #444;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
 }
 
 .legal-content a {
-  color: var(--coral, #F26A4B);
-  text-decoration: none;
+  color: var(--harbour-teal, #1F4E5F);
+  text-underline-offset: 3px;
 }
 
 .legal-content a:hover {
-  text-decoration: underline;
+  color: var(--accent);
+}
+
+@media (max-width: 640px) {
+  .legal-page {
+    padding: 32px 12px 64px;
+  }
+
+  .legal-content {
+    padding: 28px 20px;
+    border-radius: var(--radius-sm);
+  }
 }
 
 .legal-footer {
   margin-top: 40px;
   padding-top: 20px;
-  border-top: 1px solid #eee;
-  text-align: center;
-  font-family: var(--font-body, Arial, sans-serif);
-  font-size: 0.85rem;
+  border-top: 1px solid var(--border-soft);
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
 }
 
-@media (max-width: 600px) {
-  .legal-content {
-    padding: 24px 20px;
-  }
+.legal-footer a {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
 
-  .legal-content h1 {
-    font-size: 1.6rem;
-  }
+.legal-footer a:hover {
+  color: #8E6B36;
 }

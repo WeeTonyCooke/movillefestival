@@ -28,7 +28,7 @@ const INITIAL: FormData = {
   noRefund: false,
 };
 
-type Screen = 'form' | 'success' | 'full' | 'cancelled';
+type Screen = 'form' | 'success' | 'full';
 
 export default function BedPushPage() {
   const [form, setForm] = useState<FormData>(INITIAL);
@@ -39,9 +39,7 @@ export default function BedPushPage() {
     const params = new URLSearchParams(window.location.search);
     const status = params.get('status');
     const sessionId = params.get('session_id');
-    if (status === 'cancelled') {
-      setScreen('cancelled');
-    } else if (status === 'success' && sessionId) {
+    if (status === 'success' && sessionId) {
       setScreen('success');
       fetch(`/.netlify/functions/get-session?session_id=${sessionId}`)
         .then((res) => res.json())
@@ -117,33 +115,6 @@ export default function BedPushPage() {
     }
   };
 
-  if (screen === 'cancelled') {
-    return (
-      <div className="form-page">
-        <div className="form-page-bg" aria-hidden="true" />
-        <div className="form-page-content page-shell--narrow">
-          <div className="form-card">
-            <div className="form-success">
-              <div className="form-success-icon" style={{ fontSize: '2rem' }}>ℹ️</div>
-              <h2 className="form-success-title">Payment cancelled</h2>
-              <p className="form-success-body">
-                No payment was taken and your team has not been registered.
-                You can try again below whenever you're ready.
-              </p>
-              <button
-                className="form-submit"
-                onClick={() => setScreen('form')}
-              >
-                Back to Bed Push registration
-              </button>
-              <p className="form-submit-note">Questions? Contact movillefestival@gmail.com</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   if (screen === 'full') {
     return (
       <div className="form-page">
@@ -151,7 +122,7 @@ export default function BedPushPage() {
         <div className="form-page-content page-shell--narrow">
           <div className="form-card">
             <div className="form-success">
-              <div className="form-success-icon" style={{ fontSize: '2rem' }}>🛏️</div>
+              <div className="form-success-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M3 18v-7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v7"/><path d="M3 18h18M3 11V6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v5"/><rect x="9" y="8" width="6" height="3" rx="1"/></svg></div>
               <h2 className="form-success-title">All 20 teams are entered!</h2>
               <p className="form-success-body">
                 Registration for the Great Bed Push Race is now closed. Come along to Quay Street
@@ -161,7 +132,7 @@ export default function BedPushPage() {
                 <div className="form-counter-number">{MAX_TEAMS} / {MAX_TEAMS}</div>
                 <div className="form-counter-label">teams registered</div>
                 <div className="form-progress">
-                  <div className="form-progress-bar" style={{ width: '100%' }} />
+                  <div className="form-progress-bar form-progress-bar--full" />
                   <span className="form-progress-label">Full</span>
                 </div>
               </div>
@@ -175,7 +146,7 @@ export default function BedPushPage() {
                 <p className="form-info-body">Follow us on social media to hear when
                   registration opens for 2027.</p>
               </div>
-              <Link to="/programme" className="form-submit" style={{ textAlign: 'center', textDecoration: 'none' }}>
+              <Link to="/programme" className="form-submit form-submit--link">
                 View the full festival programme
               </Link>
               <p className="form-submit-note">Questions? Contact movillefestival@gmail.com</p>
@@ -231,7 +202,7 @@ export default function BedPushPage() {
               </div>
 
               <div className="form-info-block">
-                <p className="form-info-title">🔴 Scrutineering from 6.30pm sharp — Festival Square</p>
+                <p className="form-info-title">Scrutineering from 6.30pm sharp — Festival Square</p>
                 <p className="form-info-body">All beds must pass inspection by Paddy and Paddy
                   before the race. No helmet = no race. Don't be late.</p>
               </div>
@@ -323,7 +294,7 @@ export default function BedPushPage() {
             </div>
 
             <div className="form-team-size-notice">
-              <span className="form-team-size-icon">🛏️</span>
+              <span className="form-team-size-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M3 18v-7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v7"/><path d="M3 11V6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v5"/><rect x="9" y="8" width="6" height="3" rx="1"/></svg></span>
               <div>
                 <strong>{TEAM_SIZE} members per team</strong>
                 <p>4 pushers + 1 rider. All must be over 16.</p>

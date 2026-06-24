@@ -305,7 +305,7 @@ const styles: Record<string, React.CSSProperties> = {
     width:        72,
     height:       72,
     borderRadius: '50%',
-    background:   '#1F4E5F',
+    background:   'var(--accent)',
     display:      'flex',
     alignItems:   'center',
     justifyContent:'center',
@@ -316,7 +316,7 @@ const styles: Record<string, React.CSSProperties> = {
     margin:      0,
     fontSize:    22,
     fontWeight:  800,
-    color:       '#1F4E5F',
+    color:       'var(--accent)',
     fontFamily:  "'Playfair Display', Georgia, serif",
   },
   loginSub: {
@@ -337,7 +337,7 @@ const styles: Record<string, React.CSSProperties> = {
   loginBtn: {
     width:        '100%',
     padding:      '13px',
-    background:   '#1F4E5F',
+    background:   'var(--accent)',
     color:        '#fff',
     border:       'none',
     borderRadius: 10,

@@ -3,11 +3,7 @@
   background: var(--bg-base);
   color: var(--text-primary);
 
-  --archive-card-shell-bg: color-mix(
-    in srgb,
-    var(--bg-surface-strong) 92%,
-    rgba(61, 157, 176, 0.12) 8%
-  );
+  --archive-card-shell-bg: var(--paper, #FFFCF6);
   --archive-paper-surface: var(--bg-paper);
   --archive-paper-border: var(--border-soft);
   --archive-meta-strong: var(--text-primary);
@@ -37,20 +33,12 @@
   padding: 0;
   border: 1px solid var(--border-strong);
   border-radius: 50%;
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.5) 0%,
-    rgba(255, 255, 255, 0.22) 100%
-  );
+  background: var(--bg-surface);
   color: var(--text-primary);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  box-shadow:
-    0 8px 22px rgba(12, 20, 28, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.44);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  box-shadow: var(--shadow-soft);
   transition:
     transform 0.2s ease,
     color 0.2s ease,
@@ -61,11 +49,10 @@
 
 .archive-back:hover {
   color: var(--accent);
-  border-color: rgba(43, 149, 166, 0.28);
+  border-color: rgba(22, 50, 60, 0.28);
   transform: translateY(-1px);
   box-shadow:
-    0 12px 28px rgba(12, 20, 28, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.52);
+    0 12px 28px rgba(12, 20, 28, 0.1);
 }
 
 .archive-header-copy {
@@ -74,11 +61,12 @@
 
 .archive-kicker {
   margin: 0 0 10px;
-  font-size: 0.78rem;
-  font-weight: 600;
+  font-family: var(--font-sans);
+  font-size: 0.66rem;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.18em;
-  color: var(--text-muted);
+  letter-spacing: 0.24em;
+  color: var(--accent);
 }
 
 .archive-title {
@@ -114,19 +102,11 @@
   padding: 0 18px;
   border-radius: var(--radius-pill);
   border: 1px solid var(--border-strong);
-  background: linear-gradient(
-      180deg,
-      rgba(255, 255, 255, 0.48) 0%,
-      rgba(255, 255, 255, 0.22) 100%
-    ),
-    var(--bg-surface-strong);
+  background: var(--bg-surface);
   color: var(--text-primary);
   outline: none;
-  box-shadow:
-    0 10px 22px rgba(12, 20, 28, 0.04),
-    inset 0 1px 0 rgba(255, 255, 255, 0.42);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
 }
 
 .archive-search::placeholder {
@@ -134,13 +114,9 @@
 }
 
 .archive-search:focus {
-  border-color: rgba(43, 149, 166, 0.35);
-  background: linear-gradient(
-      180deg,
-      rgba(255, 255, 255, 0.56) 0%,
-      rgba(255, 255, 255, 0.28) 100%
-    ),
-    var(--bg-surface-strong);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(176, 137, 79, 0.12);
+  background: var(--bg-surface);
 }
 
 .archive-decade-row {
@@ -155,22 +131,14 @@
   padding: 0 18px;
   border: 1px solid var(--border-soft);
   border-radius: var(--radius-pill);
-  background: linear-gradient(
-      180deg,
-      rgba(255, 255, 255, 0.48) 0%,
-      rgba(255, 255, 255, 0.22) 100%
-    ),
-    var(--bg-surface);
+  background: var(--bg-surface);
   color: var(--text-secondary);
+  font-family: var(--font-sans);
   font-size: 0.82rem;
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  box-shadow:
-    0 10px 22px rgba(12, 20, 28, 0.04),
-    inset 0 1px 0 rgba(255, 255, 255, 0.42);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  box-shadow: var(--shadow-soft);
   transition:
     transform 0.2s ease,
     background 0.2s ease,
@@ -184,10 +152,10 @@
 }
 
 .archive-decade-pill.active {
-  background: linear-gradient(180deg, var(--accent) 0%, var(--accent-strong) 100%);
-  color: #ffffff;
-  border-color: rgba(43, 149, 166, 0.75);
-  box-shadow: 0 14px 30px rgba(43, 149, 166, 0.2);
+  background: var(--text-primary);
+  color: #FAF8F4;
+  border-color: var(--text-primary);
+  box-shadow: var(--shadow-card);
 }
 
 .archive-count {
@@ -208,16 +176,10 @@
   flex-direction: column;
   border-radius: 26px;
   padding: 18px;
-  background: linear-gradient(
-      180deg,
-      rgba(255, 255, 255, 0.42) 0%,
-      rgba(255, 255, 255, 0.18) 100%
-    ),
-    var(--archive-card-shell-bg);
+  background: var(--archive-card-shell-bg);
   border: 1px solid var(--border-soft);
   box-shadow:
-    0 18px 40px rgba(12, 20, 28, 0.06),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    0 18px 40px rgba(12, 20, 28, 0.06);
 }
 
 .archive-paper {
@@ -364,7 +326,7 @@
 }
 
 .theme-night .archive-page {
-  --archive-card-shell-bg: rgba(61, 157, 176, 0.04);
+  --archive-card-shell-bg: var(--bg-paper);
   --archive-paper-surface: rgba(18, 36, 48, 0.82);
   --archive-paper-border: rgba(255, 255, 255, 0.07);
   --archive-meta-strong: var(--text-primary);
@@ -377,26 +339,15 @@
 .theme-night .archive-back,
 .theme-night .archive-search,
 .theme-night .archive-decade-pill {
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.08) 0%,
-    rgba(255, 255, 255, 0.03) 100%
-  );
-  box-shadow:
-    0 10px 24px rgba(0, 0, 0, 0.24),
-    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.14);
+  box-shadow: none;
 }
 
 .theme-night .archive-card {
-  background: linear-gradient(
-      180deg,
-      rgba(255, 255, 255, 0.06) 0%,
-      rgba(255, 255, 255, 0.02) 100%
-    ),
-    var(--archive-card-shell-bg);
+  background: var(--archive-card-shell-bg);
   box-shadow:
-    0 24px 56px rgba(0, 0, 0, 0.34),
-    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    0 24px 56px rgba(0, 0, 0, 0.34);
 }
 
 @media (max-width: 720px) {

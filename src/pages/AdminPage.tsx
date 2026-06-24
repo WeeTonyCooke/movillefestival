@@ -81,74 +81,77 @@ const BED_PUSH_CAPACITY = 20;
 const CRAFT_FAIR_CAPACITY = 15;
 
 const s: Record<string, React.CSSProperties> = {
-  wrap: { fontFamily: 'Arial, sans-serif', minHeight: '100vh', background: '#f5f5f5' },
-  header: { background: '#1F4E5F', padding: '14px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '16px' },
-  headerTitle: { color: '#fff', margin: 0, fontSize: '18px', fontWeight: 'bold' },
-  headerSub: { color: '#a8c8d4', margin: '2px 0 0', fontSize: '13px' },
+  wrap: { fontFamily: 'Outfit, system-ui, sans-serif', minHeight: '100vh', background: '#FAF8F4' },
+  header: { background: '#16323C', padding: '14px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '16px' },
+  headerTitle: { color: '#f4efe5', margin: 0, fontSize: '15px', fontWeight: 600, fontFamily: "'Outfit', system-ui, sans-serif" },
+  headerSub: { color: '#B0894F', margin: '2px 0 0', fontSize: '10px', fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase' as const },
   headerActions: { display: 'flex', gap: '10px', alignItems: 'center', flexWrap: 'wrap' as const, justifyContent: 'flex-end' as const },
-  backLink: { color: '#a8c8d4', fontSize: '13px', textDecoration: 'none', background: 'none', border: 'none', cursor: 'pointer', padding: '4px 2px', fontFamily: 'Arial' },
-  choiceWrap: { minHeight: '100vh', background: 'radial-gradient(circle at 50% 0%, #163F34 0%, #0B2D2A 42%, #071821 100%)', display: 'flex', flexDirection: 'column' as const, fontFamily: "'Outfit', Arial, sans-serif" },
-  choiceHeader: { display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', padding: '22px 24px' },
-  choiceHeaderTitle: { color: '#fff', margin: 0, fontSize: '16px', fontWeight: 700, fontFamily: "'Playfair Display', Georgia, serif" },
-  choiceHeaderSub: { color: 'rgba(255,255,255,0.58)', margin: '2px 0 0', fontSize: '12px' },
-  exitLink: { color: 'rgba(255,255,255,0.68)', fontSize: '13px', textDecoration: 'none', padding: '6px 0' },
-  choiceBody: { flex: 1, display: 'flex', flexDirection: 'column' as const, justifyContent: 'center', alignItems: 'center', padding: '20px 24px 40px', gap: '16px' },
-  scanTile: { width: '100%', maxWidth: '420px', background: 'radial-gradient(circle at 50% 40%, #1B7A48 0%, #126B3D 48%, #0E4F31 100%)', border: '1px solid rgba(255,255,255,0.18)', borderRadius: '22px', padding: '44px 24px 42px', display: 'flex', flexDirection: 'column' as const, alignItems: 'center', textAlign: 'center' as const, gap: '8px', textDecoration: 'none', cursor: 'pointer', boxShadow: '0 22px 60px rgba(0,0,0,0.36), inset 0 1px 0 rgba(255,255,255,0.14)' },
-  scanTileTitle: { fontFamily: "'Playfair Display', Georgia, serif", fontSize: '32px', fontWeight: 800, color: '#fff', margin: '12px 0 0', letterSpacing: '-0.02em' },
-  reportsTile: { width: '100%', maxWidth: '420px', background: '#122030', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '18px', padding: '18px 20px', display: 'flex', alignItems: 'center', gap: '14px', cursor: 'pointer', font: 'inherit', boxShadow: '0 10px 30px rgba(0,0,0,0.26)' },
-  reportsTileTitle: { fontSize: '15px', fontWeight: 700, color: '#f4efe5', margin: 0 },
-  choiceFooter: { display: 'flex', justifyContent: 'space-between', padding: '0 24px 20px', fontSize: '11px', color: 'rgba(255,255,255,0.34)' },
-  choiceSignOut: { color: 'rgba(255,255,255,0.42)', fontSize: '11px', textDecoration: 'none', cursor: 'pointer', background: 'none', border: 'none', font: 'inherit', padding: 0 },
+  backLink: { color: 'rgba(244,239,229,0.7)', fontSize: '13px', textDecoration: 'none', background: 'none', border: 'none', cursor: 'pointer', padding: '4px 2px', fontFamily: "'Outfit', system-ui, sans-serif" },
+  choiceWrap: { minHeight: '100vh', background: '#16323C', display: 'flex', flexDirection: 'column' as const, fontFamily: "'Outfit', system-ui, sans-serif" },
+  choiceHeader: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '20px 28px', borderBottom: '1px solid rgba(255,255,255,0.08)' },
+  choiceHeaderLeft: { display: 'flex', flexDirection: 'column' as const, gap: '2px' },
+  choiceHeaderTitle: { color: '#f4efe5', margin: 0, fontSize: '15px', fontWeight: 600, fontFamily: "'Outfit', system-ui, sans-serif" },
+  choiceHeaderSub: { color: '#B0894F', margin: 0, fontSize: '10px', fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase' as const },
+  exitLink: { color: 'rgba(244,239,229,0.58)', fontSize: '13px', textDecoration: 'none', padding: '6px 0' },
+  choiceBody: { flex: 1, display: 'flex', flexDirection: 'column' as const, justifyContent: 'center', alignItems: 'center', padding: '40px 28px 40px' },
+  choiceTileGrid: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', width: '100%', maxWidth: '680px' },
+  choiceTile: { background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.10)', borderRadius: '16px', padding: '28px 24px 24px', display: 'flex', flexDirection: 'column' as const, gap: '0', textDecoration: 'none', cursor: 'pointer', font: 'inherit', textAlign: 'left' as const, transition: 'background 0.18s, border-color 0.18s' },
+  choiceTileIconWrap: { width: '44px', height: '44px', borderRadius: '12px', background: 'rgba(255,255,255,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' },
+  choiceTileTitle: { fontFamily: "'Playfair Display', Georgia, serif", fontSize: '22px', fontWeight: 700, color: '#f4efe5', margin: '0 0 8px', letterSpacing: '-0.01em' },
+  choiceTileDesc: { fontSize: '13px', color: 'rgba(244,239,229,0.58)', margin: '0 0 20px', lineHeight: 1.5 },
+  choiceTileLink: { fontSize: '11px', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase' as const, color: '#B0894F', margin: 0 },
+  choiceFooter: { display: 'flex', justifyContent: 'space-between', padding: '0 28px 24px', fontSize: '11px', color: 'rgba(255,255,255,0.28)' },
+  choiceSignOut: { color: 'rgba(255,255,255,0.38)', fontSize: '11px', textDecoration: 'none', cursor: 'pointer', background: 'none', border: 'none', font: 'inherit', padding: 0 },
   body: { maxWidth: '1200px', margin: '0 auto', padding: '24px 16px' },
   metricGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '14px', marginBottom: '28px' },
-  metricCard: { background: '#fff', borderRadius: '8px', padding: '16px 18px', boxShadow: '0 1px 4px rgba(0,0,0,0.07)' },
+  metricCard: { background: '#fff', border: '1px solid rgba(22,50,60,0.1)', borderRadius: '16px', padding: '16px 18px', boxShadow: '0 12px 30px rgba(12,20,28,0.05)' },
   metricLabel: { margin: '0 0 4px', fontSize: '11px', color: '#888', textTransform: 'uppercase' as const, letterSpacing: '0.06em' },
-  metricValue: { margin: '0 0 2px', fontSize: '24px', fontWeight: 'bold', color: '#1F4E5F' },
+  metricValue: { margin: '0 0 2px', fontFamily: "'Playfair Display', Georgia, serif", fontSize: '26px', fontWeight: 700, color: '#16323C' },
   metricSub: { margin: 0, fontSize: '12px', color: '#888' },
   sectionBar: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px', flexWrap: 'wrap' as const, gap: '8px' },
   tabs: { display: 'flex', gap: '6px', flexWrap: 'wrap' as const },
   actionRow: { display: 'flex', gap: '8px' },
   searchRow: { marginBottom: '14px' },
-  searchInput: { padding: '8px 12px', border: '1px solid #ddd', borderRadius: '6px', fontFamily: 'Arial', fontSize: '13px', width: '280px', boxSizing: 'border-box' as const },
-  inventoryBar: { background: '#fff', borderRadius: '8px', padding: '16px 20px', boxShadow: '0 1px 4px rgba(0,0,0,0.07)', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '20px', flexWrap: 'wrap' as const },
+  searchInput: { padding: '8px 12px', border: '1px solid rgba(22,50,60,0.16)', borderRadius: '12px', fontFamily: 'Outfit, system-ui, sans-serif', fontSize: '13px', width: '280px', boxSizing: 'border-box' as const },
+  inventoryBar: { background: '#fff', border: '1px solid rgba(22,50,60,0.1)', borderRadius: '16px', padding: '16px 20px', boxShadow: '0 12px 30px rgba(12,20,28,0.05)', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '20px', flexWrap: 'wrap' as const },
   invItem: { display: 'flex', flexDirection: 'column' as const, gap: '2px' },
   invLabel: { fontSize: '11px', color: '#888', textTransform: 'uppercase' as const, letterSpacing: '0.06em' },
-  invValue: { fontSize: '20px', fontWeight: 'bold', color: '#1F4E5F' },
+  invValue: { fontSize: '20px', fontWeight: 'bold', color: '#16323C' },
   invDivider: { width: '1px', height: '36px', background: '#e0e0e0', alignSelf: 'center' },
   invAdjust: { display: 'flex', alignItems: 'center', gap: '8px', marginLeft: 'auto' },
   invAdjustLabel: { fontSize: '12px', color: '#666' },
-  invAdjustInput: { width: '70px', padding: '6px 10px', border: '1px solid #ddd', borderRadius: '6px', fontFamily: 'Arial', fontSize: '13px', textAlign: 'center' as const },
-  tableWrap: { background: '#fff', borderRadius: '8px', overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.07)', overflowX: 'auto' as const },
+  invAdjustInput: { width: '70px', padding: '6px 10px', border: '1px solid #ddd', borderRadius: '6px', fontFamily: 'Outfit, system-ui, sans-serif', fontSize: '13px', textAlign: 'center' as const },
+  tableWrap: { background: '#fff', border: '1px solid rgba(22,50,60,0.1)', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 12px 30px rgba(12,20,28,0.05)', overflowX: 'auto' as const },
   table: { width: '100%', borderCollapse: 'collapse' as const, fontSize: '13px', minWidth: '700px' },
-  th: { padding: '10px 12px', textAlign: 'left' as const, color: '#fff', fontSize: '12px', fontWeight: 'bold', background: '#1F4E5F', whiteSpace: 'nowrap' as const },
+  th: { padding: '10px 12px', textAlign: 'left' as const, color: '#fff', fontSize: '12px', fontWeight: 'bold', background: '#16323C', whiteSpace: 'nowrap' as const },
   tdBase: { padding: '9px 12px', wordBreak: 'break-word' as const },
   emptyRow: { padding: '24px', textAlign: 'center' as const, color: '#888', fontSize: '14px' },
 };
 
 function tabStyle(active: boolean): React.CSSProperties {
   return {
-    padding: '8px 16px', borderRadius: '6px', border: 'none', cursor: 'pointer',
-    fontFamily: 'Arial', fontSize: '13px', fontWeight: active ? 'bold' : 'normal',
-    background: active ? '#1F4E5F' : '#fff', color: active ? '#fff' : '#333',
-    boxShadow: '0 1px 4px rgba(0,0,0,0.08)',
+    padding: '8px 16px', borderRadius: '999px', border: active ? 'none' : '1px solid rgba(22,50,60,0.16)', cursor: 'pointer',
+    fontFamily: 'Outfit, system-ui, sans-serif', fontSize: '13px', fontWeight: active ? 'bold' : 'normal',
+    background: active ? '#16323C' : '#fff', color: active ? '#fff' : 'rgba(22,50,60,0.7)',
+    boxShadow: 'none',
   };
 }
 
 function btnStyle(variant: 'primary' | 'secondary' = 'secondary'): React.CSSProperties {
   return {
-    padding: '7px 14px', borderRadius: '6px', cursor: 'pointer', fontFamily: 'Arial', fontSize: '13px',
-    border: variant === 'primary' ? 'none' : '1px solid #ddd',
-    background: variant === 'primary' ? '#1F4E5F' : '#fff',
-    color: variant === 'primary' ? '#fff' : '#333',
-    boxShadow: '0 1px 3px rgba(0,0,0,0.08)',
+    padding: '7px 14px', borderRadius: '999px', cursor: 'pointer', fontFamily: 'Outfit, system-ui, sans-serif', fontSize: '13px',
+    border: variant === 'primary' ? 'none' : '1px solid rgba(22,50,60,0.16)',
+    background: variant === 'primary' ? '#16323C' : '#fff',
+    color: variant === 'primary' ? '#fff' : '#16323C',
+    boxShadow: 'none',
   };
 }
 
 function badgeStyle(status: string): React.CSSProperties {
   return {
     fontSize: '11px', fontWeight: 'bold', padding: '2px 8px', borderRadius: '99px',
-    background: status === 'paid' ? '#D4EDDA' : '#FFF3CD',
-    color: status === 'paid' ? '#1A7A3C' : '#7D5A00',
+    background: status === 'paid' ? 'rgba(47,143,110,0.14)' : 'rgba(176,137,79,0.18)',
+    color: status === 'paid' ? '#246B52' : '#8A6A2F',
   };
 }
 
@@ -370,10 +373,17 @@ export default function AdminPage() {
   // ── Login screen ──
   if (!authed) {
     return (
-      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f5f5f5' }}>
-        <div style={{ background: '#fff', padding: '40px', borderRadius: '12px', boxShadow: '0 2px 16px rgba(0,0,0,0.1)', width: '320px' }}>
-          <h1 style={{ fontFamily: 'Arial', fontSize: '20px', color: '#1F4E5F', marginBottom: '4px' }}>Committee Admin</h1>
-          <p style={{ fontFamily: 'Arial', fontSize: '14px', color: '#888', marginBottom: '24px' }}>Moville Summer Festival 2026</p>
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#F4F6F8', fontFamily: "'Outfit', system-ui, sans-serif" }}>
+        <div style={{ background: '#fff', borderRadius: '16px', boxShadow: '0 4px 24px rgba(22,50,60,0.10)', width: '100%', maxWidth: '360px', padding: '40px 36px 36px', display: 'flex', flexDirection: 'column' as const, alignItems: 'center' }}>
+
+          {/* Lighthouse mark */}
+          <div style={{ width: '56px', height: '56px', borderRadius: '50%', background: '#16323C', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
+            <img src="/lighthouse-mark.svg" alt="" aria-hidden="true" style={{ width: '30px', height: '30px', filter: 'brightness(0) invert(1)' }} />
+          </div>
+
+          <h1 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: '22px', fontWeight: 700, color: '#16323C', margin: '0 0 4px', textAlign: 'center' as const }}>Committee Admin</h1>
+          <p style={{ fontFamily: "'Outfit', system-ui, sans-serif", fontSize: '13px', color: '#888', margin: '0 0 28px', textAlign: 'center' as const }}>Moville Summer Festival 2026</p>
+
           <form onSubmit={e => { e.preventDefault(); handleLogin(); }} style={{ width: '100%' }}>
             <input
               type="text"
@@ -392,10 +402,10 @@ export default function AdminPage() {
               placeholder="Password"
               value={password}
               onChange={e => setPassword(e.target.value)}
-              style={{ width: '100%', padding: '10px 12px', border: '1px solid #ddd', borderRadius: '6px', fontFamily: 'Arial', fontSize: '15px', boxSizing: 'border-box', marginBottom: '12px' }}
+              style={{ width: '100%', padding: '11px 14px', border: '1.5px solid rgba(22,50,60,0.16)', borderRadius: '12px', fontFamily: "'Outfit', system-ui, sans-serif", fontSize: '15px', boxSizing: 'border-box' as const, marginBottom: '12px', outline: 'none' }}
             />
-            {error && <p style={{ color: '#c0392b', fontFamily: 'Arial', fontSize: '13px', marginBottom: '12px' }}>{error}</p>}
-            <button type="submit" disabled={checkingLogin} style={{ ...btnStyle('primary'), width: '100%', padding: '12px', fontSize: '15px', opacity: checkingLogin ? 0.7 : 1 }}>
+            {error && <p style={{ color: '#c0392b', fontFamily: "'Outfit', system-ui, sans-serif", fontSize: '13px', marginBottom: '12px', margin: '0 0 12px' }}>{error}</p>}
+            <button type="submit" disabled={checkingLogin} style={{ ...btnStyle('primary'), width: '100%', padding: '13px', fontSize: '15px', fontWeight: 700, borderRadius: '999px', opacity: checkingLogin ? 0.7 : 1 }}>
               {checkingLogin ? 'Checking…' : 'Sign in'}
             </button>
           </form>
@@ -409,42 +419,45 @@ export default function AdminPage() {
     return (
       <div style={s.choiceWrap}>
         <div style={s.choiceHeader}>
-          <div>
+          <div style={s.choiceHeaderLeft}>
             <p style={s.choiceHeaderTitle}>Moville Summer Festival 2026</p>
-            <p style={s.choiceHeaderSub}>Committee access</p>
+            <p style={s.choiceHeaderSub}>Committee Access</p>
           </div>
           <Link to="/" style={s.exitLink}>Exit to site →</Link>
         </div>
 
         <div style={s.choiceBody}>
-          <Link to="/scan" data-testid="tile-scan-passes" style={s.scanTile}>
-            <svg width="96" height="96" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style={{ filter: 'drop-shadow(0 14px 24px rgba(0,0,0,0.22))' }}>
-              <path d="M12 30V17C12 14.2386 14.2386 12 17 12H30" stroke="#FFFFFF" strokeWidth="8" strokeLinecap="round" />
-              <path d="M66 12H79C81.7614 12 84 14.2386 84 17V30" stroke="#FFFFFF" strokeWidth="8" strokeLinecap="round" />
-              <path d="M12 66V79C12 81.7614 14.2386 84 17 84H30" stroke="#FFFFFF" strokeWidth="8" strokeLinecap="round" />
-              <path d="M66 84H79C81.7614 84 84 81.7614 84 79V66" stroke="#FFFFFF" strokeWidth="8" strokeLinecap="round" />
-              <rect x="28" y="28" width="13" height="13" rx="1.5" stroke="#FFFFFF" strokeWidth="5" />
-              <rect x="55" y="28" width="13" height="13" rx="1.5" stroke="#FFFFFF" strokeWidth="5" />
-              <rect x="28" y="56" width="13" height="13" rx="1.5" stroke="#FFFFFF" strokeWidth="5" />
-              <rect x="52" y="53" width="7" height="7" rx="1" fill="#FFFFFF" />
-              <rect x="63" y="53" width="7" height="7" rx="1" fill="#FFFFFF" />
-              <rect x="52" y="64" width="7" height="7" rx="1" fill="#FFFFFF" />
-              <rect x="63" y="64" width="7" height="7" rx="1" fill="#FFFFFF" />
-              <line x1="17" y1="48" x2="79" y2="48" stroke="#F26A4B" strokeWidth="3" strokeLinecap="round" />
-            </svg>
-            <span style={s.scanTileTitle}>Scan Passes</span>
-          </Link>
+          <div style={s.choiceTileGrid}>
 
-          <button data-testid="tile-reports-admin" onClick={() => setView('dashboard')} style={s.reportsTile}>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style={{ flexShrink: 0 }}>
-              <rect x="3" y="13" width="4" height="8" rx="1" fill="#6BAFA7" />
-              <rect x="10" y="7" width="4" height="14" rx="1" fill="#F26A4B" />
-              <rect x="17" y="3" width="4" height="18" rx="1" fill="#F4E9D8" />
-            </svg>
-            <div style={{ textAlign: 'left' as const }}>
-              <p style={s.reportsTileTitle}>Reports &amp; Admin</p>
-            </div>
-          </button>
+            {/* Scan Passes tile */}
+            <Link to="/scan" data-testid="tile-scan-passes" style={s.choiceTile}>
+              <div style={s.choiceTileIconWrap}>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#B0894F" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+                  <path d="M3 7V5a2 2 0 0 1 2-2h2" /><path d="M17 3h2a2 2 0 0 1 2 2v2" />
+                  <path d="M21 17v2a2 2 0 0 1-2 2h-2" /><path d="M7 21H5a2 2 0 0 1-2-2v-2" />
+                  <rect x="7" y="7" width="3" height="3" /><rect x="14" y="7" width="3" height="3" />
+                  <rect x="7" y="14" width="3" height="3" /><rect x="14" y="14" width="3" height="3" />
+                </svg>
+              </div>
+              <p style={s.choiceTileTitle}>Scan Passes</p>
+              <p style={s.choiceTileDesc}>Check tickets at the gate, on the door, anywhere.</p>
+              <p style={s.choiceTileLink}>Open scanner →</p>
+            </Link>
+
+            {/* Reports & Admin tile */}
+            <button data-testid="tile-reports-admin" onClick={() => setView('dashboard')} style={s.choiceTile}>
+              <div style={s.choiceTileIconWrap}>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#B0894F" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+                  <line x1="18" y1="20" x2="18" y2="10" /><line x1="12" y1="20" x2="12" y2="4" />
+                  <line x1="6" y1="20" x2="6" y2="14" />
+                </svg>
+              </div>
+              <p style={s.choiceTileTitle}>Reports &amp; Admin</p>
+              <p style={s.choiceTileDesc}>Registrations, revenue and CSV exports.</p>
+              <p style={s.choiceTileLink}>View dashboard →</p>
+            </button>
+
+          </div>
         </div>
 
         <div style={s.choiceFooter}>
@@ -463,7 +476,7 @@ export default function AdminPage() {
   // ── Loading ──
   if (loading || !data) {
     return (
-      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Arial', color: '#888' }}>
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Outfit, system-ui, sans-serif', color: '#888' }}>
         Loading registrations…
       </div>
     );
@@ -497,8 +510,8 @@ export default function AdminPage() {
       {/* Header */}
       <div style={s.header}>
         <div>
-          <h1 style={s.headerTitle}>Moville Summer Festival 2026</h1>
-          <p style={s.headerSub}>Committee admin</p>
+          <p style={s.headerTitle}>Moville Summer Festival 2026</p>
+          <p style={s.headerSub}>Committee Admin</p>
         </div>
         <div style={s.headerActions}>
           <button onClick={() => setView('choice')} style={s.backLink}>← Back to menu</button>
@@ -515,11 +528,11 @@ export default function AdminPage() {
             { label: 'Craft Fair', value: craftPaid.length >= CRAFT_FAIR_CAPACITY ? 'Sold out' : `${craftPaid.length} stalls`, sub: craftPaid.length >= CRAFT_FAIR_CAPACITY ? `${CRAFT_FAIR_CAPACITY} stalls filled` : `${CRAFT_FAIR_CAPACITY - craftPaid.length} remaining` },
             { label: 'Festival Passes', value: `${passesPaid.length} sold`, sub: `${formatEuro(passesPaid.reduce((s, r) => s + r.amount_paid, 0))} revenue` },
             { label: 'Sponsorships', value: formatEuro(sponsorPaid.reduce((s,r) => s + r.amount_paid, 0)), sub: `${sponsorPaid.length} sponsor${sponsorPaid.length !== 1 ? 's' : ''}` },
-            { label: 'Total revenue', value: formatEuro(totalRevenue), sub: 'all events combined', green: true },
-          ].map(({ label, value, sub, green }) => (
-            <div key={label} style={s.metricCard}>
+            { label: 'Total revenue', value: formatEuro(totalRevenue), sub: 'all events combined', green: true, accent: true },
+          ].map(({ label, value, sub, green, accent }) => (
+            <div key={label} style={{ ...s.metricCard, ...(accent ? { borderColor: '#1D9E75', borderWidth: '1.5px' } : {}) }}>
               <p style={s.metricLabel}>{label}</p>
-              <p style={{ ...s.metricValue, color: green ? '#1A7A3C' : '#1F4E5F' }}>{value}</p>
+              <p style={{ ...s.metricValue, color: green ? '#246B52' : '#16323C' }}>{value}</p>
               <p style={s.metricSub}>{sub}</p>
             </div>
           ))}
@@ -528,7 +541,7 @@ export default function AdminPage() {
         {/* Tabs + export */}
         <div style={s.sectionBar}>
           <div style={s.tabs}>
-            {([['balldrop', '🎱 Ball Drop'], ['bedpush', '🛏️ Bed Push'], ['craftfair', '🎨 Craft Fair'], ['passes', '🎟️ Festival Passes'], ['sponsorship', '🤝 Sponsorships']] as [Tab, string][]).map(([t, label]) => (
+            {([['balldrop', 'Ball Drop'], ['bedpush', 'Bed Push'], ['craftfair', 'Craft Fair'], ['passes', 'Festival Passes'], ['sponsorship', 'Sponsorships']] as [Tab, string][]).map(([t, label]) => (
               <button key={t} data-testid={`tab-${t}`} onClick={() => { setTab(t); setSearch(''); }} style={tabStyle(tab === t)}>{label}</button>
             ))}
           </div>

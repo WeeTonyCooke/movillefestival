@@ -694,6 +694,7 @@ function ProgrammePage({ isNight }: { isNight: boolean }) {
           {/* ── Weather strip ── */}
           {(() => {
             const w = forecast[activeDay];
+            const hasForecast = Object.keys(forecast).length > 0;
             return (
               <div className="prog-weather">
                 <span className="prog-weather-icon" aria-hidden="true">
@@ -703,12 +704,16 @@ function ProgrammePage({ isNight }: { isNight: boolean }) {
                   <span className="prog-weather-line">
                     {w
                       ? `${w.description} · ${w.high}°C / ${w.low}°C`
-                      : 'Moville, Co. Donegal'}
+                      : hasForecast
+                        ? 'Too early to forecast'
+                        : 'Moville, Co. Donegal'}
                   </span>
                   <span className="prog-weather-subline">
                     {w
                       ? `${w.rain}% chance of rain · Wind ${w.wind} km/h`
-                      : 'Weather forecast loading…'}
+                      : hasForecast
+                        ? 'Check back closer to the festival for the full forecast.'
+                        : 'Inishowen Peninsula, Co. Donegal'}
                   </span>
                 </div>
               </div>

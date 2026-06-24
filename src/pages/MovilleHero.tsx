@@ -6,10 +6,10 @@ const DAY_IMG = '/mobile_lighthouse_day.webp';
 const DAY_DESKTOP_IMG = '/movillelight-day-desktop.jpeg';
 
 const EVENING_IMG = '/mobile_lighthouse_evening.webp';
-const EVENING_DESKTOP_IMG = '/the-fid-evening-desktop.jpeg';
+const EVENING_DESKTOP_IMG = '/moville-light-evening-desktop.jpeg';
 
 const NIGHT_IMG = '/mobile_lighthouse_night.webp';
-const NIGHT_DESKTOP_IMG = '/the-fid-night-desktop.jpeg';
+const NIGHT_DESKTOP_IMG = '/moville-light-evening-desktop.jpeg';
 
 type MovilleHeroProps = {
   isNight: boolean;

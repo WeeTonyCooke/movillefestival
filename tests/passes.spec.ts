@@ -240,7 +240,7 @@ test.describe('Mobile layout', () => {
 
   test('MB-04 Back link present on /passes', async ({ page }) => {
     await page.goto(BASE + '/passes');
-    await expect(page.locator('text=/back to festival/i')).toBeVisible();
+    await expect(page.locator('[aria-label="Back to home"]')).toBeVisible();
   });
 
   test('MB-05 Step 2 form usable on mobile', async ({ page }) => {

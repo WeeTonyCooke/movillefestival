@@ -7,6 +7,19 @@ import { useNightMode } from '../hooks/useNightMode';
 import { Link } from 'react-router-dom';
 
 const PassSuccessPage: React.FC = () => {
+  const isNight    = useNightMode();
+  const bg         = isNight ? '#0c1a22' : '#FAF8F4';
+  const textPri    = isNight ? '#f4efe5' : '#16323C';
+  const textSec    = isNight ? 'rgba(244,239,229,0.64)' : 'rgba(22,50,60,0.72)';
+  const textMut    = isNight ? 'rgba(244,239,229,0.44)' : 'rgba(22,50,60,0.52)';
+  const btnBg      = isNight ? '#f4efe5' : '#16323C';
+  const btnText    = isNight ? '#16323C' : '#fff';
+  const [passAccent, setPassAccent] = useState('#B0894F');
+  useEffect(() => {
+    const accent = sessionStorage.getItem('lastPassAccent');
+    if (accent) setPassAccent(accent);
+  }, []);
+
   return (
     <div style={{
       minHeight:      '100vh',

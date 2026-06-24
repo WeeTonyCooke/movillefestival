@@ -1118,3 +1118,75 @@
   background: rgba(255, 255, 255, 0.04);
   border-color: var(--border-soft);
 }
+
+.theme-night .form-submit {
+  background: var(--accent);
+  color: #0c1a22;
+}
+
+.theme-night .form-submit:disabled {
+  background: rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.3);
+  cursor: not-allowed;
+}
+
+.theme-night .form-consent {
+  color: var(--text-muted);
+}
+
+.theme-night .form-info-block {
+  background: rgba(255,255,255,0.05);
+  border-left-color: var(--accent);
+}
+
+.theme-night .form-info-title {
+  color: var(--text-primary);
+}
+
+.theme-night .form-info-body {
+  color: var(--text-secondary);
+}
+
+.theme-night .form-info-list li {
+  color: var(--text-secondary);
+}
+
+.theme-night .ball-option {
+  background: var(--bg-surface);
+  border-color: var(--border-strong);
+  color: var(--text-primary);
+}
+
+.theme-night .ball-option.featured {
+  background: var(--bg-soft);
+}
+
+.theme-night .ball-option.selected,
+.theme-night .ball-option.featured.selected {
+  border-color: var(--accent);
+  background: rgba(176,137,79,0.12);
+}
+
+.theme-night .ball-best-value {
+  background: var(--accent);
+  color: #0c1a22;
+}
+
+.theme-night .ball-price,
+.theme-night .ball-label {
+  color: var(--text-primary);
+}
+
+.theme-night .ball-sub {
+  color: var(--text-secondary);
+}
+
+.theme-night .form-submit-note {
+  color: var(--text-muted);
+}
+
+.theme-night .form-notice {
+  background: rgba(255,255,255,0.05);
+  border-color: var(--border-strong);
+  color: var(--text-secondary);
+}

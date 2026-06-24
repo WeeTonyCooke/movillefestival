@@ -1062,3 +1062,59 @@
 .theme-night .form-eyebrow {
   color: var(--accent);
 }
+
+.theme-night .form-page-bg {
+  background: var(--bg-base);
+}
+
+.theme-night .form-info-block {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--border-strong);
+}
+
+.theme-night .form-info-title {
+  color: var(--text-primary);
+}
+
+.theme-night .form-info-body {
+  color: var(--text-secondary);
+}
+
+.theme-night .form-chip {
+  background: var(--bg-soft);
+  border-color: var(--border-strong);
+  color: var(--text-primary);
+}
+
+.theme-night .form-notice {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--border-strong);
+  color: var(--text-secondary);
+}
+
+.theme-night .form-payment-summary {
+  background: var(--bg-surface);
+  border-color: var(--border-strong);
+}
+
+.theme-night .form-summary-row {
+  color: var(--text-secondary);
+  border-color: var(--border-soft);
+}
+
+.theme-night .form-section-title {
+  color: var(--text-muted);
+}
+
+.theme-night .form-hint {
+  color: var(--text-muted);
+}
+
+.theme-night .form-check-label {
+  color: var(--text-secondary);
+}
+
+.theme-night .form-consent {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: var(--border-soft);
+}

@@ -446,7 +446,7 @@
   padding: 7px 16px;
   border-radius: var(--radius-pill);
   background: var(--harbour-teal);
-  color: #FAF8F4;
+  color: var(--bg-base);
   font-family: var(--font-sans);
   font-size: 0.78rem;
   font-weight: 700;

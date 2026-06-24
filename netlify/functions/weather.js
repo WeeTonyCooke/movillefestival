@@ -73,13 +73,21 @@ exports.handler = async function () {
       '&end_date=2026-07-12';
 
     const res = await fetch(url);
-    if (!res.ok) throw new Error(`Open-Meteo ${res.status}`);
+    // Open-Meteo returns 400 if dates are out of forecast range (>16 days out)
+    // Return empty forecast gracefully — front end shows nothing rather than crashing
+    if (!res.ok) {
+      return {
+        statusCode: 200,
+        headers,
+        body: JSON.stringify({ forecast: null }),
+      };
+    }
     const data = await res.json();
 
     const days = ['TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
     const forecast = {};
 
-    data.daily.time.forEach((date, i) => {
+    (data.daily?.time || []).forEach((date, i) => {
       const key = days[i];
       if (!key) return;
       const code = data.daily.weathercode[i];

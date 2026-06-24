@@ -127,16 +127,18 @@ const MovilleHero: React.FC<MovilleHeroProps> = ({ isNight }) => {
         <span className="hero-balldrop-badge-cta">Buy tickets</span>
       </button>
 
-      <div className="hero-credit">
-        Photo:{' '}
-        <a
-          href="https://www.instagram.com/christybutterz/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          @christybutterz
-        </a>
-      </div>
+      {(heroPhase === 'evening' || heroPhase === 'night') && (
+        <div className="hero-credit">
+          Photo:{' '}
+          <a
+            href="https://www.instagram.com/christybutterz/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            @christybutterz
+          </a>
+        </div>
+      )}
     </section>
 
     <button

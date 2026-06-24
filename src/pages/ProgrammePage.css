@@ -350,13 +350,12 @@
 
 /* Headliner — card treatment: cream surface, gold border, rounded */
 .prog-event.is-headline {
-  background: var(--bg-surface);
-  border: 1px solid var(--accent);
+  background: linear-gradient(180deg, rgba(201,168,120,0.10), rgba(201,168,120,0) 70%);
+  border: 1px solid rgba(176,137,79,0.45);
   border-radius: var(--radius-md);
-  padding: 20px 20px 20px 36px;
+  padding: 18px 18px 18px 20px;
   margin-left: -20px;
   margin-right: -4px;
-  box-shadow: var(--shadow-soft);
 }
 
 /* Headliner — larger gold dot, positioned on left border of card */
@@ -364,9 +363,9 @@
   width: 9px;
   height: 9px;
   left: 13px;
-  top: 30px;
+  top: 26px;
   background: var(--accent);
-  border: 2px solid var(--bg-surface);
+  border: 2px solid var(--bg-base);
 }
 
 /* Remove old left rule used in previous version */

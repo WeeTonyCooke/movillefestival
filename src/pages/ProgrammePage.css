@@ -348,14 +348,25 @@
   z-index: 1;
 }
 
-/* Headliner — larger gold dot */
+/* Headliner — card treatment: cream surface, gold border, rounded */
+.prog-event.is-headline {
+  background: var(--bg-surface);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-md);
+  padding: 20px 20px 20px 36px;
+  margin-left: -20px;
+  margin-right: -4px;
+  box-shadow: var(--shadow-soft);
+}
+
+/* Headliner — larger gold dot, positioned on left border of card */
 .prog-event.is-headline::before {
   width: 9px;
   height: 9px;
-  left: -23px;
-  top: 28px;  /* shifted down to align with title, not time */
+  left: 13px;
+  top: 30px;
   background: var(--accent);
-  border: 2px solid var(--bg-base);
+  border: 2px solid var(--bg-surface);
 }
 
 /* Remove old left rule used in previous version */

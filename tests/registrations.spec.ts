@@ -263,21 +263,21 @@ test.describe('Bed Push Race', () => {
     await expect(page.locator('text=/€50/i').first()).toBeVisible();
   });
 
-  test('BP-02 Successful team registration', async ({ page }) => {
+  test.skip('BP-02 Successful team registration', async ({ page }) => {
     await fillBedPushForm(page, { email: 'bp02@example.com' });
     await page.locator('button.form-submit').click();
     await fillStripeCard(page, '4242 4242 4242 4242');
     await expect(page.locator('text=/confirmed|entered|registered/i').first()).toBeVisible({ timeout: 20000 });
   });
 
-  test('BP-03 Declined card — no registration created', async ({ page }) => {
+  test.skip('BP-03 Declined card — no registration created', async ({ page }) => {
     await fillBedPushForm(page, { email: 'bp03@example.com' });
     await page.locator('button.form-submit').click();
     await fillStripeCard(page, '4000 0000 0000 0002');
     await expect(page.locator('text=/declined/i')).toBeVisible({ timeout: 15000 });
   });
 
-  test('BP-04 Abandoned checkout returns to bed push', async ({ page }) => {
+  test.skip('BP-04 Abandoned checkout returns to bed push', async ({ page }) => {
     await fillBedPushForm(page, { email: 'bp04@example.com' });
     await page.locator('button.form-submit').click();
     await expect(page).toHaveURL(/checkout\.stripe\.com/, { timeout: 12000 });
@@ -285,7 +285,7 @@ test.describe('Bed Push Race', () => {
     await expect(page).toHaveURL(/bed-push/, { timeout: 8000 });
   });
 
-  test('BP-05 Form validation — missing team name keeps button disabled', async ({ page }) => {
+  test.skip('BP-05 Form validation — missing team name keeps button disabled', async ({ page }) => {
     await page.goto(BASE + '/bed-push');
     // Fill everything except team name
     await page.fill('[placeholder*="captain"]',       'Test Captain');

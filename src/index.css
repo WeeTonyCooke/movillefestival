@@ -152,6 +152,7 @@ button {
   --bg-surface:         rgba(18, 36, 48, 0.90);
   --bg-surface-strong:  rgba(16, 32, 44, 0.96);
   --bg-paper:           #122030;
+  --paper:              rgba(18,36,48,0.76);
 
   --text-primary:       #F4EDE0;
   --text-secondary:     rgba(244, 237, 224, 0.74);

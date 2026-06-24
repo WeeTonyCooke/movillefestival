@@ -686,7 +686,7 @@
 
 /* Info block — coral left rule (for warnings / important notices) */
 .form-info-block {
-  background: var(--paper, #FFFCF6);
+  background: var(--bg-surface);
   border-left: 3px solid var(--coral);
   border-radius: var(--radius-sm);
   padding: 12px 14px;

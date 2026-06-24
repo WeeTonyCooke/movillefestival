@@ -2,14 +2,15 @@
 // FIX 4: Copy updated — no implication that the email itself is the pass.
 //         Directs buyer to check email and tap "View Your Pass".
 
-import React from 'react';
+import React, { useEffect, useState } from 'react'
+import { useNightMode } from '../hooks/useNightMode';
 import { Link } from 'react-router-dom';
 
 const PassSuccessPage: React.FC = () => {
   return (
     <div style={{
       minHeight:      '100vh',
-      background:     '#FAF8F4',
+      background:     bg,
       fontFamily:     "'Outfit', sans-serif",
       display:        'flex',
       alignItems:     'center',
@@ -22,7 +23,7 @@ const PassSuccessPage: React.FC = () => {
           width:          72,
           height:         72,
           borderRadius:   '50%',
-          background:     'var(--accent, #1F4E5F)',
+          background:     passAccent,
           display:        'flex',
           alignItems:     'center',
           justifyContent: 'center',
@@ -44,13 +45,13 @@ const PassSuccessPage: React.FC = () => {
           Purchase Confirmed
         </h1>
 
-        <p style={{ margin: '0 0 24px', fontSize: 17, color: 'rgba(22,50,60,0.72)', lineHeight: 1.6 }}>
+        <p style={{ margin: '0 0 24px', fontSize: 17, color: textSec, lineHeight: 1.6 }}>
           Your festival pass is booked. Check your email — there's a
           <strong> View Your Pass</strong> button that opens your pass with QR code,
           ready to show at the entrance.
         </p>
 
-        <p style={{ margin: '0 0 36px', fontSize: 14, color: 'rgba(22,50,60,0.52)', lineHeight: 1.6 }}>
+        <p style={{ margin: '0 0 36px', fontSize: 14, color: textMut, lineHeight: 1.6 }}>
           The email may take a couple of minutes to arrive. If you don't see it,
           check your spam folder or contact{' '}
           <a href="mailto:movillefestival@gmail.com" style={{ color: 'var(--accent, #1F4E5F)' }}>
@@ -65,8 +66,8 @@ const PassSuccessPage: React.FC = () => {
               display:        'inline-block',
               padding:        '14px 32px',
               borderRadius:   999,
-              background:     '#16323C',
-              color:          '#fff',
+              background:     btnBg,
+              color:          btnText,
               fontWeight:     700,
               fontSize:       15,
               textDecoration: 'none',

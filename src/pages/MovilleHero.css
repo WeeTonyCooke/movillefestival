@@ -308,13 +308,13 @@
   }
 
   .hero-bg-evening-desktop {
-    background-position: center 52%;
-    filter: saturate(1.02) contrast(1.02);
+    background-position: center 40%;
+    filter: saturate(1.05) contrast(1.02);
   }
 
   .hero-bg-night-desktop {
-    background-position: center 52%;
-    filter: saturate(1.02) contrast(1.02);
+    background-position: center 40%;
+    filter: saturate(1.05) contrast(1.02);
   }
 
   .hero-title-wrap {

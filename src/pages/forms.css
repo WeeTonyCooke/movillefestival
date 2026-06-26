@@ -341,6 +341,12 @@
 
 .form-success-back:hover { background: #0E2730; }
 
+.theme-night .form-success-back {
+  background: var(--seafoam, #6BAFA7);
+  color: #fff;
+}
+.theme-night .form-success-back:hover { background: #5a9e96; }
+
 /* ── Stepper ──────────────────────────────────────────────────────── */
 
 .form-stepper {

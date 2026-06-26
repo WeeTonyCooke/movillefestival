@@ -611,24 +611,25 @@ export default function AdminPage() {
                 <span style={s.invAdjustLabel}>Adjust online limit</span>
                 <input
                   type="number"
+                  data-testid="online-limit-input"
                   value={onlineLimitInput}
                   onChange={e => setOnlineLimitInput(e.target.value)}
                   style={s.invAdjustInput}
                   min={0}
                   max={TOTAL_BALLS - PAPER_MAX}
                 />
-                <button onClick={handleSaveOnlineLimit} disabled={savingLimit} style={{ ...btnStyle('primary'), padding: '6px 14px' }}>
+                <button data-testid="save-online-limit" onClick={handleSaveOnlineLimit} disabled={savingLimit} style={{ ...btnStyle('primary'), padding: '6px 14px' }}>
                   {savingLimit ? 'Saving…' : 'Save'}
                 </button>
               </div>
               {data && data.availableBallNumbers && (
-                <div style={s.availableNumbersWrap}>
-                  <div style={s.availableNumbersTitle} onClick={() => setShowAvailableNumbers(v => !v)}>
+                <div data-testid="available-numbers-panel" style={s.availableNumbersWrap}>
+                  <div data-testid="available-numbers-toggle" style={s.availableNumbersTitle} onClick={() => setShowAvailableNumbers(v => !v)}>
                     <span>Available ball numbers ({data.availableBallNumbers.length} remaining within limit)</span>
                     <span style={{ fontSize: '11px', color: '#6BAFA7' }}>{showAvailableNumbers ? '▲ Hide' : '▼ Show'}</span>
                   </div>
                   {showAvailableNumbers && (
-                    <div style={s.availableNumbersGrid}>
+                    <div data-testid="available-numbers-grid" style={s.availableNumbersGrid}>
                       {data.availableBallNumbers.map(n => (
                         <span key={n} style={s.availableNumberChip}>{n}</span>
                       ))}

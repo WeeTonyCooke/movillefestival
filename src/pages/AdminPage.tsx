@@ -345,6 +345,13 @@ export default function AdminPage() {
       alert(`Online limit must be between 0 and ${TOTAL_BALLS - PAPER_MAX}`);
       return;
     }
+    const confirmed = window.confirm(
+      `Reducing the online allocation to ${val} is permanent.\n\n` +
+      `${val < onlineLimit ? `${onlineLimit - val} balls will be released for manual sale and cannot be returned to online sale.\n\n` : ''}` +
+      `This action cannot be undone. Are you sure?`
+    );
+    if (!confirmed) return;
+
     setSavingLimit(true);
     try {
       const res = await fetch('/.netlify/functions/update-ball-limit', {
@@ -693,6 +700,86 @@ export default function AdminPage() {
               <button data-testid="export-csv" onClick={handleExportBallNumbersCSV} style={btnStyle('secondary')}>⬇ Export ball numbers CSV</button>
               <button data-testid="export-pdf" onClick={handleExportBallNumbersPDF} style={btnStyle('secondary')}>⬇ Export ball numbers PDF</button>
             </div>
+
+            {/* Ball Drop Master Inventory */}
+            {data && (
+              <div style={{ background: '#fff', border: '1px solid rgba(22,50,60,0.1)', borderRadius: '16px', padding: '20px', boxShadow: '0 12px 30px rgba(12,20,28,0.05)', marginBottom: '24px' }}>
+                {/* Header */}
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
+                  <div>
+                    <h3 style={{ fontFamily: 'Playfair Display, Georgia, serif', fontSize: '20px', fontWeight: 700, color: '#1F4E5F', margin: '0 0 4px' }}>Ball Drop Master Inventory</h3>
+                    <p style={{ fontSize: '12px', color: '#888', margin: 0 }}>All online balls (501–1200) — complete status overview</p>
+                  </div>
+                  <span style={{ fontSize: '11px', color: '#aaa' }}>Last updated: {new Date().toLocaleString('en-IE', { dateStyle: 'medium', timeStyle: 'short' })}</span>
+                </div>
+                {/* Legend */}
+                <div style={{ display: 'flex', gap: '24px', alignItems: 'center', marginBottom: '16px', padding: '12px 16px', background: '#FAF8F4', borderRadius: '8px', flexWrap: 'wrap' as const }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <div style={{ width: '36px', height: '28px', border: '2px solid #6BAFA7', borderRadius: '4px', background: '#fff' }} />
+                    <div>
+                      <div style={{ fontSize: '11px', fontWeight: 700, color: '#1F4E5F' }}>Available Online</div>
+                      <div style={{ fontSize: '10px', color: '#888' }}>Available for online purchase</div>
+                    </div>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <div style={{ width: '36px', height: '28px', border: '1px solid #ddd', borderRadius: '4px', background: '#f0f0f0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <span style={{ fontSize: '9px', color: '#aaa', textDecoration: 'line-through' }}>502</span>
+                    </div>
+                    <div>
+                      <div style={{ fontSize: '11px', fontWeight: 700, color: '#1F4E5F' }}>Sold Online</div>
+                      <div style={{ fontSize: '10px', color: '#888' }}>Paid and allocated</div>
+                    </div>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <div style={{ width: '36px', height: '28px', border: '1px solid #F2B49A', borderRadius: '4px', background: '#FEF3EE', display: 'flex', flexDirection: 'column' as const, alignItems: 'center', justifyContent: 'center' }}>
+                      <span style={{ fontSize: '8px', fontWeight: 700, color: '#F26A4B' }}>505</span>
+                      <span style={{ fontSize: '6px', color: '#F26A4B', letterSpacing: '0.05em' }}>MANUAL</span>
+                    </div>
+                    <div>
+                      <div style={{ fontSize: '11px', fontWeight: 700, color: '#1F4E5F' }}>Released for Manual Sale</div>
+                      <div style={{ fontSize: '10px', color: '#888' }}>Available for manual sale</div>
+                    </div>
+                  </div>
+                  <div style={{ marginLeft: 'auto', fontSize: '11px', color: '#6BAFA7', background: '#F0F8F7', border: '1px solid rgba(107,175,167,0.3)', borderRadius: '6px', padding: '6px 10px' }}>
+                    ℹ Balls 1–500 are the original paper allocation and are not shown here
+                  </div>
+                </div>
+                {/* Grid */}
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(10, 1fr)', gap: '4px' }}>
+                  {Array.from({ length: TOTAL_BALLS - PAPER_MAX }, (_, i) => {
+                    const n = PAPER_MAX + 1 + i;
+                    const isSold = (data.soldBallNumbers || []).includes(n);
+                    const isManual = !isSold && !(data.availableBallNumbers || []).includes(n);
+                    return (
+                      <div key={n} style={{
+                        border: isSold ? '1px solid #ddd' : isManual ? '1px solid #F2B49A' : '2px solid #6BAFA7',
+                        borderRadius: '4px',
+                        padding: '5px 2px',
+                        textAlign: 'center' as const,
+                        background: isSold ? '#f0f0f0' : isManual ? '#FEF3EE' : '#fff',
+                        display: 'flex',
+                        flexDirection: 'column' as const,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        minHeight: '36px',
+                      }}>
+                        <span style={{
+                          fontSize: '10px',
+                          fontWeight: 700,
+                          color: isSold ? '#bbb' : isManual ? '#F26A4B' : '#1F4E5F',
+                          textDecoration: isSold ? 'line-through' : 'none',
+                          lineHeight: 1.2,
+                        }}>{n}</span>
+                        {isManual && <span style={{ fontSize: '7px', color: '#F26A4B', letterSpacing: '0.08em', marginTop: '2px' }}>MANUAL</span>}
+                      </div>
+                    );
+                  })}
+                </div>
+                <p style={{ fontSize: '11px', color: '#aaa', textAlign: 'center' as const, marginTop: '12px' }}>
+                  Showing all {TOTAL_BALLS - PAPER_MAX} online balls (501–{TOTAL_BALLS})
+                </p>
+              </div>
+            )}
 
             <div style={s.tableWrap}>
               <table style={s.table}>

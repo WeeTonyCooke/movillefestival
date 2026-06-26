@@ -23,6 +23,7 @@ export async function handler(event) {
       ballsSoldResult,
       availableBallNumbers,
       configResult,
+      lockResult,
     ] = await Promise.all([
       supabase.from('ball_drop_registrations').select('*').order('created_at', { ascending: false }),
       supabase.from('bed_push_registrations').select('*').order('created_at', { ascending: false }),
@@ -32,6 +33,7 @@ export async function handler(event) {
       supabase.from('ball_drop_balls').select('*', { count: 'exact', head: true }).eq('status', 'sold'),
       supabase.from('ball_drop_balls').select('number').eq('status', 'available').order('number', { ascending: true }),
       supabase.from('festival_config').select('value').eq('key', 'online_ball_limit').single(),
+      supabase.from('festival_config').select('value').eq('key', 'online_ball_limit_locked_at').single(),
     ]);
 
     const onlineBallLimit = configResult.data?.value
@@ -58,6 +60,7 @@ export async function handler(event) {
         ballsRemaining:       availableWithinLimit.length,
         ballsSold:            ballsSoldResult.count      || 0,
         onlineBallLimit,
+        onlineBallLimitLockedAt: lockResult.data?.value || null,
         availableBallNumbers: availableWithinLimit,
       }),
     };

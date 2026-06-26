@@ -75,6 +75,7 @@ interface AdminData {
   availableOnline: number;
   releasedForManual: number;
   availableBallNumbers: number[];
+  soldBallNumbers: number[];
 }
 
 type Tab = 'balldrop' | 'bedpush' | 'craftfair' | 'sponsorship' | 'passes';
@@ -293,26 +294,17 @@ export default function AdminPage() {
   };
 
   const handleExportBallNumbersCSV = () => {
-    if (!data) return;
-    const rows = data.availableBallNumbers.map(n => [String(n), 'available']);
-    // Also include sold balls from registrations
-    const soldNumbers: number[] = data.ballDrop
-      .filter(r => r.status === 'paid')
-      .flatMap(r => r.ball_numbers || [])
-      .sort((a, b) => a - b);
+    const soldNumbers: number[] = [...(data.soldBallNumbers || [])].sort((a, b) => a - b);
     const allRows = [
-      ...soldNumbers.map(n => [String(n), 'sold']),
-      ...rows,
+      ...soldNumbers.map((n: number) => [String(n), 'sold']),
+      ...data.availableBallNumbers.map(n => [String(n), 'available']),
     ].sort((a, b) => Number(a[0]) - Number(b[0]));
     downloadCSV('ball-numbers.csv', allRows, ['Ball Number', 'Status']);
   };
 
   const handleExportBallNumbersPDF = () => {
     if (!data) return;
-    const soldNumbers: number[] = data.ballDrop
-      .filter(r => r.status === 'paid')
-      .flatMap(r => r.ball_numbers || [])
-      .sort((a, b) => a - b);
+    const soldNumbers: number[] = [...(data.soldBallNumbers || [])].sort((a, b) => a - b);
     const allNumbers = [
       ...soldNumbers.map(n => ({ n, status: 'sold' })),
       ...data.availableBallNumbers.map(n => ({ n, status: 'available' })),
@@ -339,7 +331,6 @@ export default function AdminPage() {
 <p>Online allocation: ${data.onlineBallLimit} balls &nbsp;|&nbsp; Sold online: ${soldNumbers.length} &nbsp;|&nbsp; Available online: ${data.availableBallNumbers.length}</p>
 <div class="grid">
 ${allNumbers.map(({ n, status }) => '<div class="ball ' + status + '">' + String(n) + '</div>').join('\n')}
-')}
 </div>
 <div class="legend">Crossed out = sold online. Blank = available for sale.</div>
 </body>

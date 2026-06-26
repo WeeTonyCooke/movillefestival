@@ -25,8 +25,8 @@ export async function handler(event) {
       availableOnlineResult,
       manualOnlineResult,
       availableBallNumbers,
-      configResult,
       soldBallNumbersResult,
+      configResult,
     ] = await Promise.all([
       supabase.from('ball_drop_registrations').select('*').order('created_at', { ascending: false }),
       supabase.from('bed_push_registrations').select('*').order('created_at', { ascending: false }),

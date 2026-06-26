@@ -70,6 +70,8 @@ interface AdminData {
   passes: FestivalPassReg[];
   ballsRemaining: number;
   ballsSold: number;
+  onlineBallLimit: number;
+  availableBallNumbers: number[];
 }
 
 type Tab = 'balldrop' | 'bedpush' | 'craftfair' | 'sponsorship' | 'passes';
@@ -121,6 +123,10 @@ const s: Record<string, React.CSSProperties> = {
   invAdjust: { display: 'flex', alignItems: 'center', gap: '8px', marginLeft: 'auto' },
   invAdjustLabel: { fontSize: '12px', color: '#666' },
   invAdjustInput: { width: '70px', padding: '6px 10px', border: '1px solid #ddd', borderRadius: '6px', fontFamily: 'Outfit, system-ui, sans-serif', fontSize: '13px', textAlign: 'center' as const },
+  availableNumbersWrap: { marginTop: '12px', padding: '14px 18px', background: '#F4F9F8', border: '1px solid rgba(107,175,167,0.3)', borderRadius: '10px' },
+  availableNumbersTitle: { fontSize: '12px', fontWeight: 700, color: '#1F4E5F', textTransform: 'uppercase' as const, letterSpacing: '0.07em', marginBottom: '8px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer' as const },
+  availableNumbersGrid: { display: 'flex', flexWrap: 'wrap' as const, gap: '4px', marginTop: '8px' },
+  availableNumberChip: { fontSize: '11px', fontWeight: 600, color: '#1F4E5F', background: '#fff', border: '1px solid rgba(107,175,167,0.5)', borderRadius: '4px', padding: '2px 7px', fontFamily: 'Outfit, system-ui, sans-serif' },
   tableWrap: { background: '#fff', border: '1px solid rgba(22,50,60,0.1)', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 12px 30px rgba(12,20,28,0.05)', overflowX: 'auto' as const },
   table: { width: '100%', borderCollapse: 'collapse' as const, fontSize: '13px', minWidth: '700px' },
   th: { padding: '10px 12px', textAlign: 'left' as const, color: '#fff', fontSize: '12px', fontWeight: 'bold', background: '#16323C', whiteSpace: 'nowrap' as const },
@@ -224,6 +230,7 @@ export default function AdminPage() {
   const [resendState, setResendState] = useState<Record<string, 'idle' | 'loading' | 'sent' | 'error'>>({});
   const [onlineLimit, setOnlineLimit] = useState(ONLINE_DEFAULT);
   const [onlineLimitInput, setOnlineLimitInput] = useState(String(ONLINE_DEFAULT));
+  const [showAvailableNumbers, setShowAvailableNumbers] = useState(false);
   const [savingLimit, setSavingLimit] = useState(false);
   const [view, setView] = useState<'choice' | 'dashboard'>('choice');
   const [checkingLogin, setCheckingLogin] = useState(false);
@@ -259,7 +266,7 @@ export default function AdminPage() {
         if (res.status === 401) { sessionStorage.removeItem(SESSION_PW_KEY); setAuthed(false); setView('choice'); setError('Incorrect password'); setLoading(false); return null; }
         return res.json();
       })
-      .then(d => { if (d) { setData(d); setLoading(false); } })
+      .then(d => { if (d) { setData(d); if (d.onlineBallLimit !== undefined) { setOnlineLimit(d.onlineBallLimit); setOnlineLimitInput(String(d.onlineBallLimit)); } setLoading(false); } })
       .catch(() => setLoading(false));
   }, [authed, password, view]);
 
@@ -289,8 +296,23 @@ export default function AdminPage() {
       return;
     }
     setSavingLimit(true);
-    // For now update local state — backend adjustment endpoint (ANT-17) to be implemented
-    setOnlineLimit(val);
+    try {
+      const res = await fetch('/.netlify/functions/update-ball-limit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-admin-password': password },
+        body: JSON.stringify({ online_ball_limit: val }),
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        alert(`Failed to save: ${err.error || res.status}`);
+        setSavingLimit(false);
+        return;
+      }
+      setOnlineLimit(val);
+      fetchData();
+    } catch {
+      alert('Could not reach the server. Check your connection.');
+    }
     setSavingLimit(false);
   };
 
@@ -589,16 +611,35 @@ export default function AdminPage() {
                 <span style={s.invAdjustLabel}>Adjust online limit</span>
                 <input
                   type="number"
+                  data-testid="online-limit-input"
                   value={onlineLimitInput}
                   onChange={e => setOnlineLimitInput(e.target.value)}
                   style={s.invAdjustInput}
                   min={0}
                   max={TOTAL_BALLS - PAPER_MAX}
                 />
-                <button onClick={handleSaveOnlineLimit} disabled={savingLimit} style={{ ...btnStyle('primary'), padding: '6px 14px' }}>
+                <button data-testid="save-online-limit" onClick={handleSaveOnlineLimit} disabled={savingLimit} style={{ ...btnStyle('primary'), padding: '6px 14px' }}>
                   {savingLimit ? 'Saving…' : 'Save'}
                 </button>
               </div>
+              {data && data.availableBallNumbers && (
+                <div data-testid="available-numbers-panel" style={s.availableNumbersWrap}>
+                  <div data-testid="available-numbers-toggle" style={s.availableNumbersTitle} onClick={() => setShowAvailableNumbers(v => !v)}>
+                    <span>Available ball numbers ({data.availableBallNumbers.length} remaining within limit)</span>
+                    <span style={{ fontSize: '11px', color: '#6BAFA7' }}>{showAvailableNumbers ? '▲ Hide' : '▼ Show'}</span>
+                  </div>
+                  {showAvailableNumbers && (
+                    <div data-testid="available-numbers-grid" style={s.availableNumbersGrid}>
+                      {data.availableBallNumbers.map(n => (
+                        <span key={n} style={s.availableNumberChip}>{n}</span>
+                      ))}
+                      {data.availableBallNumbers.length === 0 && (
+                        <span style={{ fontSize: '13px', color: '#888' }}>No balls available within current limit.</span>
+                      )}
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
 
             <div style={s.tableWrap}>

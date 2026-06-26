@@ -71,8 +71,11 @@ interface AdminData {
   ballsRemaining: number;
   ballsSold: number;
   onlineBallLimit: number;
-  onlineBallLimitLockedAt: string | null;
+  soldOnline: number;
+  availableOnline: number;
+  releasedForManual: number;
   availableBallNumbers: number[];
+  soldBallNumbers: number[];
 }
 
 type Tab = 'balldrop' | 'bedpush' | 'craftfair' | 'sponsorship' | 'passes';
@@ -232,7 +235,6 @@ export default function AdminPage() {
   const [onlineLimit, setOnlineLimit] = useState(ONLINE_DEFAULT);
   const [onlineLimitInput, setOnlineLimitInput] = useState(String(ONLINE_DEFAULT));
   const [showAvailableNumbers, setShowAvailableNumbers] = useState(false);
-  const [limitLockedAt, setLimitLockedAt] = useState<string | null>(null);
   const [savingLimit, setSavingLimit] = useState(false);
   const [view, setView] = useState<'choice' | 'dashboard'>('choice');
   const [checkingLogin, setCheckingLogin] = useState(false);
@@ -268,7 +270,7 @@ export default function AdminPage() {
         if (res.status === 401) { sessionStorage.removeItem(SESSION_PW_KEY); setAuthed(false); setView('choice'); setError('Incorrect password'); setLoading(false); return null; }
         return res.json();
       })
-      .then(d => { if (d) { setData(d); if (d.onlineBallLimit !== undefined) { setOnlineLimit(d.onlineBallLimit); setOnlineLimitInput(String(d.onlineBallLimit)); } if (d.onlineBallLimitLockedAt !== undefined) { setLimitLockedAt(d.onlineBallLimitLockedAt); } setLoading(false); } })
+      .then(d => { if (d) { setData(d); if (d.onlineBallLimit !== undefined) { setOnlineLimit(d.onlineBallLimit); setOnlineLimitInput(String(d.onlineBallLimit)); }  setLoading(false); } })
       .catch(() => setLoading(false));
   }, [authed, password, view]);
 
@@ -292,57 +294,42 @@ export default function AdminPage() {
   };
 
   const handleExportBallNumbersCSV = () => {
-    if (!data) return;
-    const rows = data.availableBallNumbers.map(n => [String(n), 'available']);
-    // Also include sold balls from registrations
-    const soldNumbers: number[] = data.ballDrop
-      .filter(r => r.status === 'paid')
-      .flatMap(r => r.ball_numbers || [])
-      .sort((a, b) => a - b);
+    const soldNumbers: number[] = [...(data.soldBallNumbers || [])].sort((a, b) => a - b);
     const allRows = [
-      ...soldNumbers.map(n => [String(n), 'sold']),
-      ...rows,
+      ...soldNumbers.map((n: number) => [String(n), 'sold']),
+      ...data.availableBallNumbers.map(n => [String(n), 'available']),
     ].sort((a, b) => Number(a[0]) - Number(b[0]));
     downloadCSV('ball-numbers.csv', allRows, ['Ball Number', 'Status']);
   };
 
   const handleExportBallNumbersPDF = () => {
     if (!data) return;
-    const soldNumbers: number[] = data.ballDrop
-      .filter(r => r.status === 'paid')
-      .flatMap(r => r.ball_numbers || [])
-      .sort((a, b) => a - b);
-    const allNumbers = [
-      ...soldNumbers.map(n => ({ n, status: 'sold' })),
-      ...data.availableBallNumbers.map(n => ({ n, status: 'available' })),
-    ].sort((a, b) => a.n - b.n);
+    const sellableNumbers = [...data.availableBallNumbers].sort((a, b) => a - b);
+    const generatedAt = new Date().toLocaleString('en-IE', { dateStyle: 'full', timeStyle: 'short' });
 
-    const html = `<!DOCTYPE html>
-<html>
-<head>
-<meta charset="utf-8">
-<title>Ball Drop Numbers — Moville Summer Festival 2026</title>
-<style>
-  body { font-family: Arial, sans-serif; padding: 20px; }
-  h1 { font-size: 18px; margin-bottom: 4px; }
-  p { font-size: 12px; color: #555; margin: 0 0 16px; }
-  .grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: 6px; }
-  .ball { border: 1px solid #ccc; border-radius: 4px; padding: 6px 4px; text-align: center; font-size: 12px; font-weight: bold; }
-  .ball.sold { background: #f0f0f0; color: #999; text-decoration: line-through; }
-  .ball.available { background: #fff; color: #000; }
-  .legend { margin-top: 16px; font-size: 11px; color: #555; }
-</style>
-</head>
-<body>
-<h1>Moville Summer Festival 2026 — Ball Drop Numbers</h1>
-<p>Online allocation: balls 501–${500 + data.onlineBallLimit} &nbsp;|&nbsp; Limit: ${data.onlineBallLimit} &nbsp;|&nbsp; Sold online: ${soldNumbers.length} &nbsp;|&nbsp; Available: ${data.availableBallNumbers.length}</p>
-<div class="grid">
-${allNumbers.map(({ n, status }) => '<div class="ball ' + status + '">' + String(n) + '</div>').join('\n')}
-')}
-</div>
-<div class="legend">Crossed out = sold online. Blank = available for sale.</div>
-</body>
-</html>`;
+    const rows = sellableNumbers.map(n =>
+      '<div class="ball">' + String(n) + '</div>'
+    ).join('\n');
+
+    const html = '<!DOCTYPE html><html><head><meta charset="utf-8">' +
+      '<title>Manual Ball Numbers — Moville Summer Festival 2026</title>' +
+      '<style>' +
+      'body{font-family:Arial,sans-serif;padding:20px}' +
+      'h1{font-size:18px;margin:0 0 6px}' +
+      '.meta{font-size:11px;color:#555;margin:0 0 10px}' +
+      '.warning{background:#fff8e1;border:1px solid #f9a825;border-radius:4px;padding:10px 14px;font-size:12px;margin-bottom:16px;color:#5d4037}' +
+      '.grid{display:grid;grid-template-columns:repeat(10,1fr);gap:6px}' +
+      '.ball{border:1px solid #333;border-radius:4px;padding:8px 4px;text-align:center;font-size:13px;font-weight:bold;color:#000;background:#fff}' +
+      '</style></head><body>' +
+      '<h1>Manual Ball Numbers Available for Sale</h1>' +
+      '<p class="meta">Generated: ' + generatedAt + ' &nbsp;|&nbsp; Numbers available: ' + sellableNumbers.length + '</p>' +
+      '<div class="warning">' +
+      'This sheet contains only numbers available for manual sale.<br>' +
+      'Any number printed on this sheet may be sold safely.<br>' +
+      '<strong>Generate a fresh sheet before each selling session.</strong>' +
+      '</div>' +
+      '<div class="grid">' + rows + '</div>' +
+      '</body></html>';
 
     const win = window.open('', '_blank');
     if (win) {
@@ -358,6 +345,13 @@ ${allNumbers.map(({ n, status }) => '<div class="ball ' + status + '">' + String
       alert(`Online limit must be between 0 and ${TOTAL_BALLS - PAPER_MAX}`);
       return;
     }
+    const confirmed = window.confirm(
+      `Reducing the online allocation to ${val} is permanent.\n\n` +
+      `${val < onlineLimit ? `${onlineLimit - val} balls will be released for manual sale and cannot be returned to online sale.\n\n` : ''}` +
+      `This action cannot be undone. Are you sure?`
+    );
+    if (!confirmed) return;
+
     setSavingLimit(true);
     try {
       const res = await fetch('/.netlify/functions/update-ball-limit', {
@@ -365,15 +359,13 @@ ${allNumbers.map(({ n, status }) => '<div class="ball ' + status + '">' + String
         headers: { 'Content-Type': 'application/json', 'x-admin-password': password },
         body: JSON.stringify({ online_ball_limit: val }),
       });
+      const body = await res.json().catch(() => ({}));
       if (!res.ok) {
-        const err = await res.json().catch(() => ({}));
-        alert(`Failed to save: ${err.error || res.status}`);
+        alert(body.error || `Failed to save (${res.status})`);
         setSavingLimit(false);
         return;
       }
       setOnlineLimit(val);
-      const body = await res.json().catch(() => ({}));
-      if (body.locked_at) setLimitLockedAt(body.locked_at);
       fetchData();
     } catch {
       alert('Could not reach the server. Check your connection.');
@@ -573,8 +565,9 @@ ${allNumbers.map(({ n, status }) => '<div class="ball ' + status + '">' + String
   const sponsorPaid = (data.sponsorships || []).filter(r => r.status === 'paid');
   const passesPaid = (data.passes || []).filter(r => r.status === 'paid');
   const totalRevenue = [...ballPaid, ...bedPaid, ...craftPaid, ...sponsorPaid, ...passesPaid].reduce((s, r) => s + r.amount_paid, 0);
-  const onlineBallsSold = ballPaid.reduce((s, r) => s + (r.quantity || 0), 0);
-  const onlineBallsRemaining = onlineLimit - onlineBallsSold;
+  const onlineBallsSold = data?.soldOnline ?? ballPaid.reduce((s, r) => s + (r.quantity || 0), 0);
+  const onlineBallsRemaining = data?.availableOnline ?? (onlineLimit - onlineBallsSold);
+  const releasedForManual = data?.releasedForManual ?? 0;
 
   const filteredBallDrop = filterRegs(data.ballDrop);
   const filteredBedPush = filterRegs(data.bedPush);
@@ -608,7 +601,7 @@ ${allNumbers.map(({ n, status }) => '<div class="ball ' + status + '">' + String
         {/* Summary cards */}
         <div style={s.metricGrid}>
           {[
-            { label: 'Ball Drop', value: `${onlineBallsSold} balls sold`, sub: `${onlineBallsRemaining} of ${onlineLimit} online remaining` },
+            { label: 'Ball Drop', value: `${onlineBallsSold} balls sold`, sub: `${onlineBallsRemaining} online remaining · ${releasedForManual} released for manual` },
             { label: 'Bed Push', value: `${bedPaid.length} teams`, sub: `${BED_PUSH_CAPACITY - bedPaid.length} of ${BED_PUSH_CAPACITY} remaining` },
             { label: 'Craft Fair', value: craftPaid.length >= CRAFT_FAIR_CAPACITY ? 'Sold out' : `${craftPaid.length} stalls`, sub: craftPaid.length >= CRAFT_FAIR_CAPACITY ? `${CRAFT_FAIR_CAPACITY} stalls filled` : `${CRAFT_FAIR_CAPACITY - craftPaid.length} remaining` },
             { label: 'Festival Passes', value: `${passesPaid.length} sold`, sub: `${formatEuro(passesPaid.reduce((s, r) => s + r.amount_paid, 0))} revenue` },
@@ -657,10 +650,11 @@ ${allNumbers.map(({ n, status }) => '<div class="ball ' + status + '">' + String
             <div data-testid="inventory-bar" style={s.inventoryBar}>
               {[
                 { label: 'Total balls', value: TOTAL_BALLS.toLocaleString() },
-                { label: `Online (501–${500 + onlineLimit})`, value: onlineLimit },
-                { label: `Paper (1–500)`, value: TOTAL_BALLS - onlineLimit },
+                { label: 'Online allocation', value: onlineLimit },
                 { label: 'Online sold', value: onlineBallsSold },
                 { label: 'Online remaining', value: onlineBallsRemaining },
+                { label: 'Released for manual sale', value: releasedForManual },
+                { label: 'Original paper (1–500)', value: PAPER_MAX },
               ].map(({ label, value }, i, arr) => (
                 <span key={label} style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
                   <div style={s.invItem}>
@@ -670,7 +664,122 @@ ${allNumbers.map(({ n, status }) => '<div class="ball ' + status + '">' + String
                   {i < arr.length - 1 && <div style={s.invDivider} />}
                 </span>
               ))}
+              <div style={s.invAdjust}>
+                <span style={s.invAdjustLabel}>Adjust online limit</span>
+                <input
+                  type="number"
+                  data-testid="online-limit-input"
+                  value={onlineLimitInput}
+                  onChange={e => setOnlineLimitInput(e.target.value)}
+                  style={s.invAdjustInput}
+                  min={onlineBallsSold}
+                  max={TOTAL_BALLS - PAPER_MAX}
+                />
+                <button
+                  data-testid="save-online-limit"
+                  onClick={handleSaveOnlineLimit}
+                  disabled={savingLimit || parseInt(onlineLimitInput, 10) < onlineBallsSold || parseInt(onlineLimitInput, 10) > onlineLimit}
+                  style={{ ...btnStyle('primary'), padding: '6px 14px' }}
+                >
+                  {savingLimit ? 'Saving…' : 'Save'}
+                </button>
+                {parseInt(onlineLimitInput, 10) > onlineLimit && (
+                  <span style={{ fontSize: '11px', color: '#c0392b', marginLeft: '4px' }}>
+                    Online allocation can only be reduced. Released manual balls cannot be restored online.
+                  </span>
+                )}
+                {parseInt(onlineLimitInput, 10) < onlineBallsSold && parseInt(onlineLimitInput, 10) <= onlineLimit && (
+                  <span style={{ fontSize: '11px', color: '#c0392b', marginLeft: '4px' }}>
+                    Cannot be lower than {onlineBallsSold} (online sold)
+                  </span>
+                )}
+              </div>
             </div>
+            {/* Ball number exports */}
+            <div style={{ display: 'flex', gap: '10px', margin: '0 0 16px' }}>
+              <button data-testid="export-csv" onClick={handleExportBallNumbersCSV} style={btnStyle('secondary')}>⬇ Export ball numbers CSV</button>
+              <button data-testid="export-pdf" onClick={handleExportBallNumbersPDF} style={btnStyle('secondary')}>⬇ Export ball numbers PDF</button>
+            </div>
+
+            {/* Ball Drop Master Inventory */}
+            {data && (
+              <div style={{ background: '#fff', border: '1px solid rgba(22,50,60,0.1)', borderRadius: '16px', padding: '20px', boxShadow: '0 12px 30px rgba(12,20,28,0.05)', marginBottom: '24px' }}>
+                {/* Header */}
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
+                  <div>
+                    <h3 style={{ fontFamily: 'Playfair Display, Georgia, serif', fontSize: '20px', fontWeight: 700, color: '#1F4E5F', margin: '0 0 4px' }}>Ball Drop Master Inventory</h3>
+                    <p style={{ fontSize: '12px', color: '#888', margin: 0 }}>All online balls (501–1200) — complete status overview</p>
+                  </div>
+                  <span style={{ fontSize: '11px', color: '#aaa' }}>Last updated: {new Date().toLocaleString('en-IE', { dateStyle: 'medium', timeStyle: 'short' })}</span>
+                </div>
+                {/* Legend */}
+                <div style={{ display: 'flex', gap: '24px', alignItems: 'center', marginBottom: '16px', padding: '12px 16px', background: '#FAF8F4', borderRadius: '8px', flexWrap: 'wrap' as const }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <div style={{ width: '36px', height: '28px', border: '2px solid #6BAFA7', borderRadius: '4px', background: '#fff' }} />
+                    <div>
+                      <div style={{ fontSize: '11px', fontWeight: 700, color: '#1F4E5F' }}>Available Online</div>
+                      <div style={{ fontSize: '10px', color: '#888' }}>Available for online purchase</div>
+                    </div>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <div style={{ width: '36px', height: '28px', border: '1px solid #ddd', borderRadius: '4px', background: '#f0f0f0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <span style={{ fontSize: '9px', color: '#aaa', textDecoration: 'line-through' }}>502</span>
+                    </div>
+                    <div>
+                      <div style={{ fontSize: '11px', fontWeight: 700, color: '#1F4E5F' }}>Sold Online</div>
+                      <div style={{ fontSize: '10px', color: '#888' }}>Paid and allocated</div>
+                    </div>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <div style={{ width: '36px', height: '28px', border: '1px solid #F2B49A', borderRadius: '4px', background: '#FEF3EE', display: 'flex', flexDirection: 'column' as const, alignItems: 'center', justifyContent: 'center' }}>
+                      <span style={{ fontSize: '8px', fontWeight: 700, color: '#F26A4B' }}>505</span>
+                      <span style={{ fontSize: '6px', color: '#F26A4B', letterSpacing: '0.05em' }}>MANUAL</span>
+                    </div>
+                    <div>
+                      <div style={{ fontSize: '11px', fontWeight: 700, color: '#1F4E5F' }}>Released for Manual Sale</div>
+                      <div style={{ fontSize: '10px', color: '#888' }}>Available for manual sale</div>
+                    </div>
+                  </div>
+                  <div style={{ marginLeft: 'auto', fontSize: '11px', color: '#6BAFA7', background: '#F0F8F7', border: '1px solid rgba(107,175,167,0.3)', borderRadius: '6px', padding: '6px 10px' }}>
+                    ℹ Balls 1–500 are the original paper allocation and are not shown here
+                  </div>
+                </div>
+                {/* Grid */}
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(10, 1fr)', gap: '4px' }}>
+                  {Array.from({ length: TOTAL_BALLS - PAPER_MAX }, (_, i) => {
+                    const n = PAPER_MAX + 1 + i;
+                    const isSold = (data.soldBallNumbers || []).includes(n);
+                    const isManual = !isSold && !(data.availableBallNumbers || []).includes(n);
+                    return (
+                      <div key={n} style={{
+                        border: isSold ? '1px solid #ddd' : isManual ? '1px solid #F2B49A' : '2px solid #6BAFA7',
+                        borderRadius: '4px',
+                        padding: '5px 2px',
+                        textAlign: 'center' as const,
+                        background: isSold ? '#f0f0f0' : isManual ? '#FEF3EE' : '#fff',
+                        display: 'flex',
+                        flexDirection: 'column' as const,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        minHeight: '36px',
+                      }}>
+                        <span style={{
+                          fontSize: '10px',
+                          fontWeight: 700,
+                          color: isSold ? '#bbb' : isManual ? '#F26A4B' : '#1F4E5F',
+                          textDecoration: isSold ? 'line-through' : 'none',
+                          lineHeight: 1.2,
+                        }}>{n}</span>
+                        {isManual && <span style={{ fontSize: '7px', color: '#F26A4B', letterSpacing: '0.08em', marginTop: '2px' }}>MANUAL</span>}
+                      </div>
+                    );
+                  })}
+                </div>
+                <p style={{ fontSize: '11px', color: '#aaa', textAlign: 'center' as const, marginTop: '12px' }}>
+                  Showing all {TOTAL_BALLS - PAPER_MAX} online balls (501–{TOTAL_BALLS})
+                </p>
+              </div>
+            )}
 
             <div style={s.tableWrap}>
               <table style={s.table}>

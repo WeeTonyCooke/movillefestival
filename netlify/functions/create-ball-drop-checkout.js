@@ -35,7 +35,7 @@ export async function handler(event) {
   }
 
   try {
-    // Check availability
+    // Check availability — only balls with status 'available' are in the online pool
     const { count, error: countError } = await supabase
       .from('ball_drop_balls')
       .select('*', { count: 'exact', head: true })

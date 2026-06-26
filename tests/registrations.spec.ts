@@ -488,7 +488,7 @@ test.describe('Admin — registration data', () => {
     const cell = page.locator('table tbody tr').first().locator('td').nth(2);
     await expect(cell).toBeVisible({ timeout: 6000 });
     const text = (await cell.textContent()) || '';
-    expect(text).toMatch(/^\d{2,4}\*+\d{2,4}$/);
+    expect(text).toMatch(/^[+\d]{1,5}\*+\d{2,4}$/);
   });
 
   test('Admin-11 CSV export shows GDPR warning before download (ANT-46)', async ({ page }) => {

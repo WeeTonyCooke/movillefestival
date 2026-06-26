@@ -249,7 +249,7 @@ test.describe('Ball limit — Admin UI', () => {
     await page.click('[data-testid="tab-balldrop"]');
     await expect(page.locator('text=Total balls')).toBeVisible({ timeout: 8000 });
     await expect(page.locator('text=Online sold')).toBeVisible();
-    await expect(page.locator('text=Online remaining')).toBeVisible();
+    await expect(page.locator('span:has-text("Online remaining")')).toBeVisible();
   });
 
   test('BL-17 Export ball numbers CSV button is visible on Ball Drop tab', async ({ page }) => {

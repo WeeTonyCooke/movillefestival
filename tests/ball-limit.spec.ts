@@ -106,8 +106,6 @@ test.describe('Ball limit — update-ball-limit API', () => {
       headers: { 'x-admin-password': ADMIN, 'Content-Type': 'application/json' },
       data: { online_ball_limit: 650 },
     });
-    // 409 means already locked — that's acceptable, limit was already set
-    if (res.status() === 409) { test.skip(true, 'Limit already locked on this instance'); return; }
     expect(res.status()).toBe(200);
     const body = await res.json();
     expect(body.ok).toBe(true);
@@ -218,8 +216,6 @@ test.describe('Ball limit — get-availability public gate', () => {
       headers: { 'x-admin-password': ADMIN, 'Content-Type': 'application/json' },
       data: { online_ball_limit: newLimit },
     });
-    // 409 means already locked — skip the availability check in that case
-    if (setRes.status() === 409) { test.skip(true, 'Limit already locked on this instance'); return; }
     expect(setRes.status()).toBe(200);
 
     // Check availability has reduced
@@ -254,32 +250,34 @@ test.describe('Ball limit — Admin UI', () => {
     await expect(bar.getByText('Online remaining', { exact: true })).toBeVisible();
   });
 
-  test('BL-17 Limit adjuster is not visible in admin (removed)', async ({ page }) => {
+  test('BL-17 Limit adjuster is visible and functional on Ball Drop tab', async ({ page }) => {
     await loginAdmin(page);
     await page.click('[data-testid="tab-balldrop"]');
-    await expect(page.locator('[data-testid="online-limit-input"]')).not.toBeVisible();
-    await expect(page.locator('[data-testid="save-online-limit"]')).not.toBeVisible();
+    await expect(page.locator('[data-testid="online-limit-input"]')).toBeVisible({ timeout: 8000 });
+    await expect(page.locator('[data-testid="save-online-limit"]')).toBeVisible();
   });
 
-  test('BL-18 Ball number export buttons are not visible in admin (removed)', async ({ page }) => {
+  test('BL-18 Export buttons are visible on Ball Drop tab', async ({ page }) => {
     await loginAdmin(page);
     await page.click('[data-testid="tab-balldrop"]');
-    await expect(page.locator('button:has-text("Export ball numbers CSV")')).not.toBeVisible();
-    await expect(page.locator('button:has-text("Export ball numbers PDF")')).not.toBeVisible();
+    await expect(page.locator('[data-testid="export-csv"]')).toBeVisible({ timeout: 8000 });
+    await expect(page.locator('[data-testid="export-pdf"]')).toBeVisible();
   });
 
-  test('BL-19 Inventory bar shows correct stats after page reload', async ({ page }) => {
+  test('BL-19 Limit persists across page reload', async ({ page }) => {
     await loginAdmin(page);
     await page.click('[data-testid="tab-balldrop"]');
-    const bar = page.locator('[data-testid="inventory-bar"]');
-    await expect(bar).toBeVisible({ timeout: 8000 });
+    const inputValue = await page.locator('[data-testid="online-limit-input"]').inputValue();
+    const val = parseInt(inputValue, 10);
+    expect(val).toBeGreaterThan(0);
+    expect(val).toBeLessThanOrEqual(700);
 
-    // Reload and verify bar is still present
     await page.reload();
     await page.click('[data-testid="tile-reports-admin"]').catch(() => {});
     await expect(page.locator('[data-testid="tab-balldrop"]')).toBeVisible({ timeout: 12000 });
     await page.click('[data-testid="tab-balldrop"]');
-    await expect(page.locator('[data-testid="inventory-bar"]')).toBeVisible({ timeout: 8000 });
+    const reloadedValue = await page.locator('[data-testid="online-limit-input"]').inputValue();
+    expect(parseInt(reloadedValue, 10)).toBe(val);
   });
 
 });

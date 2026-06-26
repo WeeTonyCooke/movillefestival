@@ -1,0 +1,2128 @@
+# Instructions
+
+- Following Playwright test failed.
+- Explain why, be concise, respect Playwright best practices.
+- Provide a snippet of code with the fix, if possible.
+
+# Test info
+
+- Name: tests/visual.spec.ts >> Dark mode >> archive
+- Location: tests/visual.spec.ts:95:5
+
+# Error details
+
+```
+Error: expect(page).toHaveScreenshot(expected) failed
+
+Timeout: 5000ms
+  Failed to take two consecutive stable screenshots.
+
+  Snapshot: archive-dark.png
+
+Call log:
+  - Expect "toHaveScreenshot(archive-dark.png)" with timeout 5000ms
+    - verifying given screenshot expectation
+  - taking page screenshot
+    - disabled all CSS animations
+  - waiting for fonts to load...
+  - fonts loaded
+  - Expected an image 1280px by 27076px, received 1265px by 27076px. 406140 pixels (ratio 0.02 of all image pixels) are different.
+  - waiting 100ms before taking screenshot
+  - taking page screenshot
+    - disabled all CSS animations
+  - waiting for fonts to load...
+  - fonts loaded
+  - Expected an image 1265px by 27076px, received 1280px by 27076px. 406140 pixels (ratio 0.02 of all image pixels) are different.
+  - waiting 250ms before taking screenshot
+  - Timeout 5000ms exceeded.
+
+```
+
+# Page snapshot
+
+```yaml
+- generic [ref=e3]:
+  - generic [ref=e5]:
+    - banner [ref=e6]:
+      - button "Back to programme" [ref=e7] [cursor=pointer]:
+        - img [ref=e8]
+      - generic [ref=e10]:
+        - paragraph [ref=e11]: From the Archive
+        - heading "Heritage" [level=1] [ref=e12]
+        - paragraph [ref=e13]: Newspaper clippings, local memories and festival history from years gone by.
+    - generic [ref=e14]:
+      - textbox "Search heritage" [ref=e16]
+      - generic "Archive decades" [ref=e17]:
+        - button "All" [pressed] [ref=e18] [cursor=pointer]
+        - button "1950s" [ref=e19] [cursor=pointer]
+        - button "1960s" [ref=e20] [cursor=pointer]
+        - button "1970s" [ref=e21] [cursor=pointer]
+        - button "1980s" [ref=e22] [cursor=pointer]
+        - button "1990s" [ref=e23] [cursor=pointer]
+        - button "2000s" [ref=e24] [cursor=pointer]
+      - paragraph [ref=e25]: 149 items in the heritage collection
+    - generic [ref=e26]:
+      - article [ref=e27]:
+        - generic [ref=e29]:
+          - generic [ref=e30]:
+            - generic "Published 19 August 1960" [ref=e31]: 19 August 1960
+            - generic [ref=e32]:
+              - img [ref=e33]
+              - text: The Derry Journal
+          - heading "3rd International Festival of Sea Angling at Moville" [level=2] [ref=e36]
+          - paragraph [ref=e37]: Coverage of the 1960 sea angling festival.
+        - generic [ref=e39]:
+          - link "View PDF" [ref=e40] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/v1775981670/1960_-_3rd_International_Festival_of_Sea_Angling_at_Moville_s5xgeb.pdf
+          - button "Share" [ref=e41] [cursor=pointer]
+      - article [ref=e42]:
+        - generic [ref=e44]:
+          - generic [ref=e45]:
+            - generic "Published 17 October 1958" [ref=e46]: 17 October 1958
+            - generic [ref=e47]:
+              - img [ref=e48]
+              - text: The Derry Journal
+          - heading "A Trip Through Romantic Inishowen" [level=2] [ref=e51]
+          - paragraph [ref=e52]: A feature on the Inishowen peninsula published around the time of the 1958 festival, capturing the region's charm.
+        - generic [ref=e54]:
+          - link "View PDF" [ref=e55] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/v1775981670/1958_-_A_Trip_Through_Romantic_Inishowen_eiud0y.pdf
+          - button "Share" [ref=e56] [cursor=pointer]
+      - article [ref=e57]:
+        - generic [ref=e59]:
+          - generic [ref=e60]:
+            - generic "Published 2 September 1958" [ref=e61]: 2 September 1958
+            - generic [ref=e62]:
+              - img [ref=e63]
+              - text: The Derry Journal
+          - heading "Competitors Say Moville Has Everything — Festival Report" [level=2] [ref=e66]
+          - paragraph [ref=e67]: Archive coverage of the Moville Festival from 1958, preserved from local newspapers.
+        - generic [ref=e69]:
+          - link "View PDF" [ref=e70] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/v1775981670/1958_-_Competitors_Say_Moville_Has_Everything_-_Festival_Report_vj0hgd.pdf
+          - button "Share" [ref=e71] [cursor=pointer]
+      - article [ref=e72]:
+        - generic [ref=e74]:
+          - generic [ref=e75]:
+            - generic "Published 26 August 1994" [ref=e76]: 26 August 1994
+            - generic [ref=e77]:
+              - img [ref=e78]
+              - text: The Derry Journal
+          - heading "Fabulous Finale to Moville Song Contest" [level=2] [ref=e81]
+          - paragraph [ref=e82]: Song contest finale in 1994.
+        - generic [ref=e84]:
+          - link "View PDF" [ref=e85] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/v1775981670/1994_-_Fabulous_Finale_to_Moville_Song_Contest_tgbnl9.pdf
+          - button "Share" [ref=e86] [cursor=pointer]
+      - article [ref=e87]:
+        - generic [ref=e89]:
+          - generic [ref=e90]:
+            - generic "Published 22 August 1961" [ref=e91]: 22 August 1961
+            - generic [ref=e92]:
+              - img [ref=e93]
+              - text: The Derry Journal
+          - heading "Fourth Sea Angling Festival Gets Under Way" [level=2] [ref=e96]
+          - paragraph [ref=e97]: Festival gets underway in 1961.
+        - generic [ref=e99]:
+          - link "View PDF" [ref=e100] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/v1775981670/1961_-_Fourth_Sea_Angling_Festival_Gets_Under_Way_xuljxa.pdf
+          - button "Share" [ref=e101] [cursor=pointer]
+      - article [ref=e102]:
+        - generic [ref=e104]:
+          - generic [ref=e105]:
+            - generic "Published 7 January 1958" [ref=e106]: 7 January 1958
+            - generic [ref=e107]:
+              - img [ref=e108]
+              - text: The Derry Journal
+          - heading "Foyle Sea Angling Festival" [level=2] [ref=e111]
+          - paragraph [ref=e112]: Newspaper coverage of the 1958 sea angling festival in Moville, Co. Donegal — from the local press archives.
+        - generic [ref=e114]:
+          - link "View PDF" [ref=e115] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/v1775981670/1958_-_Foyle_Sea_Angling_Festival_cdnjb7.pdf
+          - button "Share" [ref=e116] [cursor=pointer]
+      - article [ref=e117]:
+        - generic [ref=e119]:
+          - generic [ref=e120]:
+            - generic "Published 3 August 2001" [ref=e121]: 3 August 2001
+            - generic [ref=e122]:
+              - img [ref=e123]
+              - text: The Derry Journal
+          - heading "Regatta and Festival Fun in Moville" [level=2] [ref=e126]
+          - paragraph [ref=e127]: Regatta day on the Foyle.
+        - generic [ref=e129]:
+          - link "View PDF" [ref=e130] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/v1775981670/2001_-_Regatta_and_Festival_Fun_in_Moville_jyryrp.pdf
+          - button "Share" [ref=e131] [cursor=pointer]
+      - article [ref=e132]:
+        - generic [ref=e134]:
+          - generic [ref=e135]:
+            - generic "Published 1958" [ref=e136]: "1958"
+            - generic [ref=e137]:
+              - img [ref=e138]
+              - text: The Derry Journal
+          - heading "Gala Dance — Moville Festival" [level=2] [ref=e141]
+          - paragraph [ref=e142]: The festival gala in 1958 — an evening of music and dancing to close out another successful week in Moville.
+        - generic [ref=e144]:
+          - link "View PDF" [ref=e145] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/v1775981670/1958_-_Gala_Dance_-_Moville_Festival_unxjaf.pdf
+          - button "Share" [ref=e146] [cursor=pointer]
+      - article [ref=e147]:
+        - generic [ref=e149]:
+          - generic [ref=e150]:
+            - generic "Published 1958" [ref=e151]: "1958"
+            - generic [ref=e152]:
+              - img [ref=e153]
+              - text: The Derry Journal
+          - heading "Moville Plans Big Sea Angling Event" [level=2] [ref=e156]
+          - paragraph [ref=e157]: Newspaper coverage of the 1958 sea angling festival in Moville.
+        - generic [ref=e159]:
+          - link "View PDF" [ref=e160] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/v1775981670/1958_-_Moville_Plans_Big_Sea_Angling_Event_rcbxzd.pdf
+          - button "Share" [ref=e161] [cursor=pointer]
+      - article [ref=e162]:
+        - generic [ref=e164]:
+          - generic [ref=e165]:
+            - generic "Published 1958" [ref=e166]: "1958"
+            - generic [ref=e167]:
+              - img [ref=e168]
+              - text: The Derry Journal
+          - heading "Moville Sea Angling Festival 08" [level=2] [ref=e171]
+          - paragraph [ref=e172]: Archive coverage connected to festival week and the wider Foyle Sea Angling Festival.
+        - generic [ref=e174]:
+          - link "View PDF" [ref=e175] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1958_-_Moville_Sea_Angling_Festival_08_qpkdou.pdf
+          - button "Share" [ref=e176] [cursor=pointer]
+      - article [ref=e177]:
+        - generic [ref=e179]:
+          - generic [ref=e180]:
+            - generic "Published 1958" [ref=e181]: "1958"
+            - generic [ref=e182]:
+              - img [ref=e183]
+              - text: The Derry Journal
+          - heading "Moville Sea Angling Festival 12" [level=2] [ref=e186]
+          - paragraph [ref=e187]: Archive coverage connected to festival week and the wider Foyle Sea Angling Festival.
+        - generic [ref=e189]:
+          - link "View PDF" [ref=e190] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1958_-_Moville_Sea_Angling_Festival_12_yikodj.pdf
+          - button "Share" [ref=e191] [cursor=pointer]
+      - article [ref=e192]:
+        - generic [ref=e194]:
+          - generic [ref=e195]:
+            - generic "Published 1958" [ref=e196]: "1958"
+            - generic [ref=e197]:
+              - img [ref=e198]
+              - text: The Derry Journal
+          - heading "Moville Sea Angling Festival — Upcoming Events Preview" [level=2] [ref=e201]
+          - paragraph [ref=e202]: Archive coverage connected to festival week and the wider Foyle Sea Angling Festival.
+        - generic [ref=e204]:
+          - link "View PDF" [ref=e205] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1958_-_Moville_Sea_Angling_Festival_-_Upcoming_Events_Preview_mxk2by.pdf
+          - button "Share" [ref=e206] [cursor=pointer]
+      - article [ref=e207]:
+        - generic [ref=e209]:
+          - generic [ref=e210]:
+            - generic "Published 1958" [ref=e211]: "1958"
+            - generic [ref=e212]:
+              - img [ref=e213]
+              - text: The Derry Journal
+          - heading "Opening Ceremony of International Angling Festival" [level=2] [ref=e216]
+          - paragraph [ref=e217]: Archive coverage from the local press connected to Moville and its festival years.
+        - generic [ref=e219]:
+          - link "View PDF" [ref=e220] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1958_-_Opening_Ceremony_of_International_Angling_Festival_spbiun.pdf
+          - button "Share" [ref=e221] [cursor=pointer]
+      - article [ref=e222]:
+        - generic [ref=e224]:
+          - generic [ref=e225]:
+            - generic "Published 1959" [ref=e226]: "1959"
+            - generic [ref=e227]:
+              - img [ref=e228]
+              - text: The Derry Journal
+          - heading "Foyle Sea Angling Festival — Preview" [level=2] [ref=e231]
+          - paragraph [ref=e232]: Archive coverage connected to festival week and the wider Foyle Sea Angling Festival.
+        - generic [ref=e234]:
+          - link "View PDF" [ref=e235] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1959_-_Foyle_Sea_Angling_Festival_-_Preview_i3aaja.pdf
+          - button "Share" [ref=e236] [cursor=pointer]
+      - article [ref=e237]:
+        - generic [ref=e239]:
+          - generic [ref=e240]:
+            - generic "Published 1959" [ref=e241]: "1959"
+            - generic [ref=e242]:
+              - img [ref=e243]
+              - text: The Derry Journal
+          - heading "Lough Foyle Angling Festival Opens" [level=2] [ref=e246]
+          - paragraph [ref=e247]: Archive coverage from the local press connected to Moville and its festival years.
+        - generic [ref=e249]:
+          - link "View PDF" [ref=e250] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1959_-_Lough_Foyle_Angling_Festival_Opens_nrruym.pdf
+          - button "Share" [ref=e251] [cursor=pointer]
+      - article [ref=e252]:
+        - generic [ref=e254]:
+          - generic [ref=e255]:
+            - generic "Published 1959" [ref=e256]: "1959"
+            - generic [ref=e257]:
+              - img [ref=e258]
+              - text: The Derry Journal
+          - heading "Minister on Economic Importance of the Sea Angling Festival" [level=2] [ref=e261]
+          - paragraph [ref=e262]: Ministerial attendance at the 1959 festival.
+        - generic [ref=e264]:
+          - link "View PDF" [ref=e265] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/v1775981670/1959_-_During_Lough_Foyle_Sea_Angling_Festival_-_Minister_on_Economic_Importanc_ehzvb2.pdf
+          - button "Share" [ref=e266] [cursor=pointer]
+      - article [ref=e267]:
+        - generic [ref=e269]:
+          - generic [ref=e270]:
+            - generic "Published 1959" [ref=e271]: "1959"
+            - generic [ref=e272]:
+              - img [ref=e273]
+              - text: The Derry Journal
+          - heading "Moville Angling Festival" [level=2] [ref=e276]
+          - paragraph [ref=e277]: Archive coverage from the local press connected to Moville and its festival years.
+        - generic [ref=e279]:
+          - link "View PDF" [ref=e280] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1959_-_Moville_Angling_Festival_a5tdpb.pdf
+          - button "Share" [ref=e281] [cursor=pointer]
+      - article [ref=e282]:
+        - generic [ref=e284]:
+          - generic [ref=e285]:
+            - generic "Published 1960" [ref=e286]: "1960"
+            - generic [ref=e287]:
+              - img [ref=e288]
+              - text: The Derry Journal
+          - heading "Good Start to Moville Annual Event" [level=2] [ref=e291]
+          - paragraph [ref=e292]: Archive coverage from the local press connected to Moville and its festival years.
+        - generic [ref=e294]:
+          - link "View PDF" [ref=e295] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1960_-_Good_Start_to_Moville_Annual_Event_iydmh0.pdf
+          - button "Share" [ref=e296] [cursor=pointer]
+      - article [ref=e297]:
+        - generic [ref=e299]:
+          - generic [ref=e300]:
+            - generic "Published 1960" [ref=e301]: "1960"
+            - generic [ref=e302]:
+              - img [ref=e303]
+              - text: The Derry Journal
+          - heading "Moville Angling Festival" [level=2] [ref=e306]
+          - paragraph [ref=e307]: Archive coverage from the local press connected to Moville and its festival years.
+        - generic [ref=e309]:
+          - link "View PDF" [ref=e310] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1960_-_Moville_Angling_Festival_nrx4d3.pdf
+          - button "Share" [ref=e311] [cursor=pointer]
+      - article [ref=e312]:
+        - generic [ref=e314]:
+          - generic [ref=e315]:
+            - generic "Published 1960" [ref=e316]: "1960"
+            - generic [ref=e317]:
+              - img [ref=e318]
+              - text: The Derry Journal
+          - heading "Moville Catches Were Biggest of Any Irish Festival" [level=2] [ref=e321]
+          - paragraph [ref=e322]: Archive coverage from the local press connected to Moville and its festival years.
+        - generic [ref=e324]:
+          - link "View PDF" [ref=e325] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1960_-_Moville_Catches_Were_Biggest_of_Any_Irish_Festival_o2oxld.pdf
+          - button "Share" [ref=e326] [cursor=pointer]
+      - article [ref=e327]:
+        - generic [ref=e329]:
+          - generic [ref=e330]:
+            - generic "Published 1960" [ref=e331]: "1960"
+            - generic [ref=e332]:
+              - img [ref=e333]
+              - text: The Derry Journal
+          - heading "Sea Angling Festival — Big Harvest Gala Week" [level=2] [ref=e336]
+          - paragraph [ref=e337]: Archive coverage connected to festival week and the wider Foyle Sea Angling Festival.
+        - generic [ref=e339]:
+          - link "View PDF" [ref=e340] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1960_-_Sea_Angling_Festival_-_Big_Harvest_Gala_Week_kai7fk.pdf
+          - button "Share" [ref=e341] [cursor=pointer]
+      - article [ref=e342]:
+        - generic [ref=e344]:
+          - generic [ref=e345]:
+            - generic "Published 1961" [ref=e346]: "1961"
+            - generic [ref=e347]:
+              - img [ref=e348]
+              - text: The Derry Journal
+          - heading "Minister Presents Sea Angling Awards — Conclusion of Successful Event" [level=2] [ref=e351]
+          - paragraph [ref=e352]: A local press cutting from the archive, kept as part of the wider picture of Moville across the festival decades.
+        - generic [ref=e354]:
+          - link "View PDF" [ref=e355] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1961_-_Minister_Presents_Sea_Angling_Awards_-_Conclusion_of_Successful_Event_igz4ox.pdf
+          - button "Share" [ref=e356] [cursor=pointer]
+      - article [ref=e357]:
+        - generic [ref=e359]:
+          - generic [ref=e360]:
+            - generic "Published 1962" [ref=e361]: "1962"
+            - generic [ref=e362]:
+              - img [ref=e363]
+              - text: The Derry Journal
+          - heading "5th International Festival of Sea Angling at Moville" [level=2] [ref=e366]
+          - paragraph [ref=e367]: Archive coverage from the local press connected to Moville and its festival years.
+        - generic [ref=e369]:
+          - link "View PDF" [ref=e370] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1962_-_5th_International_Festival_of_Sea_Angling_at_Moville_qkp9he.pdf
+          - button "Share" [ref=e371] [cursor=pointer]
+      - article [ref=e372]:
+        - generic [ref=e374]:
+          - generic [ref=e375]:
+            - generic "Published 1962" [ref=e376]: "1962"
+            - generic [ref=e377]:
+              - img [ref=e378]
+              - text: The Derry Journal
+          - heading "Minister Will Open Moville Sea Angling Festival" [level=2] [ref=e381]
+          - paragraph [ref=e382]: Archive coverage connected to festival week and the wider Foyle Sea Angling Festival.
+        - generic [ref=e384]:
+          - link "View PDF" [ref=e385] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1962_-_Minister_Will_Open_Moville_Sea_Angling_Festival_mxuwzp.pdf
+          - button "Share" [ref=e386] [cursor=pointer]
+      - article [ref=e387]:
+        - generic [ref=e389]:
+          - generic [ref=e390]:
+            - generic "Published 1962" [ref=e391]: "1962"
+            - generic [ref=e392]:
+              - img [ref=e393]
+              - text: The Derry Journal
+          - heading "Moville Festival" [level=2] [ref=e396]
+          - paragraph [ref=e397]: Archive coverage from the local press connected to Moville and its festival years.
+        - generic [ref=e399]:
+          - link "View PDF" [ref=e400] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1962_-_Moville_Festival_qch3oa.pdf
+          - button "Share" [ref=e401] [cursor=pointer]
+      - article [ref=e402]:
+        - generic [ref=e404]:
+          - generic [ref=e405]:
+            - generic "Published 1962" [ref=e406]: "1962"
+            - generic [ref=e407]:
+              - img [ref=e408]
+              - text: The Derry Journal
+          - heading "Moville Festival Week" [level=2] [ref=e411]
+          - paragraph [ref=e412]: Archive coverage from the local press connected to Moville and its festival years.
+        - generic [ref=e414]:
+          - link "View PDF" [ref=e415] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1962_-_Moville_Festival_Week_xwp0jj.pdf
+          - button "Share" [ref=e416] [cursor=pointer]
+      - article [ref=e417]:
+        - generic [ref=e419]:
+          - generic [ref=e420]:
+            - generic "Published 1963" [ref=e421]: "1963"
+            - generic [ref=e422]:
+              - img [ref=e423]
+              - text: The Derry Journal
+          - heading "Moville Annual Regatta — 6th International Festival" [level=2] [ref=e426]
+          - paragraph [ref=e427]: Sporting coverage from the archive tied to festival week and the wider local calendar.
+        - generic [ref=e429]:
+          - link "View PDF" [ref=e430] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1963_-_Moville_Annual_Regatta_-_6th_International_Festival_ai9h4m.pdf
+          - button "Share" [ref=e431] [cursor=pointer]
+      - article [ref=e432]:
+        - generic [ref=e434]:
+          - generic [ref=e435]:
+            - generic "Published 1963" [ref=e436]: "1963"
+            - generic [ref=e437]:
+              - img [ref=e438]
+              - text: The Derry Journal
+          - heading "Presentation of Moville Sea Angling Festival Prizes" [level=2] [ref=e441]
+          - paragraph [ref=e442]: Archive coverage connected to festival week and the wider Foyle Sea Angling Festival.
+        - generic [ref=e444]:
+          - link "View PDF" [ref=e445] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1963_-_Presentation_of_Moville_Sea_Angling_Festival_Prizes_biqgjf.pdf
+          - button "Share" [ref=e446] [cursor=pointer]
+      - article [ref=e447]:
+        - generic [ref=e449]:
+          - generic [ref=e450]:
+            - generic "Published 1964" [ref=e451]: "1964"
+            - generic [ref=e452]:
+              - img [ref=e453]
+              - text: The Derry Journal
+          - heading "7th International Festival of Sea Angling at Moville" [level=2] [ref=e456]
+          - paragraph [ref=e457]: Archive coverage from the local press connected to Moville and its festival years.
+        - generic [ref=e459]:
+          - link "View PDF" [ref=e460] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1964_-_7th_International_Festival_of_Sea_Angling_at_Moville_rddocp.pdf
+          - button "Share" [ref=e461] [cursor=pointer]
+      - article [ref=e462]:
+        - generic [ref=e464]:
+          - generic [ref=e465]:
+            - generic "Published 1964" [ref=e466]: "1964"
+            - generic [ref=e467]:
+              - img [ref=e468]
+              - text: The Derry Journal
+          - heading "Champion Angler at Moville" [level=2] [ref=e471]
+          - paragraph [ref=e472]: Archive coverage from the local press connected to Moville and its festival years.
+        - generic [ref=e474]:
+          - link "View PDF" [ref=e475] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1964_-_Champion_Angler_at_Moville_pdendn.pdf
+          - button "Share" [ref=e476] [cursor=pointer]
+      - article [ref=e477]:
+        - generic [ref=e479]:
+          - generic [ref=e480]:
+            - generic "Published 1964" [ref=e481]: "1964"
+            - generic [ref=e482]:
+              - img [ref=e483]
+              - text: The Derry Journal
+          - heading "Moville Festival of Sea Angling Opens" [level=2] [ref=e486]
+          - paragraph [ref=e487]: Archive coverage from the local press connected to Moville and its festival years.
+        - generic [ref=e489]:
+          - link "View PDF" [ref=e490] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1964_-_Moville_Festival_of_Sea_Angling_Opens_h5lgq1.pdf
+          - button "Share" [ref=e491] [cursor=pointer]
+      - article [ref=e492]:
+        - generic [ref=e494]:
+          - generic [ref=e495]:
+            - generic "Published 1964" [ref=e496]: "1964"
+            - generic [ref=e497]:
+              - img [ref=e498]
+              - text: The Derry Journal
+          - heading "Sea Angling Festival Opens Moville" [level=2] [ref=e501]
+          - paragraph [ref=e502]: Archive coverage connected to festival week and the wider Foyle Sea Angling Festival.
+        - generic [ref=e504]:
+          - link "View PDF" [ref=e505] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1964_-_Sea_Angling_Festival_Opens_Moville_nfa0sd.pdf
+          - button "Share" [ref=e506] [cursor=pointer]
+      - article [ref=e507]:
+        - generic [ref=e509]:
+          - generic [ref=e510]:
+            - generic "Published 1965" [ref=e511]: "1965"
+            - generic [ref=e512]:
+              - img [ref=e513]
+              - text: The Derry Journal
+          - heading "Kennedy Cup Gives Big Send-Off to Moville Summer Season" [level=2] [ref=e516]
+          - paragraph [ref=e517]: Archive coverage from the local press connected to Moville and its festival years.
+        - generic [ref=e519]:
+          - link "View PDF" [ref=e520] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1965_-_Kennedy_Cup_Gives_Big_Send-Off_to_Moville_Summer_Season_mkfi45.pdf
+          - button "Share" [ref=e521] [cursor=pointer]
+      - article [ref=e522]:
+        - generic [ref=e524]:
+          - generic [ref=e525]:
+            - generic "Published 1965" [ref=e526]: "1965"
+            - generic [ref=e527]:
+              - img [ref=e528]
+              - text: The Derry Journal
+          - heading "Moville Festival" [level=2] [ref=e531]
+          - paragraph [ref=e532]: Archive coverage from the local press connected to Moville and its festival years.
+        - generic [ref=e534]:
+          - link "View PDF" [ref=e535] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1965_-_Moville_Festival_r6kmwk.pdf
+          - button "Share" [ref=e536] [cursor=pointer]
+      - article [ref=e537]:
+        - generic [ref=e539]:
+          - generic [ref=e540]:
+            - generic "Published 1965" [ref=e541]: "1965"
+            - generic [ref=e542]:
+              - img [ref=e543]
+              - text: The Derry Journal
+          - heading "Moville Festival Seaside Outing" [level=2] [ref=e546]
+          - paragraph [ref=e547]: Archive coverage from the local press connected to Moville and its festival years.
+        - generic [ref=e549]:
+          - link "View PDF" [ref=e550] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1965_-_Moville_Festival_Seaside_Outing_y4rvxa.pdf
+          - button "Share" [ref=e551] [cursor=pointer]
+      - article [ref=e552]:
+        - generic [ref=e554]:
+          - generic [ref=e555]:
+            - generic "Published 1965" [ref=e556]: "1965"
+            - generic [ref=e557]:
+              - img [ref=e558]
+              - text: The Derry Journal
+          - heading "Moville Festival — County Donegal" [level=2] [ref=e561]
+          - paragraph [ref=e562]: Archive coverage from the local press connected to Moville and its festival years.
+        - generic [ref=e564]:
+          - link "View PDF" [ref=e565] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1965_-_Moville_Festival_-_County_Donegal_tojtui.pdf
+          - button "Share" [ref=e566] [cursor=pointer]
+      - article [ref=e567]:
+        - generic [ref=e569]:
+          - generic [ref=e570]:
+            - generic "Published 1965" [ref=e571]: "1965"
+            - generic [ref=e572]:
+              - img [ref=e573]
+              - text: The Derry Journal
+          - heading "Moville Sea Angling Festival" [level=2] [ref=e576]
+          - paragraph [ref=e577]: Archive coverage connected to festival week and the wider Foyle Sea Angling Festival.
+        - generic [ref=e579]:
+          - link "View PDF" [ref=e580] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1965_-_Moville_Sea_Angling_Festival_gwxevd.pdf
+          - button "Share" [ref=e581] [cursor=pointer]
+      - article [ref=e582]:
+        - generic [ref=e584]:
+          - generic [ref=e585]:
+            - generic "Published 1966" [ref=e586]: "1966"
+            - generic [ref=e587]:
+              - img [ref=e588]
+              - text: The Derry Journal
+          - heading "Presentation of Foyle Festival Awards" [level=2] [ref=e591]
+          - paragraph [ref=e592]: Archive coverage from the local press connected to Moville and its festival years.
+        - generic [ref=e594]:
+          - link "View PDF" [ref=e595] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1966_-_Presentation_of_Foyle_Festival_Awards_mhnfkf.pdf
+          - button "Share" [ref=e596] [cursor=pointer]
+      - article [ref=e597]:
+        - generic [ref=e599]:
+          - generic [ref=e600]:
+            - generic "Published 1966" [ref=e601]: "1966"
+            - generic [ref=e602]:
+              - img [ref=e603]
+              - text: The Derry Journal
+          - heading "Rescued After Foyle Fishing Boat Ordeal" [level=2] [ref=e606]
+          - paragraph [ref=e607]: A local press cutting from the archive, kept as part of the wider picture of Moville across the festival decades.
+        - generic [ref=e609]:
+          - link "View PDF" [ref=e610] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1966_-_Rescued_After_Foyle_Fishing_Boat_Ordeal_vhyvsb.pdf
+          - button "Share" [ref=e611] [cursor=pointer]
+      - article [ref=e612]:
+        - generic [ref=e614]:
+          - generic [ref=e615]:
+            - generic "Published 1966" [ref=e616]: "1966"
+            - generic [ref=e617]:
+              - img [ref=e618]
+              - text: The Derry Journal
+          - heading "Stricter Control of Fishing Licences Sought" [level=2] [ref=e621]
+          - paragraph [ref=e622]: A local press cutting from the archive, kept as part of the wider picture of Moville across the festival decades.
+        - generic [ref=e624]:
+          - link "View PDF" [ref=e625] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1966_-_Stricter_Control_of_Fishing_Licences_Sought_ufzqrx.pdf
+          - button "Share" [ref=e626] [cursor=pointer]
+      - article [ref=e627]:
+        - generic [ref=e629]:
+          - generic [ref=e630]:
+            - generic "Published 1967" [ref=e631]: "1967"
+            - generic [ref=e632]:
+              - img [ref=e633]
+              - text: The Derry Journal
+          - heading "Moville Festival" [level=2] [ref=e636]
+          - paragraph [ref=e637]: Archive coverage from the local press connected to Moville and its festival years.
+        - generic [ref=e639]:
+          - link "View PDF" [ref=e640] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1967_-_Moville_Festival_jpyyo8.pdf
+          - button "Share" [ref=e641] [cursor=pointer]
+      - article [ref=e642]:
+        - generic [ref=e644]:
+          - generic [ref=e645]:
+            - generic "Published 1967" [ref=e646]: "1967"
+            - generic [ref=e647]:
+              - img [ref=e648]
+              - text: The Derry Journal
+          - heading "Moville Sea Angling Festival" [level=2] [ref=e651]
+          - paragraph [ref=e652]: Archive coverage connected to festival week and the wider Foyle Sea Angling Festival.
+        - generic [ref=e654]:
+          - link "View PDF" [ref=e655] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1967_-_Moville_Sea_Angling_Festival_ou4hll.pdf
+          - button "Share" [ref=e656] [cursor=pointer]
+      - article [ref=e657]:
+        - generic [ref=e659]:
+          - generic [ref=e660]:
+            - generic "Published 1967" [ref=e661]: "1967"
+            - generic [ref=e662]:
+              - img [ref=e663]
+              - text: The Derry Journal
+          - heading "Moville Will Be in Carnival — Sports and Fancy Dress August Holiday" [level=2] [ref=e666]
+          - paragraph [ref=e667]: A glimpse of the lighter, more playful side of festival week in Moville.
+        - generic [ref=e669]:
+          - link "View PDF" [ref=e670] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1967_-_Moville_Will_Be_in_Carnival_-_Sports_and_Fancy_Dress_August_Holiday_hg00xl.pdf
+          - button "Share" [ref=e671] [cursor=pointer]
+      - article [ref=e672]:
+        - generic [ref=e674]:
+          - generic [ref=e675]:
+            - generic "Published 1967" [ref=e676]: "1967"
+            - generic [ref=e677]:
+              - img [ref=e678]
+              - text: The Derry Journal
+          - heading "Mullan Regatta Day — North-West Regattas Attract Big Crowds" [level=2] [ref=e681]
+          - paragraph [ref=e682]: Sporting coverage from the archive tied to festival week and the wider local calendar.
+        - generic [ref=e684]:
+          - link "View PDF" [ref=e685] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1967_-_Mullan_Regatta_Day_-_North-West_Regattas_Attract_Big_Crowds_gv4i0a.pdf
+          - button "Share" [ref=e686] [cursor=pointer]
+      - article [ref=e687]:
+        - generic [ref=e689]:
+          - generic [ref=e690]:
+            - generic "Published 1968" [ref=e691]: "1968"
+            - generic [ref=e692]:
+              - img [ref=e693]
+              - text: The Derry Journal
+          - heading "Foyle Sea Angling Festival — Cross-Border Improvements" [level=2] [ref=e696]
+          - paragraph [ref=e697]: Archive coverage connected to festival week and the wider Foyle Sea Angling Festival.
+        - generic [ref=e699]:
+          - link "View PDF" [ref=e700] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1968_-_Foyle_Sea_Angling_Festival_-_Cross-Border_Improvements_hbqg9v.pdf
+          - button "Share" [ref=e701] [cursor=pointer]
+      - article [ref=e702]:
+        - generic [ref=e704]:
+          - generic [ref=e705]:
+            - generic "Published 1968" [ref=e706]: "1968"
+            - generic [ref=e707]:
+              - img [ref=e708]
+              - text: The Derry Journal
+          - heading "Minister Presenting Foyle Sea Angling Awards" [level=2] [ref=e711]
+          - paragraph [ref=e712]: A local press cutting from the archive, kept as part of the wider picture of Moville across the festival decades.
+        - generic [ref=e714]:
+          - link "View PDF" [ref=e715] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1968_-_Minister_Presenting_Foyle_Sea_Angling_Awards_f7bc4t.pdf
+          - button "Share" [ref=e716] [cursor=pointer]
+      - article [ref=e717]:
+        - generic [ref=e719]:
+          - generic [ref=e720]:
+            - generic "Published 1968" [ref=e721]: "1968"
+            - generic [ref=e722]:
+              - img [ref=e723]
+              - text: The Derry Journal
+          - heading "Moville Festival" [level=2] [ref=e726]
+          - paragraph [ref=e727]: Archive coverage from the local press connected to Moville and its festival years.
+        - generic [ref=e729]:
+          - link "View PDF" [ref=e730] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1968_-_Moville_Festival_xow1pt.pdf
+          - button "Share" [ref=e731] [cursor=pointer]
+      - article [ref=e732]:
+        - generic [ref=e734]:
+          - generic [ref=e735]:
+            - generic "Published 1968" [ref=e736]: "1968"
+            - generic [ref=e737]:
+              - img [ref=e738]
+              - text: The Derry Journal
+          - heading "Speedboat Racing and Open Competition at Moville" [level=2] [ref=e741]
+          - paragraph [ref=e742]: Archive coverage from the local press connected to Moville and its festival years.
+        - generic [ref=e744]:
+          - link "View PDF" [ref=e745] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1968_-_Speedboat_Racing_and_Open_Competition_at_Moville_jcjmmc.pdf
+          - button "Share" [ref=e746] [cursor=pointer]
+      - article [ref=e747]:
+        - generic [ref=e749]:
+          - generic [ref=e750]:
+            - generic "Published 1969" [ref=e751]: "1969"
+            - generic [ref=e752]:
+              - img [ref=e753]
+              - text: The Derry Journal
+          - heading "Foyle Sea Angling Festival — Largest Haul of Fish" [level=2] [ref=e756]
+          - paragraph [ref=e757]: Archive coverage connected to festival week and the wider Foyle Sea Angling Festival.
+        - generic [ref=e759]:
+          - link "View PDF" [ref=e760] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1969_-_Foyle_Sea_Angling_Festival_-_Largest_Haul_of_Fish_ocnl0h.pdf
+          - button "Share" [ref=e761] [cursor=pointer]
+      - article [ref=e762]:
+        - generic [ref=e764]:
+          - generic [ref=e765]:
+            - generic "Published 1969" [ref=e766]: "1969"
+            - generic [ref=e767]:
+              - img [ref=e768]
+              - text: The Derry Journal
+          - heading "Foyle Sea Angling Festival — Sea Angling and Fringe Events Daily" [level=2] [ref=e771]
+          - paragraph [ref=e772]: Archive coverage connected to festival week and the wider Foyle Sea Angling Festival.
+        - generic [ref=e774]:
+          - link "View PDF" [ref=e775] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1969_-_Foyle_Sea_Angling_Festival_-_Sea_Angling_and_Fringe_Events_Daily_wignsk.pdf
+          - button "Share" [ref=e776] [cursor=pointer]
+      - article [ref=e777]:
+        - generic [ref=e779]:
+          - generic [ref=e780]:
+            - generic "Published 1969" [ref=e781]: "1969"
+            - generic [ref=e782]:
+              - img [ref=e783]
+              - text: The Derry Journal
+          - heading "Moville Festival" [level=2] [ref=e786]
+          - paragraph [ref=e787]: Archive coverage from the local press connected to Moville and its festival years.
+        - generic [ref=e789]:
+          - link "View PDF" [ref=e790] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1969_-_Moville_Festival_h9xfz9.pdf
+          - button "Share" [ref=e791] [cursor=pointer]
+      - article [ref=e792]:
+        - generic [ref=e794]:
+          - generic [ref=e795]:
+            - generic "Published 1969" [ref=e796]: "1969"
+            - generic [ref=e797]:
+              - img [ref=e798]
+              - text: The Derry Journal
+          - heading "Moville Marquee Dancing — Foyle Resorts Attract Holidaymakers" [level=2] [ref=e801]
+          - paragraph [ref=e802]: Archive coverage from the local press connected to Moville and its festival years.
+        - generic [ref=e804]:
+          - link "View PDF" [ref=e805] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1969_-_Moville_Marquee_Dancing_-_Foyle_Resorts_Attract_Holidaymakers_fgcskj.pdf
+          - button "Share" [ref=e806] [cursor=pointer]
+      - article [ref=e807]:
+        - generic [ref=e809]:
+          - generic [ref=e810]:
+            - generic "Published 1969" [ref=e811]: "1969"
+            - generic [ref=e812]:
+              - img [ref=e813]
+              - text: The Derry Journal
+          - heading "Moville Parochial Sports Championship" [level=2] [ref=e816]
+          - paragraph [ref=e817]: Archive coverage from the local press connected to Moville and its festival years.
+        - generic [ref=e819]:
+          - link "View PDF" [ref=e820] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1969_-_Moville_Parochial_Sports_Championship_gnaukj.pdf
+          - button "Share" [ref=e821] [cursor=pointer]
+      - article [ref=e822]:
+        - generic [ref=e824]:
+          - generic [ref=e825]:
+            - generic "Published 1970" [ref=e826]: "1970"
+            - generic [ref=e827]:
+              - img [ref=e828]
+              - text: The Derry Journal
+          - heading "Childrens Dress Factory to Open in Carndonagh" [level=2] [ref=e831]
+          - paragraph [ref=e832]: A local press cutting from the archive, kept as part of the wider picture of Moville across the festival decades.
+        - generic [ref=e834]:
+          - link "View PDF" [ref=e835] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1970_-_Childrens_Dress_Factory_to_Open_in_Carndonagh_theavv.pdf
+          - button "Share" [ref=e836] [cursor=pointer]
+      - article [ref=e837]:
+        - generic [ref=e839]:
+          - generic [ref=e840]:
+            - generic "Published 1970" [ref=e841]: "1970"
+            - generic [ref=e842]:
+              - img [ref=e843]
+              - text: The Derry Journal
+          - heading "Dance Entertainment Listings Magilligan and Greencastle" [level=2] [ref=e846]
+          - paragraph [ref=e847]: Festival-week entertainment listings and social events from the local press archive.
+        - generic [ref=e849]:
+          - link "View PDF" [ref=e850] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1970_-_Dance_Entertainment_Listings_Magilligan_and_Greencastle_ke92tl.pdf
+          - button "Share" [ref=e851] [cursor=pointer]
+      - article [ref=e852]:
+        - generic [ref=e854]:
+          - generic [ref=e855]:
+            - generic "Published 1970" [ref=e856]: "1970"
+            - generic [ref=e857]:
+              - img [ref=e858]
+              - text: The Derry Journal
+          - heading "Festival Week Has Something For Everyone — Foyle International Sea Angli" [level=2] [ref=e861]
+          - paragraph [ref=e862]: Archive coverage from the local press connected to Moville and its festival years.
+        - generic [ref=e864]:
+          - link "View PDF" [ref=e865] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1970_-_Festival_Week_Has_Something_For_Everyone_-_Foyle_International_Sea_Angli_n2lrp3.pdf
+          - button "Share" [ref=e866] [cursor=pointer]
+      - article [ref=e867]:
+        - generic [ref=e869]:
+          - generic [ref=e870]:
+            - generic "Published 1970" [ref=e871]: "1970"
+            - generic [ref=e872]:
+              - img [ref=e873]
+              - text: The Derry Journal
+          - heading "Horse Racing Preview — Silver Dream and Venture Boy" [level=2] [ref=e876]
+          - paragraph [ref=e877]: A local press cutting from the archive, kept as part of the wider picture of Moville across the festival decades.
+        - generic [ref=e879]:
+          - link "View PDF" [ref=e880] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1970_-_Horse_Racing_Preview_-_Silver_Dream_and_Venture_Boy_rokr6i.pdf
+          - button "Share" [ref=e881] [cursor=pointer]
+      - article [ref=e882]:
+        - generic [ref=e884]:
+          - generic [ref=e885]:
+            - generic "Published 1970" [ref=e886]: "1970"
+            - generic [ref=e887]:
+              - img [ref=e888]
+              - text: The Derry Journal
+          - heading "Large Crowd Enjoyed Teelin Regatta" [level=2] [ref=e891]
+          - paragraph [ref=e892]: Sporting coverage from the archive tied to festival week and the wider local calendar.
+        - generic [ref=e894]:
+          - link "View PDF" [ref=e895] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1970_-_Large_Crowd_Enjoyed_Teelin_Regatta_nklc8a.pdf
+          - button "Share" [ref=e896] [cursor=pointer]
+      - article [ref=e897]:
+        - generic [ref=e899]:
+          - generic [ref=e900]:
+            - generic "Published 1970" [ref=e901]: "1970"
+            - generic [ref=e902]:
+              - img [ref=e903]
+              - text: The Derry Journal
+          - heading "Londonderry Department Store Winter Stock Letter" [level=2] [ref=e906]
+          - paragraph [ref=e907]: A local press cutting from the archive, kept as part of the wider picture of Moville across the festival decades.
+        - generic [ref=e909]:
+          - link "View PDF" [ref=e910] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1970_-_Londonderry_Department_Store_Winter_Stock_Letter_nwygoi.pdf
+          - button "Share" [ref=e911] [cursor=pointer]
+      - article [ref=e912]:
+        - generic [ref=e914]:
+          - generic [ref=e915]:
+            - generic "Published 1970" [ref=e916]: "1970"
+            - generic [ref=e917]:
+              - img [ref=e918]
+              - text: The Derry Journal
+          - heading "Red Cross Walkers Reach Moville Sea Angling Festival" [level=2] [ref=e921]
+          - paragraph [ref=e922]: Archive coverage connected to festival week and the wider Foyle Sea Angling Festival.
+        - generic [ref=e924]:
+          - link "View PDF" [ref=e925] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1970_-_Red_Cross_Walkers_Reach_Moville_Sea_Angling_Festival_ssxfob.pdf
+          - button "Share" [ref=e926] [cursor=pointer]
+      - article [ref=e927]:
+        - generic [ref=e929]:
+          - generic [ref=e930]:
+            - generic "Published 1970" [ref=e931]: "1970"
+            - generic [ref=e932]:
+              - img [ref=e933]
+              - text: The Derry Journal
+          - heading "Revlon Cosmetics Advertisement" [level=2] [ref=e936]
+          - paragraph [ref=e937]: A period advertisement or listings page that helps place festival-era Moville in its wider local context.
+        - generic [ref=e939]:
+          - link "View PDF" [ref=e940] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1970_-_Revlon_Cosmetics_Advertisement_ccbu4j.pdf
+          - button "Share" [ref=e941] [cursor=pointer]
+      - article [ref=e942]:
+        - generic [ref=e944]:
+          - generic [ref=e945]:
+            - generic "Published 1972" [ref=e946]: "1972"
+            - generic [ref=e947]:
+              - img [ref=e948]
+              - text: The Derry Journal
+          - heading "Anglers Do Well at Moville Festival" [level=2] [ref=e951]
+          - paragraph [ref=e952]: Archive coverage from the local press connected to Moville and its festival years.
+        - generic [ref=e954]:
+          - link "View PDF" [ref=e955] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1972_-_Anglers_Do_Well_at_Moville_Festival_w1uaar.pdf
+          - button "Share" [ref=e956] [cursor=pointer]
+      - article [ref=e957]:
+        - generic [ref=e959]:
+          - generic [ref=e960]:
+            - generic "Published 1972" [ref=e961]: "1972"
+            - generic [ref=e962]:
+              - img [ref=e963]
+              - text: The Derry Journal
+          - heading "Call for De-Escalation Policy by Army" [level=2] [ref=e966]
+          - paragraph [ref=e967]: A local press cutting from the archive, kept as part of the wider picture of Moville across the festival decades.
+        - generic [ref=e969]:
+          - link "View PDF" [ref=e970] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1972_-_Call_for_De-Escalation_Policy_by_Army_kanrvi.pdf
+          - button "Share" [ref=e971] [cursor=pointer]
+      - article [ref=e972]:
+        - generic [ref=e974]:
+          - generic [ref=e975]:
+            - generic "Published 1972" [ref=e976]: "1972"
+            - generic [ref=e977]:
+              - img [ref=e978]
+              - text: The Derry Journal
+          - heading "Derry City v Linfield Football Result" [level=2] [ref=e981]
+          - paragraph [ref=e982]: A local press cutting from the archive, kept as part of the wider picture of Moville across the festival decades.
+        - generic [ref=e984]:
+          - link "View PDF" [ref=e985] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1972_-_Derry_City_v_Linfield_Football_Result_nlvxwy.pdf
+          - button "Share" [ref=e986] [cursor=pointer]
+      - article [ref=e987]:
+        - generic [ref=e989]:
+          - generic [ref=e990]:
+            - generic "Published 1972" [ref=e991]: "1972"
+            - generic [ref=e992]:
+              - img [ref=e993]
+              - text: The Derry Journal
+          - heading "Mountain Village to Get Electric Light" [level=2] [ref=e996]
+          - paragraph [ref=e997]: A local press cutting from the archive, kept as part of the wider picture of Moville across the festival decades.
+        - generic [ref=e999]:
+          - link "View PDF" [ref=e1000] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1972_-_Mountain_Village_to_Get_Electric_Light_v0es0p.pdf
+          - button "Share" [ref=e1001] [cursor=pointer]
+      - article [ref=e1002]:
+        - generic [ref=e1004]:
+          - generic [ref=e1005]:
+            - generic "Published 1972" [ref=e1006]: "1972"
+            - generic [ref=e1007]:
+              - img [ref=e1008]
+              - text: The Derry Journal
+          - heading "Sea Anglers Festival — 15th Annual Festival at Moville" [level=2] [ref=e1011]
+          - paragraph [ref=e1012]: Archive coverage connected to festival week and the wider Foyle Sea Angling Festival.
+        - generic [ref=e1014]:
+          - link "View PDF" [ref=e1015] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1972_-_Sea_Anglers_Festival_-_15th_Annual_Festival_at_Moville_tvsckm.pdf
+          - button "Share" [ref=e1016] [cursor=pointer]
+      - article [ref=e1017]:
+        - generic [ref=e1019]:
+          - generic [ref=e1020]:
+            - generic "Published 1973" [ref=e1021]: "1973"
+            - generic [ref=e1022]:
+              - img [ref=e1023]
+              - text: The Derry Journal
+          - heading "Derry Journal Crossword Puzzle" [level=2] [ref=e1026]
+          - paragraph [ref=e1027]: A local press cutting from the archive, kept as part of the wider picture of Moville across the festival decades.
+        - generic [ref=e1029]:
+          - link "View PDF" [ref=e1030] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1973_-_Derry_Journal_Crossword_Puzzle_to99qq.pdf
+          - button "Share" [ref=e1031] [cursor=pointer]
+      - article [ref=e1032]:
+        - generic [ref=e1034]:
+          - generic [ref=e1035]:
+            - generic "Published 1973" [ref=e1036]: "1973"
+            - generic [ref=e1037]:
+              - img [ref=e1038]
+              - text: The Derry Journal
+          - heading "Entertainment Listings During Festival Week at Moville" [level=2] [ref=e1041]
+          - paragraph [ref=e1042]: Festival-week entertainment listings and social events from the local press archive.
+        - generic [ref=e1044]:
+          - link "View PDF" [ref=e1045] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1973_-_Entertainment_Listings_During_Festival_Week_at_Moville_niqiqf.pdf
+          - button "Share" [ref=e1046] [cursor=pointer]
+      - article [ref=e1047]:
+        - generic [ref=e1049]:
+          - generic [ref=e1050]:
+            - generic "Published 1973" [ref=e1051]: "1973"
+            - generic [ref=e1052]:
+              - img [ref=e1053]
+              - text: The Derry Journal
+          - heading "Letters to Editor — Old Peoples Home Appeal" [level=2] [ref=e1056]
+          - paragraph [ref=e1057]: A local press cutting that helps capture the wider community backdrop around festival-time Moville.
+        - generic [ref=e1059]:
+          - link "View PDF" [ref=e1060] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1973_-_Letters_to_Editor_-_Old_Peoples_Home_Appeal_pvnt0d.pdf
+          - button "Share" [ref=e1061] [cursor=pointer]
+      - article [ref=e1062]:
+        - generic [ref=e1064]:
+          - generic [ref=e1065]:
+            - generic "Published 1973" [ref=e1066]: "1973"
+            - generic [ref=e1067]:
+              - img [ref=e1068]
+              - text: The Derry Journal
+          - heading "NICRA Branch Urges Support for October March" [level=2] [ref=e1071]
+          - paragraph [ref=e1072]: A local press cutting from the archive, kept as part of the wider picture of Moville across the festival decades.
+        - generic [ref=e1074]:
+          - link "View PDF" [ref=e1075] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1973_-_NICRA_Branch_Urges_Support_for_October_March_eeapxm.pdf
+          - button "Share" [ref=e1076] [cursor=pointer]
+      - article [ref=e1077]:
+        - generic [ref=e1079]:
+          - generic [ref=e1080]:
+            - generic "Published 1973" [ref=e1081]: "1973"
+            - generic [ref=e1082]:
+              - img [ref=e1083]
+              - text: The Derry Journal
+          - heading "Summer Fun in the North West" [level=2] [ref=e1086]
+          - paragraph [ref=e1087]: A local press cutting from the archive, kept as part of the wider picture of Moville across the festival decades.
+        - generic [ref=e1089]:
+          - link "View PDF" [ref=e1090] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1973_-_Summer_Fun_in_the_North_West_biucoc.pdf
+          - button "Share" [ref=e1091] [cursor=pointer]
+      - article [ref=e1092]:
+        - generic [ref=e1094]:
+          - generic [ref=e1095]:
+            - generic "Published 1974" [ref=e1096]: "1974"
+            - generic [ref=e1097]:
+              - img [ref=e1098]
+              - text: The Derry Journal
+          - heading "Community Associations Could Change Society" [level=2] [ref=e1101]
+          - paragraph [ref=e1102]: A local press cutting that helps capture the wider community backdrop around festival-time Moville.
+        - generic [ref=e1104]:
+          - link "View PDF" [ref=e1105] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1974_-_Community_Associations_Could_Change_Society_iobvac.pdf
+          - button "Share" [ref=e1106] [cursor=pointer]
+      - article [ref=e1107]:
+        - generic [ref=e1109]:
+          - generic [ref=e1110]:
+            - generic "Published 1974" [ref=e1111]: "1974"
+            - generic [ref=e1112]:
+              - img [ref=e1113]
+              - text: The Derry Journal
+          - heading "North West Golf Club Pro-Am Tournament" [level=2] [ref=e1116]
+          - paragraph [ref=e1117]: A local press cutting from the archive, kept as part of the wider picture of Moville across the festival decades.
+        - generic [ref=e1119]:
+          - link "View PDF" [ref=e1120] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1974_-_North_West_Golf_Club_Pro-Am_Tournament_eco1ka.pdf
+          - button "Share" [ref=e1121] [cursor=pointer]
+      - article [ref=e1122]:
+        - generic [ref=e1124]:
+          - generic [ref=e1125]:
+            - generic "Published 1974" [ref=e1126]: "1974"
+            - generic [ref=e1127]:
+              - img [ref=e1128]
+              - text: The Derry Journal
+          - heading "Videofusion Colour TV Advertisement" [level=2] [ref=e1131]
+          - paragraph [ref=e1132]: A period advertisement or listings page that helps place festival-era Moville in its wider local context.
+        - generic [ref=e1134]:
+          - link "View PDF" [ref=e1135] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1974_-_Videofusion_Colour_TV_Advertisement_rh6kl2.pdf
+          - button "Share" [ref=e1136] [cursor=pointer]
+      - article [ref=e1137]:
+        - generic [ref=e1139]:
+          - generic [ref=e1140]:
+            - generic "Published 1975" [ref=e1141]: "1975"
+            - generic [ref=e1142]:
+              - img [ref=e1143]
+              - text: The Derry Journal
+          - heading "Biggest Ever Letterkenny Folk Festival" [level=2] [ref=e1146]
+          - paragraph [ref=e1147]: Archive coverage from the local press connected to Moville and its festival years.
+        - generic [ref=e1149]:
+          - link "View PDF" [ref=e1150] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1975_-_Biggest_Ever_Letterkenny_Folk_Festival_hvepeo.pdf
+          - button "Share" [ref=e1151] [cursor=pointer]
+      - article [ref=e1152]:
+        - generic [ref=e1154]:
+          - generic [ref=e1155]:
+            - generic "Published 1975" [ref=e1156]: "1975"
+            - generic [ref=e1157]:
+              - img [ref=e1158]
+              - text: The Derry Journal
+          - heading "Cinema Listings and Dance Entertainment" [level=2] [ref=e1161]
+          - paragraph [ref=e1162]: Festival-week entertainment listings and social events from the local press archive.
+        - generic [ref=e1164]:
+          - link "View PDF" [ref=e1165] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1975_-_Cinema_Listings_and_Dance_Entertainment_gsfufz.pdf
+          - button "Share" [ref=e1166] [cursor=pointer]
+      - article [ref=e1167]:
+        - generic [ref=e1169]:
+          - generic [ref=e1170]:
+            - generic "Published 1975" [ref=e1171]: "1975"
+            - generic [ref=e1172]:
+              - img [ref=e1173]
+              - text: The Derry Journal
+          - heading "Football — Tirconaill Cup Final" [level=2] [ref=e1176]
+          - paragraph [ref=e1177]: A local press cutting from the archive, kept as part of the wider picture of Moville across the festival decades.
+        - generic [ref=e1179]:
+          - link "View PDF" [ref=e1180] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1975_-_Football_-_Tirconaill_Cup_Final_rk8sk4.pdf
+          - button "Share" [ref=e1181] [cursor=pointer]
+      - article [ref=e1182]:
+        - generic [ref=e1184]:
+          - generic [ref=e1185]:
+            - generic "Published 1975" [ref=e1186]: "1975"
+            - generic [ref=e1187]:
+              - img [ref=e1188]
+              - text: The Derry Journal
+          - heading "Moville — Derry Diocese" [level=2] [ref=e1191]
+          - paragraph [ref=e1192]: Archive coverage from the local press connected to Moville and its festival years.
+        - generic [ref=e1194]:
+          - link "View PDF" [ref=e1195] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1975_-_Moville_-_Derry_Diocese_y3go0m.pdf
+          - button "Share" [ref=e1196] [cursor=pointer]
+      - article [ref=e1197]:
+        - generic [ref=e1199]:
+          - generic [ref=e1200]:
+            - generic "Published 1975" [ref=e1201]: "1975"
+            - generic [ref=e1202]:
+              - img [ref=e1203]
+              - text: The Derry Journal
+          - heading "RTE and BBC Television Listings" [level=2] [ref=e1206]
+          - paragraph [ref=e1207]: A period advertisement or listings page that helps place festival-era Moville in its wider local context.
+        - generic [ref=e1209]:
+          - link "View PDF" [ref=e1210] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1975_-_RTE_and_BBC_Television_Listings_ggoznh.pdf
+          - button "Share" [ref=e1211] [cursor=pointer]
+      - article [ref=e1212]:
+        - generic [ref=e1214]:
+          - generic [ref=e1215]:
+            - generic "Published 1975" [ref=e1216]: "1975"
+            - generic [ref=e1217]:
+              - img [ref=e1218]
+              - text: The Derry Journal
+          - heading "Strabane Cattle Mart Sale" [level=2] [ref=e1221]
+          - paragraph [ref=e1222]: A local press cutting from the archive, kept as part of the wider picture of Moville across the festival decades.
+        - generic [ref=e1224]:
+          - link "View PDF" [ref=e1225] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1975_-_Strabane_Cattle_Mart_Sale_j1vocb.pdf
+          - button "Share" [ref=e1226] [cursor=pointer]
+      - article [ref=e1227]:
+        - generic [ref=e1229]:
+          - generic [ref=e1230]:
+            - generic "Published 1975" [ref=e1231]: "1975"
+            - generic [ref=e1232]:
+              - img [ref=e1233]
+              - text: The Derry Journal
+          - heading "Used Cars and Volkswagen Advertisements" [level=2] [ref=e1236]
+          - paragraph [ref=e1237]: A period advertisement or listings page that helps place festival-era Moville in its wider local context.
+        - generic [ref=e1239]:
+          - link "View PDF" [ref=e1240] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1975_-_Used_Cars_and_Volkswagen_Advertisements_hw9tko.pdf
+          - button "Share" [ref=e1241] [cursor=pointer]
+      - article [ref=e1242]:
+        - generic [ref=e1244]:
+          - generic [ref=e1245]:
+            - generic "Published 1976" [ref=e1246]: "1976"
+            - generic [ref=e1247]:
+              - img [ref=e1248]
+              - text: The Derry Journal
+          - heading "Charismatic Renewal National Re-Dedication" [level=2] [ref=e1251]
+          - paragraph [ref=e1252]: A local press cutting from the archive, kept as part of the wider picture of Moville across the festival decades.
+        - generic [ref=e1254]:
+          - link "View PDF" [ref=e1255] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1976_-_Charismatic_Renewal_National_Re-Dedication_gmzeeo.pdf
+          - button "Share" [ref=e1256] [cursor=pointer]
+      - article [ref=e1257]:
+        - generic [ref=e1259]:
+          - generic [ref=e1260]:
+            - generic "Published 1976" [ref=e1261]: "1976"
+            - generic [ref=e1262]:
+              - img [ref=e1263]
+              - text: The Derry Journal
+          - heading "Foyle Harps Double Hopes Dashed — Buncrana v Brandywell" [level=2] [ref=e1266]
+          - paragraph [ref=e1267]: A local press cutting from the archive, kept as part of the wider picture of Moville across the festival decades.
+        - generic [ref=e1269]:
+          - link "View PDF" [ref=e1270] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1976_-_Foyle_Harps_Double_Hopes_Dashed_-_Buncrana_v_Brandywell_ghrhf9.pdf
+          - button "Share" [ref=e1271] [cursor=pointer]
+      - article [ref=e1272]:
+        - generic [ref=e1274]:
+          - generic [ref=e1275]:
+            - generic "Published 1976" [ref=e1276]: "1976"
+            - generic [ref=e1277]:
+              - img [ref=e1278]
+              - text: The Derry Journal
+          - heading "Job Advertisements — Du Pont and Glenveigh Textiles" [level=2] [ref=e1281]
+          - paragraph [ref=e1282]: A period advertisement or listings page that helps place festival-era Moville in its wider local context.
+        - generic [ref=e1284]:
+          - link "View PDF" [ref=e1285] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1976_-_Job_Advertisements_-_Du_Pont_and_Glenveigh_Textiles_wctx8w.pdf
+          - button "Share" [ref=e1286] [cursor=pointer]
+      - article [ref=e1287]:
+        - generic [ref=e1289]:
+          - generic [ref=e1290]:
+            - generic "Published 1976" [ref=e1291]: "1976"
+            - generic [ref=e1292]:
+              - img [ref=e1293]
+              - text: The Derry Journal
+          - heading "North West League Title Still in the Balance" [level=2] [ref=e1296]
+          - paragraph [ref=e1297]: A local press cutting from the archive, kept as part of the wider picture of Moville across the festival decades.
+        - generic [ref=e1299]:
+          - link "View PDF" [ref=e1300] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1976_-_North_West_League_Title_Still_in_the_Balance_ymtiir.pdf
+          - button "Share" [ref=e1301] [cursor=pointer]
+      - article [ref=e1302]:
+        - generic [ref=e1304]:
+          - generic [ref=e1305]:
+            - generic "Published 1977" [ref=e1306]: "1977"
+            - generic [ref=e1307]:
+              - img [ref=e1308]
+              - text: The Derry Journal
+          - heading "Bergin Gets Fourth in World Athletics" [level=2] [ref=e1311]
+          - paragraph [ref=e1312]: A local press cutting from the archive, kept as part of the wider picture of Moville across the festival decades.
+        - generic [ref=e1314]:
+          - link "View PDF" [ref=e1315] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1977_-_Bergin_Gets_Fourth_in_World_Athletics_pm2znu.pdf
+          - button "Share" [ref=e1316] [cursor=pointer]
+      - article [ref=e1317]:
+        - generic [ref=e1319]:
+          - generic [ref=e1320]:
+            - generic "Published 1977" [ref=e1321]: "1977"
+            - generic [ref=e1322]:
+              - img [ref=e1323]
+              - text: The Derry Journal
+          - heading "Big Crowds Expected for Moville Angling Festival" [level=2] [ref=e1326]
+          - paragraph [ref=e1327]: Archive coverage from the local press connected to Moville and its festival years.
+        - generic [ref=e1329]:
+          - link "View PDF" [ref=e1330] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1977_-_Big_Crowds_Expected_for_Moville_Angling_Festival_vfp8js.pdf
+          - button "Share" [ref=e1331] [cursor=pointer]
+      - article [ref=e1332]:
+        - generic [ref=e1334]:
+          - generic [ref=e1335]:
+            - generic "Published 1977" [ref=e1336]: "1977"
+            - generic [ref=e1337]:
+              - img [ref=e1338]
+              - text: The Derry Journal
+          - heading "Explosion at Kille Customs Post" [level=2] [ref=e1341]
+          - paragraph [ref=e1342]: A local press cutting from the archive, kept as part of the wider picture of Moville across the festival decades.
+        - generic [ref=e1344]:
+          - link "View PDF" [ref=e1345] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1977_-_Explosion_at_Kille_Customs_Post_vhd08j.pdf
+          - button "Share" [ref=e1346] [cursor=pointer]
+      - article [ref=e1347]:
+        - generic [ref=e1349]:
+          - generic [ref=e1350]:
+            - generic "Published 1977" [ref=e1351]: "1977"
+            - generic [ref=e1352]:
+              - img [ref=e1353]
+              - text: The Derry Journal
+          - heading "Job Advertisements — Kennedy Concrete and Others" [level=2] [ref=e1356]
+          - paragraph [ref=e1357]: A period advertisement or listings page that helps place festival-era Moville in its wider local context.
+        - generic [ref=e1359]:
+          - link "View PDF" [ref=e1360] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1977_-_Job_Advertisements_-_Kennedy_Concrete_and_Others_vcxjqa.pdf
+          - button "Share" [ref=e1361] [cursor=pointer]
+      - article [ref=e1362]:
+        - generic [ref=e1364]:
+          - generic [ref=e1365]:
+            - generic "Published 1977" [ref=e1366]: "1977"
+            - generic [ref=e1367]:
+              - img [ref=e1368]
+              - text: The Derry Journal
+          - heading "Meevagh Parish Notes and Wedding Announcement" [level=2] [ref=e1371]
+          - paragraph [ref=e1372]: A local press cutting that helps capture the wider community backdrop around festival-time Moville.
+        - generic [ref=e1374]:
+          - link "View PDF" [ref=e1375] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1977_-_Meevagh_Parish_Notes_and_Wedding_Announcement_bvwitb.pdf
+          - button "Share" [ref=e1376] [cursor=pointer]
+      - article [ref=e1377]:
+        - generic [ref=e1379]:
+          - generic [ref=e1380]:
+            - generic "Published 1977" [ref=e1381]: "1977"
+            - generic [ref=e1382]:
+              - img [ref=e1383]
+              - text: The Derry Journal
+          - heading "Moville Festival Events Attract Big Entries" [level=2] [ref=e1386]
+          - paragraph [ref=e1387]: Archive coverage from the local press connected to Moville and its festival years.
+        - generic [ref=e1389]:
+          - link "View PDF" [ref=e1390] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1977_-_Moville_Festival_Events_Attract_Big_Entries_up8oqj.pdf
+          - button "Share" [ref=e1391] [cursor=pointer]
+      - article [ref=e1392]:
+        - generic [ref=e1394]:
+          - generic [ref=e1395]:
+            - generic "Published 1977" [ref=e1396]: "1977"
+            - generic [ref=e1397]:
+              - img [ref=e1398]
+              - text: The Derry Journal
+          - heading "Moville Festival — Big Fish and Church Restoration" [level=2] [ref=e1401]
+          - paragraph [ref=e1402]: Archive coverage from the local press connected to Moville and its festival years.
+        - generic [ref=e1404]:
+          - link "View PDF" [ref=e1405] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1977_-_Moville_Festival_-_Big_Fish_and_Church_Restoration_b3kipq.pdf
+          - button "Share" [ref=e1406] [cursor=pointer]
+      - article [ref=e1407]:
+        - generic [ref=e1409]:
+          - generic [ref=e1410]:
+            - generic "Published 1977" [ref=e1411]: "1977"
+            - generic [ref=e1412]:
+              - img [ref=e1413]
+              - text: The Derry Journal
+          - heading "Vandalism Threatens Ardmore Housing Scheme" [level=2] [ref=e1416]
+          - paragraph [ref=e1417]: A local press cutting from the archive, kept as part of the wider picture of Moville across the festival decades.
+        - generic [ref=e1419]:
+          - link "View PDF" [ref=e1420] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1977_-_Vandalism_Threatens_Ardmore_Housing_Scheme_iadapd.pdf
+          - button "Share" [ref=e1421] [cursor=pointer]
+      - article [ref=e1422]:
+        - generic [ref=e1424]:
+          - generic [ref=e1425]:
+            - generic "Published 1978" [ref=e1426]: "1978"
+            - generic [ref=e1427]:
+              - img [ref=e1428]
+              - text: The Derry Journal
+          - heading "Coleraine Priest Tells IRA Way to Help" [level=2] [ref=e1431]
+          - paragraph [ref=e1432]: A local press cutting from the archive, kept as part of the wider picture of Moville across the festival decades.
+        - generic [ref=e1434]:
+          - link "View PDF" [ref=e1435] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1978_-_Coleraine_Priest_Tells_IRA_Way_to_Help_x1qgb8.pdf
+          - button "Share" [ref=e1436] [cursor=pointer]
+      - article [ref=e1437]:
+        - generic [ref=e1439]:
+          - generic [ref=e1440]:
+            - generic "Published 1978" [ref=e1441]: "1978"
+            - generic [ref=e1442]:
+              - img [ref=e1443]
+              - text: The Derry Journal
+          - heading "Moville Festival Week — Talent Contest and Nightly Entertainment" [level=2] [ref=e1446]
+          - paragraph [ref=e1447]: Coverage of one of the music and performance events that helped define festival week.
+        - generic [ref=e1449]:
+          - link "View PDF" [ref=e1450] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1978_-_Moville_Festival_Week_-_Talent_Contest_and_Nightly_Entertainment_qemhkw.pdf
+          - button "Share" [ref=e1451] [cursor=pointer]
+      - article [ref=e1452]:
+        - generic [ref=e1454]:
+          - generic [ref=e1455]:
+            - generic "Published 1978" [ref=e1456]: "1978"
+            - generic [ref=e1457]:
+              - img [ref=e1458]
+              - text: The Derry Journal
+          - heading "Over 800 Travel on Derry Diocese Lourdes Pilgrimage" [level=2] [ref=e1461]
+          - paragraph [ref=e1462]: A local press cutting from the archive, kept as part of the wider picture of Moville across the festival decades.
+        - generic [ref=e1464]:
+          - link "View PDF" [ref=e1465] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1978_-_Over_800_Travel_on_Derry_Diocese_Lourdes_Pilgrimage_vbpzpn.pdf
+          - button "Share" [ref=e1466] [cursor=pointer]
+      - article [ref=e1467]:
+        - generic [ref=e1469]:
+          - generic [ref=e1470]:
+            - generic "Published 1978" [ref=e1471]: "1978"
+            - generic [ref=e1472]:
+              - img [ref=e1473]
+              - text: The Derry Journal
+          - heading "Special Status Controversy — Bishop Daly Statement" [level=2] [ref=e1476]
+          - paragraph [ref=e1477]: A local press cutting from the archive, kept as part of the wider picture of Moville across the festival decades.
+        - generic [ref=e1479]:
+          - link "View PDF" [ref=e1480] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1978_-_Special_Status_Controversy_-_Bishop_Daly_Statement_egwghf.pdf
+          - button "Share" [ref=e1481] [cursor=pointer]
+      - article [ref=e1482]:
+        - generic [ref=e1484]:
+          - generic [ref=e1485]:
+            - generic "Published 1979" [ref=e1486]: "1979"
+            - generic [ref=e1487]:
+              - img [ref=e1488]
+              - text: The Derry Journal
+          - heading "22nd Foyle Sea Angling Festival Opens" [level=2] [ref=e1491]
+          - paragraph [ref=e1492]: Archive coverage connected to festival week and the wider Foyle Sea Angling Festival.
+        - generic [ref=e1494]:
+          - link "View PDF" [ref=e1495] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1979_-_22nd_Foyle_Sea_Angling_Festival_Opens_ua3twm.pdf
+          - button "Share" [ref=e1496] [cursor=pointer]
+      - article [ref=e1497]:
+        - generic [ref=e1499]:
+          - generic [ref=e1500]:
+            - generic "Published 1979" [ref=e1501]: "1979"
+            - generic [ref=e1502]:
+              - img [ref=e1503]
+              - text: The Derry Journal
+          - heading "Irish American Point of View on Northern Ireland" [level=2] [ref=e1506]
+          - paragraph [ref=e1507]: A local press cutting from the archive, kept as part of the wider picture of Moville across the festival decades.
+        - generic [ref=e1509]:
+          - link "View PDF" [ref=e1510] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1979_-_Irish_American_Point_of_View_on_Northern_Ireland_ryudmd.pdf
+          - button "Share" [ref=e1511] [cursor=pointer]
+      - article [ref=e1512]:
+        - generic [ref=e1514]:
+          - generic [ref=e1515]:
+            - generic "Published 1979" [ref=e1516]: "1979"
+            - generic [ref=e1517]:
+              - img [ref=e1518]
+              - text: The Derry Journal
+          - heading "Less Anglers at Moville Festival — Several Factors to Blame" [level=2] [ref=e1521]
+          - paragraph [ref=e1522]: Archive coverage from the local press connected to Moville and its festival years.
+        - generic [ref=e1524]:
+          - link "View PDF" [ref=e1525] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1979_-_Less_Anglers_at_Moville_Festival_-_Several_Factors_to_Blame_weo0mu.pdf
+          - button "Share" [ref=e1526] [cursor=pointer]
+      - article [ref=e1527]:
+        - generic [ref=e1529]:
+          - generic [ref=e1530]:
+            - generic "Published 1979" [ref=e1531]: "1979"
+            - generic [ref=e1532]:
+              - img [ref=e1533]
+              - text: The Derry Journal
+          - heading "Moorfield Youth Club First Sports Day" [level=2] [ref=e1536]
+          - paragraph [ref=e1537]: Sporting coverage from the archive tied to festival week and the wider local calendar.
+        - generic [ref=e1539]:
+          - link "View PDF" [ref=e1540] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1979_-_Moorfield_Youth_Club_First_Sports_Day_ihwg2o.pdf
+          - button "Share" [ref=e1541] [cursor=pointer]
+      - article [ref=e1542]:
+        - generic [ref=e1544]:
+          - generic [ref=e1545]:
+            - generic "Published 1979" [ref=e1546]: "1979"
+            - generic [ref=e1547]:
+              - img [ref=e1548]
+              - text: The Derry Journal
+          - heading "Mountbatten Murder — Barbarous Act" [level=2] [ref=e1551]
+          - paragraph [ref=e1552]: A local press cutting from the archive, kept as part of the wider picture of Moville across the festival decades.
+        - generic [ref=e1554]:
+          - link "View PDF" [ref=e1555] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1979_-_Mountbatten_Murder_-_Barbarous_Act_ljiuza.pdf
+          - button "Share" [ref=e1556] [cursor=pointer]
+      - article [ref=e1557]:
+        - generic [ref=e1559]:
+          - generic [ref=e1560]:
+            - generic "Published 1980" [ref=e1561]: "1980"
+            - generic [ref=e1562]:
+              - img [ref=e1563]
+              - text: The Derry Journal
+          - heading "Classified Advertisements" [level=2] [ref=e1566]
+          - paragraph [ref=e1567]: A period advertisement or listings page that helps place festival-era Moville in its wider local context.
+        - generic [ref=e1569]:
+          - link "View PDF" [ref=e1570] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1980_-_Classified_Advertisements_bxbdkr.pdf
+          - button "Share" [ref=e1571] [cursor=pointer]
+      - article [ref=e1572]:
+        - generic [ref=e1574]:
+          - generic [ref=e1575]:
+            - generic "Published 1980" [ref=e1576]: "1980"
+            - generic [ref=e1577]:
+              - img [ref=e1578]
+              - text: The Derry Journal
+          - heading "Depression Hits Donegal Shirt Factories" [level=2] [ref=e1581]
+          - paragraph [ref=e1582]: A local press cutting from the archive, kept as part of the wider picture of Moville across the festival decades.
+        - generic [ref=e1584]:
+          - link "View PDF" [ref=e1585] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1980_-_Depression_Hits_Donegal_Shirt_Factories_wded0x.pdf
+          - button "Share" [ref=e1586] [cursor=pointer]
+      - article [ref=e1587]:
+        - generic [ref=e1589]:
+          - generic [ref=e1590]:
+            - generic "Published 1980" [ref=e1591]: "1980"
+            - generic [ref=e1592]:
+              - img [ref=e1593]
+              - text: The Derry Journal
+          - heading "McDaid and Sons Heating Merchants Advertisement" [level=2] [ref=e1596]
+          - paragraph [ref=e1597]: A period advertisement or listings page that helps place festival-era Moville in its wider local context.
+        - generic [ref=e1599]:
+          - link "View PDF" [ref=e1600] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1980_-_McDaid_and_Sons_Heating_Merchants_Advertisement_mvhfcu.pdf
+          - button "Share" [ref=e1601] [cursor=pointer]
+      - article [ref=e1602]:
+        - generic [ref=e1604]:
+          - generic [ref=e1605]:
+            - generic "Published 1981" [ref=e1606]: "1981"
+            - generic [ref=e1607]:
+              - img [ref=e1608]
+              - text: The Derry Journal
+          - heading "Festival Entertainment — Susan McCann at McNamaras" [level=2] [ref=e1611]
+          - paragraph [ref=e1612]: Archive coverage from the local press connected to Moville and its festival years.
+        - generic [ref=e1614]:
+          - link "View PDF" [ref=e1615] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1981_-_Festival_Entertainment_-_Susan_McCann_at_McNamaras_ilonlu.pdf
+          - button "Share" [ref=e1616] [cursor=pointer]
+      - article [ref=e1617]:
+        - generic [ref=e1619]:
+          - generic [ref=e1620]:
+            - generic "Published 1981" [ref=e1621]: "1981"
+            - generic [ref=e1622]:
+              - img [ref=e1623]
+              - text: The Derry Journal
+          - heading "Foyle Fishing Festival at Moville — Car Treasure Hunt and Fancy Dress" [level=2] [ref=e1626]
+          - paragraph [ref=e1627]: Archive coverage connected to festival week and the wider Foyle Sea Angling Festival.
+        - generic [ref=e1629]:
+          - link "View PDF" [ref=e1630] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1981_-_Foyle_Fishing_Festival_at_Moville_-_Car_Treasure_Hunt_and_Fancy_Dress_wtnv2h.pdf
+          - button "Share" [ref=e1631] [cursor=pointer]
+      - article [ref=e1632]:
+        - generic [ref=e1634]:
+          - generic [ref=e1635]:
+            - generic "Published 1981" [ref=e1636]: "1981"
+            - generic [ref=e1637]:
+              - img [ref=e1638]
+              - text: The Derry Journal
+          - heading "Foyle Sea Angling Festival — Festival Week Entertainment" [level=2] [ref=e1641]
+          - paragraph [ref=e1642]: Archive coverage connected to festival week and the wider Foyle Sea Angling Festival.
+        - generic [ref=e1644]:
+          - link "View PDF" [ref=e1645] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1981_-_Foyle_Sea_Angling_Festival_-_Festival_Week_Entertainment_qwuvjd.pdf
+          - button "Share" [ref=e1646] [cursor=pointer]
+      - article [ref=e1647]:
+        - generic [ref=e1649]:
+          - generic [ref=e1650]:
+            - generic "Published 1982" [ref=e1651]: "1982"
+            - generic [ref=e1652]:
+              - img [ref=e1653]
+              - text: The Derry Journal
+          - heading "Last Ditch Attempts to Save Letterkenny Elk Factory" [level=2] [ref=e1656]
+          - paragraph [ref=e1657]: A local press cutting from the archive, kept as part of the wider picture of Moville across the festival decades.
+        - generic [ref=e1659]:
+          - link "View PDF" [ref=e1660] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1982_-_Last_Ditch_Attempts_to_Save_Letterkenny_Elk_Factory_pylsaj.pdf
+          - button "Share" [ref=e1661] [cursor=pointer]
+      - article [ref=e1662]:
+        - generic [ref=e1664]:
+          - generic [ref=e1665]:
+            - generic "Published 1982" [ref=e1666]: "1982"
+            - generic [ref=e1667]:
+              - img [ref=e1668]
+              - text: The Derry Journal
+          - heading "Motorcyclist Did Not Stop — Derry Court Case" [level=2] [ref=e1671]
+          - paragraph [ref=e1672]: A local press cutting from the archive, kept as part of the wider picture of Moville across the festival decades.
+        - generic [ref=e1674]:
+          - link "View PDF" [ref=e1675] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1982_-_Motorcyclist_Did_Not_Stop_-_Derry_Court_Case_gaiona.pdf
+          - button "Share" [ref=e1676] [cursor=pointer]
+      - article [ref=e1677]:
+        - generic [ref=e1679]:
+          - generic [ref=e1680]:
+            - generic "Published 1982" [ref=e1681]: "1982"
+            - generic [ref=e1682]:
+              - img [ref=e1683]
+              - text: The Derry Journal
+          - heading "Moville 25th Sea Angling Festival Will Be Memorable" [level=2] [ref=e1686]
+          - paragraph [ref=e1687]: Archive coverage connected to festival week and the wider Foyle Sea Angling Festival.
+        - generic [ref=e1689]:
+          - link "View PDF" [ref=e1690] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1982_-_Moville_25th_Sea_Angling_Festival_Will_Be_Memorable_w6qoqa.pdf
+          - button "Share" [ref=e1691] [cursor=pointer]
+      - article [ref=e1692]:
+        - generic [ref=e1694]:
+          - generic [ref=e1695]:
+            - generic "Published 1983" [ref=e1696]: "1983"
+            - generic [ref=e1697]:
+              - img [ref=e1698]
+              - text: The Derry Journal
+          - heading "Fish Dishes Win Prize for Moville ICA Member" [level=2] [ref=e1701]
+          - paragraph [ref=e1702]: Archive coverage from the local press connected to Moville and its festival years.
+        - generic [ref=e1704]:
+          - link "View PDF" [ref=e1705] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1983_-_Fish_Dishes_Win_Prize_for_Moville_ICA_Member_kl8d33.pdf
+          - button "Share" [ref=e1706] [cursor=pointer]
+      - article [ref=e1707]:
+        - generic [ref=e1709]:
+          - generic [ref=e1710]:
+            - generic "Published 1983" [ref=e1711]: "1983"
+            - generic [ref=e1712]:
+              - img [ref=e1713]
+              - text: The Derry Journal
+          - heading "Foyle Sea Angling Festival — 26th Anniversary Year" [level=2] [ref=e1716]
+          - paragraph [ref=e1717]: Archive coverage connected to festival week and the wider Foyle Sea Angling Festival.
+        - generic [ref=e1719]:
+          - link "View PDF" [ref=e1720] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1983_-_Foyle_Sea_Angling_Festival_-_26th_Anniversary_Year_usmh3j.pdf
+          - button "Share" [ref=e1721] [cursor=pointer]
+      - article [ref=e1722]:
+        - generic [ref=e1724]:
+          - generic [ref=e1725]:
+            - generic "Published 1984" [ref=e1726]: "1984"
+            - generic [ref=e1727]:
+              - img [ref=e1728]
+              - text: The Derry Journal
+          - heading "27th Anniversary Festival Entertainment Nightly" [level=2] [ref=e1731]
+          - paragraph [ref=e1732]: Festival-week entertainment listings and social events from the local press archive.
+        - generic [ref=e1734]:
+          - link "View PDF" [ref=e1735] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1984_-_27th_Anniversary_Festival_Entertainment_Nightly_f1j6a3.pdf
+          - button "Share" [ref=e1736] [cursor=pointer]
+      - article [ref=e1737]:
+        - generic [ref=e1739]:
+          - generic [ref=e1740]:
+            - generic "Published 1984" [ref=e1741]: "1984"
+            - generic [ref=e1742]:
+              - img [ref=e1743]
+              - text: The Derry Journal
+          - heading "27th Foyle Sea Angling Festival — Get the Real Festival Mood" [level=2] [ref=e1746]
+          - paragraph [ref=e1747]: Archive coverage connected to festival week and the wider Foyle Sea Angling Festival.
+        - generic [ref=e1749]:
+          - link "View PDF" [ref=e1750] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1984_-_27th_Foyle_Sea_Angling_Festival_-_Get_the_Real_Festival_Mood_twlphb.pdf
+          - button "Share" [ref=e1751] [cursor=pointer]
+      - article [ref=e1752]:
+        - generic [ref=e1754]:
+          - generic [ref=e1755]:
+            - generic "Published 1984" [ref=e1756]: "1984"
+            - generic [ref=e1757]:
+              - img [ref=e1758]
+              - text: The Derry Journal
+          - heading "Foyle Sea Angling Festival" [level=2] [ref=e1761]
+          - paragraph [ref=e1762]: Archive coverage connected to festival week and the wider Foyle Sea Angling Festival.
+        - generic [ref=e1764]:
+          - link "View PDF" [ref=e1765] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1984_-_Foyle_Sea_Angling_Festival_wtkgt3.pdf
+          - button "Share" [ref=e1766] [cursor=pointer]
+      - article [ref=e1767]:
+        - generic [ref=e1769]:
+          - generic [ref=e1770]:
+            - generic "Published 1984" [ref=e1771]: "1984"
+            - generic [ref=e1772]:
+              - img [ref=e1773]
+              - text: The Derry Journal
+          - heading "Moville Eight Days of Festival" [level=2] [ref=e1776]
+          - paragraph [ref=e1777]: Archive coverage from the local press connected to Moville and its festival years.
+        - generic [ref=e1779]:
+          - link "View PDF" [ref=e1780] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1984_-_Moville_Eight_Days_of_Festival_z4jbbq.pdf
+          - button "Share" [ref=e1781] [cursor=pointer]
+      - article [ref=e1782]:
+        - generic [ref=e1784]:
+          - generic [ref=e1785]:
+            - generic "Published 1985" [ref=e1786]: "1985"
+            - generic [ref=e1787]:
+              - img [ref=e1788]
+              - text: The Derry Journal
+          - heading "28th Foyle Sea Angling Festival — Pub Talent Night" [level=2] [ref=e1791]
+          - paragraph [ref=e1792]: Archive coverage connected to festival week and the wider Foyle Sea Angling Festival.
+        - generic [ref=e1794]:
+          - link "View PDF" [ref=e1795] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1985_-_28th_Foyle_Sea_Angling_Festival_-_Pub_Talent_Night_thndis.pdf
+          - button "Share" [ref=e1796] [cursor=pointer]
+      - article [ref=e1797]:
+        - generic [ref=e1799]:
+          - generic [ref=e1800]:
+            - generic "Published 1985" [ref=e1801]: "1985"
+            - generic [ref=e1802]:
+              - img [ref=e1803]
+              - text: The Derry Journal
+          - heading "Cinema Listings and Entertainment Advertisements" [level=2] [ref=e1806]
+          - paragraph [ref=e1807]: A period advertisement or listings page that helps place festival-era Moville in its wider local context.
+        - generic [ref=e1809]:
+          - link "View PDF" [ref=e1810] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1985_-_Cinema_Listings_and_Entertainment_Advertisements_lsncpe.pdf
+          - button "Share" [ref=e1811] [cursor=pointer]
+      - article [ref=e1812]:
+        - generic [ref=e1814]:
+          - generic [ref=e1815]:
+            - generic "Published 1985" [ref=e1816]: "1985"
+            - generic [ref=e1817]:
+              - img [ref=e1818]
+              - text: The Derry Journal
+          - heading "Festival Fun Run — Three Mile and Ten Mile Races" [level=2] [ref=e1821]
+          - paragraph [ref=e1822]: Sporting coverage from the archive tied to festival week and the wider local calendar.
+        - generic [ref=e1824]:
+          - link "View PDF" [ref=e1825] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1985_-_Festival_Fun_Run_-_Three_Mile_and_Ten_Mile_Races_bswc7j.pdf
+          - button "Share" [ref=e1826] [cursor=pointer]
+      - article [ref=e1827]:
+        - generic [ref=e1829]:
+          - generic [ref=e1830]:
+            - generic "Published 1985" [ref=e1831]: "1985"
+            - generic [ref=e1832]:
+              - img [ref=e1833]
+              - text: The Derry Journal
+          - heading "Festival Week Entertainment — Sing Songs and Disco Dancing Championship" [level=2] [ref=e1836]
+          - paragraph [ref=e1837]: Festival-week entertainment listings and social events from the local press archive.
+        - generic [ref=e1839]:
+          - link "View PDF" [ref=e1840] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1985_-_Festival_Week_Entertainment_-_Sing_Songs_and_Disco_Dancing_Championship_x7fzbx.pdf
+          - button "Share" [ref=e1841] [cursor=pointer]
+      - article [ref=e1842]:
+        - generic [ref=e1844]:
+          - generic [ref=e1845]:
+            - generic "Published 1985" [ref=e1846]: "1985"
+            - generic [ref=e1847]:
+              - img [ref=e1848]
+              - text: Inishowen News
+          - heading "Inishowen News — Malin Head Festival Marathon and Wedding" [level=2] [ref=e1851]
+          - paragraph [ref=e1852]: Sporting coverage from the archive tied to festival week and the wider local calendar.
+        - generic [ref=e1854]:
+          - link "View PDF" [ref=e1855] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1985_-_Inishowen_News_-_Malin_Head_Festival_Marathon_and_Wedding_sjecrt.pdf
+          - button "Share" [ref=e1856] [cursor=pointer]
+      - article [ref=e1857]:
+        - generic [ref=e1859]:
+          - generic [ref=e1860]:
+            - generic "Published 1985" [ref=e1861]: "1985"
+            - generic [ref=e1862]:
+              - img [ref=e1863]
+              - text: The Derry Journal
+          - heading "Moville Outstanding Fishing Festival" [level=2] [ref=e1866]
+          - paragraph [ref=e1867]: Archive coverage connected to festival week and the wider Foyle Sea Angling Festival.
+        - generic [ref=e1869]:
+          - link "View PDF" [ref=e1870] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1985_-_Moville_Outstanding_Fishing_Festival_ve3lci.pdf
+          - button "Share" [ref=e1871] [cursor=pointer]
+      - article [ref=e1872]:
+        - generic [ref=e1874]:
+          - generic [ref=e1875]:
+            - generic "Published 1985" [ref=e1876]: "1985"
+            - generic [ref=e1877]:
+              - img [ref=e1878]
+              - text: The Derry Journal
+          - heading "Wolfhounds Carnival and 10-Mile Adult Race" [level=2] [ref=e1881]
+          - paragraph [ref=e1882]: Sporting coverage from the archive tied to festival week and the wider local calendar.
+        - generic [ref=e1884]:
+          - link "View PDF" [ref=e1885] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1985_-_Wolfhounds_Carnival_and_10-Mile_Adult_Race_nqbm5p.pdf
+          - button "Share" [ref=e1886] [cursor=pointer]
+      - article [ref=e1887]:
+        - generic [ref=e1889]:
+          - generic [ref=e1890]:
+            - generic "Published 1986" [ref=e1891]: "1986"
+            - generic [ref=e1892]:
+              - img [ref=e1893]
+              - text: The Derry Journal
+          - heading "A Feast of Fun at Moville — Annual Angling Festival" [level=2] [ref=e1896]
+          - paragraph [ref=e1897]: Archive coverage from the local press connected to Moville and its festival years.
+        - generic [ref=e1899]:
+          - link "View PDF" [ref=e1900] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1986_-_A_Feast_of_Fun_at_Moville_-_Annual_Angling_Festival_kszcpk.pdf
+          - button "Share" [ref=e1901] [cursor=pointer]
+      - article [ref=e1902]:
+        - generic [ref=e1904]:
+          - generic [ref=e1905]:
+            - generic "Published 1986" [ref=e1906]: "1986"
+            - generic [ref=e1907]:
+              - img [ref=e1908]
+              - text: The Derry Journal
+          - heading "Ardboe Man Fined After Incident with Police" [level=2] [ref=e1911]
+          - paragraph [ref=e1912]: A local press cutting from the archive, kept as part of the wider picture of Moville across the festival decades.
+        - generic [ref=e1914]:
+          - link "View PDF" [ref=e1915] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1986_-_Ardboe_Man_Fined_After_Incident_with_Police_zhyl6z.pdf
+          - button "Share" [ref=e1916] [cursor=pointer]
+      - article [ref=e1917]:
+        - generic [ref=e1919]:
+          - generic [ref=e1920]:
+            - generic "Published 1986" [ref=e1921]: "1986"
+            - generic [ref=e1922]:
+              - img [ref=e1923]
+              - text: The Derry Journal
+          - heading "Classes to Broaden the Mind — Night Classes in Derry" [level=2] [ref=e1926]
+          - paragraph [ref=e1927]: A local press cutting from the archive, kept as part of the wider picture of Moville across the festival decades.
+        - generic [ref=e1929]:
+          - link "View PDF" [ref=e1930] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1986_-_Classes_to_Broaden_the_Mind_-_Night_Classes_in_Derry_zcmmwl.pdf
+          - button "Share" [ref=e1931] [cursor=pointer]
+      - article [ref=e1932]:
+        - generic [ref=e1934]:
+          - generic [ref=e1935]:
+            - generic "Published 1987" [ref=e1936]: "1987"
+            - generic [ref=e1937]:
+              - img [ref=e1938]
+              - text: The Derry Journal
+          - heading "30th Foyle Sea Angling Festival — Feast of Fun On and Off Shore" [level=2] [ref=e1941]
+          - paragraph [ref=e1942]: Archive coverage connected to festival week and the wider Foyle Sea Angling Festival.
+        - generic [ref=e1944]:
+          - link "View PDF" [ref=e1945] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1987_-_30th_Foyle_Sea_Angling_Festival_-_Feast_of_Fun_On_and_Off_Shore_bgmezl.pdf
+          - button "Share" [ref=e1946] [cursor=pointer]
+      - article [ref=e1947]:
+        - generic [ref=e1949]:
+          - generic [ref=e1950]:
+            - generic "Published 1987" [ref=e1951]: "1987"
+            - generic [ref=e1952]:
+              - img [ref=e1953]
+              - text: The Derry Journal
+          - heading "Moville Entertainment Listings and Local Family News" [level=2] [ref=e1956]
+          - paragraph [ref=e1957]: Festival-week entertainment listings and social events from the local press archive.
+        - generic [ref=e1959]:
+          - link "View PDF" [ref=e1960] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1987_-_Moville_Entertainment_Listings_and_Local_Family_News_fowfs8.pdf
+          - button "Share" [ref=e1961] [cursor=pointer]
+      - article [ref=e1962]:
+        - generic [ref=e1964]:
+          - generic [ref=e1965]:
+            - generic "Published 1988" [ref=e1966]: "1988"
+            - generic [ref=e1967]:
+              - img [ref=e1968]
+              - text: The Derry Journal
+          - heading "Festival Week Entertainment — Jackie and The Top Stars at Moville" [level=2] [ref=e1971]
+          - paragraph [ref=e1972]: Festival-week entertainment listings and social events from the local press archive.
+        - generic [ref=e1974]:
+          - link "View PDF" [ref=e1975] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1988_-_Festival_Week_Entertainment_-_Jackie_and_The_Top_Stars_at_Moville_ellhse.pdf
+          - button "Share" [ref=e1976] [cursor=pointer]
+      - article [ref=e1977]:
+        - generic [ref=e1979]:
+          - generic [ref=e1980]:
+            - generic "Published 1988" [ref=e1981]: "1988"
+            - generic [ref=e1982]:
+              - img [ref=e1983]
+              - text: The Derry Journal
+          - heading "Moville 1st Sea Angling Festival Triumph" [level=2] [ref=e1986]
+          - paragraph [ref=e1987]: Archive coverage connected to festival week and the wider Foyle Sea Angling Festival.
+        - generic [ref=e1989]:
+          - link "View PDF" [ref=e1990] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1988_-_Moville_1st_Sea_Angling_Festival_Triumph_nysk6q.pdf
+          - button "Share" [ref=e1991] [cursor=pointer]
+      - article [ref=e1992]:
+        - generic [ref=e1994]:
+          - generic [ref=e1995]:
+            - generic "Published 1988" [ref=e1996]: "1988"
+            - generic [ref=e1997]:
+              - img [ref=e1998]
+              - text: The Derry Journal
+          - heading "Moville 31st Sea Angling Festival — Fancy Dress Talent Shows Treasure Hunts" [level=2] [ref=e2001]
+          - paragraph [ref=e2002]: Archive coverage connected to festival week and the wider Foyle Sea Angling Festival.
+        - generic [ref=e2004]:
+          - link "View PDF" [ref=e2005] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1988_-_Moville_31st_Sea_Angling_Festival_-_Fancy_Dress_Talent_Shows_Treasure_Hunts_hielus.pdf
+          - button "Share" [ref=e2006] [cursor=pointer]
+      - article [ref=e2007]:
+        - generic [ref=e2009]:
+          - generic [ref=e2010]:
+            - generic "Published 1988" [ref=e2011]: "1988"
+            - generic [ref=e2012]:
+              - img [ref=e2013]
+              - text: The Derry Journal
+          - heading "Moville Festival" [level=2] [ref=e2016]
+          - paragraph [ref=e2017]: Archive coverage from the local press connected to Moville and its festival years.
+        - generic [ref=e2019]:
+          - link "View PDF" [ref=e2020] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1988_-_Moville_Festival_atv17h.pdf
+          - button "Share" [ref=e2021] [cursor=pointer]
+      - article [ref=e2022]:
+        - generic [ref=e2024]:
+          - generic [ref=e2025]:
+            - generic "Published 1988" [ref=e2026]: "1988"
+            - generic [ref=e2027]:
+              - img [ref=e2028]
+              - text: The Derry Journal
+          - heading "Pet Show at Moville Sea Angling Festival" [level=2] [ref=e2031]
+          - paragraph [ref=e2032]: Archive coverage connected to festival week and the wider Foyle Sea Angling Festival.
+        - generic [ref=e2034]:
+          - link "View PDF" [ref=e2035] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1988_-_Pet_Show_at_Moville_Sea_Angling_Festival_red24c.pdf
+          - button "Share" [ref=e2036] [cursor=pointer]
+      - article [ref=e2037]:
+        - generic [ref=e2039]:
+          - generic [ref=e2040]:
+            - generic "Published 1988" [ref=e2041]: "1988"
+            - generic [ref=e2042]:
+              - img [ref=e2043]
+              - text: The Derry Journal
+          - heading "Sea Angling Festival" [level=2] [ref=e2046]
+          - paragraph [ref=e2047]: Archive coverage connected to festival week and the wider Foyle Sea Angling Festival.
+        - generic [ref=e2049]:
+          - link "View PDF" [ref=e2050] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1988_-_Sea_Angling_Festival_vppw8y.pdf
+          - button "Share" [ref=e2051] [cursor=pointer]
+      - article [ref=e2052]:
+        - generic [ref=e2054]:
+          - generic [ref=e2055]:
+            - generic "Published 1989" [ref=e2056]: "1989"
+            - generic [ref=e2057]:
+              - img [ref=e2058]
+              - text: The Derry Journal
+          - heading "Entertainment Nightly During Festival — Corner Bar Moville" [level=2] [ref=e2061]
+          - paragraph [ref=e2062]: Festival-week entertainment listings and social events from the local press archive.
+        - generic [ref=e2064]:
+          - link "View PDF" [ref=e2065] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1989_-_Entertainment_Nightly_During_Festival_-_Corner_Bar_Moville_ihchff.pdf
+          - button "Share" [ref=e2066] [cursor=pointer]
+      - article [ref=e2067]:
+        - generic [ref=e2069]:
+          - generic [ref=e2070]:
+            - generic "Published 1989" [ref=e2071]: "1989"
+            - generic [ref=e2072]:
+              - img [ref=e2073]
+              - text: The Derry Journal
+          - heading "Moville Festival Bonny Babies" [level=2] [ref=e2076]
+          - paragraph [ref=e2077]: A family-focused community event from the festival archive.
+        - generic [ref=e2079]:
+          - link "View PDF" [ref=e2080] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1989_-_Moville_Festival_Bonny_Babies_d8nkek.pdf
+          - button "Share" [ref=e2081] [cursor=pointer]
+      - article [ref=e2082]:
+        - generic [ref=e2084]:
+          - generic [ref=e2085]:
+            - generic "Published 1989" [ref=e2086]: "1989"
+            - generic [ref=e2087]:
+              - img [ref=e2088]
+              - text: The Derry Journal
+          - heading "Moville Sea Angling Competition" [level=2] [ref=e2091]
+          - paragraph [ref=e2092]: Archive coverage from the local press connected to Moville and its festival years.
+        - generic [ref=e2094]:
+          - link "View PDF" [ref=e2095] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1989_-_Moville_Sea_Angling_Competition_wpyyou.pdf
+          - button "Share" [ref=e2096] [cursor=pointer]
+      - article [ref=e2097]:
+        - generic [ref=e2099]:
+          - generic [ref=e2100]:
+            - generic "Published 1989" [ref=e2101]: "1989"
+            - generic [ref=e2102]:
+              - img [ref=e2103]
+              - text: The Derry Journal
+          - heading "Needham Announces Double Boost for Derry Jobs" [level=2] [ref=e2106]
+          - paragraph [ref=e2107]: A local press cutting from the archive, kept as part of the wider picture of Moville across the festival decades.
+        - generic [ref=e2109]:
+          - link "View PDF" [ref=e2110] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1989_-_Needham_Announces_Double_Boost_for_Derry_Jobs_olffs6.pdf
+          - button "Share" [ref=e2111] [cursor=pointer]
+      - article [ref=e2112]:
+        - generic [ref=e2114]:
+          - generic [ref=e2115]:
+            - generic "Published 1989" [ref=e2116]: "1989"
+            - generic [ref=e2117]:
+              - img [ref=e2118]
+              - text: The Derry Journal
+          - heading "RUC Knew Bomb Was a Hoax Claims Businessman" [level=2] [ref=e2121]
+          - paragraph [ref=e2122]: A local press cutting from the archive, kept as part of the wider picture of Moville across the festival decades.
+        - generic [ref=e2124]:
+          - link "View PDF" [ref=e2125] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1989_-_RUC_Knew_Bomb_Was_a_Hoax_Claims_Businessman_o1vii0.pdf
+          - button "Share" [ref=e2126] [cursor=pointer]
+      - article [ref=e2127]:
+        - generic [ref=e2129]:
+          - generic [ref=e2130]:
+            - generic "Published 1989" [ref=e2131]: "1989"
+            - generic [ref=e2132]:
+              - img [ref=e2133]
+              - text: The Derry Journal
+          - heading "Sunseekers Sunbed Centre Advertisement" [level=2] [ref=e2136]
+          - paragraph [ref=e2137]: A period advertisement or listings page that helps place festival-era Moville in its wider local context.
+        - generic [ref=e2139]:
+          - link "View PDF" [ref=e2140] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1989_-_Sunseekers_Sunbed_Centre_Advertisement_wax9mf.pdf
+          - button "Share" [ref=e2141] [cursor=pointer]
+      - article [ref=e2142]:
+        - generic [ref=e2144]:
+          - generic [ref=e2145]:
+            - generic "Published 1990" [ref=e2146]: "1990"
+            - generic [ref=e2147]:
+              - img [ref=e2148]
+              - text: The Derry Journal
+          - heading "Inishowen Football — Moville" [level=2] [ref=e2151]
+          - paragraph [ref=e2152]: Archive coverage from the local press connected to Moville and its festival years.
+        - generic [ref=e2154]:
+          - link "View PDF" [ref=e2155] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1990_-_Inishowen_Football_-_Moville_gzwvem.pdf
+          - button "Share" [ref=e2156] [cursor=pointer]
+      - article [ref=e2157]:
+        - generic [ref=e2159]:
+          - generic [ref=e2160]:
+            - generic "Published 1990" [ref=e2161]: "1990"
+            - generic [ref=e2162]:
+              - img [ref=e2163]
+              - text: The Derry Journal
+          - heading "Moville Festival" [level=2] [ref=e2166]
+          - paragraph [ref=e2167]: Archive coverage from the local press connected to Moville and its festival years.
+        - generic [ref=e2169]:
+          - link "View PDF" [ref=e2170] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1990_-_Moville_Festival_trg5el.pdf
+          - button "Share" [ref=e2171] [cursor=pointer]
+      - article [ref=e2172]:
+        - generic [ref=e2174]:
+          - generic [ref=e2175]:
+            - generic "Published 1991" [ref=e2176]: "1991"
+            - generic [ref=e2177]:
+              - img [ref=e2178]
+              - text: The Derry Journal
+          - heading "Moville Foyle Sea Angling Festival" [level=2] [ref=e2181]
+          - paragraph [ref=e2182]: Archive coverage connected to festival week and the wider Foyle Sea Angling Festival.
+        - generic [ref=e2184]:
+          - link "View PDF" [ref=e2185] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1991_-_Moville_Foyle_Sea_Angling_Festival_x7vowq.pdf
+          - button "Share" [ref=e2186] [cursor=pointer]
+      - article [ref=e2187]:
+        - generic [ref=e2189]:
+          - generic [ref=e2190]:
+            - generic "Published 1992" [ref=e2191]: "1992"
+            - generic [ref=e2192]:
+              - img [ref=e2193]
+              - text: The Derry Journal
+          - heading "Moville Festival" [level=2] [ref=e2196]
+          - paragraph [ref=e2197]: Archive coverage from the local press connected to Moville and its festival years.
+        - generic [ref=e2199]:
+          - link "View PDF" [ref=e2200] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1992_-_Moville_Festival_soqrca.pdf
+          - button "Share" [ref=e2201] [cursor=pointer]
+      - article [ref=e2202]:
+        - generic [ref=e2204]:
+          - generic [ref=e2205]:
+            - generic "Published 1994" [ref=e2206]: "1994"
+            - generic [ref=e2207]:
+              - img [ref=e2208]
+              - text: The Derry Journal
+          - heading "Festival Queen Dance — Moville Sea Angling Festival" [level=2] [ref=e2211]
+          - paragraph [ref=e2212]: Archive coverage connected to festival week and the wider Foyle Sea Angling Festival.
+        - generic [ref=e2214]:
+          - link "View PDF" [ref=e2215] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1994_-_Festival_Queen_Dance_-_Moville_Sea_Angling_Festival_ehl9ci.pdf
+          - button "Share" [ref=e2216] [cursor=pointer]
+      - article [ref=e2217]:
+        - generic [ref=e2219]:
+          - generic [ref=e2220]:
+            - generic "Published 1997" [ref=e2221]: "1997"
+            - generic [ref=e2222]:
+              - img [ref=e2223]
+              - text: The Derry Journal
+          - heading "Moville Festival Queen — Interskola European Conference" [level=2] [ref=e2226]
+          - paragraph [ref=e2227]: Archive coverage from the local press connected to Moville and its festival years.
+        - generic [ref=e2229]:
+          - link "View PDF" [ref=e2230] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1997_-_Moville_Festival_Queen_-_Interskola_European_Conference_ei58uq.pdf
+          - button "Share" [ref=e2231] [cursor=pointer]
+      - article [ref=e2232]:
+        - generic [ref=e2234]:
+          - generic [ref=e2235]:
+            - generic "Published 1998" [ref=e2236]: "1998"
+            - generic [ref=e2237]:
+              - img [ref=e2238]
+              - text: The Derry Journal
+          - heading "41st Moville Sea Angling Festival" [level=2] [ref=e2241]
+          - paragraph [ref=e2242]: Archive coverage connected to festival week and the wider Foyle Sea Angling Festival.
+        - generic [ref=e2244]:
+          - link "View PDF" [ref=e2245] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1998_-_41st_Moville_Sea_Angling_Festival_k18cro.pdf
+          - button "Share" [ref=e2246] [cursor=pointer]
+      - article [ref=e2247]:
+        - generic [ref=e2249]:
+          - generic [ref=e2250]:
+            - generic "Published 1999" [ref=e2251]: "1999"
+            - generic [ref=e2252]:
+              - img [ref=e2253]
+              - text: The Derry Journal
+          - heading "Moville Annual Raft Race — Regatta and Sea Angling Festival" [level=2] [ref=e2256]
+          - paragraph [ref=e2257]: Archive coverage connected to festival week and the wider Foyle Sea Angling Festival.
+        - generic [ref=e2259]:
+          - link "View PDF" [ref=e2260] [cursor=pointer]:
+            - /url: https://res.cloudinary.com/dwpx6hrud/image/upload/1999_-_Moville_Annual_Raft_Race_-_Regatta_and_Sea_Angling_Festival_ijv8lk.pdf
+          - button "Share" [ref=e2261] [cursor=pointer]
+    - generic [ref=e2262]:
+      - paragraph [ref=e2263]: These historical newspaper extracts are shared for archival and educational purposes. Copyright remains with the original publishers, including The Derry Journal and relevant rights holders.
+      - paragraph [ref=e2264]: These materials are reproduced from digitised newspaper archives. If you are a rights holder and would like any content removed or amended, please contact us and we will address it promptly.
+  - contentinfo [ref=e2265]:
+    - generic [ref=e2266]:
+      - generic [ref=e2267]: Moville Summer Festival 2026 · movillefestival.com
+      - navigation "Legal" [ref=e2268]:
+        - link "Privacy Policy" [ref=e2269] [cursor=pointer]:
+          - /url: /privacy
+        - generic [ref=e2270]: ·
+        - link "Terms & Conditions" [ref=e2271] [cursor=pointer]:
+          - /url: /terms
+```
+
+# Test source
+
+```ts
+  1   | /**
+  2   |  * tests/visual.spec.ts
+  3   |  * Moville Summer Festival 2026 — Visual Regression Test Suite
+  4   |  *
+  5   |  * Captures full-page screenshots of every public route in both
+  6   |  * light mode (theme-day) and dark mode (theme-night), then diffs
+  7   |  * against stored baselines on every subsequent run.
+  8   |  *
+  9   |  * FIRST RUN — generates baselines:
+  10  |  *   npx playwright test tests/visual.spec.ts --update-snapshots
+  11  |  *
+  12  |  * SUBSEQUENT RUNS — diffs against baselines:
+  13  |  *   npx playwright test tests/visual.spec.ts
+  14  |  *
+  15  |  * Environment variables:
+  16  |  *   TEST_BASE_URL — default https://stagingmf.netlify.app
+  17  |  *
+  18  |  * Baseline images are stored in:
+  19  |  *   tests/visual.spec.ts-snapshots/
+  20  |  *
+  21  |  * Commit the snapshots directory to version control so the
+  22  |  * baseline travels with the codebase.
+  23  |  */
+  24  | 
+  25  | import { test, expect, Page } from '@playwright/test';
+  26  | 
+  27  | const BASE = process.env.TEST_BASE_URL || 'https://stagingmf.netlify.app';
+  28  | 
+  29  | // Pixel diff threshold — 0.2% of pixels may differ (anti-aliasing, fonts)
+  30  | const THRESHOLD = 0.002;
+  31  | 
+  32  | // Routes to screenshot. Each entry: [name, path, waitForSelector]
+  33  | // waitForSelector is a visible element that confirms the page has settled.
+  34  | const ROUTES: [string, string, string][] = [
+  35  |   ['home',              '/',                     '.moville-hero'],
+  36  |   ['programme',         '/programme',            '.prog-title'],
+  37  |   ['ball-drop',         '/ball-drop',            '.form-title'],
+  38  |   ['bed-push',          '/bed-push',             '.form-title'],
+  39  |   ['craft-fair',        '/craft-fair',           '.form-title'],
+  40  |   ['sponsorship',       '/sponsorship',          '.form-title'],
+  41  |   ['passes',            '/passes',               '.ticket-card'],
+  42  |   ['archive',           '/archive',              '.archive-title'],
+  43  |   ['getting-to-moville','/getting-to-moville',   '.getting-title'],
+  44  |   ['privacy',           '/privacy',              '.legal-content'],
+  45  |   ['terms',             '/terms',                '.legal-content'],
+  46  | ];
+  47  | 
+  48  | // Force the root div to light or dark mode regardless of time of day.
+  49  | async function setTheme(page: Page, mode: 'light' | 'dark') {
+  50  |   await page.evaluate((m) => {
+  51  |     const root = document.querySelector('#root > div') as HTMLElement | null;
+  52  |     if (!root) return;
+  53  |     if (m === 'dark') {
+  54  |       root.classList.remove('theme-day');
+  55  |       root.classList.add('theme-night');
+  56  |     } else {
+  57  |       root.classList.remove('theme-night');
+  58  |       root.classList.add('theme-day');
+  59  |     }
+  60  |   }, mode);
+  61  |   // Give CSS transitions a moment to settle
+  62  |   await page.waitForTimeout(400);
+  63  | }
+  64  | 
+  65  | // Wait for all images and fonts to load before screenshotting
+  66  | async function waitForPageReady(page: Page, selector: string) {
+  67  |   await page.waitForSelector(selector, { state: 'visible', timeout: 15000 });
+  68  |   await page.evaluate(() => document.fonts.ready);
+  69  |   // Wait for any lazy images
+  70  |   await page.waitForLoadState('networkidle');
+  71  | }
+  72  | 
+  73  | // ── Light mode ────────────────────────────────────────────────────────────────
+  74  | 
+  75  | test.describe('Light mode', () => {
+  76  |   for (const [name, path, waitFor] of ROUTES) {
+  77  |     test(`${name}`, async ({ page }) => {
+  78  |       await page.goto(`${BASE}${path}`);
+  79  |       await waitForPageReady(page, waitFor);
+  80  |       await setTheme(page, 'light');
+  81  | 
+  82  |       await expect(page).toHaveScreenshot(`${name}-light.png`, {
+  83  |         fullPage: true,
+  84  |         threshold: THRESHOLD,
+  85  |         animations: 'disabled',
+  86  |       });
+  87  |     });
+  88  |   }
+  89  | });
+  90  | 
+  91  | // ── Dark mode ─────────────────────────────────────────────────────────────────
+  92  | 
+  93  | test.describe('Dark mode', () => {
+  94  |   for (const [name, path, waitFor] of ROUTES) {
+  95  |     test(`${name}`, async ({ page }) => {
+  96  |       await page.goto(`${BASE}${path}`);
+  97  |       await waitForPageReady(page, waitFor);
+  98  |       await setTheme(page, 'dark');
+  99  | 
+> 100 |       await expect(page).toHaveScreenshot(`${name}-dark.png`, {
+      |                          ^ Error: expect(page).toHaveScreenshot(expected) failed
+  101 |         fullPage: true,
+  102 |         threshold: THRESHOLD,
+  103 |         animations: 'disabled',
+  104 |       });
+  105 |     });
+  106 |   }
+  107 | });
+  108 | 
+```

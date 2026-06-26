@@ -76,10 +76,29 @@ export async function handler(event) {
   }
 
   const available = currentAvailable || 0;
+  // Online allocation is one-way only — cannot increase
+  const { data: currentConfig } = await supabase
+    .from('festival_config')
+    .select('value')
+    .eq('key', 'online_ball_limit')
+    .single();
+
+  const currentLimit = currentConfig?.value ? parseInt(currentConfig.value, 10) : null;
+
+  if (currentLimit !== null && newLimit > currentLimit) {
+    return {
+      statusCode: 409,
+      body: JSON.stringify({
+        error: 'Online allocation can only be reduced. Released manual balls cannot be restored online.',
+        current_limit: currentLimit,
+      }),
+    };
+  }
+
   const diff = targetAvailable - available;
 
   if (diff < 0) {
-    // Reducing — mark surplus available balls as manual
+    // Reducing — mark surplus available balls as manual (one-way, never reversed)
     const surplus = Math.abs(diff);
     const { data: toRelease, error: fetchError } = await supabase
       .from('ball_drop_balls')
@@ -107,36 +126,8 @@ export async function handler(event) {
         return { statusCode: 500, body: JSON.stringify({ error: 'Failed to release balls to manual' }) };
       }
     }
-  } else if (diff > 0) {
-    // Increasing — restore manual balls back to available (only online ones, 501–1200)
-    const toRestore = diff;
-    const { data: manualBalls, error: fetchError } = await supabase
-      .from('ball_drop_balls')
-      .select('number')
-      .eq('status', 'manual')
-      .gte('number', ONLINE_START)
-      .order('number', { ascending: true })
-      .limit(toRestore);
-
-    if (fetchError) {
-      console.error('update-ball-limit fetch to restore error:', fetchError);
-      return { statusCode: 500, body: JSON.stringify({ error: 'Failed to fetch balls to restore' }) };
-    }
-
-    const numbersToRestore = (manualBalls || []).map(r => r.number);
-
-    if (numbersToRestore.length > 0) {
-      const { error: restoreError } = await supabase
-        .from('ball_drop_balls')
-        .update({ status: 'available' })
-        .in('number', numbersToRestore);
-
-      if (restoreError) {
-        console.error('update-ball-limit restore error:', restoreError);
-        return { statusCode: 500, body: JSON.stringify({ error: 'Failed to restore balls to available' }) };
-      }
-    }
   }
+  // No else — increases are rejected above
 
   // Save new limit to festival_config
   const { error: configError } = await supabase

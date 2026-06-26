@@ -12,7 +12,7 @@ export async function handler() {
     const [availableResult, teamsRegistered, stallsBooked, configResult] = await Promise.all([
       supabase
         .from('ball_drop_balls')
-        .select('ball_number', { count: 'exact' })
+        .select('number', { count: 'exact' })
         .eq('status', 'available'),
       supabase
         .from('bed_push_registrations')
@@ -35,7 +35,7 @@ export async function handler() {
 
     // Count only available balls within the active online allocation (501 to 500+limit)
     const limitCeiling = 500 + onlineBallLimit;
-    const allAvailable = (availableResult.data || []).map(r => r.ball_number);
+    const allAvailable = (availableResult.data || []).map(r => r.number);
     const ballsAvailable = allAvailable.filter(n => n <= limitCeiling).length;
 
     return {

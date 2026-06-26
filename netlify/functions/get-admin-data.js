@@ -26,6 +26,7 @@ export async function handler(event) {
       manualOnlineResult,
       availableBallNumbers,
       configResult,
+      soldBallNumbersResult,
     ] = await Promise.all([
       supabase.from('ball_drop_registrations').select('*').order('created_at', { ascending: false }),
       supabase.from('bed_push_registrations').select('*').order('created_at', { ascending: false }),
@@ -40,6 +41,8 @@ export async function handler(event) {
       supabase.from('ball_drop_balls').select('*', { count: 'exact', head: true }).eq('status', 'manual').gte('number', ONLINE_START),
       // Full list of available ball numbers for export
       supabase.from('ball_drop_balls').select('number').eq('status', 'available').order('number', { ascending: true }),
+      // Full list of sold ball numbers for export
+      supabase.from('ball_drop_balls').select('number').eq('status', 'sold').gte('number', 501).order('number', { ascending: true }),
       supabase.from('festival_config').select('value').eq('key', 'online_ball_limit').single(),
     ]);
 
@@ -70,6 +73,7 @@ export async function handler(event) {
         ballsRemaining:       availableOnline,
         ballsSold:            soldOnline,
         availableBallNumbers: availableBallNumbersList,
+        soldBallNumbers: (soldBallNumbersResult.data || []).map(r => r.number),
       }),
     };
   } catch (err) {

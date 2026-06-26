@@ -249,9 +249,9 @@ test.describe('Ball limit — Admin UI', () => {
     await page.click('[data-testid="tab-balldrop"]');
     const bar = page.locator('[data-testid="inventory-bar"]');
     await expect(bar).toBeVisible({ timeout: 8000 });
-    await expect(bar.locator('span:has-text("Total balls")')).toBeVisible();
-    await expect(bar.locator('span:has-text("Online sold")')).toBeVisible();
-    await expect(bar.locator('span:has-text("Online remaining")')).toBeVisible();
+    await expect(bar.getByText('Total balls', { exact: true })).toBeVisible();
+    await expect(bar.getByText('Online sold', { exact: true })).toBeVisible();
+    await expect(bar.getByText('Online remaining', { exact: true })).toBeVisible();
   });
 
   test('BL-17 Export ball numbers CSV button is visible on Ball Drop tab', async ({ page }) => {

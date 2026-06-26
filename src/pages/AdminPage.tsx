@@ -336,7 +336,7 @@ export default function AdminPage() {
 </head>
 <body>
 <h1>Moville Summer Festival 2026 — Ball Drop Numbers</h1>
-<p>Online allocation: balls 501–${500 + data.onlineBallLimit} &nbsp;|&nbsp; Limit: ${data.onlineBallLimit} &nbsp;|&nbsp; Sold online: ${soldNumbers.length} &nbsp;|&nbsp; Available: ${data.availableBallNumbers.length}</p>
+<p>Online allocation: ${data.onlineBallLimit} balls &nbsp;|&nbsp; Sold online: ${soldNumbers.length} &nbsp;|&nbsp; Available online: ${data.availableBallNumbers.length}</p>
 <div class="grid">
 ${allNumbers.map(({ n, status }) => '<div class="ball ' + status + '">' + String(n) + '</div>').join('\n')}
 ')}

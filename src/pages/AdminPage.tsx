@@ -399,9 +399,7 @@ export default function AdminPage() {
         <div style={{ background: '#fff', borderRadius: '16px', boxShadow: '0 4px 24px rgba(22,50,60,0.10)', width: '100%', maxWidth: '360px', padding: '40px 36px 36px', display: 'flex', flexDirection: 'column' as const, alignItems: 'center' }}>
 
           {/* Lighthouse mark */}
-          <div style={{ width: '56px', height: '56px', borderRadius: '50%', background: '#16323C', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
-            <img src="/lighthouse-mark.svg" alt="" aria-hidden="true" style={{ width: '30px', height: '30px', filter: 'brightness(0) invert(1)' }} />
-          </div>
+          <img src="/lighthouse-mark.svg" alt="" aria-hidden="true" style={{ width: '56px', height: '56px', marginBottom: '20px' }} />
 
           <h1 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: '22px', fontWeight: 700, color: '#16323C', margin: '0 0 4px', textAlign: 'center' as const }}>Committee Admin</h1>
           <p style={{ fontFamily: "'Outfit', system-ui, sans-serif", fontSize: '13px', color: '#888', margin: '0 0 28px', textAlign: 'center' as const }}>Moville Summer Festival 2026</p>

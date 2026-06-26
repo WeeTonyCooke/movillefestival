@@ -685,12 +685,17 @@ ${allNumbers.map(({ n, status }) => '<div class="ball ' + status + '">' + String
                 <button
                   data-testid="save-online-limit"
                   onClick={handleSaveOnlineLimit}
-                  disabled={savingLimit || parseInt(onlineLimitInput, 10) < onlineBallsSold}
+                  disabled={savingLimit || parseInt(onlineLimitInput, 10) < onlineBallsSold || parseInt(onlineLimitInput, 10) > onlineLimit}
                   style={{ ...btnStyle('primary'), padding: '6px 14px' }}
                 >
                   {savingLimit ? 'Saving…' : 'Save'}
                 </button>
-                {parseInt(onlineLimitInput, 10) < onlineBallsSold && (
+                {parseInt(onlineLimitInput, 10) > onlineLimit && (
+                  <span style={{ fontSize: '11px', color: '#c0392b', marginLeft: '4px' }}>
+                    Online allocation can only be reduced. Released manual balls cannot be restored online.
+                  </span>
+                )}
+                {parseInt(onlineLimitInput, 10) < onlineBallsSold && parseInt(onlineLimitInput, 10) <= onlineLimit && (
                   <span style={{ fontSize: '11px', color: '#c0392b', marginLeft: '4px' }}>
                     Cannot be lower than {onlineBallsSold} (online sold)
                   </span>

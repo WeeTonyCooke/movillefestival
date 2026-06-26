@@ -249,25 +249,36 @@ test.describe('Ball limit — status-based allocation model', () => {
   });
 
   test('BL-17 Increasing limit restores manual balls to available', async ({ request }) => {
-    // First reduce
-    const reducedLimit = Math.max(originalSold, originalLimit - 50);
-    if (reducedLimit === originalLimit) {
+    // Read current state (may have been modified by BL-15)
+    const beforeRes = await request.get(ADMIN_DATA_ENDPOINT, {
+      headers: { 'x-admin-password': ADMIN },
+    });
+    const before = await beforeRes.json();
+    const currentAvailable = before.availableOnline as number;
+    const currentLimit = before.onlineBallLimit as number;
+
+    // Reduce by 30 from current state
+    const reduceBy = 30;
+    const reducedLimit = Math.max(originalSold, currentLimit - reduceBy);
+    if (reducedLimit === currentLimit) {
       test.skip(true, 'Not enough headroom on this instance');
       return;
     }
+
     await request.post(LIMIT_ENDPOINT, {
       headers: { 'x-admin-password': ADMIN, 'Content-Type': 'application/json' },
       data: { online_ball_limit: reducedLimit },
     });
 
-    // Then restore
+    // Now increase back to current limit
     const res = await request.post(LIMIT_ENDPOINT, {
       headers: { 'x-admin-password': ADMIN, 'Content-Type': 'application/json' },
-      data: { online_ball_limit: originalLimit },
+      data: { online_ball_limit: currentLimit },
     });
     expect(res.status()).toBe(200);
     const body = await res.json();
-    expect(body.available_online).toBe(originalAvailable);
+    // Available should be back to what it was before this test
+    expect(body.available_online).toBe(currentAvailable);
   });
 
   test('BL-18 Original paper balls (1–500) are never touched', async ({ request }) => {

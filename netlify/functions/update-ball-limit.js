@@ -8,7 +8,7 @@ const supabase = createClient(
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 const TOTAL_BALLS = 1200;
 const PAPER_MAX = 500;
-const ONLINE_BALL_START = 501;
+const ONLINE_START = 501;
 
 export async function handler(event) {
   if (event.httpMethod !== 'POST') {
@@ -27,48 +27,149 @@ export async function handler(event) {
     return { statusCode: 400, body: JSON.stringify({ error: 'Invalid JSON' }) };
   }
 
-  const val = parseInt(body.online_ball_limit, 10);
-  if (isNaN(val) || val < 0 || val > (TOTAL_BALLS - PAPER_MAX)) {
+  const newLimit = parseInt(body.online_ball_limit, 10);
+  if (isNaN(newLimit) || newLimit < 0 || newLimit > (TOTAL_BALLS - PAPER_MAX)) {
     return {
       statusCode: 400,
       body: JSON.stringify({ error: `Limit must be between 0 and ${TOTAL_BALLS - PAPER_MAX}` }),
     };
   }
 
-  // Count online balls already sold (numbers >= ONLINE_BALL_START)
+  // Count online balls already sold (501–1200, status = 'sold')
   const { count: soldCount, error: soldError } = await supabase
     .from('ball_drop_balls')
     .select('*', { count: 'exact', head: true })
     .eq('status', 'sold')
-    .gte('number', ONLINE_BALL_START);
+    .gte('number', ONLINE_START);
 
   if (soldError) {
     console.error('update-ball-limit sold count error:', soldError);
     return { statusCode: 500, body: JSON.stringify({ error: 'Failed to check sold count' }) };
   }
 
-  if (val < (soldCount || 0)) {
+  const sold = soldCount || 0;
+
+  // Cannot set limit below number already sold online
+  if (newLimit < sold) {
     return {
       statusCode: 409,
       body: JSON.stringify({
-        error: `Online limit cannot be lower than online balls already sold (${soldCount} sold).`,
-        sold_online: soldCount,
+        error: `Online limit cannot be lower than online balls already sold (${sold} sold).`,
+        sold_online: sold,
       }),
     };
   }
 
-  const { error } = await supabase
-    .from('festival_config')
-    .upsert({ key: 'online_ball_limit', value: String(val) }, { onConflict: 'key' });
+  // How many balls should remain 'available' online after this change
+  const targetAvailable = newLimit - sold;
 
-  if (error) {
-    console.error('update-ball-limit error:', error);
+  // Count currently available online balls
+  const { count: currentAvailable, error: availError } = await supabase
+    .from('ball_drop_balls')
+    .select('*', { count: 'exact', head: true })
+    .eq('status', 'available')
+    .gte('number', ONLINE_START);
+
+  if (availError) {
+    console.error('update-ball-limit available count error:', availError);
+    return { statusCode: 500, body: JSON.stringify({ error: 'Failed to check available count' }) };
+  }
+
+  const available = currentAvailable || 0;
+  const diff = targetAvailable - available;
+
+  if (diff < 0) {
+    // Reducing — mark surplus available balls as manual
+    const surplus = Math.abs(diff);
+    const { data: toRelease, error: fetchError } = await supabase
+      .from('ball_drop_balls')
+      .select('number')
+      .eq('status', 'available')
+      .gte('number', ONLINE_START)
+      .order('number', { ascending: false })
+      .limit(surplus);
+
+    if (fetchError) {
+      console.error('update-ball-limit fetch to release error:', fetchError);
+      return { statusCode: 500, body: JSON.stringify({ error: 'Failed to fetch balls to release' }) };
+    }
+
+    const numbersToRelease = (toRelease || []).map(r => r.number);
+
+    if (numbersToRelease.length > 0) {
+      const { error: releaseError } = await supabase
+        .from('ball_drop_balls')
+        .update({ status: 'manual' })
+        .in('number', numbersToRelease);
+
+      if (releaseError) {
+        console.error('update-ball-limit release error:', releaseError);
+        return { statusCode: 500, body: JSON.stringify({ error: 'Failed to release balls to manual' }) };
+      }
+    }
+  } else if (diff > 0) {
+    // Increasing — restore manual balls back to available (only online ones, 501–1200)
+    const toRestore = diff;
+    const { data: manualBalls, error: fetchError } = await supabase
+      .from('ball_drop_balls')
+      .select('number')
+      .eq('status', 'manual')
+      .gte('number', ONLINE_START)
+      .order('number', { ascending: true })
+      .limit(toRestore);
+
+    if (fetchError) {
+      console.error('update-ball-limit fetch to restore error:', fetchError);
+      return { statusCode: 500, body: JSON.stringify({ error: 'Failed to fetch balls to restore' }) };
+    }
+
+    const numbersToRestore = (manualBalls || []).map(r => r.number);
+
+    if (numbersToRestore.length > 0) {
+      const { error: restoreError } = await supabase
+        .from('ball_drop_balls')
+        .update({ status: 'available' })
+        .in('number', numbersToRestore);
+
+      if (restoreError) {
+        console.error('update-ball-limit restore error:', restoreError);
+        return { statusCode: 500, body: JSON.stringify({ error: 'Failed to restore balls to available' }) };
+      }
+    }
+  }
+
+  // Save new limit to festival_config
+  const { error: configError } = await supabase
+    .from('festival_config')
+    .upsert({ key: 'online_ball_limit', value: String(newLimit) }, { onConflict: 'key' });
+
+  if (configError) {
+    console.error('update-ball-limit config error:', configError);
     return { statusCode: 500, body: JSON.stringify({ error: 'Failed to save limit' }) };
   }
+
+  // Return updated counts
+  const { count: finalAvailable } = await supabase
+    .from('ball_drop_balls')
+    .select('*', { count: 'exact', head: true })
+    .eq('status', 'available')
+    .gte('number', ONLINE_START);
+
+  const { count: finalManual } = await supabase
+    .from('ball_drop_balls')
+    .select('*', { count: 'exact', head: true })
+    .eq('status', 'manual')
+    .gte('number', ONLINE_START);
 
   return {
     statusCode: 200,
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ ok: true, online_ball_limit: val, sold_online: soldCount }),
+    body: JSON.stringify({
+      ok: true,
+      online_ball_limit: newLimit,
+      sold_online: sold,
+      available_online: finalAvailable || 0,
+      released_for_manual: finalManual || 0,
+    }),
   };
 }

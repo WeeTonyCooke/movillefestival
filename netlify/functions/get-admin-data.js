@@ -29,7 +29,7 @@ export async function handler(event) {
       supabase.from('craft_fair_registrations').select('*').order('created_at', { ascending: false }),
       supabase.from('sponsorship_registrations').select('*').order('created_at', { ascending: false }),
       supabase.from('festival_passes').select('*').order('created_at', { ascending: false }),
-      supabase.from('ball_drop_balls').select('*', { count: 'exact', head: true }).eq('status', 'allocated'),
+      supabase.from('ball_drop_balls').select('*', { count: 'exact', head: true }).eq('status', 'sold'),
       supabase.from('ball_drop_balls').select('ball_number').eq('status', 'available').order('ball_number', { ascending: true }),
       supabase.from('festival_config').select('value').eq('key', 'online_ball_limit').single(),
     ]);

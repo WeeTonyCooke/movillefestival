@@ -7,6 +7,7 @@ const supabase = createClient(
 
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 const ONLINE_DEFAULT = 700;
+const ONLINE_START = 501;
 
 export async function handler(event) {
   const supplied = event.headers['x-admin-password'];
@@ -20,48 +21,55 @@ export async function handler(event) {
       craftFair,
       sponsorships,
       passes,
-      ballsSoldResult,
+      soldOnlineResult,
+      availableOnlineResult,
+      manualOnlineResult,
       availableBallNumbers,
       configResult,
-      lockResult,
     ] = await Promise.all([
       supabase.from('ball_drop_registrations').select('*').order('created_at', { ascending: false }),
       supabase.from('bed_push_registrations').select('*').order('created_at', { ascending: false }),
       supabase.from('craft_fair_registrations').select('*').order('created_at', { ascending: false }),
       supabase.from('sponsorship_registrations').select('*').order('created_at', { ascending: false }),
       supabase.from('festival_passes').select('*').order('created_at', { ascending: false }),
-      supabase.from('ball_drop_balls').select('*', { count: 'exact', head: true }).eq('status', 'sold'),
+      // Online sold: status=sold, number >= 501
+      supabase.from('ball_drop_balls').select('*', { count: 'exact', head: true }).eq('status', 'sold').gte('number', ONLINE_START),
+      // Online available: status=available (all available balls are online pool)
+      supabase.from('ball_drop_balls').select('*', { count: 'exact', head: true }).eq('status', 'available'),
+      // Released for manual sale: status=manual, number >= 501 (excludes original paper 1-500)
+      supabase.from('ball_drop_balls').select('*', { count: 'exact', head: true }).eq('status', 'manual').gte('number', ONLINE_START),
+      // Full list of available ball numbers for export
       supabase.from('ball_drop_balls').select('number').eq('status', 'available').order('number', { ascending: true }),
       supabase.from('festival_config').select('value').eq('key', 'online_ball_limit').single(),
-      supabase.from('festival_config').select('value').eq('key', 'online_ball_limit_locked_at').single(),
     ]);
 
     const onlineBallLimit = configResult.data?.value
       ? parseInt(configResult.data.value, 10)
       : ONLINE_DEFAULT;
 
-    const allAvailableNumbers = (availableBallNumbers.data || []).map(r => r.number);
-
-    // Available numbers are those within the current online limit
-    // Online balls are numbered 501–1200; the limit controls how many of those are open for sale.
-    // We surface only ball numbers <= 500 + onlineBallLimit (i.e. within the active online allocation).
-    const limitCeiling = 500 + onlineBallLimit;
-    const availableWithinLimit = allAvailableNumbers.filter(n => n <= limitCeiling);
+    const soldOnline = soldOnlineResult.count || 0;
+    const availableOnline = availableOnlineResult.count || 0;
+    const releasedForManual = manualOnlineResult.count || 0;
+    const availableBallNumbersList = (availableBallNumbers.data || []).map(r => r.number);
 
     return {
       statusCode: 200,
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        ballDrop:             ballDrop.data             || [],
-        bedPush:              bedPush.data              || [],
-        craftFair:            craftFair.data            || [],
-        sponsorships:         sponsorships.data         || [],
-        passes:               passes.data               || [],
-        ballsRemaining:       availableWithinLimit.length,
-        ballsSold:            ballsSoldResult.count      || 0,
+        ballDrop:             ballDrop.data      || [],
+        bedPush:              bedPush.data       || [],
+        craftFair:            craftFair.data     || [],
+        sponsorships:         sponsorships.data  || [],
+        passes:               passes.data        || [],
+        // Ball drop inventory
         onlineBallLimit,
-        onlineBallLimitLockedAt: lockResult.data?.value || null,
-        availableBallNumbers: availableWithinLimit,
+        soldOnline,
+        availableOnline,
+        releasedForManual,
+        // Legacy fields for backwards compatibility
+        ballsRemaining:       availableOnline,
+        ballsSold:            soldOnline,
+        availableBallNumbers: availableBallNumbersList,
       }),
     };
   } catch (err) {

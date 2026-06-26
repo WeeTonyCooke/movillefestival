@@ -8,6 +8,7 @@ const supabase = createClient(
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 const TOTAL_BALLS = 1200;
 const PAPER_MAX = 500;
+const ONLINE_BALL_START = 501;
 
 export async function handler(event) {
   if (event.httpMethod !== 'POST') {
@@ -34,21 +35,27 @@ export async function handler(event) {
     };
   }
 
-  // Check if already locked
-  const { data: lockData } = await supabase
-    .from('festival_config')
-    .select('value')
-    .eq('key', 'online_ball_limit_locked_at')
-    .single();
+  // Count online balls already sold (numbers >= ONLINE_BALL_START)
+  const { count: soldCount, error: soldError } = await supabase
+    .from('ball_drop_balls')
+    .select('*', { count: 'exact', head: true })
+    .eq('status', 'sold')
+    .gte('number', ONLINE_BALL_START);
 
-  if (lockData?.value) {
-    return {
-      statusCode: 409,
-      body: JSON.stringify({ error: 'Limit already set and locked', locked_at: lockData.value }),
-    };
+  if (soldError) {
+    console.error('update-ball-limit sold count error:', soldError);
+    return { statusCode: 500, body: JSON.stringify({ error: 'Failed to check sold count' }) };
   }
 
-  const lockedAt = new Date().toISOString();
+  if (val < (soldCount || 0)) {
+    return {
+      statusCode: 409,
+      body: JSON.stringify({
+        error: `Online limit cannot be lower than online balls already sold (${soldCount} sold).`,
+        sold_online: soldCount,
+      }),
+    };
+  }
 
   const { error } = await supabase
     .from('festival_config')
@@ -59,18 +66,9 @@ export async function handler(event) {
     return { statusCode: 500, body: JSON.stringify({ error: 'Failed to save limit' }) };
   }
 
-  const { error: lockError } = await supabase
-    .from('festival_config')
-    .upsert({ key: 'online_ball_limit_locked_at', value: lockedAt }, { onConflict: 'key' });
-
-  if (lockError) {
-    console.error('update-ball-limit lock error:', lockError);
-    // Limit saved but lock failed — not fatal, log and continue
-  }
-
   return {
     statusCode: 200,
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ ok: true, online_ball_limit: val, locked_at: lockedAt }),
+    body: JSON.stringify({ ok: true, online_ball_limit: val, sold_online: soldCount }),
   };
 }

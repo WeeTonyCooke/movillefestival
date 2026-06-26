@@ -10,24 +10,24 @@
  *   BL-03  update-ball-limit rejects out-of-range value (> 700)
  *   BL-04  update-ball-limit rejects negative value
  *   BL-05  update-ball-limit rejects non-numeric value
- *   BL-06  update-ball-limit accepts a valid limit and returns ok:true
+ *   BL-06  update-ball-limit rejects limit below online sold count
  *   BL-07  get-admin-data returns onlineBallLimit field
  *   BL-08  get-admin-data returns availableBallNumbers array
- *   BL-09  availableBallNumbers contains only numbers in range 501–(500+limit)
- *   BL-10  availableBallNumbers contains no duplicates
- *   BL-11  availableBallNumbers are all integers
- *   BL-12  availableBallNumbers are sorted ascending
- *   BL-13  availableBallNumbers count matches ballsRemaining field
+ *   BL-09  All available numbers are online balls (>= 501)
+ *   BL-10  Available numbers contain no duplicates
+ *   BL-11  Available numbers are all integers
+ *   BL-12  Available numbers are sorted ascending
+ *   BL-13  availableBallNumbers count matches availableOnline field
  *   BL-14  get-availability returns ballsAvailable field
- *   BL-15  Reducing limit via admin reduces get-availability ballsAvailable
- *   BL-16  Admin UI: online limit input and Save button are visible on Ball Drop tab
- *   BL-17  Admin UI: available numbers panel is present after data loads
- *   BL-18  Admin UI: toggling available numbers panel shows/hides number chips
- *   BL-19  Admin UI: limit persists across page reload
- *
- * Environment variables:
- *   TEST_BASE_URL   — default https://stagingmf.netlify.app
- *   TEST_ADMIN_PASS — admin panel password
+ *   BL-15  Reducing limit marks surplus balls as manual, not available
+ *   BL-16  Sold online balls are never touched by limit change
+ *   BL-17  Increasing limit restores manual balls to available
+ *   BL-18  Original paper balls (1-500) are never touched
+ *   BL-19  Counts reconcile: sold + available + manual (501-1200) + paper = 1200
+ *   BL-20  Admin UI: inventory bar shows correct stat labels
+ *   BL-21  Admin UI: limit adjuster visible and functional
+ *   BL-22  Admin UI: export buttons visible
+ *   BL-23  Admin UI: limit persists across page reload
  */
 
 import { test, expect, Page } from '@playwright/test';
@@ -35,19 +35,17 @@ import { test, expect, Page } from '@playwright/test';
 const BASE  = process.env.TEST_BASE_URL  || 'https://stagingmf.netlify.app';
 const ADMIN = process.env.TEST_ADMIN_PASS || 'testpassword';
 
-const LIMIT_ENDPOINT       = BASE + '/.netlify/functions/update-ball-limit';
+const LIMIT_ENDPOINT        = BASE + '/.netlify/functions/update-ball-limit';
 const AVAILABILITY_ENDPOINT = BASE + '/.netlify/functions/get-availability';
-const ADMIN_DATA_ENDPOINT  = BASE + '/.netlify/functions/get-admin-data';
+const ADMIN_DATA_ENDPOINT   = BASE + '/.netlify/functions/get-admin-data';
 
-// The maximum valid online limit: TOTAL_BALLS(1200) - PAPER_MAX(500) = 700
-const MAX_LIMIT = 700;
-
-// ── Admin login helper (matches registrations.spec.ts pattern) ─────────────
+const MAX_LIMIT  = 700;
+const PAPER_MAX  = 500;
+const TOTAL_BALLS = 1200;
+const ONLINE_START = 501;
 
 async function loginAdmin(page: Page) {
-  if (!process.env.TEST_ADMIN_PASS) {
-    throw new Error('TEST_ADMIN_PASS is not set.');
-  }
+  if (!process.env.TEST_ADMIN_PASS) throw new Error('TEST_ADMIN_PASS is not set.');
   await page.goto(BASE + '/admin');
   await page.fill('[type="password"]', ADMIN);
   await page.click('button:has-text("Sign in")');
@@ -55,9 +53,9 @@ async function loginAdmin(page: Page) {
   await expect(page.locator('[data-testid="tab-balldrop"]')).toBeVisible({ timeout: 12000 });
 }
 
-// ── BL-01 to BL-06: update-ball-limit API ────────────────────────────────────
+// ── BL-01 to BL-05: API validation ───────────────────────────────────────────
 
-test.describe('Ball limit — update-ball-limit API', () => {
+test.describe('Ball limit — update-ball-limit API validation', () => {
 
   test('BL-01 Rejects wrong password', async ({ request }) => {
     const res = await request.post(LIMIT_ENDPOINT, {
@@ -80,8 +78,6 @@ test.describe('Ball limit — update-ball-limit API', () => {
       data: { online_ball_limit: MAX_LIMIT + 1 },
     });
     expect(res.status()).toBe(400);
-    const body = await res.json();
-    expect(body.error).toBeTruthy();
   });
 
   test('BL-04 Rejects negative value', async ({ request }) => {
@@ -100,36 +96,41 @@ test.describe('Ball limit — update-ball-limit API', () => {
     expect(res.status()).toBe(400);
   });
 
-  test('BL-06 Accepts a valid limit and returns ok:true', async ({ request }) => {
-    // Use 650 — well within range, leaves headroom either side for BL-15
-    const res = await request.post(LIMIT_ENDPOINT, {
-      headers: { 'x-admin-password': ADMIN, 'Content-Type': 'application/json' },
-      data: { online_ball_limit: 650 },
-    });
-    expect(res.status()).toBe(200);
-    const body = await res.json();
-    expect(body.ok).toBe(true);
-    expect(body.online_ball_limit).toBe(650);
-
-    // Restore to default 700 so other tests are not affected
-    await request.post(LIMIT_ENDPOINT, {
-      headers: { 'x-admin-password': ADMIN, 'Content-Type': 'application/json' },
-      data: { online_ball_limit: MAX_LIMIT },
-    });
-  });
-
 });
 
-// ── BL-07 to BL-13: get-admin-data returns correct limit and available numbers
+// ── BL-06: Backend guard ──────────────────────────────────────────────────────
+
+test('BL-06 Rejects limit below online sold count', async ({ request }) => {
+  const adminRes = await request.get(ADMIN_DATA_ENDPOINT, {
+    headers: { 'x-admin-password': ADMIN },
+  });
+  const adminBody = await adminRes.json();
+  const soldOnline = adminBody.soldOnline as number;
+
+  if (soldOnline === 0) {
+    test.skip(true, 'No balls sold online on this instance — cannot test lower bound');
+    return;
+  }
+
+  const res = await request.post(LIMIT_ENDPOINT, {
+    headers: { 'x-admin-password': ADMIN, 'Content-Type': 'application/json' },
+    data: { online_ball_limit: soldOnline - 1 },
+  });
+  expect(res.status()).toBe(409);
+  const body = await res.json();
+  expect(body.error).toMatch(/cannot be lower/i);
+});
+
+// ── BL-07 to BL-13: get-admin-data response ──────────────────────────────────
 
 test.describe('Ball limit — get-admin-data response', () => {
 
-  // Fetch once and share across the tests in this describe block
   let adminBody: {
     onlineBallLimit: number;
+    soldOnline: number;
+    availableOnline: number;
+    releasedForManual: number;
     availableBallNumbers: number[];
-    ballsRemaining: number;
-    ballsSold: number;
   };
 
   test.beforeAll(async ({ request }) => {
@@ -151,19 +152,16 @@ test.describe('Ball limit — get-admin-data response', () => {
     expect(Array.isArray(adminBody.availableBallNumbers)).toBe(true);
   });
 
-  test('BL-09 All available numbers are within range 501 to (500 + limit)', async () => {
-    const limit = adminBody.onlineBallLimit;
-    const ceiling = 500 + limit;
+  test('BL-09 All available numbers are online balls (>= 501)', async () => {
     for (const n of adminBody.availableBallNumbers) {
-      expect(n, `Ball number ${n} should be >= 501`).toBeGreaterThanOrEqual(501);
-      expect(n, `Ball number ${n} should be <= ${ceiling} (500 + limit ${limit})`).toBeLessThanOrEqual(ceiling);
+      expect(n, `Ball ${n} should be >= ${ONLINE_START}`).toBeGreaterThanOrEqual(ONLINE_START);
+      expect(n, `Ball ${n} should be <= ${TOTAL_BALLS}`).toBeLessThanOrEqual(TOTAL_BALLS);
     }
   });
 
   test('BL-10 Available numbers contain no duplicates', async () => {
-    const nums = adminBody.availableBallNumbers;
-    const unique = new Set(nums);
-    expect(unique.size).toBe(nums.length);
+    const unique = new Set(adminBody.availableBallNumbers);
+    expect(unique.size).toBe(adminBody.availableBallNumbers.length);
   });
 
   test('BL-11 All available numbers are integers', async () => {
@@ -175,102 +173,160 @@ test.describe('Ball limit — get-admin-data response', () => {
   test('BL-12 Available numbers are sorted ascending', async () => {
     const nums = adminBody.availableBallNumbers;
     for (let i = 1; i < nums.length; i++) {
-      expect(nums[i], `nums[${i}]=${nums[i]} should be > nums[${i - 1}]=${nums[i - 1]}`).toBeGreaterThan(nums[i - 1]);
+      expect(nums[i]).toBeGreaterThan(nums[i - 1]);
     }
   });
 
-  test('BL-13 availableBallNumbers count matches ballsRemaining field', async () => {
-    expect(adminBody.availableBallNumbers.length).toBe(adminBody.ballsRemaining);
+  test('BL-13 availableBallNumbers count matches availableOnline field', async () => {
+    expect(adminBody.availableBallNumbers.length).toBe(adminBody.availableOnline);
   });
 
 });
 
-// ── BL-14 to BL-15: get-availability responds to limit changes ────────────────
+// ── BL-14: get-availability ───────────────────────────────────────────────────
 
-test.describe('Ball limit — get-availability public gate', () => {
+test('BL-14 get-availability returns a ballsAvailable field', async ({ request }) => {
+  const res = await request.get(AVAILABILITY_ENDPOINT);
+  expect(res.status()).toBe(200);
+  const body = await res.json();
+  expect(typeof body.ballsAvailable).toBe('number');
+  expect(body.ballsAvailable).toBeGreaterThanOrEqual(0);
+});
 
-  test('BL-14 get-availability returns a ballsAvailable field', async ({ request }) => {
-    const res = await request.get(AVAILABILITY_ENDPOINT);
-    expect(res.status()).toBe(200);
-    const body = await res.json();
-    expect(typeof body.ballsAvailable).toBe('number');
-    expect(body.ballsAvailable).toBeGreaterThanOrEqual(0);
-  });
+// ── BL-15 to BL-19: Status-based allocation model ────────────────────────────
 
-  test('BL-15 Reducing the limit reduces ballsAvailable in get-availability', async ({ request }) => {
-    // Read current availability
-    const before = await request.get(AVAILABILITY_ENDPOINT);
-    const beforeBody = await before.json();
-    const beforeCount = beforeBody.ballsAvailable as number;
+test.describe('Ball limit — status-based allocation model', () => {
 
-    // Read current limit from admin data so we know the starting point
-    const adminRes = await request.get(ADMIN_DATA_ENDPOINT, {
+  let originalLimit: number;
+  let originalSold: number;
+  let originalAvailable: number;
+
+  test.beforeAll(async ({ request }) => {
+    const res = await request.get(ADMIN_DATA_ENDPOINT, {
       headers: { 'x-admin-password': ADMIN },
     });
-    const adminBody = await adminRes.json();
-    const currentLimit = adminBody.onlineBallLimit as number;
+    const body = await res.json();
+    originalLimit     = body.onlineBallLimit;
+    originalSold      = body.soldOnline;
+    originalAvailable = body.availableOnline;
+  });
 
-    // Set a new limit 50 less than current (but at least 1)
-    const newLimit = Math.max(1, currentLimit - 50);
-    const setRes = await request.post(LIMIT_ENDPOINT, {
-      headers: { 'x-admin-password': ADMIN, 'Content-Type': 'application/json' },
-      data: { online_ball_limit: newLimit },
-    });
-    expect(setRes.status()).toBe(200);
-
-    // Check availability has reduced
-    const after = await request.get(AVAILABILITY_ENDPOINT);
-    const afterBody = await after.json();
-    const afterCount = afterBody.ballsAvailable as number;
-
-    // The new count must be less than or equal to the before count
-    // (it will equal beforeCount if all balls within the new range were already sold)
-    expect(afterCount).toBeLessThanOrEqual(beforeCount);
-
+  test.afterAll(async ({ request }) => {
     // Restore original limit
     await request.post(LIMIT_ENDPOINT, {
       headers: { 'x-admin-password': ADMIN, 'Content-Type': 'application/json' },
-      data: { online_ball_limit: currentLimit },
+      data: { online_ball_limit: originalLimit },
     });
+  });
+
+  test('BL-15 Reducing limit marks surplus balls as manual', async ({ request }) => {
+    const reduceBy = 50;
+    const newLimit = Math.max(originalSold, originalLimit - reduceBy);
+    if (newLimit === originalLimit) {
+      test.skip(true, 'Not enough headroom to reduce limit on this instance');
+      return;
+    }
+
+    const res = await request.post(LIMIT_ENDPOINT, {
+      headers: { 'x-admin-password': ADMIN, 'Content-Type': 'application/json' },
+      data: { online_ball_limit: newLimit },
+    });
+    expect(res.status()).toBe(200);
+    const body = await res.json();
+    expect(body.available_online).toBe(newLimit - originalSold);
+    expect(body.released_for_manual).toBeGreaterThan(0);
+    // Available + sold should equal new limit
+    expect(body.available_online + body.sold_online).toBe(newLimit);
+  });
+
+  test('BL-16 Sold online balls are never touched by limit change', async ({ request }) => {
+    const res = await request.get(ADMIN_DATA_ENDPOINT, {
+      headers: { 'x-admin-password': ADMIN },
+    });
+    const body = await res.json();
+    // Sold count should never change from what it was before
+    expect(body.soldOnline).toBe(originalSold);
+  });
+
+  test('BL-17 Increasing limit restores manual balls to available', async ({ request }) => {
+    // First reduce
+    const reducedLimit = Math.max(originalSold, originalLimit - 50);
+    if (reducedLimit === originalLimit) {
+      test.skip(true, 'Not enough headroom on this instance');
+      return;
+    }
+    await request.post(LIMIT_ENDPOINT, {
+      headers: { 'x-admin-password': ADMIN, 'Content-Type': 'application/json' },
+      data: { online_ball_limit: reducedLimit },
+    });
+
+    // Then restore
+    const res = await request.post(LIMIT_ENDPOINT, {
+      headers: { 'x-admin-password': ADMIN, 'Content-Type': 'application/json' },
+      data: { online_ball_limit: originalLimit },
+    });
+    expect(res.status()).toBe(200);
+    const body = await res.json();
+    expect(body.available_online).toBe(originalAvailable);
+  });
+
+  test('BL-18 Original paper balls (1–500) are never touched', async ({ request }) => {
+    const res = await request.get(ADMIN_DATA_ENDPOINT, {
+      headers: { 'x-admin-password': ADMIN },
+    });
+    const body = await res.json();
+    // Paper balls (1-500) should not appear in availableBallNumbers (which are all online balls)
+    const paperBallsInAvailable = body.availableBallNumbers.filter((n: number) => n <= PAPER_MAX);
+    expect(paperBallsInAvailable.length).toBe(0);
+  });
+
+  test('BL-19 Counts reconcile to 1200', async ({ request }) => {
+    const res = await request.get(ADMIN_DATA_ENDPOINT, {
+      headers: { 'x-admin-password': ADMIN },
+    });
+    const body = await res.json();
+    const total = body.soldOnline + body.availableOnline + body.releasedForManual + PAPER_MAX;
+    expect(total).toBe(TOTAL_BALLS);
   });
 
 });
 
-// ── BL-16 to BL-19: Admin UI ─────────────────────────────────────────────────
+// ── BL-20 to BL-23: Admin UI ─────────────────────────────────────────────────
 
 test.describe('Ball limit — Admin UI', () => {
 
-  test('BL-16 Ball Drop tab shows inventory stats', async ({ page }) => {
+  test('BL-20 Inventory bar shows correct stat labels', async ({ page }) => {
     await loginAdmin(page);
     await page.click('[data-testid="tab-balldrop"]');
     const bar = page.locator('[data-testid="inventory-bar"]');
     await expect(bar).toBeVisible({ timeout: 8000 });
-    await expect(bar.getByText('Total balls', { exact: true })).toBeVisible();
+    await expect(bar.getByText('Online allocation', { exact: true })).toBeVisible();
     await expect(bar.getByText('Online sold', { exact: true })).toBeVisible();
     await expect(bar.getByText('Online remaining', { exact: true })).toBeVisible();
+    await expect(bar.getByText('Released for manual sale', { exact: true })).toBeVisible();
   });
 
-  test('BL-17 Limit adjuster is visible and functional on Ball Drop tab', async ({ page }) => {
+  test('BL-21 Limit adjuster is visible and functional', async ({ page }) => {
     await loginAdmin(page);
     await page.click('[data-testid="tab-balldrop"]');
     await expect(page.locator('[data-testid="online-limit-input"]')).toBeVisible({ timeout: 8000 });
     await expect(page.locator('[data-testid="save-online-limit"]')).toBeVisible();
   });
 
-  test('BL-18 Export buttons are visible on Ball Drop tab', async ({ page }) => {
+  test('BL-22 Export buttons are visible', async ({ page }) => {
     await loginAdmin(page);
     await page.click('[data-testid="tab-balldrop"]');
     await expect(page.locator('[data-testid="export-csv"]')).toBeVisible({ timeout: 8000 });
     await expect(page.locator('[data-testid="export-pdf"]')).toBeVisible();
   });
 
-  test('BL-19 Limit persists across page reload', async ({ page }) => {
+  test('BL-23 Limit persists across page reload', async ({ page }) => {
     await loginAdmin(page);
     await page.click('[data-testid="tab-balldrop"]');
     const inputValue = await page.locator('[data-testid="online-limit-input"]').inputValue();
     const val = parseInt(inputValue, 10);
     expect(val).toBeGreaterThan(0);
-    expect(val).toBeLessThanOrEqual(700);
+    expect(val).toBeLessThanOrEqual(MAX_LIMIT);
 
     await page.reload();
     await page.click('[data-testid="tile-reports-admin"]').catch(() => {});

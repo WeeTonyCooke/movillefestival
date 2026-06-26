@@ -71,6 +71,9 @@ interface AdminData {
   ballsRemaining: number;
   ballsSold: number;
   onlineBallLimit: number;
+  soldOnline: number;
+  availableOnline: number;
+  releasedForManual: number;
   availableBallNumbers: number[];
 }
 
@@ -266,7 +269,7 @@ export default function AdminPage() {
         if (res.status === 401) { sessionStorage.removeItem(SESSION_PW_KEY); setAuthed(false); setView('choice'); setError('Incorrect password'); setLoading(false); return null; }
         return res.json();
       })
-      .then(d => { if (d) { setData(d); if (d.onlineBallLimit !== undefined) { setOnlineLimit(d.onlineBallLimit); setOnlineLimitInput(String(d.onlineBallLimit)); } setLoading(false); } })
+      .then(d => { if (d) { setData(d); if (d.onlineBallLimit !== undefined) { setOnlineLimit(d.onlineBallLimit); setOnlineLimitInput(String(d.onlineBallLimit)); }  setLoading(false); } })
       .catch(() => setLoading(false));
   }, [authed, password, view]);
 
@@ -569,8 +572,9 @@ ${allNumbers.map(({ n, status }) => '<div class="ball ' + status + '">' + String
   const sponsorPaid = (data.sponsorships || []).filter(r => r.status === 'paid');
   const passesPaid = (data.passes || []).filter(r => r.status === 'paid');
   const totalRevenue = [...ballPaid, ...bedPaid, ...craftPaid, ...sponsorPaid, ...passesPaid].reduce((s, r) => s + r.amount_paid, 0);
-  const onlineBallsSold = ballPaid.reduce((s, r) => s + (r.quantity || 0), 0);
-  const onlineBallsRemaining = onlineLimit - onlineBallsSold;
+  const onlineBallsSold = data?.soldOnline ?? ballPaid.reduce((s, r) => s + (r.quantity || 0), 0);
+  const onlineBallsRemaining = data?.availableOnline ?? (onlineLimit - onlineBallsSold);
+  const releasedForManual = data?.releasedForManual ?? 0;
 
   const filteredBallDrop = filterRegs(data.ballDrop);
   const filteredBedPush = filterRegs(data.bedPush);
@@ -604,7 +608,7 @@ ${allNumbers.map(({ n, status }) => '<div class="ball ' + status + '">' + String
         {/* Summary cards */}
         <div style={s.metricGrid}>
           {[
-            { label: 'Ball Drop', value: `${onlineBallsSold} balls sold`, sub: `${onlineBallsRemaining} of ${onlineLimit} online remaining` },
+            { label: 'Ball Drop', value: `${onlineBallsSold} balls sold`, sub: `${onlineBallsRemaining} online remaining · ${releasedForManual} released for manual` },
             { label: 'Bed Push', value: `${bedPaid.length} teams`, sub: `${BED_PUSH_CAPACITY - bedPaid.length} of ${BED_PUSH_CAPACITY} remaining` },
             { label: 'Craft Fair', value: craftPaid.length >= CRAFT_FAIR_CAPACITY ? 'Sold out' : `${craftPaid.length} stalls`, sub: craftPaid.length >= CRAFT_FAIR_CAPACITY ? `${CRAFT_FAIR_CAPACITY} stalls filled` : `${CRAFT_FAIR_CAPACITY - craftPaid.length} remaining` },
             { label: 'Festival Passes', value: `${passesPaid.length} sold`, sub: `${formatEuro(passesPaid.reduce((s, r) => s + r.amount_paid, 0))} revenue` },
@@ -653,10 +657,11 @@ ${allNumbers.map(({ n, status }) => '<div class="ball ' + status + '">' + String
             <div data-testid="inventory-bar" style={s.inventoryBar}>
               {[
                 { label: 'Total balls', value: TOTAL_BALLS.toLocaleString() },
-                { label: `Online (501–${500 + onlineLimit})`, value: onlineLimit },
-                { label: `Paper (1–500)`, value: TOTAL_BALLS - onlineLimit },
+                { label: 'Online allocation', value: onlineLimit },
                 { label: 'Online sold', value: onlineBallsSold },
                 { label: 'Online remaining', value: onlineBallsRemaining },
+                { label: 'Released for manual sale', value: releasedForManual },
+                { label: 'Original paper (1–500)', value: PAPER_MAX },
               ].map(({ label, value }, i, arr) => (
                 <span key={label} style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
                   <div style={s.invItem}>

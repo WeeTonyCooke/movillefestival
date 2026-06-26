@@ -670,34 +670,6 @@ ${allNumbers.map(({ n, status }) => '<div class="ball ' + status + '">' + String
                   {i < arr.length - 1 && <div style={s.invDivider} />}
                 </span>
               ))}
-              <div style={s.invAdjust}>
-                {limitLockedAt ? (
-                  <span style={{ fontSize: '12px', color: '#6BAFA7', fontStyle: 'italic' }}>
-                    Limit set {new Date(limitLockedAt).toLocaleDateString('en-IE', { day: 'numeric', month: 'short', year: 'numeric' })} — cannot be changed
-                  </span>
-                ) : (
-                  <>
-                    <span style={s.invAdjustLabel}>Set online limit (one time only)</span>
-                    <input
-                      type="number"
-                      data-testid="online-limit-input"
-                      value={onlineLimitInput}
-                      onChange={e => setOnlineLimitInput(e.target.value)}
-                      style={s.invAdjustInput}
-                      min={0}
-                      max={TOTAL_BALLS - PAPER_MAX}
-                    />
-                    <button data-testid="save-online-limit" onClick={handleSaveOnlineLimit} disabled={savingLimit} style={{ ...btnStyle('primary'), padding: '6px 14px' }}>
-                      {savingLimit ? 'Saving…' : 'Save'}
-                    </button>
-                  </>
-                )}
-              </div>
-            </div>
-            {/* Ball number exports */}
-            <div style={{ display: 'flex', gap: '10px', margin: '0 0 16px' }}>
-              <button onClick={handleExportBallNumbersCSV} style={btnStyle('secondary')}>⬇ Export ball numbers CSV</button>
-              <button onClick={handleExportBallNumbersPDF} style={btnStyle('secondary')}>⬇ Export ball numbers PDF</button>
             </div>
 
             <div style={s.tableWrap}>

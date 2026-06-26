@@ -30,7 +30,7 @@ export async function handler(event) {
       supabase.from('sponsorship_registrations').select('*').order('created_at', { ascending: false }),
       supabase.from('festival_passes').select('*').order('created_at', { ascending: false }),
       supabase.from('ball_drop_balls').select('*', { count: 'exact', head: true }).eq('status', 'sold'),
-      supabase.from('ball_drop_balls').select('ball_number').eq('status', 'available').order('ball_number', { ascending: true }),
+      supabase.from('ball_drop_balls').select('number').eq('status', 'available').order('number', { ascending: true }),
       supabase.from('festival_config').select('value').eq('key', 'online_ball_limit').single(),
     ]);
 
@@ -38,7 +38,7 @@ export async function handler(event) {
       ? parseInt(configResult.data.value, 10)
       : ONLINE_DEFAULT;
 
-    const allAvailableNumbers = (availableBallNumbers.data || []).map(r => r.ball_number);
+    const allAvailableNumbers = (availableBallNumbers.data || []).map(r => r.number);
 
     // Available numbers are those within the current online limit
     // Online balls are numbered 501–1200; the limit controls how many of those are open for sale.

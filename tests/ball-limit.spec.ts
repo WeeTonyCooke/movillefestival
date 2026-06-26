@@ -211,13 +211,7 @@ test.describe('Ball limit — status-based allocation model', () => {
     originalAvailable = body.availableOnline;
   });
 
-  test.afterAll(async ({ request }) => {
-    // Restore original limit
-    await request.post(LIMIT_ENDPOINT, {
-      headers: { 'x-admin-password': ADMIN, 'Content-Type': 'application/json' },
-      data: { online_ball_limit: originalLimit },
-    });
-  });
+  // Note: no afterAll restore — online allocation is one-way only (can only decrease)
 
   test('BL-15 Reducing limit marks surplus balls as manual', async ({ request }) => {
     const reduceBy = 50;
@@ -248,37 +242,21 @@ test.describe('Ball limit — status-based allocation model', () => {
     expect(body.soldOnline).toBe(originalSold);
   });
 
-  test('BL-17 Increasing limit restores manual balls to available', async ({ request }) => {
-    // Read current state (may have been modified by BL-15)
-    const beforeRes = await request.get(ADMIN_DATA_ENDPOINT, {
+  test('BL-17 Increasing the limit is rejected — one-way only', async ({ request }) => {
+    const currentRes = await request.get(ADMIN_DATA_ENDPOINT, {
       headers: { 'x-admin-password': ADMIN },
     });
-    const before = await beforeRes.json();
-    const currentAvailable = before.availableOnline as number;
-    const currentLimit = before.onlineBallLimit as number;
+    const current = await currentRes.json();
+    const currentLimit = current.onlineBallLimit as number;
 
-    // Reduce by 30 from current state
-    const reduceBy = 30;
-    const reducedLimit = Math.max(originalSold, currentLimit - reduceBy);
-    if (reducedLimit === currentLimit) {
-      test.skip(true, 'Not enough headroom on this instance');
-      return;
-    }
-
-    await request.post(LIMIT_ENDPOINT, {
-      headers: { 'x-admin-password': ADMIN, 'Content-Type': 'application/json' },
-      data: { online_ball_limit: reducedLimit },
-    });
-
-    // Now increase back to current limit
+    // Attempt to increase by 1
     const res = await request.post(LIMIT_ENDPOINT, {
       headers: { 'x-admin-password': ADMIN, 'Content-Type': 'application/json' },
-      data: { online_ball_limit: currentLimit },
+      data: { online_ball_limit: currentLimit + 1 },
     });
-    expect(res.status()).toBe(200);
+    expect(res.status()).toBe(409);
     const body = await res.json();
-    // Available should be back to what it was before this test
-    expect(body.available_online).toBe(currentAvailable);
+    expect(body.error).toMatch(/only be reduced/i);
   });
 
   test('BL-18 Original paper balls (1–500) are never touched', async ({ request }) => {

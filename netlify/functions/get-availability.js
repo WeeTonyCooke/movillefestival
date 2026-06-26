@@ -9,11 +9,11 @@ const ONLINE_DEFAULT = 700;
 
 export async function handler() {
   try {
-    const [ballsAllocated, teamsRegistered, stallsBooked, configResult] = await Promise.all([
+    const [availableResult, teamsRegistered, stallsBooked, configResult] = await Promise.all([
       supabase
         .from('ball_drop_balls')
-        .select('*', { count: 'exact', head: true })
-        .eq('status', 'allocated'),
+        .select('ball_number', { count: 'exact' })
+        .eq('status', 'available'),
       supabase
         .from('bed_push_registrations')
         .select('*', { count: 'exact', head: true })
@@ -33,8 +33,10 @@ export async function handler() {
       ? parseInt(configResult.data.value, 10)
       : ONLINE_DEFAULT;
 
-    const sold = ballsAllocated.count ?? 0;
-    const ballsAvailable = Math.max(0, onlineBallLimit - sold);
+    // Count only available balls within the active online allocation (501 to 500+limit)
+    const limitCeiling = 500 + onlineBallLimit;
+    const allAvailable = (availableResult.data || []).map(r => r.ball_number);
+    const ballsAvailable = allAvailable.filter(n => n <= limitCeiling).length;
 
     return {
       statusCode: 200,

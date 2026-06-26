@@ -654,7 +654,7 @@ ${allNumbers.map(({ n, status }) => '<div class="ball ' + status + '">' + String
         {tab === 'balldrop' && (
           <>
             {/* Inventory bar */}
-            <div style={s.inventoryBar}>
+            <div data-testid="inventory-bar" style={s.inventoryBar}>
               {[
                 { label: 'Total balls', value: TOTAL_BALLS.toLocaleString() },
                 { label: `Online (501–${500 + onlineLimit})`, value: onlineLimit },

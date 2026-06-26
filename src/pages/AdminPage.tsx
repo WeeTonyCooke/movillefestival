@@ -71,6 +71,7 @@ interface AdminData {
   ballsRemaining: number;
   ballsSold: number;
   onlineBallLimit: number;
+  onlineBallLimitLockedAt: string | null;
   availableBallNumbers: number[];
 }
 
@@ -231,6 +232,7 @@ export default function AdminPage() {
   const [onlineLimit, setOnlineLimit] = useState(ONLINE_DEFAULT);
   const [onlineLimitInput, setOnlineLimitInput] = useState(String(ONLINE_DEFAULT));
   const [showAvailableNumbers, setShowAvailableNumbers] = useState(false);
+  const [limitLockedAt, setLimitLockedAt] = useState<string | null>(null);
   const [savingLimit, setSavingLimit] = useState(false);
   const [view, setView] = useState<'choice' | 'dashboard'>('choice');
   const [checkingLogin, setCheckingLogin] = useState(false);
@@ -266,7 +268,7 @@ export default function AdminPage() {
         if (res.status === 401) { sessionStorage.removeItem(SESSION_PW_KEY); setAuthed(false); setView('choice'); setError('Incorrect password'); setLoading(false); return null; }
         return res.json();
       })
-      .then(d => { if (d) { setData(d); if (d.onlineBallLimit !== undefined) { setOnlineLimit(d.onlineBallLimit); setOnlineLimitInput(String(d.onlineBallLimit)); } setLoading(false); } })
+      .then(d => { if (d) { setData(d); if (d.onlineBallLimit !== undefined) { setOnlineLimit(d.onlineBallLimit); setOnlineLimitInput(String(d.onlineBallLimit)); } if (d.onlineBallLimitLockedAt !== undefined) { setLimitLockedAt(d.onlineBallLimitLockedAt); } setLoading(false); } })
       .catch(() => setLoading(false));
   }, [authed, password, view]);
 
@@ -286,6 +288,67 @@ export default function AdminPage() {
     } catch {
       setResendState(prev => ({ ...prev, [key]: 'error' }));
       setTimeout(() => setResendState(prev => ({ ...prev, [key]: 'idle' })), 3000);
+    }
+  };
+
+  const handleExportBallNumbersCSV = () => {
+    if (!data) return;
+    const rows = data.availableBallNumbers.map(n => [String(n), 'available']);
+    // Also include sold balls from registrations
+    const soldNumbers: number[] = data.ballDrop
+      .filter(r => r.status === 'paid')
+      .flatMap(r => r.ball_numbers || [])
+      .sort((a, b) => a - b);
+    const allRows = [
+      ...soldNumbers.map(n => [String(n), 'sold']),
+      ...rows,
+    ].sort((a, b) => Number(a[0]) - Number(b[0]));
+    downloadCSV('ball-numbers.csv', allRows, ['Ball Number', 'Status']);
+  };
+
+  const handleExportBallNumbersPDF = () => {
+    if (!data) return;
+    const soldNumbers: number[] = data.ballDrop
+      .filter(r => r.status === 'paid')
+      .flatMap(r => r.ball_numbers || [])
+      .sort((a, b) => a - b);
+    const allNumbers = [
+      ...soldNumbers.map(n => ({ n, status: 'sold' })),
+      ...data.availableBallNumbers.map(n => ({ n, status: 'available' })),
+    ].sort((a, b) => a.n - b.n);
+
+    const html = `<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Ball Drop Numbers — Moville Summer Festival 2026</title>
+<style>
+  body { font-family: Arial, sans-serif; padding: 20px; }
+  h1 { font-size: 18px; margin-bottom: 4px; }
+  p { font-size: 12px; color: #555; margin: 0 0 16px; }
+  .grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: 6px; }
+  .ball { border: 1px solid #ccc; border-radius: 4px; padding: 6px 4px; text-align: center; font-size: 12px; font-weight: bold; }
+  .ball.sold { background: #f0f0f0; color: #999; text-decoration: line-through; }
+  .ball.available { background: #fff; color: #000; }
+  .legend { margin-top: 16px; font-size: 11px; color: #555; }
+</style>
+</head>
+<body>
+<h1>Moville Summer Festival 2026 — Ball Drop Numbers</h1>
+<p>Online allocation: balls 501–${500 + data.onlineBallLimit} &nbsp;|&nbsp; Limit: ${data.onlineBallLimit} &nbsp;|&nbsp; Sold online: ${soldNumbers.length} &nbsp;|&nbsp; Available: ${data.availableBallNumbers.length}</p>
+<div class="grid">
+${allNumbers.map(({ n, status }) => '<div class="ball ' + status + '">' + String(n) + '</div>').join('\n')}
+')}
+</div>
+<div class="legend">Crossed out = sold online. Blank = available for sale.</div>
+</body>
+</html>`;
+
+    const win = window.open('', '_blank');
+    if (win) {
+      win.document.write(html);
+      win.document.close();
+      win.print();
     }
   };
 
@@ -309,6 +372,8 @@ export default function AdminPage() {
         return;
       }
       setOnlineLimit(val);
+      const body = await res.json().catch(() => ({}));
+      if (body.locked_at) setLimitLockedAt(body.locked_at);
       fetchData();
     } catch {
       alert('Could not reach the server. Check your connection.');
@@ -589,11 +654,11 @@ export default function AdminPage() {
         {tab === 'balldrop' && (
           <>
             {/* Inventory bar */}
-            <div style={s.inventoryBar}>
+            <div data-testid="inventory-bar" style={s.inventoryBar}>
               {[
                 { label: 'Total balls', value: TOTAL_BALLS.toLocaleString() },
-                { label: 'Online (501–1200)', value: onlineLimit },
-                { label: 'Paper (1–500)', value: TOTAL_BALLS - onlineLimit },
+                { label: `Online (501–${500 + onlineLimit})`, value: onlineLimit },
+                { label: `Paper (1–500)`, value: TOTAL_BALLS - onlineLimit },
                 { label: 'Online sold', value: onlineBallsSold },
                 { label: 'Online remaining', value: onlineBallsRemaining },
               ].map(({ label, value }, i, arr) => (
@@ -606,38 +671,33 @@ export default function AdminPage() {
                 </span>
               ))}
               <div style={s.invAdjust}>
-                <span style={s.invAdjustLabel}>Adjust online limit</span>
-                <input
-                  type="number"
-                  data-testid="online-limit-input"
-                  value={onlineLimitInput}
-                  onChange={e => setOnlineLimitInput(e.target.value)}
-                  style={s.invAdjustInput}
-                  min={0}
-                  max={TOTAL_BALLS - PAPER_MAX}
-                />
-                <button data-testid="save-online-limit" onClick={handleSaveOnlineLimit} disabled={savingLimit} style={{ ...btnStyle('primary'), padding: '6px 14px' }}>
-                  {savingLimit ? 'Saving…' : 'Save'}
-                </button>
+                {limitLockedAt ? (
+                  <span style={{ fontSize: '12px', color: '#6BAFA7', fontStyle: 'italic' }}>
+                    Limit set {new Date(limitLockedAt).toLocaleDateString('en-IE', { day: 'numeric', month: 'short', year: 'numeric' })} — cannot be changed
+                  </span>
+                ) : (
+                  <>
+                    <span style={s.invAdjustLabel}>Set online limit (one time only)</span>
+                    <input
+                      type="number"
+                      data-testid="online-limit-input"
+                      value={onlineLimitInput}
+                      onChange={e => setOnlineLimitInput(e.target.value)}
+                      style={s.invAdjustInput}
+                      min={0}
+                      max={TOTAL_BALLS - PAPER_MAX}
+                    />
+                    <button data-testid="save-online-limit" onClick={handleSaveOnlineLimit} disabled={savingLimit} style={{ ...btnStyle('primary'), padding: '6px 14px' }}>
+                      {savingLimit ? 'Saving…' : 'Save'}
+                    </button>
+                  </>
+                )}
               </div>
-              {data && data.availableBallNumbers && (
-                <div data-testid="available-numbers-panel" style={s.availableNumbersWrap}>
-                  <div data-testid="available-numbers-toggle" style={s.availableNumbersTitle} onClick={() => setShowAvailableNumbers(v => !v)}>
-                    <span>Available ball numbers ({data.availableBallNumbers.length} remaining within limit)</span>
-                    <span style={{ fontSize: '11px', color: '#6BAFA7' }}>{showAvailableNumbers ? '▲ Hide' : '▼ Show'}</span>
-                  </div>
-                  {showAvailableNumbers && (
-                    <div data-testid="available-numbers-grid" style={s.availableNumbersGrid}>
-                      {data.availableBallNumbers.map(n => (
-                        <span key={n} style={s.availableNumberChip}>{n}</span>
-                      ))}
-                      {data.availableBallNumbers.length === 0 && (
-                        <span style={{ fontSize: '13px', color: '#888' }}>No balls available within current limit.</span>
-                      )}
-                    </div>
-                  )}
-                </div>
-              )}
+            </div>
+            {/* Ball number exports */}
+            <div style={{ display: 'flex', gap: '10px', margin: '0 0 16px' }}>
+              <button onClick={handleExportBallNumbersCSV} style={btnStyle('secondary')}>⬇ Export ball numbers CSV</button>
+              <button onClick={handleExportBallNumbersPDF} style={btnStyle('secondary')}>⬇ Export ball numbers PDF</button>
             </div>
 
             <div style={s.tableWrap}>

@@ -34,6 +34,22 @@ export async function handler(event) {
     };
   }
 
+  // Check if already locked
+  const { data: lockData } = await supabase
+    .from('festival_config')
+    .select('value')
+    .eq('key', 'online_ball_limit_locked_at')
+    .single();
+
+  if (lockData?.value) {
+    return {
+      statusCode: 409,
+      body: JSON.stringify({ error: 'Limit already set and locked', locked_at: lockData.value }),
+    };
+  }
+
+  const lockedAt = new Date().toISOString();
+
   const { error } = await supabase
     .from('festival_config')
     .upsert({ key: 'online_ball_limit', value: String(val) }, { onConflict: 'key' });
@@ -43,9 +59,18 @@ export async function handler(event) {
     return { statusCode: 500, body: JSON.stringify({ error: 'Failed to save limit' }) };
   }
 
+  const { error: lockError } = await supabase
+    .from('festival_config')
+    .upsert({ key: 'online_ball_limit_locked_at', value: lockedAt }, { onConflict: 'key' });
+
+  if (lockError) {
+    console.error('update-ball-limit lock error:', lockError);
+    // Limit saved but lock failed — not fatal, log and continue
+  }
+
   return {
     statusCode: 200,
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ ok: true, online_ball_limit: val }),
+    body: JSON.stringify({ ok: true, online_ball_limit: val, locked_at: lockedAt }),
   };
 }

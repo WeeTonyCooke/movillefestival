@@ -1224,3 +1224,8 @@
   background: var(--bg-soft);
   border-color: var(--border-strong);
 }
+
+.theme-night .ball-number-chip {
+  background: #1F4E5F;
+  color: #F4EDE0;
+}

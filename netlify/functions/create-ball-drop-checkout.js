@@ -35,23 +35,11 @@ export async function handler(event) {
   }
 
   try {
-    // Read active online limit from festival_config
-    const { data: configData } = await supabase
-      .from('festival_config')
-      .select('value')
-      .eq('key', 'online_ball_limit')
-      .single();
-
-    const onlineLimit = configData?.value ? parseInt(configData.value, 10) : 700;
-    const maxOnlineBall = 500 + onlineLimit;
-
-    // Check availability within active online range only
+    // Check availability — only balls with status 'available' are in the online pool
     const { count, error: countError } = await supabase
       .from('ball_drop_balls')
       .select('*', { count: 'exact', head: true })
-      .eq('status', 'available')
-      .gte('number', 501)
-      .lte('number', maxOnlineBall);
+      .eq('status', 'available');
 
     if (countError) throw countError;
 

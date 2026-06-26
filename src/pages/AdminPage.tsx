@@ -337,7 +337,7 @@ export default function AdminPage() {
 <h1>Moville Summer Festival 2026 — Ball Drop Numbers</h1>
 <p>Online allocation: balls 501–${500 + data.onlineBallLimit} &nbsp;|&nbsp; Limit: ${data.onlineBallLimit} &nbsp;|&nbsp; Sold online: ${soldNumbers.length} &nbsp;|&nbsp; Available: ${data.availableBallNumbers.length}</p>
 <div class="grid">
-${allNumbers.map(({ n, status }) => `<div class="ball ${status}">${n}</div>`).join('
+${allNumbers.map(({ n, status }) => '<div class="ball ' + status + '">' + String(n) + '</div>').join('\n')}
 ')}
 </div>
 <div class="legend">Crossed out = sold online. Blank = available for sale.</div>
@@ -698,7 +698,7 @@ ${allNumbers.map(({ n, status }) => `<div class="ball ${status}">${n}</div>`).jo
             <div style={{ display: 'flex', gap: '10px', margin: '0 0 16px' }}>
               <button onClick={handleExportBallNumbersCSV} style={btnStyle('secondary')}>⬇ Export ball numbers CSV</button>
               <button onClick={handleExportBallNumbersPDF} style={btnStyle('secondary')}>⬇ Export ball numbers PDF</button>
-            </div>            </div>
+            </div>
 
             <div style={s.tableWrap}>
               <table style={s.table}>

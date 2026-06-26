@@ -304,37 +304,32 @@ export default function AdminPage() {
 
   const handleExportBallNumbersPDF = () => {
     if (!data) return;
-    const soldNumbers: number[] = [...(data.soldBallNumbers || [])].sort((a, b) => a - b);
-    const allNumbers = [
-      ...soldNumbers.map(n => ({ n, status: 'sold' })),
-      ...data.availableBallNumbers.map(n => ({ n, status: 'available' })),
-    ].sort((a, b) => a.n - b.n);
+    const sellableNumbers = [...data.availableBallNumbers].sort((a, b) => a - b);
+    const generatedAt = new Date().toLocaleString('en-IE', { dateStyle: 'full', timeStyle: 'short' });
 
-    const html = `<!DOCTYPE html>
-<html>
-<head>
-<meta charset="utf-8">
-<title>Ball Drop Numbers — Moville Summer Festival 2026</title>
-<style>
-  body { font-family: Arial, sans-serif; padding: 20px; }
-  h1 { font-size: 18px; margin-bottom: 4px; }
-  p { font-size: 12px; color: #555; margin: 0 0 16px; }
-  .grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: 6px; }
-  .ball { border: 1px solid #ccc; border-radius: 4px; padding: 6px 4px; text-align: center; font-size: 12px; font-weight: bold; }
-  .ball.sold { background: #f0f0f0; color: #999; text-decoration: line-through; }
-  .ball.available { background: #fff; color: #000; }
-  .legend { margin-top: 16px; font-size: 11px; color: #555; }
-</style>
-</head>
-<body>
-<h1>Moville Summer Festival 2026 — Ball Drop Numbers</h1>
-<p>Online allocation: ${data.onlineBallLimit} balls &nbsp;|&nbsp; Sold online: ${soldNumbers.length} &nbsp;|&nbsp; Available online: ${data.availableBallNumbers.length}</p>
-<div class="grid">
-${allNumbers.map(({ n, status }) => '<div class="ball ' + status + '">' + String(n) + '</div>').join('\n')}
-</div>
-<div class="legend">Crossed out = sold online. Blank = available for sale.</div>
-</body>
-</html>`;
+    const rows = sellableNumbers.map(n =>
+      '<div class="ball">' + String(n) + '</div>'
+    ).join('\n');
+
+    const html = '<!DOCTYPE html><html><head><meta charset="utf-8">' +
+      '<title>Manual Ball Numbers — Moville Summer Festival 2026</title>' +
+      '<style>' +
+      'body{font-family:Arial,sans-serif;padding:20px}' +
+      'h1{font-size:18px;margin:0 0 6px}' +
+      '.meta{font-size:11px;color:#555;margin:0 0 10px}' +
+      '.warning{background:#fff8e1;border:1px solid #f9a825;border-radius:4px;padding:10px 14px;font-size:12px;margin-bottom:16px;color:#5d4037}' +
+      '.grid{display:grid;grid-template-columns:repeat(10,1fr);gap:6px}' +
+      '.ball{border:1px solid #333;border-radius:4px;padding:8px 4px;text-align:center;font-size:13px;font-weight:bold;color:#000;background:#fff}' +
+      '</style></head><body>' +
+      '<h1>Manual Ball Numbers Available for Sale</h1>' +
+      '<p class="meta">Generated: ' + generatedAt + ' &nbsp;|&nbsp; Numbers available: ' + sellableNumbers.length + '</p>' +
+      '<div class="warning">' +
+      'This sheet contains only numbers available for manual sale.<br>' +
+      'Any number printed on this sheet may be sold safely.<br>' +
+      '<strong>Generate a fresh sheet before each selling session.</strong>' +
+      '</div>' +
+      '<div class="grid">' + rows + '</div>' +
+      '</body></html>';
 
     const win = window.open('', '_blank');
     if (win) {

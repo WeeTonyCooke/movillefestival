@@ -71,7 +71,6 @@ interface AdminData {
   ballsRemaining: number;
   ballsSold: number;
   onlineBallLimit: number;
-  onlineBallLimitLockedAt: string | null;
   availableBallNumbers: number[];
 }
 
@@ -232,7 +231,6 @@ export default function AdminPage() {
   const [onlineLimit, setOnlineLimit] = useState(ONLINE_DEFAULT);
   const [onlineLimitInput, setOnlineLimitInput] = useState(String(ONLINE_DEFAULT));
   const [showAvailableNumbers, setShowAvailableNumbers] = useState(false);
-  const [limitLockedAt, setLimitLockedAt] = useState<string | null>(null);
   const [savingLimit, setSavingLimit] = useState(false);
   const [view, setView] = useState<'choice' | 'dashboard'>('choice');
   const [checkingLogin, setCheckingLogin] = useState(false);
@@ -268,7 +266,7 @@ export default function AdminPage() {
         if (res.status === 401) { sessionStorage.removeItem(SESSION_PW_KEY); setAuthed(false); setView('choice'); setError('Incorrect password'); setLoading(false); return null; }
         return res.json();
       })
-      .then(d => { if (d) { setData(d); if (d.onlineBallLimit !== undefined) { setOnlineLimit(d.onlineBallLimit); setOnlineLimitInput(String(d.onlineBallLimit)); } if (d.onlineBallLimitLockedAt !== undefined) { setLimitLockedAt(d.onlineBallLimitLockedAt); } setLoading(false); } })
+      .then(d => { if (d) { setData(d); if (d.onlineBallLimit !== undefined) { setOnlineLimit(d.onlineBallLimit); setOnlineLimitInput(String(d.onlineBallLimit)); } setLoading(false); } })
       .catch(() => setLoading(false));
   }, [authed, password, view]);
 
@@ -365,15 +363,13 @@ ${allNumbers.map(({ n, status }) => '<div class="ball ' + status + '">' + String
         headers: { 'Content-Type': 'application/json', 'x-admin-password': password },
         body: JSON.stringify({ online_ball_limit: val }),
       });
+      const body = await res.json().catch(() => ({}));
       if (!res.ok) {
-        const err = await res.json().catch(() => ({}));
-        alert(`Failed to save: ${err.error || res.status}`);
+        alert(body.error || `Failed to save (${res.status})`);
         setSavingLimit(false);
         return;
       }
       setOnlineLimit(val);
-      const body = await res.json().catch(() => ({}));
-      if (body.locked_at) setLimitLockedAt(body.locked_at);
       fetchData();
     } catch {
       alert('Could not reach the server. Check your connection.');
@@ -670,6 +666,36 @@ ${allNumbers.map(({ n, status }) => '<div class="ball ' + status + '">' + String
                   {i < arr.length - 1 && <div style={s.invDivider} />}
                 </span>
               ))}
+              <div style={s.invAdjust}>
+                <span style={s.invAdjustLabel}>Adjust online limit</span>
+                <input
+                  type="number"
+                  data-testid="online-limit-input"
+                  value={onlineLimitInput}
+                  onChange={e => setOnlineLimitInput(e.target.value)}
+                  style={s.invAdjustInput}
+                  min={onlineBallsSold}
+                  max={TOTAL_BALLS - PAPER_MAX}
+                />
+                <button
+                  data-testid="save-online-limit"
+                  onClick={handleSaveOnlineLimit}
+                  disabled={savingLimit || parseInt(onlineLimitInput, 10) < onlineBallsSold}
+                  style={{ ...btnStyle('primary'), padding: '6px 14px' }}
+                >
+                  {savingLimit ? 'Saving…' : 'Save'}
+                </button>
+                {parseInt(onlineLimitInput, 10) < onlineBallsSold && (
+                  <span style={{ fontSize: '11px', color: '#c0392b', marginLeft: '4px' }}>
+                    Cannot be lower than {onlineBallsSold} (online sold)
+                  </span>
+                )}
+              </div>
+            </div>
+            {/* Ball number exports */}
+            <div style={{ display: 'flex', gap: '10px', margin: '0 0 16px' }}>
+              <button data-testid="export-csv" onClick={handleExportBallNumbersCSV} style={btnStyle('secondary')}>⬇ Export ball numbers CSV</button>
+              <button data-testid="export-pdf" onClick={handleExportBallNumbersPDF} style={btnStyle('secondary')}>⬇ Export ball numbers PDF</button>
             </div>
 
             <div style={s.tableWrap}>

@@ -431,10 +431,21 @@ async function handleBallDrop(session) {
     return;
   }
 
+  // Fetch active online limit before claiming
+  const { data: configData } = await supabase
+    .from('festival_config')
+    .select('value')
+    .eq('key', 'online_ball_limit')
+    .single();
+
+  const onlineLimit = configData?.value ? parseInt(configData.value, 10) : 700;
+  const maxOnlineBall = 500 + onlineLimit;
+
   const { data: ballNumbers, error: claimError } = await supabase
     .rpc('claim_ball_numbers', {
       p_quantity: quantity,
       p_registration_id: registrationId,
+      p_max_ball_number: maxOnlineBall,
     });
 
   if (claimError || !ballNumbers || ballNumbers.length < quantity) {

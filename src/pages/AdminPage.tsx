@@ -327,9 +327,9 @@ export default function AdminPage() {
       'body{font-family:Arial,sans-serif;margin:0;padding:0;background:#fff}' +
       '.page{width:100%;page-break-after:always}' +
       '.page:last-child{page-break-after:avoid}' +
-      '.header{background:#1F4E5F;color:#fff;text-align:center;padding:10px 16px;border-radius:6px 6px 0 0;margin-bottom:8px}' +
+      '.header{text-align:center;padding:6px 16px 10px;margin-bottom:8px;border-bottom:2px solid #1F4E5F}' +
       '.header h1{margin:0;font-size:18px;font-weight:900;letter-spacing:0.04em}' +
-      '.header p{margin:4px 0 0;font-size:12px;color:#F4E9D8}' +
+      '.header p{margin:4px 0 0;font-size:12px}' +
       '.prizes{text-align:center;font-size:12px;font-weight:700;color:#1F4E5F;' +
       'background:#F4E9D8;padding:5px;border-radius:4px;margin-bottom:10px}' +
       '.cols{display:grid;grid-template-columns:1fr 1fr;gap:8px}' +
@@ -375,8 +375,9 @@ export default function AdminPage() {
       return (
         '<div class="page">' +
         '<div class="header">' +
-        '<h1>Moville Festival — Ball Drop Fundraiser</h1>' +
-        '<p>€5 per ball &nbsp;·&nbsp; 5 balls for €20 &nbsp;·&nbsp; 1st €500 · 2nd €300 · 3rd €150</p>' +
+        '<img src="https://movillefestival.com/movillefestivallogo.png" alt="Moville Festival" style="max-width:100%;max-height:120px;display:block;margin:0 auto 6px" />' +
+        '<p style="text-align:center;font-size:13px;font-weight:700;color:#1F4E5F;margin:0 0 2px">BALL DROP FUNDRAISER</p>' +
+        '<p style="text-align:center;font-size:12px;color:#F26A4B;margin:0">€5 per ball &nbsp;·&nbsp; 5 balls for €20 &nbsp;·&nbsp; 1st €500 · 2nd €300 · 3rd €150</p>' +
         '</div>' +
         '<div class="prizes">Festival Square · Sunday 12 July · 5.30pm</div>' +
         '<div class="cols">' + rows + '</div>' +

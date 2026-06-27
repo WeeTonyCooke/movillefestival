@@ -75,6 +75,7 @@ interface AdminData {
   availableOnline: number;
   releasedForManual: number;
   availableBallNumbers: number[];
+  manualBallNumbers: number[];
   soldBallNumbers: number[];
 }
 
@@ -293,18 +294,128 @@ export default function AdminPage() {
     }
   };
 
+  const handleGenerateManualSalesSheets = () => {
+    if (!data) return;
+
+    const manualNumbers = [...(data.manualBallNumbers || [])].sort((a, b) => a - b);
+    const generatedAt = new Date().toLocaleString('en-IE', { dateStyle: 'full', timeStyle: 'short' });
+    const total = manualNumbers.length;
+
+    if (total === 0) {
+      const win = window.open('', '_blank');
+      if (win) {
+        win.document.write(
+          '<!DOCTYPE html><html><head><meta charset="utf-8"><title>Manual Sales Sheets</title>' +
+          '<style>body{font-family:Arial,sans-serif;padding:40px;text-align:center}' +
+          'h1{font-size:20px;color:#1F4E5F}p{font-size:14px;color:#555}</style></head><body>' +
+          '<h1>Moville Summer Festival 2026 — Ball Drop Manual Sales Sheets</h1>' +
+          '<p>No manual balls available. No balls have been released for manual sale yet.</p>' +
+          '</body></html>'
+        );
+        win.document.close();
+      }
+      return;
+    }
+
+    // 20 entries per page (2 columns x 10 rows), matching the fundraiser sheet layout
+    const ENTRIES_PER_PAGE = 20;
+    const totalPages = Math.ceil(total / ENTRIES_PER_PAGE);
+
+    const css =
+      '@page{size:A4 portrait;margin:12mm}' +
+      '*{box-sizing:border-box}' +
+      'body{font-family:Arial,sans-serif;margin:0;padding:0;background:#fff}' +
+      '.page{width:100%;page-break-after:always}' +
+      '.page:last-child{page-break-after:avoid}' +
+      '.header{text-align:center;padding:6px 16px 10px;margin-bottom:8px;border-bottom:2px solid #1F4E5F}' +
+      '.header h1{margin:0;font-size:18px;font-weight:900;letter-spacing:0.04em}' +
+      '.header p{margin:4px 0 0;font-size:12px}' +
+      '.prizes{text-align:center;font-size:12px;font-weight:700;color:#1F4E5F;' +
+      'background:#F4E9D8;padding:5px;border-radius:4px;margin-bottom:10px}' +
+      '.cols{display:grid;grid-template-columns:1fr 1fr;gap:8px}' +
+      '.entry{display:grid;grid-template-columns:44px 1fr;gap:6px;align-items:start;' +
+      'border-bottom:1px solid #ddd;padding:5px 0}' +
+      '.ball-num{width:40px;height:40px;border-radius:6px;border:2px solid #5a9e50;' +
+      'background:#d4edcf;display:flex;align-items:center;justify-content:center;' +
+      'font-size:11px;font-weight:900;color:#2d5a27;text-align:center;line-height:1.1}' +
+      '.fields{display:flex;flex-direction:column;gap:3px}' +
+      '.field-row{display:flex;align-items:center;gap:4px;font-size:9px;color:#333}' +
+      '.field-label{min-width:52px;font-weight:700}' +
+      '.field-line{flex:1;border-bottom:1px solid #999;height:12px}' +
+      '.paid-box{display:flex;align-items:center;gap:3px;font-size:9px;font-weight:700}' +
+      '.paid-check{width:10px;height:10px;border:1px solid #333;display:inline-block}' +
+      '.footer{border-top:1px solid #ccc;margin-top:8px;padding-top:5px;' +
+      'display:flex;justify-content:space-between;font-size:8px;color:#888}' +
+      '@media print{.page{page-break-after:always}.page:last-child{page-break-after:avoid}}';
+
+    const makeEntry = (n: number) =>
+      '<div class="entry">' +
+        '<div class="ball-num">' + n + '</div>' +
+        '<div class="fields">' +
+          '<div class="field-row"><span class="field-label">Name:</span><span class="field-line"></span></div>' +
+          '<div class="field-row">' +
+            '<span class="field-label">Phone No.:</span><span class="field-line"></span>' +
+            '<span class="paid-box">PAID <span class="paid-check"></span></span>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+
+    const pages = Array.from({ length: totalPages }, (_, pageIdx) => {
+      const slice = manualNumbers.slice(pageIdx * ENTRIES_PER_PAGE, (pageIdx + 1) * ENTRIES_PER_PAGE);
+      // Split into two columns of 10
+      const col1 = slice.slice(0, 10);
+      const col2 = slice.slice(10, 20);
+      const maxRows = Math.max(col1.length, col2.length);
+      const rows = Array.from({ length: maxRows }, (_, i) => {
+        const left = col1[i] !== undefined ? makeEntry(col1[i]) : '<div class="entry"><div class="ball-num"></div><div class="fields"><div class="field-row"><span class="field-label">Name:</span><span class="field-line"></span></div><div class="field-row"><span class="field-label">Phone No.:</span><span class="field-line"></span><span class="paid-box">PAID <span class="paid-check"></span></span></div></div></div>';
+        const right = col2[i] !== undefined ? makeEntry(col2[i]) : '<div class="entry"><div class="ball-num"></div><div class="fields"><div class="field-row"><span class="field-label">Name:</span><span class="field-line"></span></div><div class="field-row"><span class="field-label">Phone No.:</span><span class="field-line"></span><span class="paid-box">PAID <span class="paid-check"></span></span></div></div></div>';
+        return '<div style="display:contents">' + left + right + '</div>';
+      }).join('');
+
+      return (
+        '<div class="page">' +
+        '<div class="header">' +
+        '<img src="https://movillefestival.com/movillefestivallogo.png" alt="Moville Festival" style="max-width:100%;max-height:120px;display:block;margin:0 auto 6px" />' +
+        '<p style="text-align:center;font-size:13px;font-weight:700;color:#1F4E5F;margin:0 0 2px">BALL DROP FUNDRAISER</p>' +
+        '<p style="text-align:center;font-size:12px;color:#F26A4B;margin:0">€5 per ball &nbsp;·&nbsp; 5 balls for €20 &nbsp;·&nbsp; 1st €500 · 2nd €300 · 3rd €150</p>' +
+        '</div>' +
+        '<div class="prizes">Festival Square · Sunday 12 July · 5.30pm</div>' +
+        '<div class="cols">' + rows + '</div>' +
+        '<div class="footer">' +
+        '<span>Generated: ' + generatedAt + ' &nbsp;|&nbsp; Total manual balls: ' + total + '</span>' +
+        '<span>Page ' + (pageIdx + 1) + ' of ' + totalPages + '</span>' +
+        '</div>' +
+        '</div>'
+      );
+    }).join('');
+
+    const html =
+      '<!DOCTYPE html><html><head><meta charset="utf-8">' +
+      '<title>Manual Sales Sheets — Moville Summer Festival 2026</title>' +
+      '<style>' + css + '</style>' +
+      '</head><body>' + pages + '</body></html>';
+
+    const win = window.open('', '_blank');
+    if (win) {
+      win.document.write(html);
+      win.document.close();
+      win.print();
+    }
+  };
+
   const handleExportBallNumbersCSV = () => {
     const soldNumbers: number[] = [...(data.soldBallNumbers || [])].sort((a, b) => a - b);
     const allRows = [
       ...soldNumbers.map((n: number) => [String(n), 'sold']),
-      ...data.availableBallNumbers.map(n => [String(n), 'available']),
+      ...(data.availableBallNumbers || []).map(n => [String(n), 'available online']),
+      ...(data.manualBallNumbers || []).map(n => [String(n), 'manual sale']),
     ].sort((a, b) => Number(a[0]) - Number(b[0]));
-    downloadCSV('ball-numbers.csv', allRows, ['Ball Number', 'Status']);
+    downloadCSV('master-inventory.csv', allRows, ['Ball Number', 'Status']);
   };
 
   const handleExportBallNumbersPDF = () => {
     if (!data) return;
-    const sellableNumbers = [...data.availableBallNumbers].sort((a, b) => a - b);
+    const sellableNumbers = [...(data.manualBallNumbers || [])].sort((a, b) => a - b);
     const generatedAt = new Date().toLocaleString('en-IE', { dateStyle: 'full', timeStyle: 'short' });
 
     const rows = sellableNumbers.map(n =>
@@ -312,7 +423,7 @@ export default function AdminPage() {
     ).join('\n');
 
     const html = '<!DOCTYPE html><html><head><meta charset="utf-8">' +
-      '<title>Manual Ball Numbers — Moville Summer Festival 2026</title>' +
+      '<title>Manual Sale Ball Numbers — Moville Summer Festival 2026</title>' +
       '<style>' +
       'body{font-family:Arial,sans-serif;padding:20px}' +
       'h1{font-size:18px;margin:0 0 6px}' +
@@ -321,10 +432,10 @@ export default function AdminPage() {
       '.grid{display:grid;grid-template-columns:repeat(10,1fr);gap:6px}' +
       '.ball{border:1px solid #333;border-radius:4px;padding:8px 4px;text-align:center;font-size:13px;font-weight:bold;color:#000;background:#fff}' +
       '</style></head><body>' +
-      '<h1>Manual Ball Numbers Available for Sale</h1>' +
-      '<p class="meta">Generated: ' + generatedAt + ' &nbsp;|&nbsp; Numbers available: ' + sellableNumbers.length + '</p>' +
+      '<h1>Manual Sale Ball Numbers Available</h1>' +
+      '<p class="meta">Generated: ' + generatedAt + ' &nbsp;|&nbsp; Manual sale numbers available: ' + sellableNumbers.length + '</p>' +
       '<div class="warning">' +
-      'This sheet contains only numbers available for manual sale.<br>' +
+      'This sheet contains only online-allocation numbers released for manual sale.<br>' +
       'Any number printed on this sheet may be sold safely.<br>' +
       '<strong>Generate a fresh sheet before each selling session.</strong>' +
       '</div>' +
@@ -697,8 +808,15 @@ export default function AdminPage() {
             </div>
             {/* Ball number exports */}
             <div style={{ display: 'flex', gap: '10px', margin: '0 0 16px' }}>
-              <button data-testid="export-csv" onClick={handleExportBallNumbersCSV} style={btnStyle('secondary')}>⬇ Export ball numbers CSV</button>
-              <button data-testid="export-pdf" onClick={handleExportBallNumbersPDF} style={btnStyle('secondary')}>⬇ Export ball numbers PDF</button>
+              <button data-testid="export-csv" onClick={handleExportBallNumbersCSV} style={btnStyle('secondary')}>⬇ Export Master Inventory</button>
+              <button data-testid="export-pdf" onClick={handleExportBallNumbersPDF} style={btnStyle('secondary')}>⬇ Export Manual Sale Numbers</button>
+              <button
+                data-testid="generate-manual-sheets"
+                data-manual-count={String(data?.manualBallNumbers?.length ?? 0)}
+                data-available-count={String(data?.availableBallNumbers?.length ?? 0)}
+                onClick={handleGenerateManualSalesSheets}
+                style={{ ...btnStyle('primary'), padding: '6px 16px' }}
+              >🖨 Generate Manual Sales Sheets</button>
             </div>
 
             {/* Ball Drop Master Inventory */}
@@ -749,7 +867,7 @@ export default function AdminPage() {
                   {Array.from({ length: TOTAL_BALLS - PAPER_MAX }, (_, i) => {
                     const n = PAPER_MAX + 1 + i;
                     const isSold = (data.soldBallNumbers || []).includes(n);
-                    const isManual = !isSold && !(data.availableBallNumbers || []).includes(n);
+                    const isManual = (data.manualBallNumbers || []).includes(n);
                     return (
                       <div key={n} style={{
                         border: isSold ? '1px solid #ddd' : isManual ? '1px solid #F2B49A' : '2px solid #6BAFA7',

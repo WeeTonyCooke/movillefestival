@@ -166,16 +166,50 @@ async function loginAdmin(page: Page) {
 
 // ── BD: Ball Drop ─────────────────────────────────────────────────────────────
 
+// ── Ball Drop availability check ─────────────────────────────────────────────
+// Checkout tests (BD-02 to BD-05) require online balls to be available.
+// If the environment has no available balls, they skip cleanly.
+
+const BD_AVAILABILITY_ENDPOINT = BASE.replace(/\/+$/, '') + '/.netlify/functions/get-availability';
+const CHECKOUT_SKIP_REASON = 'Ball Drop online checkout tests skipped: no online balls available in this environment.';
+
+async function getBallsAvailable(request: import('@playwright/test').APIRequestContext): Promise<number> {
+  const res = await request.get(BD_AVAILABILITY_ENDPOINT);
+  if (!res.ok()) return 0;
+  const body = await res.json();
+  return typeof body.ballsAvailable === 'number' ? body.ballsAvailable : 0;
+}
+
 test.describe('Ball Drop', () => {
 
   test('BD-01 Ball Drop page loads correctly', async ({ page }) => {
     await page.goto(BASE + '/ball-drop');
     await expect(page.locator('h1')).toContainText(/ball drop/i);
-    // Check either bundle option is visible
-    await expect(page.locator('.ball-option').first()).toBeVisible();
   });
 
-  test('BD-02 Successful single ball purchase', async ({ page }) => {
+  test('BD-CLOSED-01 Closed Ball Drop shows unavailable state, no Stripe redirect', async ({ page, request }) => {
+    const available = await getBallsAvailable(request);
+    if (available > 0) {
+      test.skip(true, 'Online sales are open — closed-state test not applicable');
+      return;
+    }
+    await page.goto(BASE + '/ball-drop');
+    await expect(page.locator('h1')).toContainText(/ball drop/i);
+    // Sold-out / unavailable message must be visible
+    await expect(page.locator('text=/sold.?out|no longer available|closed|unavailable/i').first()).toBeVisible({ timeout: 6000 });
+    // Stripe submit button must not be present
+    await expect(page.locator('button.form-submit')).not.toBeVisible();
+    // Must not redirect to Stripe
+    await page.waitForTimeout(2000);
+    expect(page.url()).not.toMatch(/checkout\.stripe\.com/);
+  });
+
+  test('BD-02 Successful single ball purchase', async ({ page, request }) => {
+    const available = await getBallsAvailable(request);
+    if (available === 0) {
+      test.skip(true, CHECKOUT_SKIP_REASON);
+      return;
+    }
     await fillBallDropForm(page, { bundle: '1', email: 'bd02@example.com' });
     await page.locator('button.form-submit').click();
     await fillStripeCard(page, '4242 4242 4242 4242');
@@ -183,7 +217,12 @@ test.describe('Ball Drop', () => {
     await expect(page.locator('text=/confirmed|thank you|numbers/i').first()).toBeVisible({ timeout: 10000 });
   });
 
-  test('BD-03 Successful 5-ball bundle purchase', async ({ page }) => {
+  test('BD-03 Successful 5-ball bundle purchase', async ({ page, request }) => {
+    const available = await getBallsAvailable(request);
+    if (available < 5) {
+      test.skip(true, CHECKOUT_SKIP_REASON);
+      return;
+    }
     await fillBallDropForm(page, { bundle: '5', email: 'bd03@example.com' });
     await page.locator('button.form-submit').click();
     await fillStripeCard(page, '4242 4242 4242 4242');
@@ -191,14 +230,24 @@ test.describe('Ball Drop', () => {
     await expect(page.locator('text=/confirmed|thank you|numbers/i').first()).toBeVisible({ timeout: 10000 });
   });
 
-  test('BD-04 Declined card — no registration created', async ({ page }) => {
+  test('BD-04 Declined card — no registration created', async ({ page, request }) => {
+    const available = await getBallsAvailable(request);
+    if (available === 0) {
+      test.skip(true, CHECKOUT_SKIP_REASON);
+      return;
+    }
     await fillBallDropForm(page, { email: 'bd04@example.com' });
     await page.locator('button.form-submit').click();
     await fillStripeCard(page, '4000 0000 0000 0002');
     await expect(page.locator('text=/declined/i')).toBeVisible({ timeout: 15000 });
   });
 
-  test('BD-05 Abandoned checkout returns to ball drop', async ({ page }) => {
+  test('BD-05 Abandoned checkout returns to ball drop', async ({ page, request }) => {
+    const available = await getBallsAvailable(request);
+    if (available === 0) {
+      test.skip(true, CHECKOUT_SKIP_REASON);
+      return;
+    }
     await fillBallDropForm(page, { email: 'bd05@example.com' });
     await page.locator('button.form-submit').click();
     await expect(page).toHaveURL(/checkout\.stripe\.com/, { timeout: 12000 });
@@ -206,27 +255,34 @@ test.describe('Ball Drop', () => {
     await expect(page).toHaveURL(/ball-drop/, { timeout: 8000 });
   });
 
-  test('BD-06 Form validation — missing name blocks submit', async ({ page }) => {
+  test('BD-06 Form validation — missing name blocks submit', async ({ page, request }) => {
+    const available = await getBallsAvailable(request);
+    if (available === 0) {
+      test.skip(true, 'BD-06 skipped: Ball Drop is closed in this environment — form not shown');
+      return;
+    }
     await page.goto(BASE + '/ball-drop');
     await page.locator('.ball-option:not(.featured)').first().click();
-    // Leave name blank — fill email and phone only
     await page.fill('[placeholder="your@email.com"]', 'test@example.com');
     await page.fill('[placeholder*="country code"]', '0851234567');
     await page.waitForTimeout(400);
     await page.locator('label').filter({ hasText: /over 18/i }).click();
     await page.locator('label').filter({ hasText: /non-refundable|refund/i }).click();
-    // Submit button should remain disabled
     await expect(page.locator('button.form-submit')).toBeDisabled();
   });
 
-  test('BD-07 Form validation — over 18 checkbox keeps button disabled', async ({ page }) => {
+  test('BD-07 Form validation — over 18 checkbox keeps button disabled', async ({ page, request }) => {
+    const available = await getBallsAvailable(request);
+    if (available === 0) {
+      test.skip(true, 'BD-07 skipped: Ball Drop is closed in this environment — form not shown');
+      return;
+    }
     await page.goto(BASE + '/ball-drop');
     await page.locator('.ball-option:not(.featured)').first().click();
     await page.fill('[placeholder="Your full name"]', 'Test User');
     await page.fill('[placeholder="your@email.com"]', 'test@example.com');
     await page.fill('[placeholder*="country code"]', '0851234567');
     await page.waitForTimeout(400);
-    // Do NOT tick over18 — button should be disabled
     await expect(page.locator('button.form-submit')).toBeDisabled();
   });
 

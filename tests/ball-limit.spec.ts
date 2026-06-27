@@ -280,6 +280,64 @@ test.describe('Ball limit — status-based allocation model', () => {
 
 });
 
+// ── Manual Sales Sheets ──────────────────────────────────────────────────────
+
+test.describe('Ball limit — Generate Manual Sales Sheets', () => {
+
+  test('MS-01 Generate Manual Sales Sheets button is visible on Ball Drop tab', async ({ page }) => {
+    await loginAdmin(page);
+    await page.click('[data-testid="tab-balldrop"]');
+    await expect(page.locator('[data-testid="generate-manual-sheets"]')).toBeVisible({ timeout: 8000 });
+  });
+
+  test('MS-02 Manual ball numbers in get-admin-data are all >= 501 and status manual', async ({ request }) => {
+    const res = await request.get(ADMIN_DATA_ENDPOINT, {
+      headers: { 'x-admin-password': ADMIN },
+    });
+    expect(res.status()).toBe(200);
+    const body = await res.json();
+    const manualNumbers: number[] = body.manualBallNumbers || [];
+    for (const n of manualNumbers) {
+      expect(n, `Manual ball ${n} should be >= 501`).toBeGreaterThanOrEqual(501);
+      expect(n, `Manual ball ${n} should be <= 1200`).toBeLessThanOrEqual(1200);
+    }
+  });
+
+  test('MS-03 Manual ball numbers contain no duplicates', async ({ request }) => {
+    const res = await request.get(ADMIN_DATA_ENDPOINT, {
+      headers: { 'x-admin-password': ADMIN },
+    });
+    const body = await res.json();
+    const manualNumbers: number[] = body.manualBallNumbers || [];
+    const unique = new Set(manualNumbers);
+    expect(unique.size).toBe(manualNumbers.length);
+  });
+
+  test('MS-04 Manual ball numbers do not overlap with available-online or sold numbers', async ({ request }) => {
+    const res = await request.get(ADMIN_DATA_ENDPOINT, {
+      headers: { 'x-admin-password': ADMIN },
+    });
+    const body = await res.json();
+    const manualSet = new Set(body.manualBallNumbers || []);
+    const availableSet = new Set(body.availableBallNumbers || []);
+    const soldSet = new Set(body.soldBallNumbers || []);
+    for (const n of manualSet) {
+      expect(availableSet.has(n), `Ball ${n} appears in both manual and available`).toBe(false);
+      expect(soldSet.has(n), `Ball ${n} appears in both manual and sold`).toBe(false);
+    }
+  });
+
+  test('MS-05 Manual + available + sold online + paper = 1200', async ({ request }) => {
+    const res = await request.get(ADMIN_DATA_ENDPOINT, {
+      headers: { 'x-admin-password': ADMIN },
+    });
+    const body = await res.json();
+    const total = body.soldOnline + body.availableOnline + body.releasedForManual + PAPER_MAX;
+    expect(total).toBe(TOTAL_BALLS);
+  });
+
+});
+
 // ── BL-20 to BL-23: Admin UI ─────────────────────────────────────────────────
 
 test.describe('Ball limit — Admin UI', () => {

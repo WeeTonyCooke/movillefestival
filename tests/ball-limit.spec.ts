@@ -338,6 +338,187 @@ test.describe('Ball limit — Generate Manual Sales Sheets', () => {
 
 });
 
+
+// ── MS-06 to MS-12: Allocation regression tests ──────────────────────────────
+// These tests protect against the allocation bug discovered in production and
+// ensure the manual allocation model remains correct as the codebase evolves.
+// MS-09 and MS-10 are destructive (one-way allocation) — they permanently
+// reduce the online limit on this instance and cannot be reversed.
+
+test.describe('Ball limit — allocation regression', () => {
+
+  let snapshot: {
+    onlineBallLimit: number;
+    soldOnline: number;
+    availableOnline: number;
+    releasedForManual: number;
+    availableBallNumbers: number[];
+    manualBallNumbers: number[];
+    soldBallNumbers: number[];
+  };
+
+  test.beforeAll(async ({ request }) => {
+    const res = await request.get(ADMIN_DATA_ENDPOINT, {
+      headers: { 'x-admin-password': ADMIN },
+    });
+    expect(res.status()).toBe(200);
+    snapshot = await res.json();
+  });
+
+  test('MS-06 manualBallNumbers are sorted ascending', async () => {
+    const nums = snapshot.manualBallNumbers || [];
+    for (let i = 1; i < nums.length; i++) {
+      expect(nums[i], `nums[${i}]=${nums[i]} should be > nums[${i-1}]=${nums[i-1]}`).toBeGreaterThan(nums[i - 1]);
+    }
+  });
+
+  test('MS-07 Every manual ball is a valid online ball number (>= 501)', async () => {
+    // NOTE: We cannot query the database directly from Playwright.
+    // This test validates the API response: every manualBallNumber must be
+    // in the online range (501–1200), not in the paper range (1–500).
+    // MS-08 provides the complementary assertion.
+    const nums = snapshot.manualBallNumbers || [];
+    for (const n of nums) {
+      expect(n, `Manual ball ${n} must be >= 501 (online range only)`).toBeGreaterThanOrEqual(ONLINE_START);
+      expect(n, `Manual ball ${n} must be <= ${TOTAL_BALLS}`).toBeLessThanOrEqual(TOTAL_BALLS);
+    }
+  });
+
+  test('MS-08 Manual balls never include original paper balls (1–500)', async () => {
+    const nums = snapshot.manualBallNumbers || [];
+    const paperBalls = nums.filter(n => n <= PAPER_MAX);
+    expect(paperBalls.length).toBe(0);
+  });
+
+  test('MS-09 Reducing online limit releases the correct number of balls', async ({ request }) => {
+    const reduceBy = 100;
+    const newLimit = snapshot.onlineBallLimit - reduceBy;
+
+    if (newLimit < snapshot.soldOnline) {
+      test.skip(true, `Cannot reduce by ${reduceBy} — would go below sold count (${snapshot.soldOnline})`);
+      return;
+    }
+    if (snapshot.availableOnline < reduceBy) {
+      test.skip(true, `Only ${snapshot.availableOnline} available — not enough headroom to reduce by ${reduceBy}`);
+      return;
+    }
+
+    const before = snapshot;
+
+    const res = await request.post(LIMIT_ENDPOINT, {
+      headers: { 'x-admin-password': ADMIN, 'Content-Type': 'application/json' },
+      data: { online_ball_limit: newLimit },
+    });
+    expect(res.status()).toBe(200);
+
+    const afterRes = await request.get(ADMIN_DATA_ENDPOINT, {
+      headers: { 'x-admin-password': ADMIN },
+    });
+    const after = await afterRes.json();
+
+    // Exactly reduceBy balls moved from available to manual
+    expect(after.availableOnline).toBe(before.availableOnline - reduceBy);
+    expect(after.manualBallNumbers.length).toBe((before.manualBallNumbers || []).length + reduceBy);
+
+    // Sold count unchanged
+    expect(after.soldOnline).toBe(before.soldOnline);
+
+    // Inventory reconciles
+    const total = after.soldOnline + after.availableOnline + after.releasedForManual + PAPER_MAX;
+    expect(total).toBe(TOTAL_BALLS);
+
+    // Update snapshot for MS-10
+    snapshot = after;
+  });
+
+  test('MS-10 Closing online sales releases every remaining unsold online ball', async ({ request }) => {
+    // Set limit to exactly the number already sold — closes online sales
+    const closingLimit = snapshot.soldOnline;
+
+    if (snapshot.availableOnline === 0) {
+      test.skip(true, 'Online sales already closed on this instance');
+      return;
+    }
+
+    const previousAvailable = snapshot.availableOnline;
+    const previousManualCount = (snapshot.manualBallNumbers || []).length;
+
+    const res = await request.post(LIMIT_ENDPOINT, {
+      headers: { 'x-admin-password': ADMIN, 'Content-Type': 'application/json' },
+      data: { online_ball_limit: closingLimit },
+    });
+    expect(res.status()).toBe(200);
+
+    const afterRes = await request.get(ADMIN_DATA_ENDPOINT, {
+      headers: { 'x-admin-password': ADMIN },
+    });
+    const after = await afterRes.json();
+
+    // Online sales closed
+    expect(after.availableOnline).toBe(0);
+
+    // Every previously available ball is now manual
+    expect(after.manualBallNumbers.length).toBe(previousManualCount + previousAvailable);
+
+    // Sold count unchanged
+    expect(after.soldOnline).toBe(snapshot.soldOnline);
+
+    // No ball disappeared or duplicated
+    const total = after.soldOnline + after.availableOnline + after.releasedForManual + PAPER_MAX;
+    expect(total).toBe(TOTAL_BALLS);
+
+    // Update snapshot for MS-11
+    snapshot = after;
+  });
+
+  test('MS-11 Manual allocation is one-way — increasing limit is rejected', async ({ request }) => {
+    const currentManualCount = (snapshot.manualBallNumbers || []).length;
+    const attemptedLimit = snapshot.onlineBallLimit + 1;
+
+    const res = await request.post(LIMIT_ENDPOINT, {
+      headers: { 'x-admin-password': ADMIN, 'Content-Type': 'application/json' },
+      data: { online_ball_limit: attemptedLimit },
+    });
+
+    // Must be rejected
+    expect(res.status()).toBe(409);
+    const body = await res.json();
+    expect(body.error).toMatch(/only be reduced/i);
+
+    // Verify state is unchanged
+    const afterRes = await request.get(ADMIN_DATA_ENDPOINT, {
+      headers: { 'x-admin-password': ADMIN },
+    });
+    const after = await afterRes.json();
+    expect(after.onlineBallLimit).toBe(snapshot.onlineBallLimit);
+    expect((after.manualBallNumbers || []).length).toBe(currentManualCount);
+  });
+
+  test('MS-12 Existing online reports use available-online dataset, not manual', async ({ request }) => {
+    const res = await request.get(ADMIN_DATA_ENDPOINT, {
+      headers: { 'x-admin-password': ADMIN },
+    });
+    const body = await res.json();
+
+    const availableNumbers: number[] = body.availableBallNumbers || [];
+    const manualNumbers: number[] = body.manualBallNumbers || [];
+    const manualSet = new Set(manualNumbers);
+
+    // availableBallNumbers must not contain any manual ball
+    for (const n of availableNumbers) {
+      expect(manualSet.has(n), `Ball ${n} appears in both availableBallNumbers and manualBallNumbers`).toBe(false);
+    }
+
+    // availableBallNumbers count must match availableOnline
+    expect(availableNumbers.length).toBe(body.availableOnline);
+
+    // ballsAvailable from get-availability must also match
+    const availRes = await request.get(AVAILABILITY_ENDPOINT);
+    const availBody = await availRes.json();
+    expect(availBody.ballsAvailable).toBe(body.availableOnline);
+  });
+
+});
 // ── BL-20 to BL-23: Admin UI ─────────────────────────────────────────────────
 
 test.describe('Ball limit — Admin UI', () => {

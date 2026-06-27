@@ -308,7 +308,7 @@ export default function AdminPage() {
           '<!DOCTYPE html><html><head><meta charset="utf-8"><title>Manual Sales Sheets</title>' +
           '<style>body{font-family:Arial,sans-serif;padding:40px;text-align:center}' +
           'h1{font-size:20px;color:#1F4E5F}p{font-size:14px;color:#555}</style></head><body>' +
-          '<h1>Moville Summer Festival 2026 — Manual Sales Sheets</h1>' +
+          '<h1>Moville Summer Festival 2026 — Ball Drop Manual Sales Sheets</h1>' +
           '<p>No manual balls available. No balls have been released for manual sale yet.</p>' +
           '</body></html>'
         );
@@ -317,41 +317,72 @@ export default function AdminPage() {
       return;
     }
 
-    // Split into pages of 100 balls (10 columns x 10 rows)
-    const BALLS_PER_PAGE = 100;
-    const totalPages = Math.ceil(total / BALLS_PER_PAGE);
+    // 20 entries per page (2 columns x 10 rows), matching the fundraiser sheet layout
+    const ENTRIES_PER_PAGE = 20;
+    const totalPages = Math.ceil(total / ENTRIES_PER_PAGE);
 
-    const pageStyle =
-      'body{font-family:Arial,sans-serif;margin:0;padding:0}' +
-      '.page{padding:16px 20px;page-break-after:always;box-sizing:border-box}' +
+    const css =
+      '@page{size:A4 portrait;margin:12mm}' +
+      '*{box-sizing:border-box}' +
+      'body{font-family:Arial,sans-serif;margin:0;padding:0;background:#fff}' +
+      '.page{width:100%;page-break-after:always}' +
       '.page:last-child{page-break-after:avoid}' +
-      'h1{font-size:16px;font-weight:bold;color:#1F4E5F;margin:0 0 2px}' +
-      '.subtitle{font-size:11px;color:#555;margin:0 0 10px}' +
-      '.warning{background:#fff8e1;border:1px solid #f9a825;border-radius:4px;' +
-      'padding:8px 12px;font-size:11px;margin-bottom:12px;color:#5d4037}' +
-      '.grid{display:grid;grid-template-columns:repeat(10,1fr);gap:5px;margin-bottom:12px}' +
-      '.ball{border:2px solid #1F4E5F;border-radius:4px;padding:8px 2px;text-align:center;' +
-      'font-size:13px;font-weight:bold;color:#1F4E5F;background:#fff;min-height:36px;' +
-      'display:flex;align-items:center;justify-content:center}' +
-      '.footer{border-top:1px solid #ddd;padding-top:8px;font-size:10px;color:#888;' +
-      'display:flex;justify-content:space-between}' +
-      '@media print{.page{padding:12px 16px}}';
+      '.header{background:#1F4E5F;color:#fff;text-align:center;padding:10px 16px;border-radius:6px 6px 0 0;margin-bottom:8px}' +
+      '.header h1{margin:0;font-size:18px;font-weight:900;letter-spacing:0.04em}' +
+      '.header p{margin:4px 0 0;font-size:12px;color:#F4E9D8}' +
+      '.prizes{text-align:center;font-size:12px;font-weight:700;color:#1F4E5F;' +
+      'background:#F4E9D8;padding:5px;border-radius:4px;margin-bottom:10px}' +
+      '.cols{display:grid;grid-template-columns:1fr 1fr;gap:8px}' +
+      '.entry{display:grid;grid-template-columns:44px 1fr;gap:6px;align-items:start;' +
+      'border-bottom:1px solid #ddd;padding:5px 0}' +
+      '.ball-num{width:40px;height:40px;border-radius:6px;border:2px solid #5a9e50;' +
+      'background:#d4edcf;display:flex;align-items:center;justify-content:center;' +
+      'font-size:11px;font-weight:900;color:#2d5a27;text-align:center;line-height:1.1}' +
+      '.fields{display:flex;flex-direction:column;gap:3px}' +
+      '.field-row{display:flex;align-items:center;gap:4px;font-size:9px;color:#333}' +
+      '.field-label{min-width:52px;font-weight:700}' +
+      '.field-line{flex:1;border-bottom:1px solid #999;height:12px}' +
+      '.paid-box{display:flex;align-items:center;gap:3px;font-size:9px;font-weight:700}' +
+      '.paid-check{width:10px;height:10px;border:1px solid #333;display:inline-block}' +
+      '.footer{border-top:1px solid #ccc;margin-top:8px;padding-top:5px;' +
+      'display:flex;justify-content:space-between;font-size:8px;color:#888}' +
+      '@media print{.page{page-break-after:always}.page:last-child{page-break-after:avoid}}';
+
+    const makeEntry = (n: number) =>
+      '<div class="entry">' +
+        '<div class="ball-num">' + n + '</div>' +
+        '<div class="fields">' +
+          '<div class="field-row"><span class="field-label">Name:</span><span class="field-line"></span></div>' +
+          '<div class="field-row">' +
+            '<span class="field-label">Phone No.:</span><span class="field-line"></span>' +
+            '<span class="paid-box">PAID <span class="paid-check"></span></span>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
 
     const pages = Array.from({ length: totalPages }, (_, pageIdx) => {
-      const slice = manualNumbers.slice(pageIdx * BALLS_PER_PAGE, (pageIdx + 1) * BALLS_PER_PAGE);
-      const balls = slice.map(n => '<div class="ball">' + n + '</div>').join('');
+      const slice = manualNumbers.slice(pageIdx * ENTRIES_PER_PAGE, (pageIdx + 1) * ENTRIES_PER_PAGE);
+      // Split into two columns of 10
+      const col1 = slice.slice(0, 10);
+      const col2 = slice.slice(10, 20);
+      const maxRows = Math.max(col1.length, col2.length);
+      const rows = Array.from({ length: maxRows }, (_, i) => {
+        const left = col1[i] !== undefined ? makeEntry(col1[i]) : '<div class="entry"><div class="ball-num"></div><div class="fields"><div class="field-row"><span class="field-label">Name:</span><span class="field-line"></span></div><div class="field-row"><span class="field-label">Phone No.:</span><span class="field-line"></span><span class="paid-box">PAID <span class="paid-check"></span></span></div></div></div>';
+        const right = col2[i] !== undefined ? makeEntry(col2[i]) : '<div class="entry"><div class="ball-num"></div><div class="fields"><div class="field-row"><span class="field-label">Name:</span><span class="field-line"></span></div><div class="field-row"><span class="field-label">Phone No.:</span><span class="field-line"></span><span class="paid-box">PAID <span class="paid-check"></span></span></div></div></div>';
+        return '<div style="display:contents">' + left + right + '</div>';
+      }).join('');
+
       return (
         '<div class="page">' +
-        '<h1>Moville Summer Festival 2026 — Manual Ball Sales Sheet</h1>' +
-        '<p class="subtitle">Generated: ' + generatedAt + ' &nbsp;|&nbsp; Total manual balls: ' + total + '</p>' +
-        '<div class="warning">' +
-        'COMMITTEE USE ONLY — Every number on this sheet is safe to sell manually.<br>' +
-        '<strong>Generate a fresh sheet before each selling session.</strong>' +
+        '<div class="header">' +
+        '<h1>Moville Festival — Ball Drop Fundraiser</h1>' +
+        '<p>€5 per ball &nbsp;·&nbsp; 5 balls for €20 &nbsp;·&nbsp; 1st €500 · 2nd €300 · 3rd €150</p>' +
         '</div>' +
-        '<div class="grid">' + balls + '</div>' +
+        '<div class="prizes">Festival Square · Sunday 12 July · 5.30pm</div>' +
+        '<div class="cols">' + rows + '</div>' +
         '<div class="footer">' +
-        '<span>Moville Summer Festival 2026 — Ball Drop Manual Sales</span>' +
-        '<span>Page ' + (pageIdx + 1) + ' of ' + totalPages + ' &nbsp;|&nbsp; ' + total + ' balls total</span>' +
+        '<span>Generated: ' + generatedAt + ' &nbsp;|&nbsp; Total manual balls: ' + total + '</span>' +
+        '<span>Page ' + (pageIdx + 1) + ' of ' + totalPages + '</span>' +
         '</div>' +
         '</div>'
       );
@@ -360,7 +391,7 @@ export default function AdminPage() {
     const html =
       '<!DOCTYPE html><html><head><meta charset="utf-8">' +
       '<title>Manual Sales Sheets — Moville Summer Festival 2026</title>' +
-      '<style>' + pageStyle + '</style>' +
+      '<style>' + css + '</style>' +
       '</head><body>' + pages + '</body></html>';
 
     const win = window.open('', '_blank');

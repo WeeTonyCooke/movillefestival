@@ -809,7 +809,13 @@ export default function AdminPage() {
             <div style={{ display: 'flex', gap: '10px', margin: '0 0 16px' }}>
               <button data-testid="export-csv" onClick={handleExportBallNumbersCSV} style={btnStyle('secondary')}>⬇ Export Master Inventory</button>
               <button data-testid="export-pdf" onClick={handleExportBallNumbersPDF} style={btnStyle('secondary')}>⬇ Export Manual Sale Numbers</button>
-              <button data-testid="generate-manual-sheets" onClick={handleGenerateManualSalesSheets} style={{ ...btnStyle('primary'), padding: '6px 16px' }}>🖨 Generate Manual Sales Sheets</button>
+              <button
+                data-testid="generate-manual-sheets"
+                data-manual-count={String(data?.manualBallNumbers?.length ?? 0)}
+                data-available-count={String(data?.availableBallNumbers?.length ?? 0)}
+                onClick={handleGenerateManualSalesSheets}
+                style={{ ...btnStyle('primary'), padding: '6px 16px' }}
+              >🖨 Generate Manual Sales Sheets</button>
             </div>
 
             {/* Ball Drop Master Inventory */}

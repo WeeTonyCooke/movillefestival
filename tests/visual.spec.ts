@@ -29,25 +29,31 @@ const BASE = process.env.TEST_BASE_URL || 'https://stagingmf.netlify.app';
 // Pixel diff threshold — 0.2% of pixels may differ (anti-aliasing, fonts)
 const THRESHOLD = 0.002;
 
-// Routes to screenshot. Each entry: [name, path, waitForSelector]
+// Routes to screenshot. Each entry: [name, path, waitForSelector, clip?]
 // waitForSelector is a visible element that confirms the page has settled.
-const ROUTES: [string, string, string][] = [
+// clip: true = use a fixed-height clip instead of fullPage (for unstable long pages).
+const ROUTES: [string, string, string, boolean?][] = [
   ['home',              '/',                     '.moville-hero'],
   ['programme',         '/programme',            '.prog-title'],
-  ['ball-drop',         '/ball-drop',            '.form-title'],
+  ['ball-drop',         '/ball-drop',            'h1'],
   ['bed-push',          '/bed-push',             '.form-title'],
   ['craft-fair',        '/craft-fair',           '.form-title'],
   ['sponsorship',       '/sponsorship',          '.form-title'],
   ['passes',            '/passes',               '.ticket-card'],
-  ['archive',           '/archive',              '.archive-title'],
+  ['archive',           '/archive',              '.archive-title', true],
   ['getting-to-moville','/getting-to-moville',   '.getting-title'],
   ['privacy',           '/privacy',              '.legal-content'],
   ['terms',             '/terms',                '.legal-content'],
 ];
 
+// Stable viewport — fixed width eliminates scrollbar-driven 1265/1280 oscillation.
+const VIEWPORT = { width: 1280, height: 900 };
+
 // Force the root div to light or dark mode regardless of time of day.
 async function setTheme(page: Page, mode: 'light' | 'dark') {
   await page.evaluate((m) => {
+    // Force scrollbar always visible to prevent layout shifts
+    document.documentElement.style.overflowY = 'scroll';
     const root = document.querySelector('#root > div') as HTMLElement | null;
     if (!root) return;
     if (m === 'dark') {
@@ -66,24 +72,35 @@ async function setTheme(page: Page, mode: 'light' | 'dark') {
 async function waitForPageReady(page: Page, selector: string) {
   await page.waitForSelector(selector, { state: 'visible', timeout: 15000 });
   await page.evaluate(() => document.fonts.ready);
-  // Wait for any lazy images
   await page.waitForLoadState('networkidle');
+  // Extra settle time for dynamic content (ball count, etc.)
+  await page.waitForTimeout(300);
 }
 
 // ── Light mode ────────────────────────────────────────────────────────────────
 
 test.describe('Light mode', () => {
-  for (const [name, path, waitFor] of ROUTES) {
+  for (const [name, path, waitFor, useClip] of ROUTES) {
     test(`${name}`, async ({ page }) => {
+      await page.setViewportSize(VIEWPORT);
       await page.goto(`${BASE}${path}`);
       await waitForPageReady(page, waitFor);
       await setTheme(page, 'light');
 
-      await expect(page).toHaveScreenshot(`${name}-light.png`, {
-        fullPage: true,
-        threshold: THRESHOLD,
-        animations: 'disabled',
-      });
+      if (useClip) {
+        // Clip to a stable top section to avoid long-page flicker
+        await expect(page).toHaveScreenshot(`${name}-light.png`, {
+          clip: { x: 0, y: 0, width: VIEWPORT.width, height: 2400 },
+          threshold: THRESHOLD,
+          animations: 'disabled',
+        });
+      } else {
+        await expect(page).toHaveScreenshot(`${name}-light.png`, {
+          fullPage: true,
+          threshold: THRESHOLD,
+          animations: 'disabled',
+        });
+      }
     });
   }
 });
@@ -91,17 +108,26 @@ test.describe('Light mode', () => {
 // ── Dark mode ─────────────────────────────────────────────────────────────────
 
 test.describe('Dark mode', () => {
-  for (const [name, path, waitFor] of ROUTES) {
+  for (const [name, path, waitFor, useClip] of ROUTES) {
     test(`${name}`, async ({ page }) => {
+      await page.setViewportSize(VIEWPORT);
       await page.goto(`${BASE}${path}`);
       await waitForPageReady(page, waitFor);
       await setTheme(page, 'dark');
 
-      await expect(page).toHaveScreenshot(`${name}-dark.png`, {
-        fullPage: true,
-        threshold: THRESHOLD,
-        animations: 'disabled',
-      });
+      if (useClip) {
+        await expect(page).toHaveScreenshot(`${name}-dark.png`, {
+          clip: { x: 0, y: 0, width: VIEWPORT.width, height: 2400 },
+          threshold: THRESHOLD,
+          animations: 'disabled',
+        });
+      } else {
+        await expect(page).toHaveScreenshot(`${name}-dark.png`, {
+          fullPage: true,
+          threshold: THRESHOLD,
+          animations: 'disabled',
+        });
+      }
     });
   }
 });

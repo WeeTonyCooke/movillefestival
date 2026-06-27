@@ -363,20 +363,44 @@ test.describe('Ball limit — Manual Sales Pack report', () => {
   });
 
   test('MS-07 Manual Sales Pack uses manualBallNumbers not availableBallNumbers — the bug-catcher', async ({ page, request }) => {
-    // Get current state from API
-    const adminRes = await request.get(ADMIN_DATA_ENDPOINT, {
+    // Step 1: Read current state
+    const beforeRes = await request.get(ADMIN_DATA_ENDPOINT, {
       headers: { 'x-admin-password': ADMIN },
     });
-    const adminBody = await adminRes.json();
-    const manualNumbers: number[] = adminBody.manualBallNumbers || [];
-    const availableNumbers: number[] = adminBody.availableBallNumbers || [];
+    const before = await beforeRes.json();
+    const soldOnline: number = before.soldOnline;
+    const availableOnline: number = before.availableOnline;
 
-    if (manualNumbers.length === 0) {
-      test.skip(true, 'No manual balls on this instance — reduce the limit first to create manual balls');
-      return;
+    if (availableOnline === 0) {
+      // Online already closed — manualBallNumbers should already be populated
+      // Verify the report is not blank
+      const manualNumbers: number[] = before.manualBallNumbers || [];
+      if (manualNumbers.length === 0) {
+        test.skip(true, 'No available or manual balls on this instance — cannot test');
+        return;
+      }
+    } else {
+      // Step 2: Close online sales — set limit to exactly soldOnline
+      // This makes availableBallNumbers empty and moves all unsold online balls to manual
+      const closeRes = await request.post(LIMIT_ENDPOINT, {
+        headers: { 'x-admin-password': ADMIN, 'Content-Type': 'application/json' },
+        data: { online_ball_limit: soldOnline },
+      });
+      expect(closeRes.status()).toBe(200);
     }
 
-    // Intercept the new window opened by the report
+    // Step 3: Verify the state — availableBallNumbers must now be empty, manualBallNumbers populated
+    const afterRes = await request.get(ADMIN_DATA_ENDPOINT, {
+      headers: { 'x-admin-password': ADMIN },
+    });
+    const after = await afterRes.json();
+    const manualNumbers: number[] = after.manualBallNumbers || [];
+    const availableNumbers: number[] = after.availableBallNumbers || [];
+
+    expect(availableNumbers.length, 'availableBallNumbers should be empty after closing online sales').toBe(0);
+    expect(manualNumbers.length, 'manualBallNumbers should be populated').toBeGreaterThan(0);
+
+    // Step 4: Generate the Manual Sales Pack
     const [newPage] = await Promise.all([
       page.context().waitForEvent('page'),
       (async () => {
@@ -390,17 +414,18 @@ test.describe('Ball limit — Manual Sales Pack report', () => {
     const html = await newPage.content();
     await newPage.close();
 
-    // Every manual ball number must appear in the PDF HTML
-    for (const n of manualNumbers.slice(0, 20)) { // check first 20 for speed
-      expect(html, `Manual ball ${n} should appear in the report`).toContain(String(n));
+    // Step 5: Report must NOT be blank — this is exactly the original bug
+    expect(html, 'Report must not show the empty state message').not.toContain('No manual balls available');
+
+    // Step 6: Manual ball numbers must appear in the report
+    for (const n of manualNumbers.slice(0, 20)) {
+      expect(html, `Manual ball ${n} should appear in the report`).toContain('>' + String(n) + '<');
     }
 
-    // The report must NOT be empty just because availableBallNumbers is empty
-    // This is exactly the bug: if availableNumbers is 0 but manualNumbers > 0,
-    // the report must still show content
-    if (availableNumbers.length === 0 && manualNumbers.length > 0) {
-      expect(html).not.toContain('No manual balls available');
-      expect(html).toContain(String(manualNumbers[0]));
+    // Step 7: Available-online balls must NOT appear (there are none, but belt-and-braces)
+    // Since availableNumbers is empty this loop won't execute — that's correct
+    for (const n of availableNumbers) {
+      expect(html, `Available-online ball ${n} must not appear in manual sales report`).not.toContain('>' + String(n) + '<');
     }
   });
 

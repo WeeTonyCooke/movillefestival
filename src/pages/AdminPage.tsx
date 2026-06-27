@@ -75,6 +75,7 @@ interface AdminData {
   availableOnline: number;
   releasedForManual: number;
   availableBallNumbers: number[];
+  manualBallNumbers: number[];
   soldBallNumbers: number[];
 }
 
@@ -297,14 +298,15 @@ export default function AdminPage() {
     const soldNumbers: number[] = [...(data.soldBallNumbers || [])].sort((a, b) => a - b);
     const allRows = [
       ...soldNumbers.map((n: number) => [String(n), 'sold']),
-      ...data.availableBallNumbers.map(n => [String(n), 'available']),
+      ...(data.availableBallNumbers || []).map(n => [String(n), 'available online']),
+      ...(data.manualBallNumbers || []).map(n => [String(n), 'manual sale']),
     ].sort((a, b) => Number(a[0]) - Number(b[0]));
     downloadCSV('ball-numbers.csv', allRows, ['Ball Number', 'Status']);
   };
 
   const handleExportBallNumbersPDF = () => {
     if (!data) return;
-    const sellableNumbers = [...data.availableBallNumbers].sort((a, b) => a - b);
+    const sellableNumbers = [...(data.manualBallNumbers || [])].sort((a, b) => a - b);
     const generatedAt = new Date().toLocaleString('en-IE', { dateStyle: 'full', timeStyle: 'short' });
 
     const rows = sellableNumbers.map(n =>
@@ -312,7 +314,7 @@ export default function AdminPage() {
     ).join('\n');
 
     const html = '<!DOCTYPE html><html><head><meta charset="utf-8">' +
-      '<title>Manual Ball Numbers — Moville Summer Festival 2026</title>' +
+      '<title>Manual Sale Ball Numbers — Moville Summer Festival 2026</title>' +
       '<style>' +
       'body{font-family:Arial,sans-serif;padding:20px}' +
       'h1{font-size:18px;margin:0 0 6px}' +
@@ -321,10 +323,10 @@ export default function AdminPage() {
       '.grid{display:grid;grid-template-columns:repeat(10,1fr);gap:6px}' +
       '.ball{border:1px solid #333;border-radius:4px;padding:8px 4px;text-align:center;font-size:13px;font-weight:bold;color:#000;background:#fff}' +
       '</style></head><body>' +
-      '<h1>Manual Ball Numbers Available for Sale</h1>' +
-      '<p class="meta">Generated: ' + generatedAt + ' &nbsp;|&nbsp; Numbers available: ' + sellableNumbers.length + '</p>' +
+      '<h1>Manual Sale Ball Numbers Available</h1>' +
+      '<p class="meta">Generated: ' + generatedAt + ' &nbsp;|&nbsp; Manual sale numbers available: ' + sellableNumbers.length + '</p>' +
       '<div class="warning">' +
-      'This sheet contains only numbers available for manual sale.<br>' +
+      'This sheet contains only online-allocation numbers released for manual sale.<br>' +
       'Any number printed on this sheet may be sold safely.<br>' +
       '<strong>Generate a fresh sheet before each selling session.</strong>' +
       '</div>' +
@@ -749,7 +751,7 @@ export default function AdminPage() {
                   {Array.from({ length: TOTAL_BALLS - PAPER_MAX }, (_, i) => {
                     const n = PAPER_MAX + 1 + i;
                     const isSold = (data.soldBallNumbers || []).includes(n);
-                    const isManual = !isSold && !(data.availableBallNumbers || []).includes(n);
+                    const isManual = (data.manualBallNumbers || []).includes(n);
                     return (
                       <div key={n} style={{
                         border: isSold ? '1px solid #ddd' : isManual ? '1px solid #F2B49A' : '2px solid #6BAFA7',

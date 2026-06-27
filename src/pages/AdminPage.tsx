@@ -301,7 +301,7 @@ export default function AdminPage() {
       ...(data.availableBallNumbers || []).map(n => [String(n), 'available online']),
       ...(data.manualBallNumbers || []).map(n => [String(n), 'manual sale']),
     ].sort((a, b) => Number(a[0]) - Number(b[0]));
-    downloadCSV('ball-numbers.csv', allRows, ['Ball Number', 'Status']);
+    downloadCSV('master-inventory.csv', allRows, ['Ball Number', 'Status']);
   };
 
   const handleExportBallNumbersPDF = () => {
@@ -699,8 +699,8 @@ export default function AdminPage() {
             </div>
             {/* Ball number exports */}
             <div style={{ display: 'flex', gap: '10px', margin: '0 0 16px' }}>
-              <button data-testid="export-csv" onClick={handleExportBallNumbersCSV} style={btnStyle('secondary')}>⬇ Export ball numbers CSV</button>
-              <button data-testid="export-pdf" onClick={handleExportBallNumbersPDF} style={btnStyle('secondary')}>⬇ Export ball numbers PDF</button>
+              <button data-testid="export-csv" onClick={handleExportBallNumbersCSV} style={btnStyle('secondary')}>⬇ Export Master Inventory</button>
+              <button data-testid="export-pdf" onClick={handleExportBallNumbersPDF} style={btnStyle('secondary')}>⬇ Export Manual Sale Numbers</button>
             </div>
 
             {/* Ball Drop Master Inventory */}

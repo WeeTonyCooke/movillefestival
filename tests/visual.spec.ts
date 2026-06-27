@@ -53,7 +53,6 @@ const VIEWPORT = { width: 1280, height: 900 };
 async function setTheme(page: Page, mode: 'light' | 'dark') {
   await page.evaluate((m) => {
     // Force scrollbar always visible to prevent layout shifts
-    document.documentElement.style.overflowY = 'scroll';
     const root = document.querySelector('#root > div') as HTMLElement | null;
     if (!root) return;
     if (m === 'dark') {
@@ -66,6 +65,15 @@ async function setTheme(page: Page, mode: 'light' | 'dark') {
   }, mode);
   // Give CSS transitions a moment to settle
   await page.waitForTimeout(400);
+}
+
+// Inject scrollbar stabilisation CSS — must be called before any layout is measured.
+// Forces the vertical scrollbar to always occupy space, eliminating the
+// 1265px ↔ 1280px width oscillation caused by scrollbar appearing/disappearing.
+async function injectScrollbarStability(page: Page) {
+  await page.addStyleTag({
+    content: 'html { overflow-y: scroll !important; scrollbar-gutter: stable !important; }',
+  });
 }
 
 // Wait for all images and fonts to load before screenshotting
@@ -84,6 +92,7 @@ test.describe('Light mode', () => {
     test(`${name}`, async ({ page }) => {
       await page.setViewportSize(VIEWPORT);
       await page.goto(`${BASE}${path}`);
+      await injectScrollbarStability(page);
       await waitForPageReady(page, waitFor);
       await setTheme(page, 'light');
 
@@ -112,6 +121,7 @@ test.describe('Dark mode', () => {
     test(`${name}`, async ({ page }) => {
       await page.setViewportSize(VIEWPORT);
       await page.goto(`${BASE}${path}`);
+      await injectScrollbarStability(page);
       await waitForPageReady(page, waitFor);
       await setTheme(page, 'dark');
 

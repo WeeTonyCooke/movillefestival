@@ -305,8 +305,8 @@ test.describe('Ball limit — Admin UI', () => {
   test('BL-22 Export buttons are visible', async ({ page }) => {
     await loginAdmin(page);
     await page.click('[data-testid="tab-balldrop"]');
-    await expect(page.locator('[data-testid="export-csv"]')).toBeVisible({ timeout: 8000 });
-    await expect(page.locator('[data-testid="export-pdf"]')).toBeVisible();
+    await expect(page.locator('button:has-text("Export Master Inventory")')).toBeVisible({ timeout: 8000 });
+    await expect(page.locator('button:has-text("Export Manual Sale Numbers")')).toBeVisible();
   });
 
   test('BL-23 Limit persists across page reload', async ({ page }) => {

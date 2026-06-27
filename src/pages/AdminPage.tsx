@@ -294,6 +294,83 @@ export default function AdminPage() {
     }
   };
 
+  const handleGenerateManualSalesSheets = () => {
+    if (!data) return;
+
+    const manualNumbers = [...(data.manualBallNumbers || [])].sort((a, b) => a - b);
+    const generatedAt = new Date().toLocaleString('en-IE', { dateStyle: 'full', timeStyle: 'short' });
+    const total = manualNumbers.length;
+
+    if (total === 0) {
+      const win = window.open('', '_blank');
+      if (win) {
+        win.document.write(
+          '<!DOCTYPE html><html><head><meta charset="utf-8"><title>Manual Sales Sheets</title>' +
+          '<style>body{font-family:Arial,sans-serif;padding:40px;text-align:center}' +
+          'h1{font-size:20px;color:#1F4E5F}p{font-size:14px;color:#555}</style></head><body>' +
+          '<h1>Moville Summer Festival 2026 — Manual Sales Sheets</h1>' +
+          '<p>No manual balls available. No balls have been released for manual sale yet.</p>' +
+          '</body></html>'
+        );
+        win.document.close();
+      }
+      return;
+    }
+
+    // Split into pages of 100 balls (10 columns x 10 rows)
+    const BALLS_PER_PAGE = 100;
+    const totalPages = Math.ceil(total / BALLS_PER_PAGE);
+
+    const pageStyle =
+      'body{font-family:Arial,sans-serif;margin:0;padding:0}' +
+      '.page{padding:16px 20px;page-break-after:always;box-sizing:border-box}' +
+      '.page:last-child{page-break-after:avoid}' +
+      'h1{font-size:16px;font-weight:bold;color:#1F4E5F;margin:0 0 2px}' +
+      '.subtitle{font-size:11px;color:#555;margin:0 0 10px}' +
+      '.warning{background:#fff8e1;border:1px solid #f9a825;border-radius:4px;' +
+      'padding:8px 12px;font-size:11px;margin-bottom:12px;color:#5d4037}' +
+      '.grid{display:grid;grid-template-columns:repeat(10,1fr);gap:5px;margin-bottom:12px}' +
+      '.ball{border:2px solid #1F4E5F;border-radius:4px;padding:8px 2px;text-align:center;' +
+      'font-size:13px;font-weight:bold;color:#1F4E5F;background:#fff;min-height:36px;' +
+      'display:flex;align-items:center;justify-content:center}' +
+      '.footer{border-top:1px solid #ddd;padding-top:8px;font-size:10px;color:#888;' +
+      'display:flex;justify-content:space-between}' +
+      '@media print{.page{padding:12px 16px}}';
+
+    const pages = Array.from({ length: totalPages }, (_, pageIdx) => {
+      const slice = manualNumbers.slice(pageIdx * BALLS_PER_PAGE, (pageIdx + 1) * BALLS_PER_PAGE);
+      const balls = slice.map(n => '<div class="ball">' + n + '</div>').join('');
+      return (
+        '<div class="page">' +
+        '<h1>Moville Summer Festival 2026 — Manual Ball Sales Sheet</h1>' +
+        '<p class="subtitle">Generated: ' + generatedAt + ' &nbsp;|&nbsp; Total manual balls: ' + total + '</p>' +
+        '<div class="warning">' +
+        'COMMITTEE USE ONLY — Every number on this sheet is safe to sell manually.<br>' +
+        '<strong>Generate a fresh sheet before each selling session.</strong>' +
+        '</div>' +
+        '<div class="grid">' + balls + '</div>' +
+        '<div class="footer">' +
+        '<span>Moville Summer Festival 2026 — Ball Drop Manual Sales</span>' +
+        '<span>Page ' + (pageIdx + 1) + ' of ' + totalPages + ' &nbsp;|&nbsp; ' + total + ' balls total</span>' +
+        '</div>' +
+        '</div>'
+      );
+    }).join('');
+
+    const html =
+      '<!DOCTYPE html><html><head><meta charset="utf-8">' +
+      '<title>Manual Sales Sheets — Moville Summer Festival 2026</title>' +
+      '<style>' + pageStyle + '</style>' +
+      '</head><body>' + pages + '</body></html>';
+
+    const win = window.open('', '_blank');
+    if (win) {
+      win.document.write(html);
+      win.document.close();
+      win.print();
+    }
+  };
+
   const handleExportBallNumbersCSV = () => {
     const soldNumbers: number[] = [...(data.soldBallNumbers || [])].sort((a, b) => a - b);
     const allRows = [
@@ -701,6 +778,7 @@ export default function AdminPage() {
             <div style={{ display: 'flex', gap: '10px', margin: '0 0 16px' }}>
               <button data-testid="export-csv" onClick={handleExportBallNumbersCSV} style={btnStyle('secondary')}>⬇ Export Master Inventory</button>
               <button data-testid="export-pdf" onClick={handleExportBallNumbersPDF} style={btnStyle('secondary')}>⬇ Export Manual Sale Numbers</button>
+              <button data-testid="generate-manual-sheets" onClick={handleGenerateManualSalesSheets} style={{ ...btnStyle('primary'), padding: '6px 16px' }}>🖨 Generate Manual Sales Sheets</button>
             </div>
 
             {/* Ball Drop Master Inventory */}

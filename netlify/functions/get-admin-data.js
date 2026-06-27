@@ -25,6 +25,7 @@ export async function handler(event) {
       availableOnlineResult,
       manualOnlineResult,
       availableBallNumbers,
+      manualBallNumbersResult,
       soldBallNumbersResult,
       configResult,
     ] = await Promise.all([
@@ -39,9 +40,11 @@ export async function handler(event) {
       supabase.from('ball_drop_balls').select('*', { count: 'exact', head: true }).eq('status', 'available'),
       // Released for manual sale: status=manual, number >= 501 (excludes original paper 1-500)
       supabase.from('ball_drop_balls').select('*', { count: 'exact', head: true }).eq('status', 'manual').gte('number', ONLINE_START),
-      // Full list of available ball numbers for export
-      supabase.from('ball_drop_balls').select('number').eq('status', 'available').order('number', { ascending: true }),
-      // Full list of sold ball numbers for export
+      // Full list of online-available ball numbers
+      supabase.from('ball_drop_balls').select('number').eq('status', 'available').gte('number', ONLINE_START).order('number', { ascending: true }),
+      // Full list of online balls released to manual sale (excludes original paper 1-500)
+      supabase.from('ball_drop_balls').select('number').eq('status', 'manual').gte('number', ONLINE_START).order('number', { ascending: true }),
+      // Full list of sold online ball numbers for export
       supabase.from('ball_drop_balls').select('number').eq('status', 'sold').gte('number', 501).order('number', { ascending: true }),
       supabase.from('festival_config').select('value').eq('key', 'online_ball_limit').single(),
     ]);
@@ -54,6 +57,7 @@ export async function handler(event) {
     const availableOnline = availableOnlineResult.count || 0;
     const releasedForManual = manualOnlineResult.count || 0;
     const availableBallNumbersList = (availableBallNumbers.data || []).map(r => r.number);
+    const manualBallNumbersList = (manualBallNumbersResult.data || []).map(r => r.number);
 
     return {
       statusCode: 200,
@@ -73,6 +77,7 @@ export async function handler(event) {
         ballsRemaining:       availableOnline,
         ballsSold:            soldOnline,
         availableBallNumbers: availableBallNumbersList,
+        manualBallNumbers: manualBallNumbersList,
         soldBallNumbers: (soldBallNumbersResult.data || []).map(r => r.number),
       }),
     };

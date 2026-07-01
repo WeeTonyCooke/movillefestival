@@ -95,8 +95,7 @@ const PROGRAMME_DATA: Record<FestivalDay, ProgrammeEvent[]> = {
       strapline: 'Rides and amusements for all the family throughout the evening.',
     },
     {
-      time: '20:00–22:00',
-      startTime: '20:00',
+      time: '20:00',
       title: 'Social Dance',
       venue: "St Eugene's Hall",
       strapline: 'Good music, a bit of dancing and plenty of craic.',

@@ -182,7 +182,6 @@ const PROGRAMME_DATA: Record<FestivalDay, ProgrammeEvent[]> = {
       time: '10:00',
       title: 'Balance with Bronagh',
       venue: "St Eugene's Hall",
-      admission: 'Free',
       strapline:
         'A music and movement playgroup for children aged 4–12 with additional needs and disabilities, in a fun, inclusive way. Children must be accompanied. Booking advised.',
     },
@@ -221,7 +220,6 @@ const PROGRAMME_DATA: Record<FestivalDay, ProgrammeEvent[]> = {
       time: '14:00',
       title: 'Plein Air Painting',
       venue: 'Moville Green & Shore Walk',
-      admission: 'Free',
       strapline:
         'Paint the coastline with artists of all ages and abilities. Bring your own materials, or use what\'s provided for passers-by who fancy a go.',
     },

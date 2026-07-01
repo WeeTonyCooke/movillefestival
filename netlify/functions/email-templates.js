@@ -122,6 +122,7 @@ export function bedPushEmail(registration) {
           <strong>Scrutineering at 6pm sharp — Festival Square</strong>
           <p style="margin: 4px 0 0;">All beds must pass inspection by Paddy and Paddy before the race. No helmet = no race. Don't be late.</p>
         </div>
+        <p>Please make sure your whole team has read the <a href="https://movillefestival.com/bed-push-rules">Bed Push race rules and safety information</a> before the day.</p>
         <p>See you on Quay Street on 8 July. Questions? <a href="mailto:movillefestival@gmail.com">movillefestival@gmail.com</a></p>
       </div>
       <div style="background: #f5f5f5; padding: 16px 24px; text-align: center; font-size: 12px; color: #888;">

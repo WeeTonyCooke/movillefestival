@@ -180,6 +180,14 @@ const PROGRAMME_DATA: Record<FestivalDay, ProgrammeEvent[]> = {
       strapline: 'With The Mighty Mermaids at Big White Bay. All welcome.',
     },
     {
+      time: '10:00',
+      title: 'Balance with Bronagh',
+      venue: "St Eugene's Hall",
+      admission: 'Free',
+      strapline:
+        'A music and movement playgroup for children aged 4–12 with additional needs and disabilities, in a fun, inclusive way. Children must be accompanied. Booking advised.',
+    },
+    {
       time: '11:00',
       title: 'Pet Show',
       venue: 'The Green',

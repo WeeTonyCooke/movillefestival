@@ -10,6 +10,7 @@ import AdminPage from './pages/AdminPage';
 import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
 import TermsPage from './pages/TermsPage';
 import BallDropRulesPage from './pages/BallDropRulesPage';
+import BedPushRulesPage from './pages/BedPushRulesPage';
 import SponsorshipPage from './pages/SponsorshipPage';
 import PassesPage from './pages/PassesPage';
 import PassSuccessPage from './pages/PassSuccessPage';
@@ -44,6 +45,7 @@ function App() {
         <Route path="/privacy" element={<PrivacyPolicyPage />} />
         <Route path="/terms" element={<TermsPage />} />
         <Route path="/ball-drop-rules" element={<BallDropRulesPage />} />
+        <Route path="/bed-push-rules" element={<BedPushRulesPage />} />
         <Route path="/sponsorship" element={<SponsorshipPage />} />
         <Route path="/passes" element={<PassesPage />} />
         <Route path="/passes/success" element={<PassSuccessPage />} />

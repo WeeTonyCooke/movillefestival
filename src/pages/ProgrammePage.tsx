@@ -95,8 +95,7 @@ const PROGRAMME_DATA: Record<FestivalDay, ProgrammeEvent[]> = {
       strapline: 'Rides and amusements for all the family throughout the evening.',
     },
     {
-      time: '20:00–22:00',
-      startTime: '20:00',
+      time: '20:00',
       title: 'Social Dance',
       venue: "St Eugene's Hall",
       strapline: 'Good music, a bit of dancing and plenty of craic.',
@@ -180,6 +179,14 @@ const PROGRAMME_DATA: Record<FestivalDay, ProgrammeEvent[]> = {
       strapline: 'With The Mighty Mermaids at Big White Bay. All welcome.',
     },
     {
+      time: '10:00',
+      title: 'Balance with Bronagh',
+      venue: "St Eugene's Hall",
+      admission: 'Free',
+      strapline:
+        'A music and movement playgroup for children aged 4–12 with additional needs and disabilities, in a fun, inclusive way. Children must be accompanied. Booking advised.',
+    },
+    {
       time: '11:00',
       title: 'Pet Show',
       venue: 'The Green',
@@ -209,6 +216,14 @@ const PROGRAMME_DATA: Record<FestivalDay, ProgrammeEvent[]> = {
       title: 'Bonny Baby',
       venue: "St Eugene's Hall",
       strapline: "Moville's bonniest babies - or so they'll be told.",
+    },
+    {
+      time: '14:00',
+      title: 'Plein Air Painting',
+      venue: 'Moville Green & Shore Walk',
+      admission: 'Free',
+      strapline:
+        'Paint the coastline with artists of all ages and abilities. Bring your own materials, or use what\'s provided for passers-by who fancy a go.',
     },
     {
       time: '16:00',

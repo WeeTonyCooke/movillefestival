@@ -364,7 +364,8 @@ export default function BedPushPage() {
             <label className="form-check">
               <input type="checkbox" checked={form.agreeRules} onChange={set('agreeRules')} />
               <span className="form-check-label">
-                I confirm our team has read and agrees to the race rules.
+                I confirm our team has read and agrees to the{' '}
+                <Link to="/bed-push-rules" target="_blank" rel="noopener noreferrer">race rules</Link>.
               </span>
             </label>
 

@@ -219,6 +219,14 @@ const PROGRAMME_DATA: Record<FestivalDay, ProgrammeEvent[]> = {
       strapline: "Moville's bonniest babies - or so they'll be told.",
     },
     {
+      time: '14:00',
+      title: 'Plein Air Painting',
+      venue: 'Moville Green & Shore Walk',
+      admission: 'Free',
+      strapline:
+        'Paint the coastline with artists of all ages and abilities. Bring your own materials, or use what\'s provided for passers-by who fancy a go.',
+    },
+    {
       time: '16:00',
       title: 'Treasure Hunt',
       venue: 'Festival Square',

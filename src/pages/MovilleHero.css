@@ -597,12 +597,15 @@
 /* Flash rate is 0.4 flashes/sec — well under the WCAG 3/sec limit.  */
 
 .moville-hero {
-  --flash-x: 50%;            /* lantern centre, % of hero width  */
-  --flash-y: 30%;            /* lantern centre, % of hero height */
-  --flash-size: 120px;       /* glow diameter                    */
+  --flash-x: 50%;            /* lens centre, % of hero width     */
+  --flash-y: 36.5%;          /* lens centre, % of hero height    */
+  --flash-size: 44px;        /* lit lens diameter — small, tight */
   --flash-duration: 2.5s;    /* charted period — leave at 2.5s   */
-  --flash-core: rgba(255, 241, 205, 0.95);  /* warm white        */
-  --flash-fringe: rgba(255, 64, 48, 0.40);  /* red sector fringe */
+  --flash-core: rgba(255, 236, 195, 0.95);  /* warm white        */
+  --flash-fringe: rgba(255, 64, 48, 0.45);  /* red sector fringe */
+  --haze-width: 130px;       /* haze reach to the right          */
+  --haze-height: 54px;
+  --haze-opacity: 0.55;      /* overall haze strength            */
 }
 
 .lantern-flash {
@@ -612,6 +615,7 @@
   pointer-events: none;
 }
 
+/* The lens itself lighting up — small and bright, sits in the glazing */
 .lantern-flash-glow {
   position: absolute;
   left: var(--flash-x);
@@ -621,27 +625,55 @@
   transform: translate(-50%, -50%);
   border-radius: 50%;
   background:
-    radial-gradient(circle at 50% 50%, var(--flash-core) 0%, transparent 55%),
-    radial-gradient(circle at 64% 56%, var(--flash-fringe) 0%, transparent 70%);
+    radial-gradient(circle at 50% 50%, var(--flash-core) 0%, transparent 60%),
+    radial-gradient(circle at 60% 55%, var(--flash-fringe) 0%, transparent 75%);
   mix-blend-mode: screen;
-  filter: blur(1px);
   opacity: 0;
   animation: lantern-flash var(--flash-duration) infinite;
   will-change: opacity;
+}
+
+/* Soft haze drifting out to the right of the lens — not a beam */
+.lantern-flash-haze {
+  position: absolute;
+  left: var(--flash-x);
+  top: var(--flash-y);
+  width: var(--haze-width);
+  height: var(--haze-height);
+  transform: translate(-12%, -50%);
+  background: radial-gradient(
+    ellipse at left center,
+    rgba(255, 220, 170, 0.30) 0%,
+    rgba(255, 200, 150, 0.12) 45%,
+    transparent 75%
+  );
+  filter: blur(8px);
+  mix-blend-mode: screen;
+  opacity: 0;
+  animation: lantern-flash-haze var(--flash-duration) infinite;
+  will-change: opacity;
+}
+
+@keyframes lantern-flash-haze {
+  0%   { opacity: 0; }
+  4%   { opacity: var(--haze-opacity); }
+  14%  { opacity: var(--haze-opacity); }
+  26%  { opacity: 0; }
+  100% { opacity: 0; }
 }
 
 /* Faint answering glow on the water below the lantern */
 .lantern-flash-reflection {
   position: absolute;
   left: var(--flash-x);
-  top: calc(var(--flash-y) + 10%);
-  width: calc(var(--flash-size) * 0.55);
-  height: 34%;
+  top: calc(var(--flash-y) + 12%);
+  width: calc(var(--flash-size) * 1.1);
+  height: 28%;
   transform: translateX(-50%);
   background: linear-gradient(
     to bottom,
-    rgba(255, 214, 140, 0.26) 0%,
-    rgba(255, 190, 120, 0.10) 55%,
+    rgba(255, 214, 140, 0.16) 0%,
+    rgba(255, 190, 120, 0.06) 55%,
     transparent 100%
   );
   filter: blur(6px);
@@ -664,9 +696,10 @@
 /* Steady glow instead of flashing for users who prefer reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .lantern-flash-glow,
+  .lantern-flash-haze,
   .lantern-flash-reflection {
     animation: none;
-    opacity: 0.55;
+    opacity: 0.45;
   }
 }
 
@@ -686,8 +719,8 @@
 
 @media (max-width: 640px) {
   .moville-hero {
-    --flash-y: 34%;
-    --flash-size: 96px;
+    --flash-y: 36.5%;
+    --flash-size: 40px;
   }
 }
 
@@ -700,6 +733,14 @@
 /* Flash only on phone layouts, where the image geometry is exact.
    Tablet and desktop use differently framed images — hidden there. */
 @media (min-width: 641px) {
+  .lantern-flash {
+    display: none;
+  }
+}
+
+/* Viewports squarer than the 1:2 image shift it under cover — the glow
+   would drift off the lens, so hide it rather than misplace it. */
+@media (min-aspect-ratio: 1/2) {
   .lantern-flash {
     display: none;
   }

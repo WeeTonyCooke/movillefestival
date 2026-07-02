@@ -127,6 +127,7 @@ const MovilleHero: React.FC<MovilleHeroProps> = ({ isNight }) => {
       {(isHeroNight || heroPhase === 'evening') && (
         <div className="lantern-flash" aria-hidden="true">
           <span className="lantern-flash-glow" />
+          <span className="lantern-flash-haze" />
           <span className="lantern-flash-reflection" />
         </div>
       )}

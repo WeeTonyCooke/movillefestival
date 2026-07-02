@@ -11,10 +11,13 @@ export default function BedPushRulesPage() {
         <p className="legal-updated">Moville Summer Festival 2026</p>
 
         <p>
-          The Great Bed Push Race takes place at Festival Square and Quay Street on
-          Wednesday 8 July 2026. Teams push a decorated bed along the course as fast
-          as they can. Please read these rules carefully before registering — every
-          team member should understand and agree to them.
+          The Great Bed Push Race is intended to be a fun community event. Please race
+          safely, respect the marshals and other teams, and help make it an enjoyable
+          evening for everyone.
+        </p>
+        <p>
+          The race takes place at Festival Square and Quay Street on Wednesday 8 July
+          2026. Teams push a decorated bed along the course as fast as they can.
         </p>
 
         <h2>Event details</h2>
@@ -27,20 +30,19 @@ export default function BedPushRulesPage() {
 
         <h2>Eligibility</h2>
         <ul>
-          <li>Teams consist of exactly 5 participants — 4 pushers and 1 rider.</li>
-          <li>All team members must be 16 or over. The team captain must be 18 or over.</li>
-          <li>Anyone under 18 taking part must have the written consent of a parent or guardian, provided by countersigning the participation waiver at scrutineering.</li>
+          <li>Each team consists of five participants: four pushers and one rider.</li>
+          <li>All participants must be over 16. The team captain must be over 18.</li>
+          <li>Participants under 18 must have written consent from a parent or guardian, provided by countersigning the waiver at scrutineering.</li>
           <li>A maximum of 20 teams can enter. Registrations close when capacity is reached.</li>
         </ul>
 
         <h2>Safety</h2>
         <ul>
           <li>All beds must pass a safety inspection ("scrutineering") at 6.30pm sharp at Festival Square before the race.</li>
-          <li>Helmets are mandatory for all riders. No helmet, no race — this is enforced without exception.</li>
-          <li>Marshals and organisers may stop a team's run at any time if they consider it unsafe.</li>
-          <li>The Bed Push Race is a physical event and involves an inherent risk of injury. Participants take part at their own risk.</li>
-          <li>Participants should make sure they are medically fit to take part before entering.</li>
-          <li>Every team member must sign the participation waiver at scrutineering before racing. A parent or guardian must countersign for anyone under 18. No signed waiver, no race.</li>
+          <li>Helmets are mandatory for all riders. No helmet, no race — enforced without exception.</li>
+          <li>Marshals may stop a team's run at any time if they consider it unsafe.</li>
+          <li>The race is physically demanding. Only take part if you are medically fit to do so.</li>
+          <li>Every team member must sign the participation waiver at scrutineering before racing.</li>
         </ul>
 
         <h2>Conduct</h2>
@@ -52,20 +54,12 @@ export default function BedPushRulesPage() {
 
         <h2>Insurance &amp; liability</h2>
         <p>
-          The Bed Push Race is a physical event run on public streets and involves an
-          inherent risk of injury. The Bed Push Race is not covered by the festival&rsquo;s
-          insurance, and no insurance cover is provided by the organisers for
-          participants, their equipment, or their property. Participants take part
-          entirely at their own risk.
-        </p>
-        <p>
-          By registering, and by signing the participation waiver on the day, each team
-          member: confirms they are medically fit to take part; agrees to follow all
-          marshal and organiser instructions; accepts responsibility for injury, loss,
-          or damage caused by their team&rsquo;s bed or conduct; and, to the fullest extent
-          permitted by law, releases Moville Summer Festival, its committee, organisers,
-          sponsors, and volunteers from all liability for injury, loss, or damage
-          arising from participation in the Bed Push Race.
+          The Bed Push Race takes place on public streets and involves an element of
+          risk. Participants take part at their own risk. The organisers do not provide
+          insurance for participants, their equipment or their property. By entering
+          and signing the event waiver, participants agree to follow the instructions
+          of marshals and organisers and accept responsibility for their own actions
+          and those of their team, to the fullest extent permitted by law.
         </p>
 
         <h2>Refund policy</h2>

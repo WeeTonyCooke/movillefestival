@@ -573,3 +573,105 @@
   background: rgba(0, 0, 0, 0.38);
   border-color: rgba(255, 255, 255, 0.7);
 }
+
+/* ── Lantern flash — charted Fl W 2.5s with red sector inshore ──── */
+/* The real Moville Light flashes white once every 2.5 seconds with  */
+/* a range of 4 miles; a red sector covers Moville Bank inshore.     */
+/* Warm-white core + soft red fringe = what the drone viewpoint sees */
+/* near the sector boundary. All tunables are variables below.       */
+/* Flash rate is 0.4 flashes/sec — well under the WCAG 3/sec limit.  */
+
+.moville-hero {
+  --flash-x: 50%;            /* lantern centre, % of hero width  */
+  --flash-y: 30%;            /* lantern centre, % of hero height */
+  --flash-size: 120px;       /* glow diameter                    */
+  --flash-duration: 2.5s;    /* charted period — leave at 2.5s   */
+  --flash-core: rgba(255, 241, 205, 0.95);  /* warm white        */
+  --flash-fringe: rgba(255, 64, 48, 0.40);  /* red sector fringe */
+}
+
+.lantern-flash {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.lantern-flash-glow {
+  position: absolute;
+  left: var(--flash-x);
+  top: var(--flash-y);
+  width: var(--flash-size);
+  height: var(--flash-size);
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 50% 50%, var(--flash-core) 0%, transparent 55%),
+    radial-gradient(circle at 64% 56%, var(--flash-fringe) 0%, transparent 70%);
+  mix-blend-mode: screen;
+  filter: blur(1px);
+  opacity: 0;
+  animation: lantern-flash var(--flash-duration) infinite;
+  will-change: opacity;
+}
+
+/* Faint answering glow on the water below the lantern */
+.lantern-flash-reflection {
+  position: absolute;
+  left: var(--flash-x);
+  top: calc(var(--flash-y) + 10%);
+  width: calc(var(--flash-size) * 0.55);
+  height: 34%;
+  transform: translateX(-50%);
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 214, 140, 0.26) 0%,
+    rgba(255, 190, 120, 0.10) 55%,
+    transparent 100%
+  );
+  filter: blur(6px);
+  mix-blend-mode: screen;
+  opacity: 0;
+  animation: lantern-flash var(--flash-duration) infinite;
+  will-change: opacity;
+}
+
+/* On for ~0.5s of the 2.5s cycle: fast strike, brief hold, soft decay.
+   To lengthen the flash, raise the 14%/24% stops (each 1% ≈ 25ms). */
+@keyframes lantern-flash {
+  0%   { opacity: 0; }
+  4%   { opacity: 1; }
+  14%  { opacity: 1; }
+  24%  { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+/* Steady glow instead of flashing for users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .lantern-flash-glow,
+  .lantern-flash-reflection {
+    animation: none;
+    opacity: 0.55;
+  }
+}
+
+/* Per-breakpoint lantern position — tune live with ?hero=night */
+@media (min-width: 768px) {
+  .moville-hero {
+    --flash-y: 27%;
+  }
+}
+
+@media (min-width: 1280px) {
+  .moville-hero {
+    --flash-y: 33%;
+    --flash-size: 150px;
+  }
+}
+
+@media (max-width: 640px) {
+  .moville-hero {
+    --flash-y: 30%;
+    --flash-size: 96px;
+  }
+}

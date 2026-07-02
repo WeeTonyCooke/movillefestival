@@ -359,15 +359,9 @@
     margin-bottom: 16px;
   }
   
-  /* Headliner — larger gold dot, centered on the card's left border,
-     vertically aligned with the HEADLINER label row */
+  /* Headliner — dot removed; card styling (border/background) is enough */
   .prog-event.is-headline::before {
-    width: 9px;
-    height: 9px;
-    left: -4.5px;
-    top: 20px;
-    background: var(--accent);
-    border: 2px solid var(--bg-base);
+    display: none;
   }
   
   /* Remove old left rule used in previous version */
@@ -748,7 +742,6 @@
     }
   
     .prog-event::before { left: -20px; }
-    .prog-event.is-headline::before { left: -21px; }
   
     .prog-time-divider span { padding-left: 72px; }
   

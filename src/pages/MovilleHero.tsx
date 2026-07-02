@@ -97,6 +97,16 @@ const MovilleHero: React.FC<MovilleHeroProps> = ({ isNight }) => {
       <div className="hero-overlay" aria-hidden="true" />
       <div className="water-shimmer" aria-hidden="true" />
 
+      {/* Lantern flash — the real Moville Light is charted Fl W 2.5s
+          (one white flash every 2.5 seconds) with a red sector inshore.
+          Rendered only at night; position/colour tuned in MovilleHero.css. */}
+      {isHeroNight && (
+        <div className="lantern-flash" aria-hidden="true">
+          <span className="lantern-flash-glow" />
+          <span className="lantern-flash-reflection" />
+        </div>
+      )}
+
       <div className="hero-content">
         <div className="page-shell hero-shell">
           <div className="hero-title-wrap">

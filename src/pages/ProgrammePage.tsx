@@ -190,13 +190,20 @@ const PROGRAMME_DATA: Record<FestivalDay, ProgrammeEvent[]> = {
       title: 'Pet Show',
       venue: 'The Green',
       strapline:
-        "Moville's finest four-legged friends - big, small and full of personality.",
+        "Moville's finest four-legged friends - big, small and full of personality. Dogs on leads please — pets remain their owners' responsibility at all times.",
     },
     {
       time: '11:30',
       title: "Yoga with Lauren O'Farrelly",
       venue: 'Tennis Court',
       strapline: 'Start your Saturday morning with a stretch and some fresh air.',
+    },
+    {
+      time: '12:00',
+      title: 'DJ Workshop',
+      venue: 'Paul McGowan Fitness',
+      strapline:
+        'Get behind the decks with local DJ duo DisFreq — beats, mixing and a taste of the DJ life. Sponsored by Muff Liquor Company.',
     },
     {
       time: '13:00',

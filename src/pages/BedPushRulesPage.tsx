@@ -29,7 +29,7 @@ export default function BedPushRulesPage() {
         <ul>
           <li>Teams consist of exactly 5 participants — 4 pushers and 1 rider.</li>
           <li>All team members must be 16 or over. The team captain must be 18 or over.</li>
-          <li>Anyone under 18 taking part should have the consent of a parent or guardian.</li>
+          <li>Anyone under 18 taking part must have the written consent of a parent or guardian, provided by countersigning the participation waiver at scrutineering.</li>
           <li>A maximum of 20 teams can enter. Registrations close when capacity is reached.</li>
         </ul>
 
@@ -40,6 +40,7 @@ export default function BedPushRulesPage() {
           <li>Marshals and organisers may stop a team's run at any time if they consider it unsafe.</li>
           <li>The Bed Push Race is a physical event and involves an inherent risk of injury. Participants take part at their own risk.</li>
           <li>Participants should make sure they are medically fit to take part before entering.</li>
+          <li>Every team member must sign the participation waiver at scrutineering before racing. A parent or guardian must countersign for anyone under 18. No signed waiver, no race.</li>
         </ul>
 
         <h2>Conduct</h2>
@@ -49,11 +50,22 @@ export default function BedPushRulesPage() {
           <li>Unsportsmanlike conduct may result in disqualification.</li>
         </ul>
 
-        <h2>Liability</h2>
+        <h2>Insurance &amp; liability</h2>
         <p>
-          Moville Summer Festival, its committee, organisers, and volunteers accept no
-          liability for injury, loss, or damage arising from participation in the Bed
-          Push Race, except where caused by their own negligence.
+          The Bed Push Race is a physical event run on public streets and involves an
+          inherent risk of injury. The Bed Push Race is not covered by the festival&rsquo;s
+          insurance, and no insurance cover is provided by the organisers for
+          participants, their equipment, or their property. Participants take part
+          entirely at their own risk.
+        </p>
+        <p>
+          By registering, and by signing the participation waiver on the day, each team
+          member: confirms they are medically fit to take part; agrees to follow all
+          marshal and organiser instructions; accepts responsibility for injury, loss,
+          or damage caused by their team&rsquo;s bed or conduct; and, to the fullest extent
+          permitted by law, releases Moville Summer Festival, its committee, organisers,
+          sponsors, and volunteers from all liability for injury, loss, or damage
+          arising from participation in the Bed Push Race.
         </p>
 
         <h2>Refund policy</h2>

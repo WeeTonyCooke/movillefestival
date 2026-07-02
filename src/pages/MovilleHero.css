@@ -667,26 +667,6 @@
   100% { opacity: 0; }
 }
 
-/* Faint answering glow on the water below the lantern */
-.lantern-flash-reflection {
-  position: absolute;
-  left: var(--flash-x);
-  top: calc(var(--flash-y) + 12%);
-  width: calc(var(--flash-size) * 1.1);
-  height: 28%;
-  transform: translateX(-50%);
-  background: linear-gradient(
-    to bottom,
-    rgba(255, 214, 140, 0.16) 0%,
-    rgba(255, 190, 120, 0.06) 55%,
-    transparent 100%
-  );
-  filter: blur(6px);
-  mix-blend-mode: screen;
-  opacity: 0;
-  animation: lantern-flash var(--flash-duration) infinite;
-  will-change: opacity;
-}
 
 /* On for ~0.5s of the 2.5s cycle: fast strike, brief hold, soft decay.
    To lengthen the flash, raise the 14%/24% stops (each 1% ≈ 25ms). */
@@ -701,8 +681,7 @@
 /* Steady glow instead of flashing for users who prefer reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .lantern-flash-glow,
-  .lantern-flash-haze,
-  .lantern-flash-reflection {
+  .lantern-flash-haze {
     animation: none;
     opacity: 0.45;
   }

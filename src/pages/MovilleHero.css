@@ -601,15 +601,15 @@
 /* Flash rate is 0.4 flashes/sec — well under the WCAG 3/sec limit.  */
 
 .moville-hero {
-  --flash-x: 50%;            /* lens centre, % of hero width     */
+  --flash-x: calc(50% + 5px); /* lens centre — glazing sits a touch right */
   --flash-y: 36.5%;          /* lens centre, % of hero height    */
-  --flash-size: 44px;        /* lit lens diameter — small, tight */
+  --flash-size: 34px;        /* lit lens diameter — small, tight */
   --flash-duration: 2.5s;    /* charted period — leave at 2.5s   */
-  --lens-clear: rgba(255, 240, 205, 0.95);  /* lamp through clear glazing (right) */
-  --lens-red: rgba(255, 42, 32, 0.60);      /* lamp behind the red panel (dimmer)  */
-  --haze-width: 130px;       /* haze reach to the right          */
-  --haze-height: 54px;
-  --haze-opacity: 0.55;      /* overall haze strength            */
+  --lens-clear: rgba(255, 240, 205, 0.62);  /* lamp through clear glazing (right) */
+  --lens-red: rgba(255, 42, 32, 0.40);      /* lamp behind the red panel (dimmer)  */
+  --haze-width: 100px;       /* haze reach to the right          */
+  --haze-height: 42px;
+  --haze-opacity: 0.30;      /* overall haze strength            */
 }
 
 .lantern-flash {
@@ -725,7 +725,7 @@
 @media (max-width: 640px) {
   .moville-hero {
     --flash-y: max(36.4%, 72.9vw);
-    --flash-size: 40px;
+    --flash-size: 30px;
   }
 }
 

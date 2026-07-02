@@ -623,7 +623,7 @@ function bedPushEmail(registration) {
           </table>
         </div>
         <div style="border-left: 4px solid #F26A4B; padding: 12px 16px; margin: 16px 0; background: #fff8f6;">
-          <strong>Scrutineering at 6pm sharp — Festival Square</strong>
+          <strong>Arrive from 6pm. Scrutineering starts at 6.30pm sharp — Festival Square</strong>
           <p style="margin: 4px 0 0;">All beds must pass inspection by Paddy and Paddy before the race. No helmet = no race. Don't be late.</p>
         </div>
         <p>See you on Quay Street on 8 July. Questions? <a href="mailto:movillefestival@gmail.com">movillefestival@gmail.com</a></p>

@@ -119,7 +119,7 @@ export function bedPushEmail(registration) {
           </table>
         </div>
         <div style="border-left: 4px solid #F26A4B; padding: 12px 16px; margin: 16px 0; background: #fff8f6;">
-          <strong>Scrutineering at 6pm sharp — Festival Square</strong>
+          <strong>Arrive from 6pm. Scrutineering starts at 6.30pm sharp — Festival Square</strong>
           <p style="margin: 4px 0 0;">All beds must pass inspection by Paddy and Paddy before the race. No helmet = no race. Don't be late.</p>
         </div>
         <p>Please make sure your whole team has read the <a href="https://movillefestival.com/bed-push-rules">Bed Push race rules and safety information</a> before the day.</p>

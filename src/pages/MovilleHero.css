@@ -361,20 +361,24 @@
     min-height: 100svh;
   }
 
+  /* Top-anchored: with the 1:2 images, the lens is then always at
+     max(36.4% of viewport height, 72.9% of viewport width) regardless of
+     whether cover fits by height (tall phones) or width (browser chrome
+     visible). The flash position uses the same expression below. */
   .hero-bg-dawn,
   .hero-bg-day {
-    background-position: center 54%;
+    background-position: center top;
   }
 
   .hero-bg-evening {
-    background-position: center 54%;
+    background-position: center top;
     transform: none;
     -webkit-mask-image: none;
     mask-image: none;
   }
 
   .hero-bg-night {
-    background-position: center 54%;
+    background-position: center top;
     transform: none;
     -webkit-mask-image: none;
     mask-image: none;
@@ -719,7 +723,7 @@
 
 @media (max-width: 640px) {
   .moville-hero {
-    --flash-y: 36.5%;
+    --flash-y: max(36.4%, 72.9vw);
     --flash-size: 40px;
   }
 }
@@ -733,14 +737,6 @@
 /* Flash only on phone layouts, where the image geometry is exact.
    Tablet and desktop use differently framed images — hidden there. */
 @media (min-width: 641px) {
-  .lantern-flash {
-    display: none;
-  }
-}
-
-/* Viewports squarer than the 1:2 image shift it under cover — the glow
-   would drift off the lens, so hide it rather than misplace it. */
-@media (min-aspect-ratio: 1/2) {
   .lantern-flash {
     display: none;
   }

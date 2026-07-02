@@ -605,8 +605,8 @@
   --flash-y: 36.5%;          /* lens centre, % of hero height    */
   --flash-size: 44px;        /* lit lens diameter — small, tight */
   --flash-duration: 2.5s;    /* charted period — leave at 2.5s   */
-  --flash-core: rgba(255, 236, 195, 0.95);  /* warm white        */
-  --flash-fringe: rgba(255, 64, 48, 0.45);  /* red sector fringe */
+  --lens-clear: rgba(255, 240, 205, 0.95);  /* lamp through clear glazing (right) */
+  --lens-red: rgba(255, 42, 32, 0.60);      /* lamp behind the red panel (dimmer)  */
   --haze-width: 130px;       /* haze reach to the right          */
   --haze-height: 54px;
   --haze-opacity: 0.55;      /* overall haze strength            */
@@ -619,18 +619,19 @@
   pointer-events: none;
 }
 
-/* The lens itself lighting up — small and bright, sits in the glazing */
+/* The lamp lighting the glazing from inside: bright through the clear
+   glass on the right, a dim red smoulder behind the red sector panel. */
 .lantern-flash-glow {
   position: absolute;
   left: var(--flash-x);
   top: var(--flash-y);
-  width: var(--flash-size);
+  width: calc(var(--flash-size) * 1.35);
   height: var(--flash-size);
   transform: translate(-50%, -50%);
   border-radius: 50%;
   background:
-    radial-gradient(circle at 50% 50%, var(--flash-core) 0%, transparent 60%),
-    radial-gradient(circle at 60% 55%, var(--flash-fringe) 0%, transparent 75%);
+    radial-gradient(circle at 68% 50%, var(--lens-clear) 0%, transparent 52%),
+    radial-gradient(circle at 34% 52%, var(--lens-red) 0%, transparent 55%);
   mix-blend-mode: screen;
   opacity: 0;
   animation: lantern-flash var(--flash-duration) infinite;
@@ -644,7 +645,7 @@
   top: var(--flash-y);
   width: var(--haze-width);
   height: var(--haze-height);
-  transform: translate(-12%, -50%);
+  transform: translate(6%, -50%);
   background: radial-gradient(
     ellipse at left center,
     rgba(255, 220, 170, 0.30) 0%,
@@ -730,8 +731,8 @@
 
 /* Dusk: from this shore you look into the light's red sector */
 .hero-evening {
-  --flash-core: rgba(255, 190, 160, 0.92);
-  --flash-fringe: rgba(255, 60, 40, 0.55);
+  --lens-clear: rgba(255, 215, 180, 0.85);
+  --lens-red: rgba(255, 42, 32, 0.72);
 }
 
 /* Flash only on phone layouts, where the image geometry is exact.

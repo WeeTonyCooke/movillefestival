@@ -632,7 +632,9 @@
   background:
     radial-gradient(circle at 68% 50%, var(--lens-clear) 0%, transparent 52%),
     radial-gradient(circle at 34% 52%, var(--lens-red) 0%, transparent 55%);
-  mix-blend-mode: screen;
+  /* overlay: the photo decides — dark glazing bars stay dark and cut through,
+     bright glass takes the light. Reads as the lamp behind the frame. */
+  mix-blend-mode: overlay;
   opacity: 0;
   animation: lantern-flash var(--flash-duration) infinite;
   will-change: opacity;

@@ -20,6 +20,7 @@
   opacity: 1;
 }
 
+.hero-bg-dawn,
 .hero-bg-day,
 .hero-bg-evening,
 .hero-bg-night {
@@ -27,10 +28,15 @@
 }
 
 /* Desktop images hidden by default, shown at 1280px+ */
+.hero-bg-dawn-desktop,
 .hero-bg-day-desktop,
 .hero-bg-evening-desktop,
 .hero-bg-night-desktop {
   display: none;
+}
+
+.hero-bg-dawn {
+  filter: saturate(1.02) contrast(1.02);
 }
 
 .hero-bg-day {
@@ -68,6 +74,7 @@
   );
 }
 
+.hero-dawn .hero-overlay,
 .hero-evening .hero-overlay {
   background: linear-gradient(
     to bottom,
@@ -290,16 +297,23 @@
 }
 
 @media (min-width: 1280px) {
+  .hero-bg-dawn,
   .hero-bg-day,
   .hero-bg-evening,
   .hero-bg-night {
     display: none;
   }
 
+  .hero-bg-dawn-desktop,
   .hero-bg-day-desktop,
   .hero-bg-evening-desktop,
   .hero-bg-night-desktop {
     display: block;
+  }
+
+  .hero-bg-dawn-desktop {
+    background-position: center 48%;
+    filter: saturate(1.05) contrast(1.02);
   }
 
   .hero-bg-day-desktop {
@@ -347,6 +361,7 @@
     min-height: 100svh;
   }
 
+  .hero-bg-dawn,
   .hero-bg-day {
     background-position: center 54%;
   }
@@ -671,7 +686,21 @@
 
 @media (max-width: 640px) {
   .moville-hero {
-    --flash-y: 30%;
+    --flash-y: 34%;
     --flash-size: 96px;
+  }
+}
+
+/* Dusk: from this shore you look into the light's red sector */
+.hero-evening {
+  --flash-core: rgba(255, 190, 160, 0.92);
+  --flash-fringe: rgba(255, 60, 40, 0.55);
+}
+
+/* Flash only on phone layouts, where the image geometry is exact.
+   Tablet and desktop use differently framed images — hidden there. */
+@media (min-width: 641px) {
+  .lantern-flash {
+    display: none;
   }
 }

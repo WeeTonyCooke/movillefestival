@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './MovilleHero.css';
 
+const DAWN_IMG = '/mobile_lighthouse_dawn.webp';
+const DAWN_DESKTOP_IMG = '/moville-light-evening-desktop.jpeg';
+
 const DAY_IMG = '/mobile_lighthouse_day.webp';
 const DAY_DESKTOP_IMG = '/movillelight-day-desktop.jpeg';
 
@@ -15,13 +18,18 @@ type MovilleHeroProps = {
   isNight: boolean;
 };
 
-type HeroPhase = 'day' | 'evening' | 'night';
+type HeroPhase = 'dawn' | 'day' | 'evening' | 'night';
 
 function getHeroPhase(): HeroPhase {
   const params = new URLSearchParams(window.location.search);
   const override = params.get('hero');
 
-  if (override === 'day' || override === 'evening' || override === 'night') {
+  if (
+    override === 'dawn' ||
+    override === 'day' ||
+    override === 'evening' ||
+    override === 'night'
+  ) {
     return override;
   }
 
@@ -29,11 +37,13 @@ function getHeroPhase(): HeroPhase {
     return 'evening';
   }
 
-  const hour = new Date().getHours();
+  const now = new Date();
+  const hour = now.getHours() + now.getMinutes() / 60;
 
-  if (hour >= 21 || hour < 6) return 'night';
-  if (hour >= 14) return 'evening';
-  return 'day';
+  if (hour >= 22.5 || hour < 5) return 'night';
+  if (hour >= 20) return 'evening';
+  if (hour >= 9) return 'day';
+  return 'dawn';
 }
 
 const MovilleHero: React.FC<MovilleHeroProps> = ({ isNight }) => {
@@ -52,6 +62,20 @@ const MovilleHero: React.FC<MovilleHeroProps> = ({ isNight }) => {
   return (
     <>
     <section className={`moville-hero hero-${heroPhase}`}>
+      {/* Dawn — mobile */}
+      <div
+        className={`hero-bg hero-bg-dawn ${heroPhase === 'dawn' ? 'active' : ''}`}
+        style={{ backgroundImage: `url(${DAWN_IMG})` }}
+        aria-hidden="true"
+      />
+
+      {/* Dawn — desktop */}
+      <div
+        className={`hero-bg hero-bg-dawn-desktop ${heroPhase === 'dawn' ? 'active' : ''}`}
+        style={{ backgroundImage: `url(${DAWN_DESKTOP_IMG})` }}
+        aria-hidden="true"
+      />
+
       {/* Day — mobile */}
       <div
         className={`hero-bg hero-bg-day ${heroPhase === 'day' ? 'active' : ''}`}
@@ -99,8 +123,8 @@ const MovilleHero: React.FC<MovilleHeroProps> = ({ isNight }) => {
 
       {/* Lantern flash — the real Moville Light is charted Fl W 2.5s
           (one white flash every 2.5 seconds) with a red sector inshore.
-          Rendered only at night; position/colour tuned in MovilleHero.css. */}
-      {isHeroNight && (
+          Runs from dusk (red sector tint) through night; tuned in MovilleHero.css. */}
+      {(isHeroNight || heroPhase === 'evening') && (
         <div className="lantern-flash" aria-hidden="true">
           <span className="lantern-flash-glow" />
           <span className="lantern-flash-reflection" />
@@ -127,7 +151,7 @@ const MovilleHero: React.FC<MovilleHeroProps> = ({ isNight }) => {
         </div>
       </div>
 
-      {(heroPhase === 'evening' || heroPhase === 'night') && (
+      {(heroPhase === 'dawn' || heroPhase === 'evening' || heroPhase === 'night') && (
         <div className="hero-credit">
           Photo:{' '}
           <a

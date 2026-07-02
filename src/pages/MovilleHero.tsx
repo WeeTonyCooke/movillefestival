@@ -117,16 +117,6 @@ const MovilleHero: React.FC<MovilleHeroProps> = ({ isNight }) => {
         </div>
       </div>
 
-      <button
-        className="hero-balldrop-badge"
-        onClick={() => navigate('/ball-drop')}
-        aria-label="Ball Drop — win up to €500, buy a ball"
-      >
-        <span className="hero-balldrop-badge-eyebrow">Ball Drop</span>
-        <span className="hero-balldrop-badge-prize">€500</span>
-        <span className="hero-balldrop-badge-cta">Buy tickets</span>
-      </button>
-
       {(heroPhase === 'evening' || heroPhase === 'night') && (
         <div className="hero-credit">
           Photo:{' '}

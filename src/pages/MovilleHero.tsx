@@ -151,18 +151,6 @@ const MovilleHero: React.FC<MovilleHeroProps> = ({ isNight }) => {
         </div>
       </div>
 
-      {(heroPhase === 'dawn' || heroPhase === 'evening' || heroPhase === 'night') && (
-        <div className="hero-credit">
-          Photo:{' '}
-          <a
-            href="https://www.instagram.com/christybutterz/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            @christybutterz
-          </a>
-        </div>
-      )}
     </section>
 
     <button

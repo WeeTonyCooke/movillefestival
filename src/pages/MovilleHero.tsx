@@ -3,16 +3,16 @@ import { useNavigate } from 'react-router-dom';
 import './MovilleHero.css';
 
 const DAWN_IMG = '/mobile_lighthouse_dawn.webp';
-const DAWN_DESKTOP_IMG = '/moville-light-evening-desktop.jpeg';
+const DAWN_DESKTOP_IMG = '/moville-light-dawn-desktop.jpeg';
 
 const DAY_IMG = '/mobile_lighthouse_day.webp';
-const DAY_DESKTOP_IMG = '/movillelight-day-desktop.jpeg';
+const DAY_DESKTOP_IMG = '/moville-light-day-desktop.jpeg';
 
 const EVENING_IMG = '/mobile_lighthouse_evening.webp';
-const EVENING_DESKTOP_IMG = '/moville-light-evening-desktop.jpeg';
+const EVENING_DESKTOP_IMG = '/moville-light-dusk-desktop.jpeg';
 
 const NIGHT_IMG = '/mobile_lighthouse_night.webp';
-const NIGHT_DESKTOP_IMG = '/moville-light-evening-desktop.jpeg';
+const NIGHT_DESKTOP_IMG = '/moville-light-night-desktop.jpeg';
 
 type MovilleHeroProps = {
   isNight: boolean;

@@ -12,6 +12,12 @@
  *
  * Canonical state: 1200 rows, numbers 1-1200, 500 manual (reserved paper
  * stock 1-500), 700 available (online pool 501-1200, before any sales).
+ *
+ * Aggregate counts alone aren't sufficient — they can match by coincidence
+ * while the wrong numbers sit in the wrong buckets. This check also
+ * verifies the actual min/max of each status, and that no paper-range
+ * ball (1-500) is marked available and no online-range ball (501+) is
+ * marked manual.
  */
 
 import type { APIRequestContext } from '@playwright/test';
@@ -27,6 +33,12 @@ const EXPECTED = {
   maxNumber: 1200,
   manualCount: 500,
   availableCount: 700,
+  manualMin: 1,
+  manualMax: 500,
+  availableMin: 501,
+  availableMax: 1200,
+  manualInOnlineRange: 0,
+  availableInPaperRange: 0,
 };
 
 export async function assertBallInventoryHealthy(request: APIRequestContext): Promise<void> {
@@ -42,15 +54,22 @@ export async function assertBallInventoryHealthy(request: APIRequestContext): Pr
   }
 
   const body = await res.json();
-  const { inventoryOk, totalRows, minNumber, maxNumber, manualCount, availableCount } = body;
+  const {
+    inventoryOk,
+    totalRows, minNumber, maxNumber, manualCount, availableCount,
+    manualMin, manualMax, availableMin, availableMax,
+    manualInOnlineRange, availableInPaperRange,
+  } = body;
 
   const report =
     `Inventory Health Check\n\n` +
     `Total rows: ${totalRows} (expected ${EXPECTED.totalRows})\n` +
     `Min number: ${minNumber} (expected ${EXPECTED.minNumber})\n` +
     `Max number: ${maxNumber} (expected ${EXPECTED.maxNumber})\n` +
-    `Manual: ${manualCount} (expected ${EXPECTED.manualCount})\n` +
-    `Available: ${availableCount} (expected ${EXPECTED.availableCount})\n\n` +
+    `Manual: ${manualCount} (expected ${EXPECTED.manualCount}) — range ${manualMin}-${manualMax} (expected ${EXPECTED.manualMin}-${EXPECTED.manualMax})\n` +
+    `Available: ${availableCount} (expected ${EXPECTED.availableCount}) — range ${availableMin}-${availableMax} (expected ${EXPECTED.availableMin}-${EXPECTED.availableMax})\n` +
+    `Manual balls in online range (501+): ${manualInOnlineRange} (expected ${EXPECTED.manualInOnlineRange})\n` +
+    `Available balls in paper range (<501): ${availableInPaperRange} (expected ${EXPECTED.availableInPaperRange})\n\n` +
     `Result: ${inventoryOk ? 'PASSED' : 'FAILED'}`;
 
   console.log(report);
@@ -63,8 +82,9 @@ export async function assertBallInventoryHealthy(request: APIRequestContext): Pr
       `Expected:\n` +
       `- ${EXPECTED.totalRows} total rows\n` +
       `- numbers ${EXPECTED.minNumber}\u2013${EXPECTED.maxNumber}\n` +
-      `- ${EXPECTED.manualCount} manual balls\n` +
-      `- ${EXPECTED.availableCount} available balls\n\n` +
+      `- ${EXPECTED.manualCount} manual balls, numbered ${EXPECTED.manualMin}\u2013${EXPECTED.manualMax}\n` +
+      `- ${EXPECTED.availableCount} available balls, numbered ${EXPECTED.availableMin}\u2013${EXPECTED.availableMax}\n` +
+      `- no cross-range contamination (paper marked available, or online marked manual)\n\n` +
       `Please reset the QA inventory before running tests.`
     );
   }

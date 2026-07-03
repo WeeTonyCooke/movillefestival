@@ -48,7 +48,7 @@ const PROGRAMME_DATA: Record<FestivalDay, ProgrammeEvent[]> = {
     {
       time: '18:30',
       title: 'Fancy Dress Opening Parade',
-      venue: 'Market Square',
+      venue: 'Festival Square',
       strapline:
         'A colourful start to the festival - loud, lively and full of fun for everyone.',
     },

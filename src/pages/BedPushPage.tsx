@@ -202,7 +202,7 @@ export default function BedPushPage() {
               </div>
 
               <div className="form-info-block">
-                <p className="form-info-title">Scrutineering from 6.30pm sharp — Festival Square</p>
+                <p className="form-info-title">Scrutineering from 6.00pm sharp — Festival Square</p>
                 <p className="form-info-body">All beds must pass inspection by Paddy and Paddy
                   before the race. No helmet = no race. Don't be late.</p>
               </div>
@@ -346,7 +346,7 @@ export default function BedPushPage() {
           <div className="form-scrutineering">
             <span className="form-scrutineering-dot" />
             <div>
-              <strong>Scrutineering from 6.30pm — Festival Square</strong>
+              <strong>Scrutineering from 6.00pm — Festival Square</strong>
               <p>All beds must pass a safety inspection by Paddy and Paddy before the race.
                 No helmet = no race.</p>
             </div>

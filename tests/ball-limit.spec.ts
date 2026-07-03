@@ -31,6 +31,7 @@
  */
 
 import { test, expect, Page } from '@playwright/test';
+import { assertBallInventoryHealthy } from './helpers/ball-inventory-health';
 
 const BASE  = process.env.TEST_BASE_URL  || 'https://stagingmf.netlify.app';
 const ADMIN = process.env.TEST_ADMIN_PASS || 'testpassword';
@@ -43,6 +44,14 @@ const MAX_LIMIT  = 700;
 const PAPER_MAX  = 500;
 const TOTAL_BALLS = 1200;
 const ONLINE_START = 501;
+
+// QA pre-flight (ANT-78): this whole file is Ball Drop inventory logic, so
+// gate every test in it on the inventory being in its canonical state.
+// A corrupted table should fail loud as an environment error here, not
+// masquerade as broken application logic further down.
+test.beforeAll(async ({ request }) => {
+  await assertBallInventoryHealthy(request);
+});
 
 async function loginAdmin(page: Page) {
   if (!process.env.TEST_ADMIN_PASS) throw new Error('TEST_ADMIN_PASS is not set.');

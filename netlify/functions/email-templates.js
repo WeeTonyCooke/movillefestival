@@ -114,12 +114,12 @@ export function bedPushEmail(registration) {
             <tr><td style="padding: 6px 0; color: #666;">Captain</td><td style="padding: 6px 0; font-weight: bold; text-align: right;">${captain}</td></tr>
             <tr><td style="padding: 6px 0; color: #666;">Amount paid</td><td style="padding: 6px 0; font-weight: bold; text-align: right;">€50.00</td></tr>
             <tr><td style="padding: 6px 0; color: #666;">Date</td><td style="padding: 6px 0; font-weight: bold; text-align: right;">Wednesday 8 July 2026</td></tr>
-            <tr><td style="padding: 6px 0; color: #666;">Start time</td><td style="padding: 6px 0; font-weight: bold; text-align: right;">6pm for 6.30pm</td></tr>
+            <tr><td style="padding: 6px 0; color: #666;">Race starts</td><td style="padding: 6px 0; font-weight: bold; text-align: right;">7pm</td></tr>
             <tr><td style="padding: 6px 0; color: #666;">Venue</td><td style="padding: 6px 0; font-weight: bold; text-align: right;">Festival Square &amp; Quay Street</td></tr>
           </table>
         </div>
         <div style="border-left: 4px solid #F26A4B; padding: 12px 16px; margin: 16px 0; background: #fff8f6;">
-          <strong>Scrutineering at 6pm sharp — Festival Square</strong>
+          <strong>Scrutineering from 6pm sharp — Festival Square. Parade departs 6.30pm to Quay Street, where the race starts at 7pm.</strong>
           <p style="margin: 4px 0 0;">All beds must pass inspection by Paddy and Paddy before the race. No helmet = no race. Don't be late.</p>
         </div>
         <p>Please make sure your whole team has read the <a href="https://movillefestival.com/bed-push-rules">Bed Push race rules and safety information</a> before the day.</p>

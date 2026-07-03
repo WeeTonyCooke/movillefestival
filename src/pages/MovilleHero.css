@@ -20,6 +20,7 @@
   opacity: 1;
 }
 
+.hero-bg-dawn,
 .hero-bg-day,
 .hero-bg-evening,
 .hero-bg-night {
@@ -27,10 +28,15 @@
 }
 
 /* Desktop images hidden by default, shown at 1280px+ */
+.hero-bg-dawn-desktop,
 .hero-bg-day-desktop,
 .hero-bg-evening-desktop,
 .hero-bg-night-desktop {
   display: none;
+}
+
+.hero-bg-dawn {
+  filter: saturate(1.02) contrast(1.02);
 }
 
 .hero-bg-day {
@@ -68,6 +74,7 @@
   );
 }
 
+.hero-dawn .hero-overlay,
 .hero-evening .hero-overlay {
   background: linear-gradient(
     to bottom,
@@ -290,16 +297,23 @@
 }
 
 @media (min-width: 1280px) {
+  .hero-bg-dawn,
   .hero-bg-day,
   .hero-bg-evening,
   .hero-bg-night {
     display: none;
   }
 
+  .hero-bg-dawn-desktop,
   .hero-bg-day-desktop,
   .hero-bg-evening-desktop,
   .hero-bg-night-desktop {
     display: block;
+  }
+
+  .hero-bg-dawn-desktop {
+    background-position: center 48%;
+    filter: saturate(1.05) contrast(1.02);
   }
 
   .hero-bg-day-desktop {
@@ -347,19 +361,24 @@
     min-height: 100svh;
   }
 
+  /* Top-anchored: with the 1:2 images, the lens is then always at
+     max(36.4% of viewport height, 72.9% of viewport width) regardless of
+     whether cover fits by height (tall phones) or width (browser chrome
+     visible). The flash position uses the same expression below. */
+  .hero-bg-dawn,
   .hero-bg-day {
-    background-position: center 54%;
+    background-position: center top;
   }
 
   .hero-bg-evening {
-    background-position: center 54%;
+    background-position: center top;
     transform: none;
     -webkit-mask-image: none;
     mask-image: none;
   }
 
   .hero-bg-night {
-    background-position: center 54%;
+    background-position: center top;
     transform: none;
     -webkit-mask-image: none;
     mask-image: none;
@@ -572,4 +591,135 @@
 .hero-day .hero-cta:hover {
   background: rgba(0, 0, 0, 0.38);
   border-color: rgba(255, 255, 255, 0.7);
+}
+
+/* ── Lantern flash — charted Fl W 2.5s with red sector inshore ──── */
+/* The real Moville Light flashes white once every 2.5 seconds with  */
+/* a range of 4 miles; a red sector covers Moville Bank inshore.     */
+/* Warm-white core + soft red fringe = what the drone viewpoint sees */
+/* near the sector boundary. All tunables are variables below.       */
+/* Flash rate is 0.4 flashes/sec — well under the WCAG 3/sec limit.  */
+
+.moville-hero {
+  --flash-x: calc(50% + 5px); /* lens centre — glazing sits a touch right */
+  --flash-y: 36.5%;          /* lens centre, % of hero height    */
+  --flash-size: 34px;        /* lit lens diameter — small, tight */
+  --flash-duration: 2.5s;    /* charted period — leave at 2.5s   */
+  --lens-clear: rgba(255, 240, 205, 0.62);  /* lamp through clear glazing (right) */
+  --lens-red: rgba(255, 42, 32, 0.40);      /* lamp behind the red panel (dimmer)  */
+  --haze-width: 100px;       /* haze reach to the right          */
+  --haze-height: 42px;
+  --haze-opacity: 0.30;      /* overall haze strength            */
+}
+
+.lantern-flash {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* The lamp lighting the glazing from inside: bright through the clear
+   glass on the right, a dim red smoulder behind the red sector panel. */
+.lantern-flash-glow {
+  position: absolute;
+  left: var(--flash-x);
+  top: var(--flash-y);
+  width: calc(var(--flash-size) * 1.35);
+  height: var(--flash-size);
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 68% 50%, var(--lens-clear) 0%, transparent 52%),
+    radial-gradient(circle at 34% 52%, var(--lens-red) 0%, transparent 55%);
+  /* overlay: the photo decides — dark glazing bars stay dark and cut through,
+     bright glass takes the light. Reads as the lamp behind the frame. */
+  mix-blend-mode: overlay;
+  opacity: 0;
+  animation: lantern-flash var(--flash-duration) infinite;
+  will-change: opacity;
+}
+
+/* Soft haze drifting out to the right of the lens — not a beam */
+.lantern-flash-haze {
+  position: absolute;
+  left: var(--flash-x);
+  top: var(--flash-y);
+  width: var(--haze-width);
+  height: var(--haze-height);
+  transform: translate(6%, -50%);
+  background: radial-gradient(
+    ellipse at left center,
+    rgba(255, 220, 170, 0.30) 0%,
+    rgba(255, 200, 150, 0.12) 45%,
+    transparent 75%
+  );
+  filter: blur(8px);
+  mix-blend-mode: screen;
+  opacity: 0;
+  animation: lantern-flash-haze var(--flash-duration) infinite;
+  will-change: opacity;
+}
+
+@keyframes lantern-flash-haze {
+  0%   { opacity: 0; }
+  4%   { opacity: var(--haze-opacity); }
+  14%  { opacity: var(--haze-opacity); }
+  26%  { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+
+/* On for ~0.5s of the 2.5s cycle: fast strike, brief hold, soft decay.
+   To lengthen the flash, raise the 14%/24% stops (each 1% ≈ 25ms). */
+@keyframes lantern-flash {
+  0%   { opacity: 0; }
+  4%   { opacity: 1; }
+  14%  { opacity: 1; }
+  24%  { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+/* Steady glow instead of flashing for users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .lantern-flash-glow,
+  .lantern-flash-haze {
+    animation: none;
+    opacity: 0.45;
+  }
+}
+
+/* Per-breakpoint lantern position — tune live with ?hero=night */
+@media (min-width: 768px) {
+  .moville-hero {
+    --flash-y: 27%;
+  }
+}
+
+@media (min-width: 1280px) {
+  .moville-hero {
+    --flash-y: 33%;
+    --flash-size: 150px;
+  }
+}
+
+@media (max-width: 640px) {
+  .moville-hero {
+    --flash-y: max(36.4%, 72.9vw);
+    --flash-size: 30px;
+  }
+}
+
+/* Dusk: from this shore you look into the light's red sector */
+.hero-evening {
+  --lens-clear: rgba(255, 215, 180, 0.85);
+  --lens-red: rgba(255, 42, 32, 0.72);
+}
+
+/* Flash only on phone layouts, where the image geometry is exact.
+   Tablet and desktop use differently framed images — hidden there. */
+@media (min-width: 641px) {
+  .lantern-flash {
+    display: none;
+  }
 }

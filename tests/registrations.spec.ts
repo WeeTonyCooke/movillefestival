@@ -10,6 +10,7 @@
  */
 
 import { test, expect, Page } from '@playwright/test';
+import { assertBallInventoryHealthy } from './helpers/ball-inventory-health';
 
 const BASE  = process.env.TEST_BASE_URL  || 'https://stagingmf.netlify.app';
 const ADMIN = process.env.TEST_ADMIN_PASS || 'testpassword';
@@ -181,6 +182,13 @@ async function getBallsAvailable(request: import('@playwright/test').APIRequestC
 }
 
 test.describe('Ball Drop', () => {
+
+  // QA pre-flight (ANT-78): fail loud with an environment error if the
+  // ball_drop_balls table isn't in its canonical state, rather than letting
+  // corrupted data masquerade as broken purchase-flow logic below.
+  test.beforeAll(async ({ request }) => {
+    await assertBallInventoryHealthy(request);
+  });
 
   test('BD-01 Ball Drop page loads correctly', async ({ page }) => {
     await page.goto(BASE + '/ball-drop');

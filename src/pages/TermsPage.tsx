@@ -40,6 +40,7 @@ export default function TermsPage() {
         <ul>
           <li>Teams consist of exactly 5 participants — 4 pushers and 1 rider.</li>
           <li>All team members must be over 16. The team captain must be over 18.</li>
+          <li>Participants under 18 must have written consent from a parent or guardian, provided by countersigning the waiver at scrutineering.</li>
           <li>The entry fee is €50 per team, paid online at the time of registration.</li>
           <li>A maximum of 20 teams can enter. Registrations close when capacity is reached.</li>
         </ul>
@@ -47,10 +48,14 @@ export default function TermsPage() {
         <h3>On the day</h3>
         <ul>
           <li>The Bed Push Race takes place on Wednesday 8 July 2026 at Festival Square and Quay Street, Moville.</li>
-          <li>Scrutineering takes place at 6:30pm sharp at Festival Square. All beds must pass a safety inspection before the race.</li>
+          <li>Scrutineering takes place from 6pm sharp at Festival Square. All beds must pass a safety inspection before the race.</li>
           <li>No helmet = no race. This rule will be enforced without exception.</li>
-          <li>The race starts at 7pm.</li>
+          <li>The parade departs Festival Square at 6.30pm for Quay Street, where the race starts at 7pm.</li>
+          <li>Every team member must sign the participation waiver at scrutineering before racing. No signed waiver, no race.</li>
         </ul>
+
+        <h3>Insurance &amp; liability</h3>
+        <p>The Bed Push Race takes place on public streets and involves an element of risk. Participants take part at their own risk. The organisers do not provide insurance for participants, their equipment or their property. By entering and signing the event waiver, participants agree to follow the instructions of marshals and organisers and accept responsibility for their own actions and those of their team, to the fullest extent permitted by law. Full rules are on the <Link to="/bed-push-rules">Bed Push Rules &amp; Safety</Link> page.</p>
 
         <h3>Refunds</h3>
         <p>Entry fees are non-refundable once registered, unless the event is cancelled by the organisers. If the event is cancelled, a full refund will be issued to the original payment method.</p>
@@ -105,6 +110,8 @@ export default function TermsPage() {
 
         <h2>General</h2>
         <p>The organisers reserve the right to amend event details where necessary due to weather, safety requirements or circumstances beyond their control.</p>
+        <p>Attendance at festival events is at your own risk.</p>
+        <p><strong>Pet Show:</strong> animals remain the responsibility of their owners at all times. Owners must keep pets under control and on leads, and are responsible for any injury, loss, or damage caused by their animals. The organisers do not provide insurance for the Pet Show; entry is at the owner&rsquo;s risk.</p>
 
         <h2>Contact</h2>
         <p>If you have any questions about these terms, please contact us at <a href="mailto:movillefestival@gmail.com">movillefestival@gmail.com</a>.</p>

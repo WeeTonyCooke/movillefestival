@@ -9,26 +9,44 @@ const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 
 // Canonical QA/live state: 1-500 reserved paper stock (status=manual),
 // 501-1200 online pool (700 balls, status=available until sold/released).
-//
-// Aggregate counts alone aren't enough — they can match by coincidence
-// while the wrong numbers sit in the wrong buckets (e.g. paper-range
-// balls marked available, or online-range balls counted as manual for
-// the wrong reason). This check verifies the actual number ranges of
-// each status, not just how many rows have it.
+const PAPER_START = 1;
+const PAPER_END = 500;
 const ONLINE_START = 501;
-const EXPECTED = {
-  totalRows: 1200,
-  minNumber: 1,
-  maxNumber: 1200,
-  manualCount: 500,
-  availableCount: 700,
-  manualMin: 1,
-  manualMax: 500,
-  availableMin: ONLINE_START,
-  availableMax: 1200,
-  manualInOnlineRange: 0,   // online balls (>=501) incorrectly/temporarily marked manual
-  availableInPaperRange: 0, // paper balls (<501) incorrectly marked available
-};
+const ONLINE_END = 1200;
+
+// Verifies `numbers` is EXACTLY the contiguous integer range [start, end] —
+// no gaps, no duplicates, no numbers outside the range. Count/min/max
+// matching alone isn't sufficient: duplicate rows can inflate a count while
+// masking a missing number elsewhere (this exact failure mode has happened
+// on this project before).
+function checkExactRange(numbers, start, end) {
+  const expectedCount = end - start + 1;
+  const set = new Set(numbers);
+
+  if (set.size !== numbers.length) {
+    return { ok: false, issue: `${numbers.length - set.size} duplicate ball number(s)` };
+  }
+  if (numbers.length !== expectedCount) {
+    return { ok: false, issue: `${numbers.length} numbers present, expected ${expectedCount}` };
+  }
+
+  const missing = [];
+  const outOfRange = [];
+  for (let n = start; n <= end; n++) {
+    if (!set.has(n)) missing.push(n);
+  }
+  for (const n of numbers) {
+    if (n < start || n > end) outOfRange.push(n);
+  }
+
+  if (missing.length > 0) {
+    return { ok: false, issue: `missing ${missing.length} number(s), e.g. ${missing.slice(0, 5).join(', ')}` };
+  }
+  if (outOfRange.length > 0) {
+    return { ok: false, issue: `${outOfRange.length} number(s) outside expected range, e.g. ${outOfRange.slice(0, 5).join(', ')}` };
+  }
+  return { ok: true, issue: null };
+}
 
 export async function handler(event) {
   const supplied = event.headers['x-admin-password'];
@@ -37,73 +55,38 @@ export async function handler(event) {
   }
 
   try {
-    const [
-      totalResult,
-      minResult,
-      maxResult,
-      manualCountResult,
-      availableCountResult,
-      manualMinResult,
-      manualMaxResult,
-      availableMinResult,
-      availableMaxResult,
-      manualInOnlineRangeResult,
-      availableInPaperRangeResult,
-    ] = await Promise.all([
+    const [totalResult, manualNumbersResult, availableNumbersResult] = await Promise.all([
       supabase.from('ball_drop_balls').select('*', { count: 'exact', head: true }),
-      supabase.from('ball_drop_balls').select('number').order('number', { ascending: true }).limit(1),
-      supabase.from('ball_drop_balls').select('number').order('number', { ascending: false }).limit(1),
-      supabase.from('ball_drop_balls').select('*', { count: 'exact', head: true }).eq('status', 'manual'),
-      supabase.from('ball_drop_balls').select('*', { count: 'exact', head: true }).eq('status', 'available'),
-      supabase.from('ball_drop_balls').select('number').eq('status', 'manual').order('number', { ascending: true }).limit(1),
-      supabase.from('ball_drop_balls').select('number').eq('status', 'manual').order('number', { ascending: false }).limit(1),
-      supabase.from('ball_drop_balls').select('number').eq('status', 'available').order('number', { ascending: true }).limit(1),
-      supabase.from('ball_drop_balls').select('number').eq('status', 'available').order('number', { ascending: false }).limit(1),
-      supabase.from('ball_drop_balls').select('*', { count: 'exact', head: true }).eq('status', 'manual').gte('number', ONLINE_START),
-      supabase.from('ball_drop_balls').select('*', { count: 'exact', head: true }).eq('status', 'available').lt('number', ONLINE_START),
+      supabase.from('ball_drop_balls').select('number').eq('status', 'manual'),
+      supabase.from('ball_drop_balls').select('number').eq('status', 'available'),
     ]);
 
     const totalRows = totalResult.count || 0;
-    const minNumber = minResult.data?.[0]?.number ?? null;
-    const maxNumber = maxResult.data?.[0]?.number ?? null;
-    const manualCount = manualCountResult.count || 0;
-    const availableCount = availableCountResult.count || 0;
-    const manualMin = manualMinResult.data?.[0]?.number ?? null;
-    const manualMax = manualMaxResult.data?.[0]?.number ?? null;
-    const availableMin = availableMinResult.data?.[0]?.number ?? null;
-    const availableMax = availableMaxResult.data?.[0]?.number ?? null;
-    const manualInOnlineRange = manualInOnlineRangeResult.count || 0;
-    const availableInPaperRange = availableInPaperRangeResult.count || 0;
+    const manualNumbers = (manualNumbersResult.data || []).map(r => r.number);
+    const availableNumbers = (availableNumbersResult.data || []).map(r => r.number);
 
-    const inventoryOk =
-      totalRows === EXPECTED.totalRows &&
-      minNumber === EXPECTED.minNumber &&
-      maxNumber === EXPECTED.maxNumber &&
-      manualCount === EXPECTED.manualCount &&
-      availableCount === EXPECTED.availableCount &&
-      manualMin === EXPECTED.manualMin &&
-      manualMax === EXPECTED.manualMax &&
-      availableMin === EXPECTED.availableMin &&
-      availableMax === EXPECTED.availableMax &&
-      manualInOnlineRange === EXPECTED.manualInOnlineRange &&
-      availableInPaperRange === EXPECTED.availableInPaperRange;
+    const manualCheck = checkExactRange(manualNumbers, PAPER_START, PAPER_END);
+    const availableCheck = checkExactRange(availableNumbers, ONLINE_START, ONLINE_END);
+    const totalOk = totalRows === (PAPER_END - PAPER_START + 1) + (ONLINE_END - ONLINE_START + 1);
+
+    const inventoryOk = totalOk && manualCheck.ok && availableCheck.ok;
 
     return {
       statusCode: 200,
       body: JSON.stringify({
         inventoryOk,
         totalRows,
-        minNumber,
-        maxNumber,
-        manualCount,
-        availableCount,
-        manualMin,
-        manualMax,
-        availableMin,
-        availableMax,
-        manualInOnlineRange,
-        availableInPaperRange,
-        expected: EXPECTED,
+        totalExpected: (PAPER_END - PAPER_START + 1) + (ONLINE_END - ONLINE_START + 1),
+        manualCount: manualNumbers.length,
+        availableCount: availableNumbers.length,
+        manualCheckOk: manualCheck.ok,
+        manualIssue: manualCheck.issue,
+        availableCheckOk: availableCheck.ok,
+        availableIssue: availableCheck.issue,
+        expected: {
+          manualRange: `${PAPER_START}-${PAPER_END}`,
+          availableRange: `${ONLINE_START}-${ONLINE_END}`,
+        },
       }),
     };
   } catch (err) {

@@ -10,14 +10,12 @@
  * fast with a clear environment error — not a confusing app-logic failure —
  * if it isn't.
  *
- * Canonical state: 1200 rows, numbers 1-1200, 500 manual (reserved paper
- * stock 1-500), 700 available (online pool 501-1200, before any sales).
- *
- * Aggregate counts alone aren't sufficient — they can match by coincidence
- * while the wrong numbers sit in the wrong buckets. This check also
- * verifies the actual min/max of each status, and that no paper-range
- * ball (1-500) is marked available and no online-range ball (501+) is
- * marked manual.
+ * Canonical state: manual balls are EXACTLY 1-500 (reserved paper stock),
+ * available balls are EXACTLY 501-1200 (online pool, before any sales) —
+ * no gaps, no duplicates, no cross-range contamination. Aggregate counts
+ * alone aren't sufficient: duplicate rows can inflate a count while
+ * masking a missing number elsewhere, which has happened on this project
+ * before. This check verifies the full number ranges, not just totals.
  */
 
 import type { APIRequestContext } from '@playwright/test';
@@ -26,20 +24,6 @@ const BASE  = process.env.TEST_BASE_URL   || 'https://stagingmf.netlify.app';
 const ADMIN = process.env.TEST_ADMIN_PASS || 'testpassword';
 
 const HEALTH_ENDPOINT = BASE + '/.netlify/functions/check-ball-inventory-health';
-
-const EXPECTED = {
-  totalRows: 1200,
-  minNumber: 1,
-  maxNumber: 1200,
-  manualCount: 500,
-  availableCount: 700,
-  manualMin: 1,
-  manualMax: 500,
-  availableMin: 501,
-  availableMax: 1200,
-  manualInOnlineRange: 0,
-  availableInPaperRange: 0,
-};
 
 export async function assertBallInventoryHealthy(request: APIRequestContext): Promise<void> {
   const res = await request.get(HEALTH_ENDPOINT, {
@@ -55,21 +39,17 @@ export async function assertBallInventoryHealthy(request: APIRequestContext): Pr
 
   const body = await res.json();
   const {
-    inventoryOk,
-    totalRows, minNumber, maxNumber, manualCount, availableCount,
-    manualMin, manualMax, availableMin, availableMax,
-    manualInOnlineRange, availableInPaperRange,
+    inventoryOk, totalRows, totalExpected,
+    manualCount, manualCheckOk, manualIssue,
+    availableCount, availableCheckOk, availableIssue,
+    expected,
   } = body;
 
   const report =
     `Inventory Health Check\n\n` +
-    `Total rows: ${totalRows} (expected ${EXPECTED.totalRows})\n` +
-    `Min number: ${minNumber} (expected ${EXPECTED.minNumber})\n` +
-    `Max number: ${maxNumber} (expected ${EXPECTED.maxNumber})\n` +
-    `Manual: ${manualCount} (expected ${EXPECTED.manualCount}) — range ${manualMin}-${manualMax} (expected ${EXPECTED.manualMin}-${EXPECTED.manualMax})\n` +
-    `Available: ${availableCount} (expected ${EXPECTED.availableCount}) — range ${availableMin}-${availableMax} (expected ${EXPECTED.availableMin}-${EXPECTED.availableMax})\n` +
-    `Manual balls in online range (501+): ${manualInOnlineRange} (expected ${EXPECTED.manualInOnlineRange})\n` +
-    `Available balls in paper range (<501): ${availableInPaperRange} (expected ${EXPECTED.availableInPaperRange})\n\n` +
+    `Total rows: ${totalRows} (expected ${totalExpected})\n` +
+    `Manual: ${manualCount} — expected exactly ${expected.manualRange} — ${manualCheckOk ? 'OK' : `FAILED (${manualIssue})`}\n` +
+    `Available: ${availableCount} — expected exactly ${expected.availableRange} — ${availableCheckOk ? 'OK' : `FAILED (${availableIssue})`}\n\n` +
     `Result: ${inventoryOk ? 'PASSED' : 'FAILED'}`;
 
   console.log(report);
@@ -80,11 +60,9 @@ export async function assertBallInventoryHealthy(request: APIRequestContext): Pr
       `QA ENVIRONMENT ERROR\n\n` +
       `ball_drop_balls inventory is corrupted.\n\n` +
       `Expected:\n` +
-      `- ${EXPECTED.totalRows} total rows\n` +
-      `- numbers ${EXPECTED.minNumber}\u2013${EXPECTED.maxNumber}\n` +
-      `- ${EXPECTED.manualCount} manual balls, numbered ${EXPECTED.manualMin}\u2013${EXPECTED.manualMax}\n` +
-      `- ${EXPECTED.availableCount} available balls, numbered ${EXPECTED.availableMin}\u2013${EXPECTED.availableMax}\n` +
-      `- no cross-range contamination (paper marked available, or online marked manual)\n\n` +
+      `- manual balls numbered exactly ${expected.manualRange}, no gaps or duplicates\n` +
+      `- available balls numbered exactly ${expected.availableRange}, no gaps or duplicates\n` +
+      `- ${totalExpected} total rows\n\n` +
       `Please reset the QA inventory before running tests.`
     );
   }

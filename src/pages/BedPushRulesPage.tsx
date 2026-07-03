@@ -23,7 +23,8 @@ export default function BedPushRulesPage() {
         <h2>Event details</h2>
         <ul>
           <li><strong>Date:</strong> Wednesday 8 July 2026</li>
-          <li><strong>Scrutineering:</strong> 6.30pm sharp, Festival Square</li>
+          <li><strong>Scrutineering:</strong> from 6pm sharp, Festival Square</li>
+          <li><strong>Parade to Quay Street:</strong> departs 6.30pm</li>
           <li><strong>Race start:</strong> 7pm</li>
           <li><strong>Location:</strong> Festival Square &amp; Quay Street, Moville</li>
         </ul>
@@ -38,7 +39,7 @@ export default function BedPushRulesPage() {
 
         <h2>Safety</h2>
         <ul>
-          <li>All beds must pass a safety inspection ("scrutineering") at 6.30pm sharp at Festival Square before the race.</li>
+          <li>All beds must pass a safety inspection ("scrutineering") from 6pm sharp at Festival Square before the race.</li>
           <li>Helmets are mandatory for all riders. No helmet, no race — enforced without exception.</li>
           <li>Marshals may stop a team's run at any time if they consider it unsafe.</li>
           <li>The race is physically demanding. Only take part if you are medically fit to do so.</li>

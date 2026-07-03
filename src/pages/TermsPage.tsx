@@ -48,9 +48,9 @@ export default function TermsPage() {
         <h3>On the day</h3>
         <ul>
           <li>The Bed Push Race takes place on Wednesday 8 July 2026 at Festival Square and Quay Street, Moville.</li>
-          <li>Scrutineering takes place at 6:30pm sharp at Festival Square. All beds must pass a safety inspection before the race.</li>
+          <li>Scrutineering takes place from 6pm sharp at Festival Square. All beds must pass a safety inspection before the race.</li>
           <li>No helmet = no race. This rule will be enforced without exception.</li>
-          <li>The race starts at 7pm.</li>
+          <li>The parade departs Festival Square at 6.30pm for Quay Street, where the race starts at 7pm.</li>
           <li>Every team member must sign the participation waiver at scrutineering before racing. No signed waiver, no race.</li>
         </ul>
 

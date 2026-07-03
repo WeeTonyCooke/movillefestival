@@ -20,9 +20,53 @@
  *
  * Commit the snapshots directory to version control so the
  * baseline travels with the codebase.
+ *
+ * ── When is it valid to run --update-snapshots? ──────────────────────────
+ * A failing visual test means EITHER a real regression OR a stale baseline.
+ * Before updating any baseline, confirm which one it is:
+ *
+ *   1. Run the suite twice back-to-back with no code changes in between.
+ *      - Same pages/pixel-counts fail identically both times  → stale
+ *        baseline or environment drift (safe to investigate further).
+ *      - Different pages/pixel-counts each run                → runtime
+ *        instability (live data, unsettled state, a real bug). Fix the
+ *        instability first. Do NOT update baselines to paper over this.
+ *   2. For each failing page, open the actual/expected/diff images
+ *      (`npx playwright show-report`) and visually confirm the CURRENT
+ *      rendering is the intended design — not a broken or half-loaded
+ *      state, not an accidental content change.
+ *   3. Only once both checks pass: update, and update ALL confirmed
+ *      pages in a single commit with a commit message naming WHY
+ *      (e.g. "content change" / "confirmed inventory fix" / "design
+ *      change"), never a generic "fix visual tests" commit.
+ *   4. Any diff you can't explain — don't accept it. File it as a named
+ *      ticket instead of silently re-baselining over it.
+ *
+ * ── 3 July 2026 investigation (see ANT-78 in Linear) ─────────────────────
+ * A run showing 20/22 visual tests failing was traced as follows:
+ *   - Confirmed via two consecutive identical runs: stale baselines /
+ *     content drift, NOT runtime instability (pixel-diff counts matched
+ *     exactly, or within ~3px of AA noise, across both runs).
+ *   - Ruled out with hard evidence: Playwright version drift (unchanged
+ *     since before baseline capture), Chromium binary drift (installed
+ *     Jun 24, before the Jun 27 baseline), OS/display drift, and the
+ *     theme-class-override mechanism being reverted by React (diagnostics
+ *     confirmed the correct class was present at every capture).
+ *   - ball-drop's dramatic height mismatch (989px → 1684px) was caused by
+ *     the QA ball_drop_balls inventory corruption (ANT-78): the baseline
+ *     captured the page's "sold out" state while `available` was
+ *     incorrectly 0. After the inventory repair, the page correctly
+ *     renders the full purchase form — confirmed by direct visual
+ *     inspection of the live page. This is the fix working, not a
+ *     regression.
+ *   - The remaining pages showed smaller, but equally stable, diffs with
+ *     no shared-component or dependency cause found — consistent with
+ *     baselines simply predating legitimate design work (Harbour Light
+ *     redesign, hero refresh) that was never re-baselined afterward.
  */
 
 import { test, expect, Page } from '@playwright/test';
+
 import { createRequire } from 'module';
 
 const require = createRequire(import.meta.url);

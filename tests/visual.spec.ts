@@ -23,11 +23,50 @@
  */
 
 import { test, expect, Page } from '@playwright/test';
+import { createRequire } from 'module';
+
+const require = createRequire(import.meta.url);
+const playwrightVersion = require('@playwright/test/package.json').version;
 
 const BASE = process.env.TEST_BASE_URL || 'https://stagingmf.netlify.app';
 
 // Pixel diff threshold — 0.2% of pixels may differ (anti-aliasing, fonts)
 const THRESHOLD = 0.002;
+
+let loggedRunnerInfo = false;
+function logRunnerInfoOnce(browserName: string, browserVersion: string) {
+  if (loggedRunnerInfo) return;
+  loggedRunnerInfo = true;
+  console.log(
+    `\n[visual-diagnostics] Runner info (logged once per test run)\n` +
+    `  @playwright/test package version: ${playwrightVersion}\n` +
+    `  Browser: ${browserName} ${browserVersion}\n`
+  );
+}
+
+// Logs the actual rendered state right before a screenshot is taken, so a
+// failure can be diagnosed as environment drift, an unsettled theme class,
+// or genuinely different content — instead of guessing from a pixel count.
+async function logPageDiagnostics(page: Page, label: string) {
+  const diag = await page.evaluate(() => ({
+    htmlClassName: document.documentElement.className,
+    bodyClassName: document.body.className,
+    rootDivClassName: (document.querySelector('#root > div') as HTMLElement | null)?.className ?? '(not found)',
+    prefersColorScheme: window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light',
+    devicePixelRatio: window.devicePixelRatio,
+    innerWidth: window.innerWidth,
+    innerHeight: window.innerHeight,
+    now: new Date().toString(),
+  }));
+  console.log(
+    `[visual-diagnostics] ${label}\n` +
+    `  #root > div className: "${diag.rootDivClassName}"\n` +
+    `  documentElement className: "${diag.htmlClassName}" | body className: "${diag.bodyClassName}"\n` +
+    `  prefers-color-scheme (OS/browser): ${diag.prefersColorScheme}\n` +
+    `  viewport: ${diag.innerWidth}x${diag.innerHeight} @ devicePixelRatio=${diag.devicePixelRatio}\n` +
+    `  page's Date().toString(): ${diag.now}\n`
+  );
+}
 
 // Routes to screenshot. Each entry: [name, path, waitForSelector, clip?]
 // waitForSelector is a visible element that confirms the page has settled.
@@ -89,12 +128,14 @@ async function waitForPageReady(page: Page, selector: string) {
 
 test.describe('Light mode', () => {
   for (const [name, path, waitFor, useClip] of ROUTES) {
-    test(`${name}`, async ({ page }) => {
+    test(`${name}`, async ({ page, browserName }) => {
+      logRunnerInfoOnce(browserName, page.context().browser()?.version() ?? 'unknown');
       await page.setViewportSize(VIEWPORT);
       await page.goto(`${BASE}${path}`);
       await injectScrollbarStability(page);
       await waitForPageReady(page, waitFor);
       await setTheme(page, 'light');
+      await logPageDiagnostics(page, `Light mode / ${name}`);
 
       if (useClip) {
         // Clip to a stable top section to avoid long-page flicker
@@ -118,12 +159,14 @@ test.describe('Light mode', () => {
 
 test.describe('Dark mode', () => {
   for (const [name, path, waitFor, useClip] of ROUTES) {
-    test(`${name}`, async ({ page }) => {
+    test(`${name}`, async ({ page, browserName }) => {
+      logRunnerInfoOnce(browserName, page.context().browser()?.version() ?? 'unknown');
       await page.setViewportSize(VIEWPORT);
       await page.goto(`${BASE}${path}`);
       await injectScrollbarStability(page);
       await waitForPageReady(page, waitFor);
       await setTheme(page, 'dark');
+      await logPageDiagnostics(page, `Dark mode / ${name}`);
 
       if (useClip) {
         await expect(page).toHaveScreenshot(`${name}-dark.png`, {

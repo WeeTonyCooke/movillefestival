@@ -781,11 +781,11 @@
 }
 
 .star-4 {
-  top: 6%;
-  left: 60%;
+  top: 18%;
+  left: 47%;
   width: 2px;
   height: 2px;
-  box-shadow: 0 0 3px 1px rgba(255, 250, 235, 0.5);
+  box-shadow: 0 0 2px 1px rgba(255, 250, 235, 0.35);
   animation-name: twinkle-a;
   animation-duration: 4.9s;
   animation-delay: 2.4s;

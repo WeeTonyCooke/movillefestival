@@ -131,6 +131,19 @@ const MovilleHero: React.FC<MovilleHeroProps> = ({ isNight }) => {
         </div>
       )}
 
+      {/* Scattered twinkling stars — night sky only, mobile only.
+          Six points on independent timing so they never sync into a loop. */}
+      {isHeroNight && (
+        <div className="hero-stars" aria-hidden="true">
+          <span className="star star-1" />
+          <span className="star star-2" />
+          <span className="star star-3" />
+          <span className="star star-4" />
+          <span className="star star-5" />
+          <span className="star star-6" />
+        </div>
+      )}
+
       <div className="hero-content">
         <div className="page-shell hero-shell">
           <div className="hero-title-wrap">

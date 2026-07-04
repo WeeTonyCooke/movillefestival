@@ -803,11 +803,11 @@
 }
 
 .star-6 {
-  top: 33%;
+  top: 21%;
   left: 5%;
-  width: 3px;
-  height: 3px;
-  box-shadow: 0 0 4px 1px rgba(255, 250, 235, 0.55);
+  width: 2px;
+  height: 2px;
+  box-shadow: 0 0 3px 1px rgba(255, 250, 235, 0.4);
   animation-name: twinkle-c;
   animation-duration: 5.1s;
   animation-delay: 3s;

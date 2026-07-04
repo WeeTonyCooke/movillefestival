@@ -625,7 +625,7 @@
   position: absolute;
   left: var(--flash-x);
   top: var(--flash-y);
-  width: calc(var(--flash-size) * 1.35);
+  width: calc(var(--flash-size) * 1.08);
   height: var(--flash-size);
   transform: translate(-50%, -50%);
   border-radius: 50%;
@@ -706,7 +706,7 @@
 @media (max-width: 640px) {
   .moville-hero {
     --flash-y: max(36.4%, 72.9vw);
-    --flash-size: 30px;
+    --flash-size: 24px;
   }
 }
 

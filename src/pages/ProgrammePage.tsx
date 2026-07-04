@@ -231,6 +231,12 @@ const PROGRAMME_DATA: Record<FestivalDay, ProgrammeEvent[]> = {
         'Paint the coastline with artists of all ages and abilities. Bring your own materials, or use what\'s provided for passers-by who fancy a go.',
     },
     {
+      time: '15:00',
+      title: 'Irish Dancing & Line Dancing',
+      venue: 'Marquee, Festival Square',
+      strapline: 'With Sheila and Caroline — céilí steps and line dancing for all ages, 3–4pm.',
+    },
+    {
       time: '16:00',
       title: 'Treasure Hunt',
       venue: 'Festival Square',

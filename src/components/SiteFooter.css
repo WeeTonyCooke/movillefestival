@@ -47,3 +47,144 @@
     text-align: center;
   }
 }
+
+/* MCA maker's mark credit — adapted from Quiet Objects' McaEmailLogo.
+   Discreet by design: sits at the same muted opacity/size as the legal
+   links, only the mark itself is a distinct element. Click plays a
+   320ms optical-trace sweep, then follows the mailto link (mirrors the
+   source component's tracing-state pattern, minus its unused/broken
+   useReducedMotion hook — reduced motion is checked inline instead). */
+.site-footer-credit {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  color: var(--text-muted, rgba(29, 39, 48, 0.52));
+  text-decoration: none;
+  opacity: .82;
+  transition: opacity 160ms linear, color 160ms linear;
+}
+
+.site-footer-credit:hover,
+.site-footer-credit:focus-visible {
+  opacity: 1;
+  color: var(--accent, #1F4E5F);
+  text-decoration: underline;
+}
+
+.site-footer-credit:focus-visible {
+  outline: 1px solid var(--accent, #1F4E5F);
+  outline-offset: 4px;
+}
+
+.site-footer-credit-mark {
+  position: relative;
+  display: inline-block;
+  width: 34px;
+  aspect-ratio: 1065 / 381;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.site-footer-credit-logo {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.site-footer-credit-caption {
+  white-space: nowrap;
+}
+
+/* Optical trace: a compressed, footer-scaled take on the MCA reveal
+   sequence (rest -> trace the letterforms -> sparkle -> fade -> rest).
+   Real stroke-traced contours (not a masked rectangle), but tuned way
+   down from the source's 2.5-3.5s multi-color glow so it stays a
+   discreet footer credit rather than a hero brand moment: ~700ms, a
+   muted 4-stop gradient, and a small sparkle. Triggered by the
+   .site-footer-credit--tracing class the component toggles on click.
+   Hidden at rest by default — plain mark + caption always work with no
+   JS and no animation support required. */
+.site-footer-credit-trace-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.site-footer-credit-trace-strokes path {
+  fill: none;
+  stroke: url(#site-footer-mca-trace-gradient);
+  /* The viewBox is 1065 user units wide but renders at ~34px, so this
+     needs to be large in user-unit terms to read as a visible 2-3px
+     line on screen (stroke-width doesn't auto-scale with the viewport
+     the way the rest of the layout does). */
+  stroke-width: 80;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  filter: drop-shadow(0 0 2px rgba(255, 255, 255, .45));
+}
+
+.site-footer-credit-sparkle {
+  fill: #F4E1B0;
+  opacity: 0;
+  transform-origin: 955px 300px;
+  filter: drop-shadow(0 0 3px rgba(244, 225, 176, .8));
+}
+
+.site-footer-credit--tracing .site-footer-credit-trace-svg {
+  animation: site-footer-mca-trace-fade 700ms ease-out both;
+}
+
+.site-footer-credit--tracing .site-footer-credit-trace-strokes path {
+  animation: site-footer-mca-trace-draw 700ms ease-in-out both;
+}
+
+.site-footer-credit--tracing .site-footer-credit-sparkle {
+  animation: site-footer-mca-sparkle 700ms ease-out both;
+}
+
+@keyframes site-footer-mca-trace-fade {
+  0% { opacity: 0; }
+  10% { opacity: 1; }
+  75% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes site-footer-mca-trace-draw {
+  0% { stroke-dashoffset: 100; }
+  78% { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: 0; }
+}
+
+@keyframes site-footer-mca-sparkle {
+  0%, 76% {
+    opacity: 0;
+    transform: scale(.4);
+  }
+  86% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(.6);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-footer-credit {
+    transition: none;
+  }
+
+  .site-footer-credit--tracing .site-footer-credit-trace-svg,
+  .site-footer-credit--tracing .site-footer-credit-trace-strokes path,
+  .site-footer-credit--tracing .site-footer-credit-sparkle {
+    animation: none;
+  }
+}

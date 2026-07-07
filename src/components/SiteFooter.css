@@ -118,7 +118,11 @@
 .site-footer-credit-trace-strokes path {
   fill: none;
   stroke: url(#site-footer-mca-trace-gradient);
-  stroke-width: 16;
+  /* The viewBox is 1065 user units wide but renders at ~34px, so this
+     needs to be large in user-unit terms to read as a visible 2-3px
+     line on screen (stroke-width doesn't auto-scale with the viewport
+     the way the rest of the layout does). */
+  stroke-width: 80;
   stroke-linecap: round;
   stroke-linejoin: round;
   stroke-dasharray: 100;

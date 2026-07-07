@@ -96,42 +96,80 @@
   white-space: nowrap;
 }
 
-/* Optical trace: a masked light sweep over the mark, CSS-only keyframe
-   (no dependency), triggered by the .site-footer-credit--tracing class
-   the component toggles on click. Plain mark + caption work with no JS
-   and no animation support required. */
-.site-footer-credit-trace {
+/* Optical trace: a compressed, footer-scaled take on the MCA reveal
+   sequence (rest -> trace the letterforms -> sparkle -> fade -> rest).
+   Real stroke-traced contours (not a masked rectangle), but tuned way
+   down from the source's 2.5-3.5s multi-color glow so it stays a
+   discreet footer credit rather than a hero brand moment: ~700ms, a
+   muted 4-stop gradient, and a small sparkle. Triggered by the
+   .site-footer-credit--tracing class the component toggles on click.
+   Hidden at rest by default — plain mark + caption always work with no
+   JS and no animation support required. */
+.site-footer-credit-trace-svg {
   position: absolute;
   inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
   opacity: 0;
-  background: linear-gradient(
-    103deg,
-    transparent 0 43%,
-    rgba(224, 233, 236, .28) 47%,
-    rgba(250, 252, 252, .92) 50%,
-    rgba(224, 233, 236, .2) 53%,
-    transparent 57% 100%
-  );
-  -webkit-mask: url('/mca-logo.svg') center / contain no-repeat;
-  mask: url('/mca-logo.svg') center / contain no-repeat;
-  transform: translateX(-115%);
   pointer-events: none;
 }
 
-.site-footer-credit--tracing .site-footer-credit-trace {
-  animation: site-footer-mca-trace 450ms linear both;
+.site-footer-credit-trace-strokes path {
+  fill: none;
+  stroke: url(#site-footer-mca-trace-gradient);
+  stroke-width: 16;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  filter: drop-shadow(0 0 2px rgba(255, 255, 255, .45));
 }
 
-@keyframes site-footer-mca-trace {
-  0% {
+.site-footer-credit-sparkle {
+  fill: #F4E1B0;
+  opacity: 0;
+  transform-origin: 955px 300px;
+  filter: drop-shadow(0 0 3px rgba(244, 225, 176, .8));
+}
+
+.site-footer-credit--tracing .site-footer-credit-trace-svg {
+  animation: site-footer-mca-trace-fade 700ms ease-out both;
+}
+
+.site-footer-credit--tracing .site-footer-credit-trace-strokes path {
+  animation: site-footer-mca-trace-draw 700ms ease-in-out both;
+}
+
+.site-footer-credit--tracing .site-footer-credit-sparkle {
+  animation: site-footer-mca-sparkle 700ms ease-out both;
+}
+
+@keyframes site-footer-mca-trace-fade {
+  0% { opacity: 0; }
+  10% { opacity: 1; }
+  75% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes site-footer-mca-trace-draw {
+  0% { stroke-dashoffset: 100; }
+  78% { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: 0; }
+}
+
+@keyframes site-footer-mca-sparkle {
+  0%, 76% {
     opacity: 0;
-    transform: translateX(-115%);
+    transform: scale(.4);
   }
-  12% { opacity: .72; }
-  82% { opacity: .72; }
+  86% {
+    opacity: 1;
+    transform: scale(1);
+  }
   100% {
     opacity: 0;
-    transform: translateX(115%);
+    transform: scale(.6);
   }
 }
 
@@ -140,7 +178,9 @@
     transition: none;
   }
 
-  .site-footer-credit--tracing .site-footer-credit-trace {
+  .site-footer-credit--tracing .site-footer-credit-trace-svg,
+  .site-footer-credit--tracing .site-footer-credit-trace-strokes path,
+  .site-footer-credit--tracing .site-footer-credit-sparkle {
     animation: none;
   }
 }

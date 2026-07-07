@@ -1,4 +1,18 @@
- # React + TypeScript + Vite
+ # Moville Festival — Digital Platform
+
+## ⚠️ Release branch: `Quality-Assurance-Branch`, not `main`
+
+`Quality-Assurance-Branch` is the deployable release branch. `main` is only
+periodically synced from it and should not be assumed current. All edits
+and PRs target `Quality-Assurance-Branch`; merging that branch into `main`
+is what deploys to production (`movillefestival.com`).
+
+See [`CLAUDE.md`](./CLAUDE.md) for the full branch strategy, environment
+mapping, and release checklist before merging to `main`.
+
+---
+
+# React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 

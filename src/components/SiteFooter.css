@@ -80,7 +80,7 @@
 .site-footer-credit-mark {
   position: relative;
   display: inline-block;
-  width: 20px;
+  width: 34px;
   aspect-ratio: 1065 / 381;
   overflow: hidden;
   flex-shrink: 0;
@@ -119,7 +119,7 @@
 }
 
 .site-footer-credit--tracing .site-footer-credit-trace {
-  animation: site-footer-mca-trace 320ms linear both;
+  animation: site-footer-mca-trace 450ms linear both;
 }
 
 @keyframes site-footer-mca-trace {

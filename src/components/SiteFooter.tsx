@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import './SiteFooter.css';
 
-const MCA_EMAIL_HREF = 'mailto:hello@quietobjects.ie';
-const MCA_TRACE_DURATION_MS = 320;
+const MCA_EMAIL_HREF = 'mailto:hello@quietobjects.ie?subject=Collaboration';
+const MCA_TRACE_DURATION_MS = 450;
 
 function prefersReducedMotion() {
   return (
@@ -55,8 +55,8 @@ export default function SiteFooter() {
               className="site-footer-credit-logo"
               src="/mca-logo-dark.svg"
               alt=""
-              width="20"
-              height="8"
+              width="34"
+              height="12"
             />
             <span className="site-footer-credit-trace" />
           </span>

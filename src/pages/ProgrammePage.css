@@ -334,8 +334,9 @@
     display: block;
   }
   
-  /* Circle dot on the vertical rule */
+  /* Circle dot on the vertical rule — removed per design review (no longer conveys info) */
   .prog-event::before {
+    display: none;
     content: '';
     position: absolute;
     left: -22px;
@@ -348,10 +349,11 @@
     z-index: 1;
   }
   
-  /* Headliner — card treatment: cream surface, gold border, rounded */
+  /* Headliner — card treatment: cream surface, gold border, rounded, soft lift */
   .prog-event.is-headline {
     background: linear-gradient(180deg, rgba(201,168,120,0.10), rgba(201,168,120,0) 70%);
     border: 1px solid rgba(176,137,79,0.45);
+    box-shadow: var(--shadow-card);
     border-radius: var(--radius-md);
     padding: 18px 18px 18px 20px;
     margin-left: -20px;
@@ -437,7 +439,7 @@
   }
   
   .prog-event-venue svg {
-    fill: var(--harbour-teal);
+    fill: #6BAFA7;
     flex-shrink: 0;
   }
   

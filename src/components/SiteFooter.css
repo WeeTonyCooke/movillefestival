@@ -47,3 +47,100 @@
     text-align: center;
   }
 }
+
+/* MCA maker's mark credit — adapted from Quiet Objects' McaEmailLogo.
+   Discreet by design: sits at the same muted opacity/size as the legal
+   links, only the mark itself is a distinct element. Click plays a
+   320ms optical-trace sweep, then follows the mailto link (mirrors the
+   source component's tracing-state pattern, minus its unused/broken
+   useReducedMotion hook — reduced motion is checked inline instead). */
+.site-footer-credit {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  color: var(--text-muted, rgba(29, 39, 48, 0.52));
+  text-decoration: none;
+  opacity: .82;
+  transition: opacity 160ms linear, color 160ms linear;
+}
+
+.site-footer-credit:hover,
+.site-footer-credit:focus-visible {
+  opacity: 1;
+  color: var(--accent, #1F4E5F);
+  text-decoration: underline;
+}
+
+.site-footer-credit:focus-visible {
+  outline: 1px solid var(--accent, #1F4E5F);
+  outline-offset: 4px;
+}
+
+.site-footer-credit-mark {
+  position: relative;
+  display: inline-block;
+  width: 20px;
+  aspect-ratio: 1065 / 381;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.site-footer-credit-logo {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.site-footer-credit-caption {
+  white-space: nowrap;
+}
+
+/* Optical trace: a masked light sweep over the mark, CSS-only keyframe
+   (no dependency), triggered by the .site-footer-credit--tracing class
+   the component toggles on click. Plain mark + caption work with no JS
+   and no animation support required. */
+.site-footer-credit-trace {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  background: linear-gradient(
+    103deg,
+    transparent 0 43%,
+    rgba(224, 233, 236, .28) 47%,
+    rgba(250, 252, 252, .92) 50%,
+    rgba(224, 233, 236, .2) 53%,
+    transparent 57% 100%
+  );
+  -webkit-mask: url('/mca-logo.svg') center / contain no-repeat;
+  mask: url('/mca-logo.svg') center / contain no-repeat;
+  transform: translateX(-115%);
+  pointer-events: none;
+}
+
+.site-footer-credit--tracing .site-footer-credit-trace {
+  animation: site-footer-mca-trace 320ms linear both;
+}
+
+@keyframes site-footer-mca-trace {
+  0% {
+    opacity: 0;
+    transform: translateX(-115%);
+  }
+  12% { opacity: .72; }
+  82% { opacity: .72; }
+  100% {
+    opacity: 0;
+    transform: translateX(115%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-footer-credit {
+    transition: none;
+  }
+
+  .site-footer-credit--tracing .site-footer-credit-trace {
+    animation: none;
+  }
+}

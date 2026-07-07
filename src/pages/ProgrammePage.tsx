@@ -5,6 +5,10 @@ import './ProgrammePage.css';
 const FEEDBACK_URL =
   'https://script.google.com/macros/s/AKfycbwADI9Ld2vGjlkjST4VTHHR-y5QbuoBPmFjhE8IX2sZVS8mXxfPWQL5nWoCNSJdHQ9oxg/exec';
 
+// The smiley voting widget only opens once the whole festival has
+// wrapped, rather than immediately after each individual event.
+const FEEDBACK_VOTING_OPENS = new Date(2026, 6, 13, 0, 0, 0, 0); // 13 July 2026
+
 const DEFAULT_EVENT_DURATION_MIN = 90;
 
 type FestivalDay = 'TUE' | 'WED' | 'THU' | 'FRI' | 'SAT' | 'SUN';
@@ -387,6 +391,10 @@ function hasEventFinished(day: FestivalDay, event: ProgrammeEvent): boolean {
   );
 
   return new Date() > end;
+}
+
+function isFeedbackVotingOpen(): boolean {
+  return new Date() >= FEEDBACK_VOTING_OPENS;
 }
 
 function getClientId(): string {
@@ -865,7 +873,7 @@ function ProgrammePage({ isNight }: { isNight: boolean }) {
                           )}
 
                           {/* Post-event voting */}
-                          {eventFinished && (
+                          {isFeedbackVotingOpen() && eventFinished && (
                             <>
                               <p className="prog-event-vote-heading">Tell us what you thought</p>
                               <div className="prog-event-vote" role="group" aria-label={`Your reaction to ${event.title}`}>

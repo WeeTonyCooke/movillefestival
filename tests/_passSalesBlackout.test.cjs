@@ -21,7 +21,7 @@
 
 const { test } = require('node:test');
 const assert   = require('node:assert/strict');
-const { getPassSalesStatus, PASS_SALES_BLACKOUTS } = require('./_passSalesBlackout.cjs');
+const { getPassSalesStatus, PASS_SALES_BLACKOUTS } = require('../netlify/functions/_passSalesBlackout.cjs');
 
 const ALL_PRODUCTS = ['festival_pass', 'friday', 'saturday', 'sunday'];
 
@@ -232,7 +232,7 @@ console.log('\nAll _passSalesBlackout tests passed.\n');
 
 // ── Post-festival permanent close ────────────────────────────────────────────
 
-const { FESTIVAL_END } = require('./_passSalesBlackout.cjs');
+const { FESTIVAL_END } = require('../netlify/functions/_passSalesBlackout.cjs');
 
 test('Post-festival: exactly at FESTIVAL_END — blocked with FESTIVAL_ENDED', () => {
   const now = new Date(FESTIVAL_END);

@@ -133,17 +133,12 @@ exports.handler = async (event) => {
   // instead of admitting twice.
   const updatedDates = [...scanDates, today];
 
-  let updateQuery = supabase
+  const { data: updateResult, error: updateError } = await supabase
     .from('festival_passes')
     .update({ scan_dates: updatedDates })
     .eq('pass_ref', ref)
-    .eq('status', 'paid');
-
-  updateQuery = data.scan_dates === null
-    ? updateQuery.is('scan_dates', null)
-    : updateQuery.eq('scan_dates', data.scan_dates);
-
-  const { data: updateResult, error: updateError } = await updateQuery.select();
+    .eq('status', 'paid')
+    .select();
 
   if (updateError) {
     console.error('Scan update error:', updateError);

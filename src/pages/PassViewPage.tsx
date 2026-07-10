@@ -46,10 +46,12 @@ const PassViewPage: React.FC = () => {
   const [loading, setLoading]   = useState(true);
   const [error, setError]       = useState<string | null>(null);
 
-  const token = new URLSearchParams(window.location.search).get('token');
+  const params = new URLSearchParams(window.location.search);
+  const token = params.get('token');
+  const ref = params.get('ref');
 
   useEffect(() => {
-    if (!token) {
+    if (!token && !ref) {
       setError('No pass token found in the link. Please use the link from your confirmation email.');
       setLoading(false);
       return;
@@ -57,9 +59,12 @@ const PassViewPage: React.FC = () => {
 
     const load = async () => {
       // FIX 2: Call our server-side function — never touch Supabase directly
-      const passRes = await fetch(
-        `/.netlify/functions/get-pass-by-ref?token=${encodeURIComponent(token)}`
-      );
+      const paramStr = token
+          ? `token=${encodeURIComponent(token)}`
+          : `ref=${encodeURIComponent(ref!)}`;
+        const passRes = await fetch(
+          `/.netlify/functions/get-pass-by-ref?${paramStr}`
+        );
 
       if (!passRes.ok) {
         setError(

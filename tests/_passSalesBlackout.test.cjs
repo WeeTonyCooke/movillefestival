@@ -9,12 +9,12 @@
  * Blackout windows (all IST = UTC+01:00):
  *   Friday   10 Jul: 18:00–23:00
  *   Saturday 11 Jul: 16:00–23:30
- *   Sunday   12 Jul: 15:30–23:30
+ *   Sunday   12 Jul: 14:00–23:30
  *
  * UTC equivalents:
  *   Friday   10 Jul: 17:00–22:00 UTC
  *   Saturday 11 Jul: 15:00–22:30 UTC
- *   Sunday   12 Jul: 14:30–22:30 UTC
+ *   Sunday   12 Jul: 13:00–22:30 UTC
  */
 
 'use strict';

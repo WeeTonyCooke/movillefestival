@@ -4,6 +4,7 @@
 
 const Stripe = require('stripe');
 const { createClient } = require('@supabase/supabase-js');
+const { getPassSalesStatus } = require('./_passSalesBlackout.cjs');
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const supabase = createClient(
@@ -63,10 +64,49 @@ exports.handler = async (event) => {
     };
   }
 
+  // ── Pass sales blackout gate ──────────────────────────────────────────────
+  // PASS_SALES_OVERRIDE controls this gate:
+  //   auto   — follow the schedule (default)
+  //   open   — force all pass sales open regardless of schedule
+  //   closed — immediately pause all pass products
+  const override = (process.env.PASS_SALES_OVERRIDE || 'auto').trim().toLowerCase();
+
+  if (override !== 'open') {
+    let blocked = false;
+    let reopenAt = null;
+
+    if (override === 'closed') {
+      blocked = true;
+    } else {
+      // 'auto' — evaluate the schedule
+      const status = getPassSalesStatus(passType, new Date());
+      if (!status.available) {
+        blocked   = true;
+        reopenAt  = status.reopenAt || null;
+      }
+    }
+
+    if (blocked) {
+      return {
+        statusCode: 409,
+        body: JSON.stringify({
+          error: 'ONLINE_SALES_PAUSED',
+          message:
+            'Online sales are paused during today\'s paid events. Passes are available at the gate.',
+          reopenAt,
+        }),
+      };
+    }
+  }
+  // ── End blackout gate ─────────────────────────────────────────────────────
+
   const siteUrl = process.env.URL || 'https://movillefestival.com';
 
   try {
-    // Create Stripe checkout session
+    // Create Stripe checkout session.
+    // Note: sessions already in progress before the blackout window opened
+    // are NOT affected here — this gate only prevents NEW sessions.
+    // The webhook (stripe-webhook.js) fulfils any completed payment regardless.
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: [

@@ -1,6 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useNightMode } from '../hooks/useNightMode';
+import {
+  getPassPageSalesStatus,
+  formatIrishTime,
+  type PassSalesStatus,
+} from '../lib/passSalesBlackout';
 
 const PASSES = [
   {
@@ -50,6 +55,36 @@ const PASSES = [
     accent: '#6B3FA0',
     stubFoot: 'Sunday Pass',
     btnLabel: 'Buy Sunday Pass →',
+  },
+];
+
+// Paid gigs shown on the closed page — programme info only, no purchase actions
+const PAID_GIGS = [
+  {
+    day: 'Friday',
+    date: '10 July',
+    accent: '#6BAFA7',
+    gigs: [
+      { time: '8:00 pm', title: "All Folk'd Up", venue: 'Market Square', admission: '€10' },
+    ],
+  },
+  {
+    day: 'Saturday',
+    date: '11 July',
+    accent: '#F26A4B',
+    gigs: [
+      { time: '6:00 pm', title: 'Marty Healy Band', venue: 'Market Square', admission: '€10' },
+      { time: '9:00 pm', title: 'Bagatelle',         venue: 'Market Square', admission: '€10' },
+    ],
+  },
+  {
+    day: 'Sunday',
+    date: '12 July',
+    accent: '#6B3FA0',
+    gigs: [
+      { time: '5:30 pm', title: 'The Two Bucks',    venue: 'Market Square', admission: '€10' },
+      { time: '8:30 pm', title: 'The Björn Identity', venue: 'Market Square', admission: '€10' },
+    ],
   },
 ];
 
@@ -253,7 +288,15 @@ function CheckoutForm({ pass, onChangePass }: { pass: Pass; onChangePass: () => 
         }),
       });
       const data = await res.json();
-      if (!res.ok) { setError(data.error || 'Something went wrong. Please try again.'); setLoading(false); return; }
+      if (!res.ok) {
+        if (res.status === 409 && data.error === 'ONLINE_SALES_PAUSED') {
+          setError('Online sales are paused during today\'s paid events. Passes are available at the gate.');
+        } else {
+          setError(data.error || 'Something went wrong. Please try again.');
+        }
+        setLoading(false);
+        return;
+      }
       window.location.href = data.url;
     } catch {
       setError('Network error. Please check your connection and try again.');
@@ -360,10 +403,220 @@ function CheckoutForm({ pass, onChangePass }: { pass: Pass; onChangePass: () => 
   );
 }
 
+/** Closed/paused state shown during a blackout window */
+function BlackoutClosedPage({ isNight, textPri, textSec, border }: {
+  isNight: boolean;
+  textPri: string;
+  textSec: string;
+  border: string;
+}) {
+  const surface = isNight ? 'rgba(18,36,48,0.76)' : '#FFFCF6';
+
+  return (
+    <div style={{ width: '100%', maxWidth: 680 }}>
+
+      {/* Primary status banner */}
+      <div
+        data-testid="blackout-banner"
+        style={{
+          background: surface,
+          border: `1px solid ${border}`,
+          borderLeft: '4px solid #1F4E5F',
+          borderRadius: 12,
+          padding: '20px 22px',
+          marginBottom: 28,
+        }}
+      >
+        <p style={{
+          margin: '0 0 6px',
+          fontSize: 16,
+          fontWeight: 700,
+          color: textPri,
+          fontFamily: "'Outfit', system-ui, sans-serif",
+          lineHeight: 1.4,
+        }}>
+          Online sales are paused during today's paid events.
+        </p>
+        <p style={{
+          margin: '0 0 12px',
+          fontSize: 14,
+          fontWeight: 600,
+          color: textPri,
+          fontFamily: "'Outfit', system-ui, sans-serif",
+        }}>
+          Passes are available at the gate.
+        </p>
+        <p style={{
+          margin: 0,
+          fontSize: 13,
+          color: textSec,
+          fontFamily: "'Outfit', system-ui, sans-serif",
+        }}>
+          Online sales will reopen after tonight's events.
+        </p>
+      </div>
+
+      {/* Paid gigs — read-only programme, no purchase actions */}
+      <div
+        data-testid="blackout-gigs-list"
+        style={{
+          background: surface,
+          border: `1px solid ${border}`,
+          borderRadius: 12,
+          overflow: 'hidden',
+        }}
+      >
+        <div style={{
+          padding: '14px 20px 10px',
+          borderBottom: `1px solid ${border}`,
+        }}>
+          <p style={{
+            margin: 0,
+            fontSize: 10,
+            fontWeight: 700,
+            letterSpacing: '2px',
+            textTransform: 'uppercase',
+            color: textSec,
+            fontFamily: "'Outfit', system-ui, sans-serif",
+          }}>
+            Paid Events This Week
+          </p>
+        </div>
+
+        {PAID_GIGS.map((day, di) => (
+          <div
+            key={day.day}
+            data-testid={`blackout-day-${day.day.toLowerCase()}`}
+            style={{
+              padding: '16px 20px',
+              borderBottom: di < PAID_GIGS.length - 1 ? `1px solid ${border}` : 'none',
+            }}
+          >
+            {/* Day header */}
+            <div style={{
+              display: 'flex',
+              alignItems: 'baseline',
+              gap: 8,
+              marginBottom: 10,
+            }}>
+              <span style={{
+                fontSize: 13,
+                fontWeight: 700,
+                color: day.accent,
+                fontFamily: "'Outfit', system-ui, sans-serif",
+                letterSpacing: '0.5px',
+              }}>
+                {day.day}
+              </span>
+              <span style={{
+                fontSize: 11,
+                color: textSec,
+                fontFamily: "'Outfit', system-ui, sans-serif",
+              }}>
+                {day.date}
+              </span>
+            </div>
+
+            {/* Gigs under this day */}
+            {day.gigs.map((gig, gi) => (
+              <div
+                key={gi}
+                style={{
+                  display: 'flex',
+                  alignItems: 'flex-start',
+                  gap: 12,
+                  paddingBottom: gi < day.gigs.length - 1 ? 10 : 0,
+                }}
+              >
+                <span style={{
+                  fontSize: 12,
+                  color: textSec,
+                  fontFamily: "'Outfit', system-ui, sans-serif",
+                  minWidth: 52,
+                  flexShrink: 0,
+                  paddingTop: 1,
+                }}>
+                  {gig.time}
+                </span>
+                <div>
+                  <div style={{
+                    fontSize: 14,
+                    fontWeight: 600,
+                    color: textPri,
+                    fontFamily: "'Outfit', system-ui, sans-serif",
+                    lineHeight: 1.3,
+                  }}>
+                    {gig.title}
+                  </div>
+                  <div style={{
+                    fontSize: 12,
+                    color: textSec,
+                    fontFamily: "'Outfit', system-ui, sans-serif",
+                    marginTop: 2,
+                  }}>
+                    {gig.venue} · {gig.admission}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+
+    </div>
+  );
+}
+
+/** Pre-cutoff warning strip shown when a blackout window is approaching */
+function PreCutoffWarning({ closesAt, textPri, textSec, border }: {
+  closesAt: string;
+  textPri: string;
+  textSec: string;
+  border: string;
+}) {
+  const timeStr = formatIrishTime(closesAt);
+  if (!timeStr) return null;
+
+  return (
+    <div
+      data-testid="precutoff-warning"
+      style={{
+        background: '#FFFCF6',
+        border: `1px solid ${border}`,
+        borderLeft: '3px solid #B0894F',
+        borderRadius: 10,
+        padding: '12px 16px',
+        marginBottom: 20,
+        maxWidth: 680,
+        width: '100%',
+      }}
+    >
+      <p style={{
+        margin: 0,
+        fontSize: 13,
+        color: textPri,
+        fontFamily: "'Outfit', system-ui, sans-serif",
+      }}>
+        <strong>Online sales close at {timeStr} today.</strong>{' '}
+        <span style={{ color: textSec }}>Passes will remain available at the gate.</span>
+      </p>
+    </div>
+  );
+}
+
 export default function PassesPage() {
   const [step,     setStep]     = useState<Step>('select');
   const [selected, setSelected] = useState<string | null>(null);
   const isNight = useNightMode();
+
+  // Evaluate blackout status on mount and re-check every 30 s
+  const [salesStatus, setSalesStatus] = useState<PassSalesStatus>(() =>
+    getPassPageSalesStatus()
+  );
+  useEffect(() => {
+    const id = setInterval(() => setSalesStatus(getPassPageSalesStatus()), 30_000);
+    return () => clearInterval(id);
+  }, []);
 
   // Night mode colour tokens
   const bg       = isNight ? '#0c1a22' : '#FAF8F4';
@@ -384,6 +637,9 @@ export default function PassesPage() {
     setStep('select');
     setSelected(null);
   };
+
+  // If we're currently in a blackout, show the closed page regardless of step
+  const isBlacked = !salesStatus.available;
 
   return (
     <>
@@ -411,30 +667,78 @@ export default function PassesPage() {
 
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
 
-          {step === 'select' && (
-            <>
-              <div style={{ width: '100%', maxWidth: 680, marginBottom: 28 }}>
-                <p style={{ fontSize: 13, color: textSec, marginBottom: 0 }}>
-                  Passes required for ages 16 and over — under 16s enter free.
-                </p>
-              </div>
-
-              <div style={{ width: '100%', maxWidth: 680, marginBottom: 8, background: '#FFFCF6', borderRadius: 12, padding: '12px 18px', borderLeft: '3px solid #B8860B' }}>
-                <p style={{ margin: 0, fontSize: 13, color: '#16323C', fontFamily: "'Outfit', system-ui, sans-serif" }}>
-                  <strong>Attending more than one day?</strong> The Festival Pass (€20) covers all admission-required events across the full festival — better value than two or more day passes.
-                </p>
-              </div>
-
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 20, width: '100%' }}>
-                {PASSES.map(pass => (
-                  <Ticket key={pass.id} pass={pass} onSelect={() => handleSelect(pass.id)} />
-                ))}
-              </div>
-            </>
+          {/* ── POST-FESTIVAL: permanently ended ── */}
+          {isBlacked && salesStatus.reason === 'FESTIVAL_ENDED' && (
+            <div
+              data-testid="festival-ended-banner"
+              style={{
+                width: '100%',
+                maxWidth: 680,
+                background: surface,
+                border: `1px solid ${border}`,
+                borderLeft: '4px solid #1F4E5F',
+                borderRadius: 12,
+                padding: '24px 24px',
+              }}
+            >
+              <p style={{ margin: '0 0 6px', fontSize: 16, fontWeight: 700, color: textPri, fontFamily: "'Outfit', system-ui, sans-serif" }}>
+                The Moville Summer Festival 2026 has ended.
+              </p>
+              <p style={{ margin: 0, fontSize: 13, color: textSec, fontFamily: "'Outfit', system-ui, sans-serif" }}>
+                Online pass sales are now closed. Thank you to everyone who came along.
+              </p>
+            </div>
           )}
 
-          {step === 'checkout' && selectedPass && (
-            <CheckoutForm pass={selectedPass} onChangePass={handleChangePass} />
+          {/* ── BLACKOUT: gig evening closed state ── */}
+          {isBlacked && salesStatus.reason !== 'FESTIVAL_ENDED' && (
+            <BlackoutClosedPage
+              isNight={isNight}
+              textPri={textPri}
+              textSec={textSec}
+              border={border}
+            />
+          )}
+
+          {/* ── NORMAL: sales open ── */}
+          {!isBlacked && (
+            <>
+              {/* Pre-cutoff warning (if a blackout is coming today) */}
+              {salesStatus.closesAt && (
+                <PreCutoffWarning
+                  closesAt={salesStatus.closesAt}
+                  textPri={textPri}
+                  textSec={textSec}
+                  border={border}
+                />
+              )}
+
+              {step === 'select' && (
+                <>
+                  <div style={{ width: '100%', maxWidth: 680, marginBottom: 28 }}>
+                    <p style={{ fontSize: 13, color: textSec, marginBottom: 0 }}>
+                      Passes required for ages 16 and over — under 16s enter free.
+                    </p>
+                  </div>
+
+                  <div style={{ width: '100%', maxWidth: 680, marginBottom: 8, background: '#FFFCF6', borderRadius: 12, padding: '12px 18px', borderLeft: '3px solid #B8860B' }}>
+                    <p style={{ margin: 0, fontSize: 13, color: '#16323C', fontFamily: "'Outfit', system-ui, sans-serif" }}>
+                      <strong>Attending more than one day?</strong> The Festival Pass (€20) covers all admission-required events across the full festival — better value than two or more day passes.
+                    </p>
+                  </div>
+
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 20, width: '100%' }}>
+                    {PASSES.map(pass => (
+                      <Ticket key={pass.id} pass={pass} onSelect={() => handleSelect(pass.id)} />
+                    ))}
+                  </div>
+                </>
+              )}
+
+              {step === 'checkout' && selectedPass && (
+                <CheckoutForm pass={selectedPass} onChangePass={handleChangePass} />
+              )}
+            </>
           )}
 
         </div>

@@ -508,6 +508,10 @@
   flex-wrap: wrap;
 }
 
+.home-feedback-faces--voted {
+  margin-top: 36px;
+}
+
 .home-feedback-face-wrap {
   display: flex;
   flex-direction: column;

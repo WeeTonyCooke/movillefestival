@@ -2,17 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import './ProgrammePage.css';
 
-const FEEDBACK_URL =
-  'https://script.google.com/macros/s/AKfycbwADI9Ld2vGjlkjST4VTHHR-y5QbuoBPmFjhE8IX2sZVS8mXxfPWQL5nWoCNSJdHQ9oxg/exec';
-
-// The smiley voting widget only opens once the whole festival has
-// wrapped, rather than immediately after each individual event.
-const FEEDBACK_VOTING_OPENS = new Date(2026, 6, 13, 0, 0, 0, 0); // 13 July 2026
-
 const DEFAULT_EVENT_DURATION_MIN = 90;
 
 type FestivalDay = 'TUE' | 'WED' | 'THU' | 'FRI' | 'SAT' | 'SUN';
-type Rating = 1 | 2 | 3 | 4;
 
 type ProgrammeEvent = {
   time: string;
@@ -384,40 +376,6 @@ function buildEventStart(day: FestivalDay, event: ProgrammeEvent): Date {
   return new Date(year, month, dayNum, hours, minutes, 0, 0);
 }
 
-function hasEventFinished(day: FestivalDay, event: ProgrammeEvent): boolean {
-  const start = buildEventStart(day, event);
-  const end = new Date(
-    start.getTime() + DEFAULT_EVENT_DURATION_MIN * 60 * 1000,
-  );
-
-  return new Date() > end;
-}
-
-function isFeedbackVotingOpen(): boolean {
-  return new Date() >= FEEDBACK_VOTING_OPENS;
-}
-
-function getClientId(): string {
-  const KEY = 'moville-client-id';
-
-  try {
-    let id = window.localStorage.getItem(KEY);
-
-    if (!id) {
-      id =
-        'c_' +
-        Math.random().toString(36).slice(2, 10) +
-        Date.now().toString(36);
-
-      window.localStorage.setItem(KEY, id);
-    }
-
-    return id;
-  } catch {
-    return 'c_nostorage';
-  }
-}
-
 type TimeBucket = 'morning' | 'afternoon' | 'evening';
 
 const BUCKET_LABELS: Record<TimeBucket, string> = {
@@ -501,117 +459,6 @@ function downloadICS(day: FestivalDay, event: ProgrammeEvent) {
   URL.revokeObjectURL(url);
 }
 
-function SmileyVeryUnhappy() {
-  return (
-    <svg viewBox="0 0 100 100" aria-hidden="true">
-      <circle cx="35" cy="40" r="7" />
-      <circle cx="65" cy="40" r="7" />
-      <path
-        d="M 27 78 Q 50 52 73 78"
-        strokeWidth="8"
-        fill="none"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-}
-
-function SmileyUnhappy() {
-  return (
-    <svg viewBox="0 0 100 100" aria-hidden="true">
-      <circle cx="35" cy="40" r="7" />
-      <circle cx="65" cy="40" r="7" />
-      <path
-        d="M 30 70 Q 50 62 70 70"
-        strokeWidth="8"
-        fill="none"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-}
-
-function SmileyHappy() {
-  return (
-    <svg viewBox="0 0 100 100" aria-hidden="true">
-      <circle cx="35" cy="40" r="7" />
-      <circle cx="65" cy="40" r="7" />
-      <path
-        d="M 30 64 Q 50 80 70 64"
-        strokeWidth="8"
-        fill="none"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-}
-
-function SmileyVeryHappy() {
-  return (
-    <svg viewBox="0 0 100 100" aria-hidden="true">
-      <circle cx="35" cy="40" r="7" />
-      <circle cx="65" cy="40" r="7" />
-      <path
-        d="M 27 62 Q 50 88 73 62"
-        strokeWidth="8"
-        fill="none"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-}
-
-function VoteTick() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      aria-hidden="true"
-      className="prog-event-vote-tick-icon"
-    >
-      <path
-        d="M6 12.5l4 4L18 8.5"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2.6"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-const RATING_CONFIG: {
-  rating: Rating;
-  className: string;
-  label: string;
-  Smiley: () => JSX.Element;
-}[] = [
-  {
-    rating: 1,
-    className: 'prog-event-vote-face--r1',
-    label: 'Very unhappy',
-    Smiley: SmileyVeryUnhappy,
-  },
-  {
-    rating: 2,
-    className: 'prog-event-vote-face--r2',
-    label: 'Unhappy',
-    Smiley: SmileyUnhappy,
-  },
-  {
-    rating: 3,
-    className: 'prog-event-vote-face--r3',
-    label: 'Happy',
-    Smiley: SmileyHappy,
-  },
-  {
-    rating: 4,
-    className: 'prog-event-vote-face--r4',
-    label: 'Very happy',
-    Smiley: SmileyVeryHappy,
-  },
-];
-
 function getDefaultFestivalDay(): FestivalDay {
   const now = new Date();
 
@@ -650,9 +497,6 @@ function ProgrammePage({ isNight }: { isNight: boolean }) {
     description: string; emoji: string; rain: number; wind: number;
   };
   const [forecast, setForecast] = useState<Record<string, DayForecast>>({});
-  const [selectedVotes, setSelectedVotes] = useState<Record<string, Rating>>(
-    {},
-  );
 
   useEffect(() => {
     fetch('/.netlify/functions/weather')
@@ -662,33 +506,6 @@ function ProgrammePage({ isNight }: { isNight: boolean }) {
       })
       .catch(() => {});
   }, []);
-
-  const handleVote = (
-    eventKey: string,
-    eventTitle: string,
-    day: FestivalDay,
-    event: ProgrammeEvent,
-    rating: Rating,
-  ) => {
-    setSelectedVotes((prev) => ({ ...prev, [eventKey]: rating }));
-
-    const payload = {
-      event: eventTitle,
-      day,
-      scheduledTime: event.time,
-      rating,
-      recordedAt: new Date().toISOString(),
-      clientId: getClientId(),
-    };
-
-    fetch(FEEDBACK_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify(payload),
-    }).catch(() => {
-      // keep tap experience clean
-    });
-  };
 
   return (
     <div className="prog-page">
@@ -794,8 +611,6 @@ function ProgrammePage({ isNight }: { isNight: boolean }) {
                 <div className="prog-timeline">
                   {dayEvents.map((event) => {
                     const eventKey = `${day}-${event.time}-${event.title}`;
-                    const selectedRating = selectedVotes[eventKey];
-                    const eventFinished = hasEventFinished(day, event);
                     const isHeadliner = Boolean(event.headline || event.admission);
 
                     const bucket = bucketForTime(getStartTime(event));
@@ -870,35 +685,6 @@ function ProgrammePage({ isNight }: { isNight: boolean }) {
                                 Add to calendar
                               </button>
                             </div>
-                          )}
-
-                          {/* Post-event voting */}
-                          {isFeedbackVotingOpen() && eventFinished && (
-                            <>
-                              <p className="prog-event-vote-heading">Tell us what you thought</p>
-                              <div className="prog-event-vote" role="group" aria-label={`Your reaction to ${event.title}`}>
-                                {RATING_CONFIG.map(({ rating, className, label, Smiley }) => {
-                                  const isSelected = selectedRating === rating;
-                                  return (
-                                    <button
-                                      key={rating}
-                                      type="button"
-                                      className={`prog-event-vote-face ${className}${isSelected ? ' is-voted' : ''}`}
-                                      onClick={() => handleVote(eventKey, event.title, day, event, rating)}
-                                      aria-label={`${label} about ${event.title}`}
-                                      aria-pressed={isSelected}
-                                    >
-                                      <Smiley />
-                                      {isSelected && (
-                                        <span className="prog-event-vote-tick" aria-hidden="true">
-                                          <VoteTick />
-                                        </span>
-                                      )}
-                                    </button>
-                                  );
-                                })}
-                              </div>
-                            </>
                           )}
 
                         </article>

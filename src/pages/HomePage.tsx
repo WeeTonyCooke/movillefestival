@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import MovilleHero from './MovilleHero';
 import './HomePage.css';
@@ -7,9 +7,168 @@ type HomePageProps = {
   isNight: boolean;
 };
 
+const FEEDBACK_URL =
+  'https://script.google.com/macros/s/AKfycbwADI9Ld2vGjlkjST4VTHHR-y5QbuoBPmFjhE8IX2sZVS8mXxfPWQL5nWoCNSJdHQ9oxg/exec';
+
+// One-week takeover: replaces the hero with a single feedback ask,
+// then reverts to the normal hero automatically. No manual toggle needed.
+const FEEDBACK_TAKEOVER_START = new Date(2026, 6, 13, 0, 0, 0, 0); // 13 July 2026
+const FEEDBACK_TAKEOVER_ENDS = new Date(2026, 6, 20, 0, 0, 0, 0); // 20 July 2026
+
+function isFeedbackTakeoverActive(): boolean {
+  const now = new Date();
+  return now >= FEEDBACK_TAKEOVER_START && now < FEEDBACK_TAKEOVER_ENDS;
+}
+
+function getClientId(): string {
+  const KEY = 'moville-client-id';
+  try {
+    let id = window.localStorage.getItem(KEY);
+    if (!id) {
+      id = 'c_' + Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
+      window.localStorage.setItem(KEY, id);
+    }
+    return id;
+  } catch {
+    return 'c_nostorage';
+  }
+}
+
+type Rating = 1 | 2 | 3 | 4;
+
+function SmileyVeryUnhappy() {
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <circle cx="35" cy="40" r="7" />
+      <circle cx="65" cy="40" r="7" />
+      <path d="M 27 78 Q 50 52 73 78" strokeWidth="8" fill="none" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function SmileyUnhappy() {
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <circle cx="35" cy="40" r="7" />
+      <circle cx="65" cy="40" r="7" />
+      <path d="M 30 70 Q 50 62 70 70" strokeWidth="8" fill="none" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function SmileyHappy() {
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <circle cx="35" cy="40" r="7" />
+      <circle cx="65" cy="40" r="7" />
+      <path d="M 30 64 Q 50 80 70 64" strokeWidth="8" fill="none" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function SmileyVeryHappy() {
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <circle cx="35" cy="40" r="7" />
+      <circle cx="65" cy="40" r="7" />
+      <path d="M 27 62 Q 50 88 73 62" strokeWidth="8" fill="none" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+const RATING_CONFIG: {
+  rating: Rating;
+  className: string;
+  label: string;
+  Smiley: () => JSX.Element;
+}[] = [
+  { rating: 1, className: 'home-feedback-face--r1', label: 'Poor', Smiley: SmileyVeryUnhappy },
+  { rating: 2, className: 'home-feedback-face--r2', label: 'Okay', Smiley: SmileyUnhappy },
+  { rating: 3, className: 'home-feedback-face--r3', label: 'Good', Smiley: SmileyHappy },
+  { rating: 4, className: 'home-feedback-face--r4', label: 'Loved it', Smiley: SmileyVeryHappy },
+];
+
+const VOTED_KEY = 'moville-feedback-voted';
+
+function getStoredVote(): Rating | null {
+  try {
+    const stored = window.localStorage.getItem(VOTED_KEY);
+    if (stored === '1' || stored === '2' || stored === '3' || stored === '4') {
+      return Number(stored) as Rating;
+    }
+    return null;
+  } catch {
+    return null;
+  }
+}
+
+function FeedbackTakeover() {
+  const [selectedRating, setSelectedRating] = useState<Rating | null>(() => getStoredVote());
+
+  const handleVote = (rating: Rating) => {
+    if (selectedRating) return; // already voted on this device — don't re-fire
+    setSelectedRating(rating);
+    try {
+      window.localStorage.setItem(VOTED_KEY, String(rating));
+    } catch {
+      // best-effort only
+    }
+    const payload = {
+      rating,
+      recordedAt: new Date().toISOString(),
+      clientId: getClientId(),
+    };
+    fetch(FEEDBACK_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload),
+    }).catch(() => {
+      // keep tap experience clean
+    });
+  };
+
+  return (
+    <section className="home-feedback-takeover" aria-label="Festival feedback">
+      <div className="home-feedback-inner">
+        <p className="home-feedback-eyebrow">Moville Festival 2026</p>
+        <h1 className="home-feedback-heading">
+          {selectedRating
+            ? 'Thanks for letting us know!'
+            : 'How was your festival, Moville?'}
+        </h1>
+        {!selectedRating && (
+          <p className="home-feedback-sub">Tap a face to rate your experience</p>
+        )}
+        <div className="home-feedback-faces" role="group" aria-label="Rate your festival experience">
+          {RATING_CONFIG.map(({ rating, className, label, Smiley }) => {
+            const isSelected = selectedRating === rating;
+            return (
+              <div key={rating} className="home-feedback-face-wrap">
+                <button
+                  type="button"
+                  className={`home-feedback-face ${className}${isSelected ? ' is-voted' : ''}`}
+                  onClick={() => handleVote(rating)}
+                  disabled={selectedRating !== null}
+                  aria-label={label}
+                  aria-pressed={isSelected}
+                >
+                  <Smiley />
+                </button>
+                <span className="home-feedback-face-label">{label}</span>
+              </div>
+            );
+          })}
+        </div>
+        <p className="home-feedback-note">Help us plan for 2027.</p>
+      </div>
+    </section>
+  );
+}
+
 export default function HomePage({ isNight }: HomePageProps) {
   const navigate = useNavigate();
   const sponsorRef = useRef<HTMLElement | null>(null);
+  const showFeedbackTakeover = isFeedbackTakeoverActive();
 
   useEffect(() => {
     const el = sponsorRef.current;
@@ -26,7 +185,11 @@ export default function HomePage({ isNight }: HomePageProps) {
 
   return (
     <>
-      <MovilleHero isNight={isNight} />
+      {showFeedbackTakeover ? (
+        <FeedbackTakeover />
+      ) : (
+        <MovilleHero isNight={isNight} />
+      )}
 
       {/* Ball Drop — featured section */}
       <section className="home-balldrop">

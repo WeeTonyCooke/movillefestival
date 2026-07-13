@@ -88,11 +88,31 @@ const RATING_CONFIG: {
   { rating: 4, className: 'home-feedback-face--r4', label: 'Loved it', Smiley: SmileyVeryHappy },
 ];
 
+const VOTED_KEY = 'moville-feedback-voted';
+
+function getStoredVote(): Rating | null {
+  try {
+    const stored = window.localStorage.getItem(VOTED_KEY);
+    if (stored === '1' || stored === '2' || stored === '3' || stored === '4') {
+      return Number(stored) as Rating;
+    }
+    return null;
+  } catch {
+    return null;
+  }
+}
+
 function FeedbackTakeover() {
-  const [selectedRating, setSelectedRating] = useState<Rating | null>(null);
+  const [selectedRating, setSelectedRating] = useState<Rating | null>(() => getStoredVote());
 
   const handleVote = (rating: Rating) => {
+    if (selectedRating) return; // already voted on this device — don't re-fire
     setSelectedRating(rating);
+    try {
+      window.localStorage.setItem(VOTED_KEY, String(rating));
+    } catch {
+      // best-effort only
+    }
     const payload = {
       rating,
       recordedAt: new Date().toISOString(),
@@ -128,6 +148,7 @@ function FeedbackTakeover() {
                   type="button"
                   className={`home-feedback-face ${className}${isSelected ? ' is-voted' : ''}`}
                   onClick={() => handleVote(rating)}
+                  disabled={selectedRating !== null}
                   aria-label={label}
                   aria-pressed={isSelected}
                 >

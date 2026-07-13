@@ -139,8 +139,12 @@ function FeedbackTakeover() {
         {!selectedRating && (
           <p className="home-feedback-sub">Tap a face to rate your experience</p>
         )}
-        <div className="home-feedback-faces" role="group" aria-label="Rate your festival experience">
-          {RATING_CONFIG.map(({ rating, className, label, Smiley }) => {
+        <div
+          className={`home-feedback-faces${selectedRating ? ' home-feedback-faces--voted' : ''}`}
+          role="group"
+          aria-label="Rate your festival experience"
+        >
+          {RATING_CONFIG.filter(({ rating }) => !selectedRating || rating === selectedRating).map(({ rating, className, label, Smiley }) => {
             const isSelected = selectedRating === rating;
             return (
               <div key={rating} className="home-feedback-face-wrap">

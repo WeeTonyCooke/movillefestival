@@ -574,3 +574,19 @@
   color: rgba(250, 248, 244, 0.55);
   margin: 0;
 }
+
+@media (max-width: 480px) {
+  .home-feedback-faces {
+    gap: 12px;
+  }
+
+  .home-feedback-face {
+    width: 52px;
+    height: 52px;
+  }
+
+  .home-feedback-face-label {
+    font-size: 0.62rem;
+    white-space: nowrap;
+  }
+}

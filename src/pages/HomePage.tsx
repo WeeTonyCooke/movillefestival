@@ -114,7 +114,7 @@ function FeedbackTakeover() {
         <h1 className="home-feedback-heading">
           {selectedRating
             ? 'Thanks for letting us know!'
-            : 'How was your festival?'}
+            : 'How was your festival, Moville?'}
         </h1>
         {!selectedRating && (
           <p className="home-feedback-sub">Tap a face to rate your experience</p>
@@ -138,7 +138,7 @@ function FeedbackTakeover() {
             );
           })}
         </div>
-        <p className="home-feedback-note">Here for the week — helps us plan 2027</p>
+        <p className="home-feedback-note">Help us plan for 2027.</p>
       </div>
     </section>
   );

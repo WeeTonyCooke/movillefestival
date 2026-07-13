@@ -458,11 +458,11 @@
 /* ── Feedback takeover (temporary, replaces hero for one week) ──────── */
 
 .home-feedback-takeover {
-  background: var(--bg-base);
+  background: #1F4E5F;
   padding: 96px 24px;
   display: flex;
   justify-content: center;
-  min-height: 70vh;
+  min-height: 92vh;
   align-items: center;
 }
 
@@ -481,14 +481,14 @@
   font-weight: 700;
   letter-spacing: 0.24em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: #B0894F;
   margin: 0 0 14px;
 }
 
 .home-feedback-heading {
   font-family: var(--font-display);
   font-size: clamp(2rem, 6vw, 3.2rem);
-  color: var(--text-primary);
+  color: #FAF8F4;
   margin: 0 0 12px;
   line-height: 1.1;
 }
@@ -496,7 +496,7 @@
 .home-feedback-sub {
   font-family: var(--font-sans);
   font-size: 1rem;
-  color: var(--text-muted);
+  color: rgba(250, 248, 244, 0.72);
   margin: 0 0 40px;
 }
 
@@ -565,13 +565,12 @@
   font-family: var(--font-sans);
   font-size: 0.72rem;
   font-weight: 600;
-  color: var(--text-muted);
+  color: rgba(250, 248, 244, 0.75);
 }
 
 .home-feedback-note {
   font-family: var(--font-sans);
   font-size: 0.78rem;
-  color: var(--text-muted);
-  opacity: 0.75;
+  color: rgba(250, 248, 244, 0.55);
   margin: 0;
 }

@@ -82,10 +82,10 @@ const RATING_CONFIG: {
   label: string;
   Smiley: () => JSX.Element;
 }[] = [
-  { rating: 1, className: 'home-feedback-face--r1', label: 'Poor', Smiley: SmileyVeryUnhappy },
-  { rating: 2, className: 'home-feedback-face--r2', label: 'Okay', Smiley: SmileyUnhappy },
-  { rating: 3, className: 'home-feedback-face--r3', label: 'Good', Smiley: SmileyHappy },
   { rating: 4, className: 'home-feedback-face--r4', label: 'Loved it', Smiley: SmileyVeryHappy },
+  { rating: 3, className: 'home-feedback-face--r3', label: 'Good', Smiley: SmileyHappy },
+  { rating: 2, className: 'home-feedback-face--r2', label: 'Okay', Smiley: SmileyUnhappy },
+  { rating: 1, className: 'home-feedback-face--r1', label: 'Poor', Smiley: SmileyVeryUnhappy },
 ];
 
 const VOTED_KEY = 'moville-feedback-voted';

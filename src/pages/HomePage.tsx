@@ -15,7 +15,13 @@ const FEEDBACK_URL =
 const FEEDBACK_TAKEOVER_START = new Date(2026, 6, 13, 0, 0, 0, 0); // 13 July 2026
 const FEEDBACK_TAKEOVER_ENDS = new Date(2026, 6, 20, 0, 0, 0, 0); // 20 July 2026
 
+// Manually disabled 16 July — was interfering with sponsors landing on
+// the homepage trying to complete a payment. Flip to false to re-enable
+// for the remainder of the window above.
+const FEEDBACK_TAKEOVER_MANUALLY_DISABLED = true;
+
 function isFeedbackTakeoverActive(): boolean {
+  if (FEEDBACK_TAKEOVER_MANUALLY_DISABLED) return false;
   const now = new Date();
   return now >= FEEDBACK_TAKEOVER_START && now < FEEDBACK_TAKEOVER_ENDS;
 }

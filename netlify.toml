@@ -15,6 +15,10 @@
 [functions."daily-summary"]
   schedule = "0 20 * * *"
 
+# ANT-96: Check every 30 min whether a blackout window just opened and fire the gate report if so
+[functions."pass-blackout-report-check"]
+  schedule = "*/30 * * * *"
+
 [[redirects]]
   from = "/*"
   to = "/index.html"

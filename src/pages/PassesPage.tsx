@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useNightMode } from '../hooks/useNightMode';
 import {
   getPassPageSalesStatus,
+  fetchPassSalesStatus,
   formatIrishTime,
   type PassSalesStatus,
 } from '../lib/passSalesBlackout';
@@ -609,12 +610,15 @@ export default function PassesPage() {
   const [selected, setSelected] = useState<string | null>(null);
   const isNight = useNightMode();
 
-  // Evaluate blackout status on mount and re-check every 30 s
+  // ANT-95: Fetch blackout status dynamically from festival_events via Netlify function.
+  // Falls back to the legacy local check if the fetch fails.
   const [salesStatus, setSalesStatus] = useState<PassSalesStatus>(() =>
     getPassPageSalesStatus()
   );
   useEffect(() => {
-    const id = setInterval(() => setSalesStatus(getPassPageSalesStatus()), 30_000);
+    // Fetch immediately on mount, then every 30 s
+    fetchPassSalesStatus().then(setSalesStatus);
+    const id = setInterval(() => fetchPassSalesStatus().then(setSalesStatus), 30_000);
     return () => clearInterval(id);
   }, []);
 
@@ -724,6 +728,13 @@ export default function PassesPage() {
                   <div style={{ width: '100%', maxWidth: 680, marginBottom: 8, background: '#FFFCF6', borderRadius: 12, padding: '12px 18px', borderLeft: '3px solid #B8860B' }}>
                     <p style={{ margin: 0, fontSize: 13, color: '#16323C', fontFamily: "'Outfit', system-ui, sans-serif" }}>
                       <strong>Attending more than one day?</strong> The Festival Pass (€20) covers all admission-required events across the full festival — better value than two or more day passes.
+                    </p>
+                  </div>
+
+                  {/* ANT-97: WiFi notice — Moville signal is poor, warn before checkout */}
+                  <div style={{ width: '100%', maxWidth: 680, marginBottom: 16, background: isNight ? 'rgba(18,36,48,0.76)' : '#FFFCF6', borderRadius: 12, padding: '10px 18px', border: `1px solid ${border}` }}>
+                    <p style={{ margin: 0, fontSize: 13, color: textSec, fontFamily: "'Outfit', system-ui, sans-serif" }}>
+                      📶 <strong style={{ color: textPri }}>Poor signal at the festival site?</strong> Buy your pass on WiFi or at home for best results — Moville mobile coverage can cause checkout to drop.
                     </p>
                   </div>
 

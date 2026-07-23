@@ -1,26 +1,26 @@
 /**
- * Pass sales blackout schedule — CommonJS mirror for Netlify functions.
+ * Pass sales blackout — CommonJS module for Netlify functions.
  *
- * KEEP IN SYNC WITH: src/lib/passSalesBlackout.ts
- * (ESM/TypeScript version consumed by the React UI).
+ * ANT-95: Now exports both a legacy synchronous function (kept for backward
+ * compatibility and as a fallback) and a new async function that derives
+ * blackout windows dynamically from the festival_events Supabase table.
  *
  * Underscore prefix prevents Netlify from treating this as a function endpoint.
  *
- * All ISO timestamps are Irish Summer Time (IST = UTC+01:00).
- *
- * Friday  paid gigs : All Folk'd Up 20:00                → window 18:00–23:00
- * Saturday paid gigs: Marty Healy 18:00, Bagatelle 21:00 → window 16:00–23:30
- * Sunday  paid gigs : first paid act 16:00, The Two Bucks 17:30, Björn Identity 20:30 → window 14:00–23:30
+ * Legacy schedule (2026 hardcoded, retained as fallback):
+ *   Friday  : All Folk'd Up 20:00            → window 18:00–23:00
+ *   Saturday: Marty Healy 18:00, Bagatelle 21:00 → window 16:00–23:30
+ *   Sunday  : first act 16:00, Two Bucks 17:30, Björn 20:30 → window 14:00–23:30
  */
 
 'use strict';
 
 const ALL_PASS_PRODUCTS = ['festival_pass', 'friday', 'saturday', 'sunday'];
 
-/**
- * Festival end — after this moment all online pass sales are permanently closed.
- * Set to the Sunday blackout end so there is no gap where sales briefly reopen.
- */
+// ---------------------------------------------------------------------------
+// Legacy hardcoded schedule (2026) — used by getPassSalesStatus() below
+// ---------------------------------------------------------------------------
+
 const FESTIVAL_END = '2026-07-12T23:30:00+01:00';
 
 /** @type {Array<{startsAt: string, endsAt: string, products: string[]}>} */
@@ -36,7 +36,6 @@ const PASS_SALES_BLACKOUTS = [
     products: [...ALL_PASS_PRODUCTS],
   },
   {
-    // 2 h before first paid act (16:00 IST), merged through The Björn Identity (20:30 IST)
     startsAt: '2026-07-12T14:00:00+01:00',
     endsAt:   '2026-07-12T23:30:00+01:00',
     products: [...ALL_PASS_PRODUCTS],
@@ -44,30 +43,107 @@ const PASS_SALES_BLACKOUTS = [
 ];
 
 /**
- * Returns the current sales status for a specific pass product.
- *
- * ISO timestamps with explicit +01:00 offsets are parsed by Date so
- * comparison is always in UTC — server timezone doesn't matter.
- *
- * Fails open: if the schedule cannot be parsed, sales remain available
- * rather than taking the site down.
- *
- * @param {string} productId
- * @param {Date} [now]
- * @returns {{ available: boolean, reason?: string, reopenAt?: string, closesAt?: string }}
+ * [LEGACY] Synchronous blackout check against the hardcoded 2026 schedule.
+ * Kept for tests and any callers not yet migrated to computeBlackoutStatus().
  */
 function getPassSalesStatus(productId, now = new Date()) {
   try {
     const nowMs = now.getTime();
 
-    // Permanent post-festival close
     if (nowMs >= new Date(FESTIVAL_END).getTime()) {
       return { available: false, reason: 'FESTIVAL_ENDED' };
     }
 
-    // Check active windows first
     for (const w of PASS_SALES_BLACKOUTS) {
       if (!w.products.includes(productId)) continue;
+      const startsMs = new Date(w.startsAt).getTime();
+      const endsMs   = new Date(w.endsAt).getTime();
+      if (nowMs >= startsMs && nowMs < endsMs) {
+        return { available: false, reason: 'ONLINE_SALES_PAUSED', reopenAt: w.endsAt };
+      }
+    }
+
+    for (const w of PASS_SALES_BLACKOUTS) {
+      if (!w.products.includes(productId)) continue;
+      const startsMs = new Date(w.startsAt).getTime();
+      if (startsMs > nowMs) {
+        return { available: true, closesAt: w.startsAt };
+      }
+    }
+
+    return { available: true };
+  } catch (err) {
+    console.error('[passSalesBlackout] Failed to evaluate blackout schedule:', err);
+    return { available: true };
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Dynamic schedule — ANT-95
+// ---------------------------------------------------------------------------
+
+/**
+ * Queries festival_events for all active pass-required events, computes merged
+ * blackout windows (event_start - blackout_hours_before → event_end), and
+ * returns the same PassSalesStatus shape as getPassSalesStatus().
+ *
+ * Overlapping windows on the same evening are automatically merged.
+ *
+ * @param {import('@supabase/supabase-js').SupabaseClient} supabase
+ * @param {string} productId
+ * @param {Date} [now]
+ * @returns {Promise<{ available: boolean, reason?: string, reopenAt?: string, closesAt?: string, festivalEnd?: string }>}
+ */
+async function computeBlackoutStatus(supabase, productId, now = new Date()) {
+  try {
+    const nowMs = now.getTime();
+
+    // Fetch all active pass-required events ordered by start time
+    const { data: events, error } = await supabase
+      .from('festival_events')
+      .select('name, starts_at, ends_at, blackout_hours_before')
+      .eq('requires_pass', true)
+      .eq('active', true)
+      .order('starts_at', { ascending: true });
+
+    if (error) throw error;
+    if (!events || events.length === 0) {
+      return { available: true };
+    }
+
+    // Compute raw blackout windows from each event
+    const rawWindows = events.map(ev => ({
+      startsAt: new Date(new Date(ev.starts_at).getTime() - ev.blackout_hours_before * 60 * 60 * 1000).toISOString(),
+      endsAt:   ev.ends_at,
+    }));
+
+    // Merge overlapping/adjacent windows (sort by start, then sweep)
+    const sorted = rawWindows.slice().sort((a, b) => new Date(a.startsAt) - new Date(b.startsAt));
+    const merged = [];
+    for (const w of sorted) {
+      if (merged.length === 0) {
+        merged.push({ ...w });
+        continue;
+      }
+      const last = merged[merged.length - 1];
+      if (new Date(w.startsAt) <= new Date(last.endsAt)) {
+        // Overlapping — extend the end if needed
+        if (new Date(w.endsAt) > new Date(last.endsAt)) last.endsAt = w.endsAt;
+      } else {
+        merged.push({ ...w });
+      }
+    }
+
+    // Festival end = end of the last window
+    const festivalEnd = merged[merged.length - 1].endsAt;
+
+    // Permanent post-festival close
+    if (nowMs >= new Date(festivalEnd).getTime()) {
+      return { available: false, reason: 'FESTIVAL_ENDED', festivalEnd };
+    }
+
+    // Check if we're inside an active blackout window
+    for (const w of merged) {
       const startsMs = new Date(w.startsAt).getTime();
       const endsMs   = new Date(w.endsAt).getTime();
       if (nowMs >= startsMs && nowMs < endsMs) {
@@ -75,28 +151,34 @@ function getPassSalesStatus(productId, now = new Date()) {
           available: false,
           reason:    'ONLINE_SALES_PAUSED',
           reopenAt:  w.endsAt,
+          festivalEnd,
         };
       }
     }
 
-    // Not in a blackout — look for an upcoming one
-    for (const w of PASS_SALES_BLACKOUTS) {
-      if (!w.products.includes(productId)) continue;
+    // Look for the next upcoming blackout
+    for (const w of merged) {
       const startsMs = new Date(w.startsAt).getTime();
       if (startsMs > nowMs) {
         return {
           available: true,
           closesAt:  w.startsAt,
+          festivalEnd,
         };
       }
     }
 
-    return { available: true };
+    return { available: true, festivalEnd };
   } catch (err) {
-    // Fail open — log but don't block sales if schedule parse fails
-    console.error('[passSalesBlackout] Failed to evaluate blackout schedule:', err);
+    console.error('[passSalesBlackout] computeBlackoutStatus failed, failing open:', err.message);
     return { available: true };
   }
 }
 
-module.exports = { PASS_SALES_BLACKOUTS, ALL_PASS_PRODUCTS, FESTIVAL_END, getPassSalesStatus };
+module.exports = {
+  PASS_SALES_BLACKOUTS,
+  ALL_PASS_PRODUCTS,
+  FESTIVAL_END,
+  getPassSalesStatus,
+  computeBlackoutStatus,
+};

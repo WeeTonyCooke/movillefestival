@@ -4,7 +4,7 @@
 
 const Stripe = require('stripe');
 const { createClient } = require('@supabase/supabase-js');
-const { getPassSalesStatus } = require('./_passSalesBlackout.cjs');
+const { computeBlackoutStatus } = require('./_passSalesBlackout.cjs');
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const supabase = createClient(
@@ -78,8 +78,8 @@ exports.handler = async (event) => {
     if (override === 'closed') {
       blocked = true;
     } else {
-      // 'auto' — evaluate the schedule
-      const status = getPassSalesStatus(passType, new Date());
+      // 'auto' — evaluate dynamically from festival_events (ANT-95)
+      const status = await computeBlackoutStatus(supabase, passType, new Date());
       if (!status.available) {
         blocked   = true;
         reopenAt  = status.reopenAt || null;

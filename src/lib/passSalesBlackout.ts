@@ -1,14 +1,12 @@
 /**
- * Pass sales blackout schedule — ESM/TypeScript module for the React UI.
+ * Pass sales blackout — ESM/TypeScript module for the React UI.
  *
- * Defines windows during which ALL online pass sales are paused
- * (2 h before each paid gig through end of the evening),
- * so customers cannot buy passes "for tonight" after the gate opens.
+ * ANT-95: The primary path is now fetchPassSalesStatus(), which calls the
+ * get-blackout-status Netlify function and gets windows derived dynamically
+ * from the festival_events Supabase table.
  *
- * All ISO timestamps are Irish Summer Time (IST = UTC+01:00).
- *
- * KEEP IN SYNC WITH: netlify/functions/_passSalesBlackout.js
- * (CommonJS mirror consumed by the Netlify checkout function).
+ * The legacy synchronous getPassSalesStatus() / getPassPageSalesStatus()
+ * functions are kept for tests and as a fail-open fallback.
  */
 
 export interface BlackoutWindow {
@@ -135,6 +133,27 @@ export function getPassSalesStatus(
  */
 export function getPassPageSalesStatus(now: Date = new Date()): PassSalesStatus {
   return getPassSalesStatus('festival_pass', now);
+}
+
+/**
+ * ANT-95: Fetches live blackout status from the get-blackout-status Netlify
+ * function, which derives windows from the festival_events Supabase table.
+ *
+ * Falls back to the legacy synchronous check if the fetch fails.
+ */
+export async function fetchPassSalesStatus(
+  productId: string = 'festival_pass',
+): Promise<PassSalesStatus> {
+  try {
+    const res = await fetch(
+      `/.netlify/functions/get-blackout-status?product=${encodeURIComponent(productId)}`,
+    );
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return (await res.json()) as PassSalesStatus;
+  } catch (err) {
+    console.warn('[passSalesBlackout] fetchPassSalesStatus failed, falling back to local check:', err);
+    return getPassSalesStatus(productId);
+  }
 }
 
 /**

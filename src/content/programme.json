@@ -6,7 +6,11 @@
       "label": "Tue, 7 Jul",
       "name": "Tuesday",
       "dateLabel": "7 July",
-      "festivalDate": { "year": 2026, "month": 6, "day": 7 },
+      "festivalDate": {
+        "year": 2026,
+        "month": 6,
+        "day": 7
+      },
       "events": [
         {
           "time": "17:30",
@@ -21,7 +25,11 @@
       "label": "Wed, 8 Jul",
       "name": "Wednesday",
       "dateLabel": "8 July",
-      "festivalDate": { "year": 2026, "month": 6, "day": 8 },
+      "festivalDate": {
+        "year": 2026,
+        "month": 6,
+        "day": 8
+      },
       "events": [
         {
           "time": "18:30",
@@ -62,7 +70,11 @@
       "label": "Thu, 9 Jul",
       "name": "Thursday",
       "dateLabel": "9 July",
-      "festivalDate": { "year": 2026, "month": 6, "day": 9 },
+      "festivalDate": {
+        "year": 2026,
+        "month": 6,
+        "day": 9
+      },
       "events": [
         {
           "time": "18:00",
@@ -101,7 +113,11 @@
       "label": "Fri, 10 Jul",
       "name": "Friday",
       "dateLabel": "10 July",
-      "festivalDate": { "year": 2026, "month": 6, "day": 10 },
+      "festivalDate": {
+        "year": 2026,
+        "month": 6,
+        "day": 10
+      },
       "events": [
         {
           "time": "16:00",
@@ -142,8 +158,18 @@
       "label": "Sat, 11 Jul",
       "name": "Saturday",
       "dateLabel": "11 July",
-      "festivalDate": { "year": 2026, "month": 6, "day": 11 },
+      "festivalDate": {
+        "year": 2026,
+        "month": 6,
+        "day": 11
+      },
       "events": [
+        {
+          "time": "00:00",
+          "title": "Keith Fletcher — Over 35s Rave",
+          "venue": "Annie's Bar",
+          "strapline": "Highland Radio DJ Keith Fletcher plays a non-stop night of 90s and 00s dance anthems and club classics. Doors midnight. Over 35s event."
+        },
         {
           "time": "09:00",
           "title": "Fun Team Workout",
@@ -252,10 +278,9 @@
           "strapline": "One of Ireland's best-loved bands brings the big Saturday night to Market Square."
         },
         {
-          "time": "00:00",
-          "title": "Keith Fletcher — Over 35s Rave",
-          "venue": "Annie's Bar",
-          "strapline": "Highland Radio DJ Keith Fletcher plays a non-stop night of 90s and 00s dance anthems and club classics. Doors midnight. Over 35s event."
+          "time": "22:00",
+          "title": "Trad Session",
+          "venue": "Annie's Bar"
         }
       ]
     },
@@ -264,7 +289,11 @@
       "label": "Sun, 12 Jul",
       "name": "Sunday",
       "dateLabel": "12 July",
-      "festivalDate": { "year": 2026, "month": 6, "day": 12 },
+      "festivalDate": {
+        "year": 2026,
+        "month": 6,
+        "day": 12
+      },
       "events": [
         {
           "time": "09:00",

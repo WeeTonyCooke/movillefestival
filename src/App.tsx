@@ -1,5 +1,6 @@
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import HomePage from './pages/HomePage';
+import HoldingPage from './pages/HoldingPage';
 import ProgrammePage from './pages/ProgrammePage';
 import ArchivePage from './pages/ArchivePage';
 import GettingToMoville from './pages/gettingtomoville';
@@ -26,6 +27,7 @@ function App() {
   const isNight = useNightMode();
   const location = useLocation();
   const hideFooter =
+    location.pathname === '/' ||
     location.pathname === '/admin' ||
     location.pathname === '/scan' ||
     location.pathname.startsWith('/passes/view');
@@ -34,7 +36,7 @@ function App() {
     <div className={isNight ? 'theme-night' : 'theme-day'}>
       <ScrollToTop />
       <Routes>
-        <Route path="/" element={<HomePage isNight={isNight} />} />
+        <Route path="/" element={<HoldingPage />} />
         <Route path="/programme" element={<ProgrammePage isNight={isNight} />} />
         <Route path="/archive" element={<ArchivePage />} />
         <Route path="/getting-to-moville" element={<GettingToMoville />} />

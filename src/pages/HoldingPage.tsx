@@ -16,8 +16,8 @@ export default function HoldingPage() {
         <div className="holding-announcement">
           <p className="holding-return">See you by the water.</p>
           <div className="holding-rule" aria-hidden="true" />
-          <h2>Dates &amp; programme coming soon</h2>
-          <p>Our next chapter is on the horizon.<br />Check back here for news of Moville Festival 2027.</p>
+          <h2>6–11 July 2027</h2>
+          <p>Full programme coming soon.<br />Check back here for news of Moville Festival 2027.</p>
         </div>
         <p className="holding-place">Moville · Inishowen · Donegal</p>
       </section>

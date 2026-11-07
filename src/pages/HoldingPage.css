@@ -11,7 +11,7 @@
 .holding-announcement{margin-top:auto;padding-top:290px;max-width:580px}
 .holding-return{font-family:var(--font-display);font-size:clamp(28px,3vw,40px);font-style:italic;margin:0 0 22px;line-height:1.2}
 .holding-rule{height:1px;width:44px;background:#c9a56a;margin:0 auto 23px}
-.holding-announcement h2{font-size:clamp(15px,1.4vw,18px);font-weight:500;letter-spacing:.025em;margin:0 0 13px;line-height:1.5}
+.holding-announcement h2{font-size:clamp(24px,2.4vw,32px);font-weight:500;letter-spacing:.025em;margin:0 0 13px;line-height:1.5}
 .holding-announcement>p:last-child{font-size:15px;line-height:1.7;color:#e1e5e3;margin:0}
 .holding-place{font-size:10px;letter-spacing:.23em;text-transform:uppercase;margin:44px 0 0;color:#d8c7ac}
 .holding-footer{min-height:82px;max-width:1440px;margin:auto;display:flex;gap:26px;align-items:center;justify-content:space-between;padding:22px 40px;font-size:12px;line-height:1.5}

@@ -85,3 +85,10 @@ export default defineConfig([
   },
 ])
 ```
+
+
+## Christmas holding page, 2026–27
+
+The home page automatically shows the Christmas scene from 1 December 2026 at 00:00 through 6 January 2027, returning to the regular holding page on 7 January at 00:00 (Europe/Dublin, GMT on both dates). The one-off boundaries are in `src/utils/christmasSeason.ts`; the browser rechecks every 30 seconds and on focus/visibility changes. Selection uses the visitor device clock.
+
+Preview the Christmas scene at `/?preview=christmas` at any time. The canonical homepage remains the normal URL. Snow and light animation honour reduced-motion preferences and can also be paused.

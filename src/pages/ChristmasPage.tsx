@@ -6,7 +6,7 @@ export default function ChristmasPage() {
   return <div className={`christmas-page${paused ? ' christmas-paused' : ''}`}>
     <main className="christmas-hero">
       <div className="christmas-scene" aria-hidden="true"><div className="christmas-art">
-        <img src="/winter-lighthouse.png" alt="" fetchPriority="high" />
+        <img src="/winter-lighthouse-no-birds.png" alt="" fetchPriority="high" />
         {[[47.6,35],[53.6,43],[44.5,52],[55.5,57]].map(([left,top], i) => <i key={i} className="christmas-glow" style={{left:`${left}%`,top:`${top}%`,animationDelay:`-${i+1}s`}} />)}
       </div></div>
       <div className="christmas-shade" aria-hidden="true" />

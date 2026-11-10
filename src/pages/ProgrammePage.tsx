@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import programmeJSON from '../content/programme.json';
 import './ProgrammePage.css';
 
 const DEFAULT_EVENT_DURATION_MIN = 90;
@@ -18,350 +19,28 @@ type ProgrammeEvent = {
   registerLabel?: string;
 };
 
-const FESTIVAL_DATES: Record<
-  FestivalDay,
-  { year: number; month: number; day: number }
-> = {
-  TUE: { year: 2026, month: 6, day: 7 },
-  WED: { year: 2026, month: 6, day: 8 },
-  THU: { year: 2026, month: 6, day: 9 },
-  FRI: { year: 2026, month: 6, day: 10 },
-  SAT: { year: 2026, month: 6, day: 11 },
-  SUN: { year: 2026, month: 6, day: 12 },
-};
+// Derive all constants from the JSON — edit src/content/programme.json to update the programme.
+const FESTIVAL_DATES = Object.fromEntries(
+  programmeJSON.days.map((d) => [d.key, d.festivalDate]),
+) as Record<FestivalDay, { year: number; month: number; day: number }>;
 
-const PROGRAMME_DATA: Record<FestivalDay, ProgrammeEvent[]> = {
-  TUE: [
-    {
-      time: '17:30',
-      title: 'Golf Scramble',
-      venue: 'Greencastle Golf Club',
-      strapline:
-        'One of the most beautiful links courses you will play anywhere.',
-    },
-  ],
-  WED: [
-    {
-      time: '18:30',
-      title: 'Fancy Dress Opening Parade',
-      venue: 'Festival Square',
-      strapline:
-        'A colourful start to the festival - loud, lively and full of fun for everyone.',
-    },
-    {
-      time: '19:00',
-      title: 'Bed Push',
-      venue: 'Quay Street',
-      strapline: 'Fast, slightly chaotic, and much harder than it looks.',
-      registerUrl: '/bed-push',
-      registerLabel: 'Register your team',
-    },
-    {
-      time: '19:00',
-      title: 'Starfares Amusements',
-      venue: 'Festival Square',
-      strapline: 'Rides and amusements for all the family throughout the evening.',
-    },
-    {
-      time: '19:30',
-      title: 'Fire Brigade Car Rescue Demo',
-      venue: 'Moville Pier',
-      strapline:
-        'Up close and real - a live rescue demonstration from the fire brigade. Not to be missed.',
-    },
-    {
-      time: '21:00',
-      title: 'Festival Bingo',
-      venue: "St Eugene's Hall",
-      strapline: 'Eyes down, dabbers ready. Expect a full house.',
-    },
-  ],
-  THU: [
-    {
-      time: '18:00',
-      title: 'Car Treasure Hunt',
-      venue: "Bonner's Corner",
-      strapline:
-        'Follow the clues, trust your instincts and blame the navigator if you don’t win.',
-    },
-    {
-      time: '19:00',
-      title: 'Starfares Amusements',
-      venue: 'Festival Square',
-      strapline: 'Rides and amusements for all the family throughout the evening.',
-    },
-    {
-      time: '20:00',
-      title: 'Social Dance',
-      venue: "St Eugene's Hall",
-      strapline: 'Good music, a bit of dancing and plenty of craic.',
-    },
-    {
-      time: '20:30',
-      title: 'Festival Queen',
-      venue: "Annie's Bar",
-      strapline:
-        'Who will wear the crown? An evening of glitz, glam and all eyes on the runway.',
-    },
-    {
-      time: '21:00',
-      title: 'Darts Competition',
-      venue: "Maguire's & The Corner Bar",
-      strapline:
-        "Hoping we'll see some of Inishowen's sharpest shooters step up to the oche. Everyone welcome. ",
-    },
-  ],
-  FRI: [
-    {
-      time: '16:00',
-      title: 'Kids Entertainment',
-      venue: 'Market Square',
-      strapline: 'Fun and games for our younger festival-goers.',
-    },
-    {
-      time: '17:00',
-      title: 'Junior Bake Off',
-      venue: 'Market Square',
-      strapline: 'Celebrating the best of our talented young bakers.',
-    },
-    {
-      time: '19:00',
-      title: 'Starfares Amusements',
-      venue: 'Festival Square',
-      strapline: 'Rides and amusements for all the family throughout the evening.',
-    },
-    {
-      time: '19:00',
-      title: 'Street Frolics',
-      venue: 'Market Square',
-      strapline:
-        'La Tomatina, Moville style. Something’s about to get out of hand… in a good way.',
-    },
-    {
-      time: '20:00',
-      title: "All Folk'd Up",
-      venue: 'Market Square',
-      admission: '€10',
-      headline: true,
-      strapline:
-        'Trad, folk and everything in between - live music under the summer sky.',
-    },
-  ],
-  SAT: [
-    {
-      time: '09:00',
-      title: 'Fun Team Workout',
-      venue: 'Paul McGowan Fitness',
-      strapline: 'Shake off the cobwebs and get the day started properly.',
-    },
-    {
-      time: '10:00',
-      title: 'Community Games',
-      venue: 'Paul McGowan Fitness',
-      strapline: 'Community spirit in action — sport and fun for all ages.',
-    },
-    {
-      time: '10:00',
-      title: 'Craft Fair',
-      venue: 'Marquee, Festival Square',
-      strapline: 'Local makers, artists, crafters and small businesses. A day of creativity, community and unique shopping.',
-      registerUrl: '/craft-fair',
-      registerLabel: 'Apply for a stall',
-    },
-    {
-      time: '10:00',
-      title: 'Sea Swim',
-      venue: 'Big White Bay',
-      strapline: 'With The Mighty Mermaids at Big White Bay. All welcome.',
-    },
-    {
-      time: '10:00',
-      title: 'Balance with Bronagh',
-      venue: "St Eugene's Hall",
-      strapline:
-        'A music and movement playgroup for children aged 4–12 with additional needs and disabilities, in a fun, inclusive way. Children must be accompanied. Booking advised.',
-    },
-    {
-      time: '11:00',
-      title: 'Pet Show',
-      venue: 'The Green',
-      strapline:
-        "Moville's finest four-legged friends - big, small and full of personality. Dogs on leads please — pets remain their owners' responsibility at all times.",
-    },
-    {
-      time: '11:30',
-      title: "Yoga with Lauren O'Farrelly",
-      venue: 'Tennis Court',
-      strapline: 'Start your Saturday morning with a stretch and some fresh air.',
-    },
-    {
-      time: '12:00',
-      title: 'DJ Workshop',
-      venue: 'Paul McGowan Fitness',
-      strapline:
-        'Get behind the decks with local DJ duo DisFreq — beats, mixing and a taste of the DJ life. Sponsored by Muff Liquor Company.',
-    },
-    {
-      time: '13:00',
-      title: 'Starfares Amusements',
-      venue: 'Festival Square',
-      strapline: 'Rides and amusements for all the family throughout the afternoon.',
-    },
-    {
-      time: '14:00',
-      title: 'Crab Fishing',
-      venue: 'Moville Pier',
-      strapline: 'Pull your line in very slowly, inch by inch.',
-    },
-    {
-      time: '14:00',
-      title: 'Bonny Baby',
-      venue: "St Eugene's Hall",
-      strapline: "Moville's bonniest babies - or so they'll be told.",
-    },
-    {
-      time: '14:00',
-      title: 'Plein Air Painting',
-      venue: 'Moville Green & Shore Walk',
-      strapline:
-        'Paint the coastline with artists of all ages and abilities. Bring your own materials, or use what\'s provided for passers-by who fancy a go.',
-    },
-    {
-      time: '15:00',
-      title: 'Irish Dancing & Line Dancing',
-      venue: 'Marquee, Festival Square',
-      strapline: 'With Sheila and Caroline — céilí steps and line dancing for all ages, 3–4pm.',
-    },
-    {
-      time: '16:00',
-      title: 'Treasure Hunt',
-      venue: 'Festival Square',
-      strapline: 'X marks the spot. Follow the clues and see where they take you.',
-    },
-    {
-      time: '18:00',
-      title: 'Marty Healy Band',
-      venue: 'Market Square',
-      admission: '€10',
-      strapline: 'Live music in the Square to ease you into Saturday evening.',
-    },
-    {
-      time: '19:00',
-      title: 'Pool Competition',
-      venue: "Maguire's, Diver's & The Corner Bar",
-      strapline: 'Chalk up your cue and show us what you’ve got.',
-    },
-    {
-      time: '21:00',
-      title: 'Bagatelle',
-      venue: 'Market Square',
-      admission: '€10',
-      headline: true,
-      strapline:
-        'One of Ireland’s best-loved bands brings the big Saturday night to Market Square.',
-    },
-    {
-      time: '00:00',
-      title: 'Keith Fletcher — Over 35s Rave',
-      venue: "Annie’s Bar",
-      strapline:
-        'Highland Radio DJ Keith Fletcher plays a non-stop night of 90s and 00s dance anthems and club classics. Doors midnight. Over 35s event.',
-    },
-  ],
-  SUN: [
-    {
-      time: '09:00',
-      title: '5K Fun Run or Walk',
-      strapline: 'Run it, walk it or just enjoy the fresh start to Sunday.',
-    },
-    {
-      time: '10:00',
-      title: '((Bounce)) Carndonagh Free Pop Up',
-      venue: "St Eugene's Hall",
-      strapline: 'Free pop-up session from Carndonagh — fun for all ages.',
-    },
-    {
-      time: '12:00',
-      title: 'Starfares Amusements',
-      venue: 'Festival Square',
-      strapline: 'Rides and amusements for all the family.',
-    },
-    {
-      time: '12:00',
-      title: 'Moville Celtic Sports',
-      venue: 'Bayfield',
-      strapline: 'A great afternoon of sport, competition and community spirit.',
-    },
-    {
-      time: '17:30',
-      title: 'Ball Drop',
-      venue: 'The Green',
-      strapline:
-        'Hundreds of balls. One hill. Absolute chaos. Make sure you have your ticket.',
-      registerUrl: '/ball-drop',
-      registerLabel: 'Buy balls',
-    },
-    {
-      time: '17:30',
-      title: 'The Two Bucks',
-      venue: 'Market Square',
-      admission: '€10',
-      strapline:
-        'A lively start to Sunday evening - expect a good crowd and high-energy takes on familiar favourites.',
-    },
-    {
-      time: '19:00',
-      title: 'Pool Competition',
-      venue: "Maguire's, Diver's & The Corner Bar",
-      strapline: 'Chalk up your cue and show us what you’ve got.',
-    },
-    {
-      time: '20:30',
-      title: 'The Björn Identity',
-      venue: 'Market Square',
-      admission: '€10',
-      headline: true,
-      strapline:
-        'Ireland’s premier ABBA tribute band hits the Square for the festival finale. Glitter optional, but encouraged.',
-    },
-    {
-      time: '23:30',
-      title: 'DJ Col Hamilton — LUSH! Portrush',
-      venue: "Annie’s Bar",
-      strapline:
-        'Promoter and resident DJ of the iconic LUSH! Portrush takes to the decks for classic dance anthems and club favourites. Warm-up set from local favourite DJ Paddy Hegarty from earlier in the evening.',
-    },
-  ],
-};
+const DAY_LABELS = Object.fromEntries(
+  programmeJSON.days.map((d) => [d.key, d.label]),
+) as Record<FestivalDay, string>;
 
-const DAY_LABELS: Record<FestivalDay, string> = {
-  TUE: 'Tue, 7 Jul',
-  WED: 'Wed, 8 Jul',
-  THU: 'Thu, 9 Jul',
-  FRI: 'Fri, 10 Jul',
-  SAT: 'Sat, 11 Jul',
-  SUN: 'Sun, 12 Jul',
-};
+const DAY_NAMES = Object.fromEntries(
+  programmeJSON.days.map((d) => [d.key, d.name]),
+) as Record<FestivalDay, string>;
 
-const DAY_NAMES: Record<FestivalDay, string> = {
-  TUE: 'Tuesday',
-  WED: 'Wednesday',
-  THU: 'Thursday',
-  FRI: 'Friday',
-  SAT: 'Saturday',
-  SUN: 'Sunday',
-};
+const DATE_LABELS = Object.fromEntries(
+  programmeJSON.days.map((d) => [d.key, d.dateLabel]),
+) as Record<FestivalDay, string>;
 
-const DATE_LABELS: Record<FestivalDay, string> = {
-  TUE: '7 July',
-  WED: '8 July',
-  THU: '9 July',
-  FRI: '10 July',
-  SAT: '11 July',
-  SUN: '12 July',
-};
+const PROGRAMME_DATA = Object.fromEntries(
+  programmeJSON.days.map((d) => [d.key, d.events as ProgrammeEvent[]]),
+) as Record<FestivalDay, ProgrammeEvent[]>;
 
-const DAY_ORDER: FestivalDay[] = ['TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
+const DAY_ORDER = programmeJSON.days.map((d) => d.key as FestivalDay);
 
 function getStartTime(event: ProgrammeEvent): string {
   return event.startTime ?? event.time.split(/[–-]/)[0].trim();
@@ -462,30 +141,23 @@ function downloadICS(day: FestivalDay, event: ProgrammeEvent) {
 function getDefaultFestivalDay(): FestivalDay {
   const now = new Date();
 
-  const festivalStart = new Date(2026, 6, 7, 0, 0, 0, 0);
-  const festivalEnd = new Date(2026, 6, 12, 23, 59, 59, 999);
+  if (DAY_ORDER.length === 0) return 'TUE';
 
-  if (now < festivalStart) return 'TUE';
-  if (now > festivalEnd) return 'SUN';
+  const first = FESTIVAL_DATES[DAY_ORDER[0]];
+  const last = FESTIVAL_DATES[DAY_ORDER[DAY_ORDER.length - 1]];
+  const festivalStart = new Date(first.year, first.month, first.day, 0, 0, 0, 0);
+  const festivalEnd = new Date(last.year, last.month, last.day, 23, 59, 59, 999);
 
-  const dayIndex = now.getDay();
+  if (now < festivalStart) return DAY_ORDER[0];
+  if (now > festivalEnd) return DAY_ORDER[DAY_ORDER.length - 1];
 
-  switch (dayIndex) {
-    case 2:
-      return 'TUE';
-    case 3:
-      return 'WED';
-    case 4:
-      return 'THU';
-    case 5:
-      return 'FRI';
-    case 6:
-      return 'SAT';
-    case 0:
-      return 'SUN';
-    default:
-      return 'TUE';
-  }
+  const match = DAY_ORDER.find((key) => {
+    const d = FESTIVAL_DATES[key];
+    const start = new Date(d.year, d.month, d.day, 0, 0, 0, 0);
+    const end = new Date(d.year, d.month, d.day, 23, 59, 59, 999);
+    return now >= start && now <= end;
+  });
+  return match ?? DAY_ORDER[0];
 }
 
 function ProgrammePage({ isNight }: { isNight: boolean }) {
